@@ -23,6 +23,7 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>False</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -134,6 +135,7 @@
       <Link>resources\accounts_plain.json</Link>
     </None>
     <None Include="app.config" />
+    <None Include="readme.md" />
     <None Include="resources\accounts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -160,4 +162,7 @@
     <Folder Include="resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>start Powershell -File "T:\Dropbox\Entwicklungsstrang\Shiny ID3 Tagger\_git\Auto-Commit_GitHub.ps1"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
