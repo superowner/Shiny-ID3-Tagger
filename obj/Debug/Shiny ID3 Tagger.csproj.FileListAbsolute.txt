@@ -1,0 +1,24 @@
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\bin\Debug\resources\accounts.json
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\bin\Debug\resources\licence.txt
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\bin\Debug\resources\Newtonsoft.Json.dll
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\bin\Debug\resources\Ookii.Dialogs.dll
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\bin\Debug\resources\settings.json
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\bin\Debug\resources\taglib-sharp.dll
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\bin\Debug\Shiny ID3 Tagger.exe.config
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\bin\Debug\Shiny ID3 Tagger.exe
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\bin\Debug\Shiny ID3 Tagger.pdb
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\obj\Debug\Shiny ID3 Tagger.exe
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\obj\Debug\Shiny ID3 Tagger.pdb
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\bin\Debug\resources\accounts.json
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\bin\Debug\resources\licence.txt
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\bin\Debug\resources\Newtonsoft.Json.dll
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\bin\Debug\resources\Ookii.Dialogs.dll
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\bin\Debug\resources\settings.json
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\bin\Debug\resources\taglib-sharp.dll
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\bin\Debug\Shiny Id3 Tagger.exe.config
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\bin\Debug\Shiny Id3 Tagger.exe
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\bin\Debug\Shiny Id3 Tagger.pdb
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\obj\Debug\Shiny ID3 Tagger.csprojResolveAssemblyReference.cache
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\obj\Debug\Shiny Id3 Tagger.exe
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger - 161031\obj\Debug\Shiny Id3 Tagger.pdb
+T:\Dropbox\Shiny ID3 Tagger\Shiny ID3 Tagger\obj\Debug\Shiny ID3 Tagger.csprojResolveAssemblyReference.cache

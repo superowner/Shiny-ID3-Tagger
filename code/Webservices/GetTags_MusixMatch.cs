@@ -1,0 +1,93 @@
+//-----------------------------------------------------------------------
+// <copyright file="GetTags_MusixMatch.cs" company="Shiny Id3 Tagger">
+//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// </copyright>
+// <author>ShinyId3Tagger Team</author>
+// <summary>Gets ID3 data from MusixMatch API for current track</summary>
+// https://developer.musixmatch.com/documentation/api-reference/track-search
+// https://developer.musixmatch.com/documentation/input-parameters
+// Only 1000 hits per day. Since 2 calls per file are needed, you can only search for 500 files a day. That's not much
+//-----------------------------------------------------------------------
+
+namespace GlobalNamespace
+{
+	using System;
+	using System.Data;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Net;
+	using System.Net.Http;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+
+	public partial class Form1
+	{
+		private async Task<Id3> GetTags_MusixMatch(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		{
+			Id3 o = new Id3();
+			o.Service = "Musixmatch";
+			
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+			
+			// ###########################################################################
+			DataRow[] account = User.MmAccounts.Select("lastused = MIN(lastused)");
+			User.MmAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;			
+				
+			string artistEnc = WebUtility.UrlEncode(artist);
+			string titleEnc = WebUtility.UrlEncode(title);
+			
+			HttpRequestMessage request = new HttpRequestMessage();
+			request.RequestUri = new Uri("https://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEnc + "&q_track=" + titleEnc + "&page_size=1&apikey=" + (string)account[0]["key"]);
+			
+			string content1 = await this.GetRequest(client, request, cancelToken);
+			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
+
+			if (data1 != null && data1.SelectToken("message.body.track_list[0].track") != null)
+			{
+				o.Artist = (string)data1.SelectToken("message.body.track_list[0].track.artist_name");
+				o.Title = (string)data1.SelectToken("message.body.track_list[0].track.track_name");
+				o.Album = (string)data1.SelectToken("message.body.track_list[0].track.album_name");
+				o.Genre = (string)data1.SelectToken("message.body.track_list[0].track.primary_genres.music_genre_list[0].music_genre.music_genre_name");
+
+				foreach (string size in new[] { "800x800", "500x500", "350x350" })
+				{
+					o.Cover = (string)data1.SelectToken("message.body.track_list[0].track.album_coverart_" + size);
+					if (o.Cover != string.Empty)
+					{
+						break;
+					}
+				}
+				
+				// ###########################################################################
+				string albumid = (string)data1.SelectToken("message.body.track_list[0].track.album_id");
+
+				request = new HttpRequestMessage();
+				request.RequestUri = new Uri("https://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account[0]["key"]);
+
+				string content2 = await this.GetRequest(client, request, cancelToken);
+				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
+
+				if (data2 != null && data2.SelectToken("message.body.album") != null)
+				{
+					o.Date = (string)data2.SelectToken("message.body.album.album_release_date");					
+					o.TrackCount = (string)data2.SelectToken("message.body.album.album_track_count");
+					o.TrackNumber = null;
+					o.DiscCount = null;
+					o.DiscNumber = null;
+				}
+			}
+			
+			// ###########################################################################
+			sw.Stop();
+			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+
+			request.Dispose();
+			return o;
+		}
+	}
+}
+
+// System.IO.File.WriteAllText (@"D:\response.json", content2);
