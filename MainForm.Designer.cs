@@ -838,10 +838,10 @@ namespace GlobalNamespace
 			this.Controls.Add(this.tabControl2);
 			this.DoubleBuffered = true;
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.Icon = global::Shiny_ID3_Tagger.resources.icon_resources.icon_main;
 			this.MainMenuStrip = this.menuStrip1;
 			this.MinimumSize = new System.Drawing.Size(500, 500);
 			this.Name = "Form1";
-			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Shiny ID3 Tagger";
 			this.Load += new System.EventHandler(this.TabControl1_SelectedIndexChanged);

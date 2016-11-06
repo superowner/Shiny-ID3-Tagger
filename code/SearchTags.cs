@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Code fired when "Search tags" button is clicked. Calls all External API modules</summary>
+// <summary>Code fired when "Search tags" button is clicked. Calls all webservice APIs</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
