@@ -1,5 +1,5 @@
 # Shiny ID3 Tagger
-A straight-forward windows application to automatically retrieve missing ID3 tags for your music files.
+## A straight-forward windows application to automatically retrieve missing ID3 tags for your music files.
 
 
 1. The app extracts ID3 tags for artist and title or tries to guess them from filename (filename pattern: artist - title)
