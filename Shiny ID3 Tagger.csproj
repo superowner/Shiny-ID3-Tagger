@@ -162,7 +162,4 @@
     <Folder Include="resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>start Powershell -File "T:\Dropbox\Entwicklungsstrang\Shiny ID3 Tagger\_git\Auto-Commit_GitHub.ps1"</PostBuildEvent>
-  </PropertyGroup>
 </Project>
