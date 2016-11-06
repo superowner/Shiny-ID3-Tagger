@@ -20,7 +20,6 @@ Currently supported webservices
 - Qobuz
 - Spotify
 
-
 How To Install
 ==============
 - todo
@@ -32,3 +31,4 @@ How To Use
 How to add a new RESTful Web Service
 ====================================
 - todo
+
