@@ -2,6 +2,9 @@ Shiny ID3 Tagger
 ================
 A straight-forward windows application to automatically retrieve missing ID3 tags for your music files
 
+![Main window](https://cloud.githubusercontent.com/assets/21058782/20035217/6e4d4f2e-a3db-11e6-9e9d-3344ee8ce90b.png)
+
+
 Currently supported webservices
 - 7digital
 - Amazon
