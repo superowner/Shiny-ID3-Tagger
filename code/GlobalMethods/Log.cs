@@ -38,7 +38,7 @@ namespace GlobalNamespace
 						break;
 					case "error":
 						this.rtbErrorLog.AppendText(message + Environment.NewLine);
-						this.rtbWriteLog.ScrollToCaret();
+						this.rtbErrorLog.ScrollToCaret();
 						this.tabControl2.SelectTab(2);
 						break;						
 				}
