@@ -33,7 +33,7 @@ namespace GlobalNamespace
 					string xml = this.ConvertXmlToJson(content);
 					JObject data = JsonConvert.DeserializeObject<JObject>(xml, this.GetJsonSettings());
 
-					if (data.SelectToken("GetLyricResult.Lyric") != null)
+					if (data != null && data.SelectToken("GetLyricResult.Lyric") != null)
 					{
 						string artistTemp = (string)data.SelectToken("GetLyricResult.LyricArtist");
 						string titleTemp = (string)data.SelectToken("GetLyricResult.LyricSong");

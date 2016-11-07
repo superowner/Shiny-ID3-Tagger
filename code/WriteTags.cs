@@ -34,7 +34,6 @@ namespace GlobalNamespace
 			this.progressBar1.Visible = true;
 
 			HttpClient client = InitiateHttpClient();
-			
 
 			foreach (DataGridViewRow row in this.dataGridView1.Rows)
 			{
@@ -56,7 +55,7 @@ namespace GlobalNamespace
 				successWrite = await this.SaveAndDisposeFile(tagFile);
 				if (!successWrite)
 				{
-					string message = string.Format("{0,-100}{1}","ERROR: Could not access file","file: \"" + filepath + "\"");										
+					string message = string.Format("{0,-100}{1}", "ERROR: Could not access file", "file: \"" + filepath + "\"");										
 					this.Log("error", new[] { message });
 			
 					continue;
@@ -87,7 +86,7 @@ namespace GlobalNamespace
 							}
 							else
 							{
-								string message = string.Format("{0,-100}{1}","Tag removed: " + frameDesc,"file: \"" + filepath + "\"");
+								string message = string.Format("{0,-100}{1}", "Tag removed: " + frameDesc, "file: \"" + filepath + "\"");
 								this.Log("write", new[] { message });								
 							}
 						}
@@ -98,14 +97,14 @@ namespace GlobalNamespace
 					}
 					else
 					{
-						string message = string.Format("{0,-100}{1}","Tag removed: " + frameId,"file: \"" + filepath + "\"");
+						string message = string.Format("{0,-100}{1}", "Tag removed: " + frameId, "file: \"" + filepath + "\"");
 						this.Log("write", new[] { message });
 					}
 				}
 				
 				// ###########################################################################
 				// Write tags (artist, title, album, genre, date, disc, track, lyrics) to file
-				id3v2 = WriteTags(tagFile, row, id3v2);
+				id3v2 = this.WriteTags(tagFile, row, id3v2);
 				
 				// ###########################################################################
 				// TODO: Move whole "insert jpg cover" section into a new module
@@ -125,7 +124,7 @@ namespace GlobalNamespace
 					{
 						if (response.Content.Headers.ContentType.ToString().StartsWith("image/", StringComparison.InvariantCultureIgnoreCase))
 						{
-							string message = string.Format("{0,-100}{1}","Picture source: " + request.RequestUri.Authority,"file: \"" + filepath + "\"");
+							string message = string.Format("{0,-100}{1}", "Picture source: " + request.RequestUri.Authority, "file: \"" + filepath + "\"");
 							this.Log("write", new[] { message });							
 							
 							MemoryStream stream = (MemoryStream)await response.Content.ReadAsStreamAsync();
@@ -210,12 +209,6 @@ namespace GlobalNamespace
 			this.btnSearch.Enabled = true;
 			this.btnWrite.Enabled = true;
 		}
-
-		// ###########################################################################
-		private TagLib.Id3v2.Tag RemoveTags(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag id3v2)
-		{
-			return null;
-		}
 		
 		// ###########################################################################
 		private TagLib.Id3v2.Tag WriteTags(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag id3v2)
@@ -225,7 +218,7 @@ namespace GlobalNamespace
 			string newArtist = (string)row.Cells[this.artist1.Index].Value;
 			if (oldArtist != newArtist && !string.IsNullOrWhiteSpace(newArtist))
 			{
-				string message = string.Format("{0,-100}{1}","Artist: " + newArtist,"file: \"" + tagFile.Name + "\"");
+				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Artist: " + newArtist, "file: \"" + tagFile.Name + "\"");
 				this.Log("write", new[] { message });
 				id3v2.RemoveFrames("TPE1");
 				id3v2.SetTextFrame("TPE1", newArtist);	
@@ -235,7 +228,7 @@ namespace GlobalNamespace
 			string newTitle = (string)row.Cells[this.title1.Index].Value;
 			if (oldTitle != newTitle && !string.IsNullOrWhiteSpace(newTitle))
 			{
-				string message = string.Format("{0,-100}{1}","Title: " + newTitle,"file: \"" + tagFile.Name + "\"");
+				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Title: " + newTitle, "file: \"" + tagFile.Name + "\"");
 				this.Log("write", new[] { message });
 				id3v2.RemoveFrames("TIT2");
 				id3v2.SetTextFrame("TIT2", newTitle);	
@@ -245,7 +238,7 @@ namespace GlobalNamespace
 			string newAlbum = (string)row.Cells[this.album1.Index].Value;
 			if (oldAlbum != newAlbum && !string.IsNullOrWhiteSpace(newAlbum))
 			{
-				string message = string.Format("{0,-100}{1}","Album: " + newAlbum,"file: \"" + tagFile.Name + "\"");
+				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Album: " + newAlbum, "file: \"" + tagFile.Name + "\"");
 				this.Log("write", new[] { message });
 				id3v2.RemoveFrames("TALB");
 				id3v2.SetTextFrame("TALB", newAlbum);	
@@ -255,7 +248,7 @@ namespace GlobalNamespace
 			string newGenre = (string)row.Cells[this.genre1.Index].Value;
 			if (oldGenre != newGenre && !string.IsNullOrWhiteSpace(newGenre))
 			{
-				string message = string.Format("{0,-100}{1}","Genre: " + newGenre,"file: \"" + tagFile.Name + "\"");
+				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Genre: " + newGenre, "file: \"" + tagFile.Name + "\"");
 				this.Log("write", new[] { message });
 				id3v2.RemoveFrames("TCON");
 				id3v2.SetTextFrame("TCON", newGenre);	
@@ -270,7 +263,7 @@ namespace GlobalNamespace
 			{				
 				newDiscnumber = string.IsNullOrWhiteSpace(newDiscnumber) ? oldDiscnumber : newDiscnumber;
 				newDisccount = string.IsNullOrWhiteSpace(newDisccount) ? oldDisccount : newDisccount;
-				string message = string.Format("{0,-100}{1}","Disc: " + newDiscnumber + "/" + newDisccount,"file: \"" + tagFile.Name + "\"");
+				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Disc: " + newDiscnumber + "/" + newDisccount, "file: \"" + tagFile.Name + "\"");
 				this.Log("write", new[] { message });
 				id3v2.RemoveFrames("TPOS");
 				id3v2.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
@@ -285,7 +278,7 @@ namespace GlobalNamespace
 			{				
 				newTracknumber = string.IsNullOrWhiteSpace(newTracknumber) ? oldTracknumber : newTracknumber;
 				newTrackcount = string.IsNullOrWhiteSpace(newTrackcount) ? oldTrackcount : newTrackcount;
-				string message = string.Format("{0,-100}{1}","Track: " + newTracknumber + "/" + newTrackcount,"file: \"" + tagFile.Name + "\"");
+				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Track: " + newTracknumber + "/" + newTrackcount, "file: \"" + tagFile.Name + "\"");
 				this.Log("write", new[] { message });
 				id3v2.RemoveFrames("TRCK");
 				id3v2.SetTextFrame("TRCK", newTracknumber + "/" + newTrackcount);
@@ -298,7 +291,7 @@ namespace GlobalNamespace
 			string newDate = (string)row.Cells[this.date1.Index].Value;
 			if (oldDate != newDate && !string.IsNullOrWhiteSpace(newDate))
 			{
-				string message = string.Format("{0,-100}{1}","Date: " + newDate,"file: \"" + tagFile.Name + "\"");
+				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Date: " + newDate, "file: \"" + tagFile.Name + "\"");
 				this.Log("write", new[] { message });
 				id3v2.RemoveFrames("TDRC");
 				id3v2.RemoveFrames("TYER");
@@ -313,7 +306,7 @@ namespace GlobalNamespace
 			string newLyrics = (string)row.Cells[this.lyrics1.Index].Value;
 			if (oldLyrics != newLyrics && !string.IsNullOrWhiteSpace(newLyrics))
 			{
-				string message = string.Format("{0,-100}{1}","Lyrics: " + newLyrics.Take(20),"file: \"" + tagFile.Name + "\"");
+				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Lyrics: " + newLyrics.Take(20), "file: \"" + tagFile.Name + "\"");
 				this.Log("write", new[] { message });
 				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
 				frmUSLT.Text = newLyrics;

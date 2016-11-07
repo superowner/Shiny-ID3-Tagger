@@ -231,9 +231,21 @@ namespace GlobalNamespace
 								group row by row.Field<string>("tracknumber") into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
-
-				// tagNew.Lyrics = await this.GetLyrics_Chartlyrics(client, tagNew, cancelToken);
-				tagNew.Lyrics = await this.GetLyrics_Lololyrics(client, tagNew, cancelToken);
+				
+				if (tagNew.Lyrics == null)
+				{
+					tagNew.Lyrics = await this.GetLyrics_Baidu(client, tagNew, cancelToken);
+				}
+				
+				if (tagNew.Lyrics == null)
+				{
+					tagNew.Lyrics = await this.GetLyrics_Chartlyrics(client, tagNew, cancelToken);	
+				}
+				
+				if (tagNew.Lyrics == null)
+				{
+					tagNew.Lyrics = await this.GetLyrics_Lololyrics(client, tagNew, cancelToken);
+				}
 
 				// While Decibel and Discogs provide a cover URL, their URL is not easily downloadable via code because authorization via header or Oauth is required
 				// Musicgraph does not provide any cover URLs via API at all

@@ -20,7 +20,6 @@ namespace GlobalNamespace
 			jsonSettings.Error += (obj, errorArgs) =>
 			{
 				this.Log("error", new[] { "ERROR: Could not convert server response to JSON", errorArgs.ErrorContext.Error.Message });
-
 				errorArgs.ErrorContext.Handled = true;
 			};
 			

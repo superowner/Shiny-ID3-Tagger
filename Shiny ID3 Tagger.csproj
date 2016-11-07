@@ -104,6 +104,7 @@
     <Compile Include="code\GlobalVariables.cs" />
     <Compile Include="code\SearchTags.cs" />
     <Compile Include="code\Webservices\GetCover_Bing.cs" />
+    <Compile Include="code\Webservices\GetLyrics_Baidu.cs" />
     <Compile Include="code\Webservices\GetLyrics_Chartlyrics.cs" />
     <Compile Include="code\Webservices\GetLyrics_Lololyrics.cs" />
     <Compile Include="code\Webservices\GetTags_7digital.cs" />
