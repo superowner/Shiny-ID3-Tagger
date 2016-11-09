@@ -27,7 +27,8 @@
 
 
 ## Key Features
-- Searches and writes the following ID3 tags
+- Queries large online databases to get the right tags. No handwork needed
+- Supports the following ID3v2.3 tags
   - **Artist name**
   - **Track title**
   - **Album name**
