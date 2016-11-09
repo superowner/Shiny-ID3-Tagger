@@ -1,7 +1,7 @@
 # Shiny ID3 Tagger
 ### Automatically searches and adds missing ID3 tags for your music collection with just two clicks
 
-![Main window](https://cloud.githubusercontent.com/assets/21058782/20035217/6e4d4f2e-a3db-11e6-9e9d-3344ee8ce90b.png)
+![Main window](https://cloud.githubusercontent.com/assets/21058782/20148484/28893abe-a6ad-11e6-9941-ab1dfded8c24.png)
 
 
 ## Features
