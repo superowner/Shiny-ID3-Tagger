@@ -3,25 +3,6 @@
 
 ![Main window](https://cloud.githubusercontent.com/assets/21058782/20148484/28893abe-a6ad-11e6-9941-ab1dfded8c24.png)
 
-
-## Features
-- The app extracts ID3 tags for artist and title or tries to guess them from filename (filename pattern: artist - title)
-- Queries 16 different online web services to retrieve as much additional data as possible
-- All retrieved values are weighted and the best match is taken for:
-  - artist name
-  - track title
-  - album name
-  - release date
-  - genre
-  - disc count
-  - disc number
-  - track count
-  - track number
-- Artist, title, Album and genre have the correct casing and spelling mistakes are corrected
-- Adds embedded cover which matches the best album name
-- Adds lyrics as ID3 tag
-- If no album was found (mashups, remixes) the first image from bing image search is used as fallback cover (optional)
-
 ## Currently supported webservices
 - 7digital
 - Amazon
@@ -42,7 +23,23 @@
 - Lololyrics (only for lyrics)
 - Bing (only as fallback image source)
 
+## Key Features
+- Queries 16 different online web services to retrieve the following ID3 tags
+  - artist name
+  - track title
+  - album name
+  - release date
+  - genre
+  - disc count
+  - disc number
+  - track count
+  - track number
+- Corrects casing and spelling mistakes
+- Auto downloads and embedds an album cover
+- Adds lyrics as ID3 tag
+
 ## How To Install
 - [Download and extract the latest release](https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest)
-- Run "Shiny Id3 Tagger.exe"
+- Open the extracted folder and run "Shiny Id3 Tagger.exe". That's it. No further installation needed
+- The GUI is pretty simple and self explanatory
 
