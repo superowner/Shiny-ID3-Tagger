@@ -27,7 +27,7 @@ namespace GlobalNamespace
 			HttpRequestMessage requestBackup = CloneRequest(request);
 
 			string responseString = string.Empty;
-			this.Log("search", new[] { "Get results from " + request.RequestUri.Scheme + "://" + request.RequestUri.Authority });
+//			this.Log("search", new[] { "Get results from " + request.RequestUri.Scheme + "://" + request.RequestUri.Authority });
 
 			for (int i = MaxRetries; i >= 1; i--)
 			{
