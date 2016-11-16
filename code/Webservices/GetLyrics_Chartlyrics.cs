@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright file="GetLyrics_Chartlyrics.cs" company="Shiny Id3 Tagger">
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
@@ -12,6 +12,7 @@ namespace GlobalNamespace
 	using System;
 	using System.Linq;
 	using System.Net.Http;
+	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using Newtonsoft.Json;
@@ -27,7 +28,7 @@ namespace GlobalNamespace
 				request.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + tagNew.Artist + "&song=" + tagNew.Title);
 				
 				string content = await this.GetRequest(client, request, cancelToken);
-				
+								
 				if (!content.StartsWith("SearchLyricDirect:", StringComparison.InvariantCultureIgnoreCase))
 				{
 					string xml = this.ConvertXmlToJson(content);
@@ -41,10 +42,14 @@ namespace GlobalNamespace
 						if (artistTemp == tagNew.Artist && titleTemp == tagNew.Title)
 						{
 							string response = (string)data.SelectToken("GetLyricResult.Lyric");
+							
 							if (!string.IsNullOrWhiteSpace(response))
 							{
+								byte[] bytes = Encoding.GetEncoding(28591).GetBytes(response);
+								response = Encoding.UTF8.GetString(bytes);
+								
 								tagNew.Lyrics = response;
-								this.Log("search", new[] { "  Lyrics taken from Chartlyrics"});
+								this.Log("search", new[] { "  Lyrics taken from Chartlyrics" });
 							}							
 						}
 					}

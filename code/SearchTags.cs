@@ -245,7 +245,7 @@ namespace GlobalNamespace
 
 					if (tagNew.Cover != null)
 					{
-						this.Log("search", new[] { "  Cover taken from " + service});
+						this.Log("search", new[] { "  Cover taken from " + service });
 						break;
 					}
 				}
@@ -319,7 +319,7 @@ namespace GlobalNamespace
 				taskList.Add(this.GetTags_Qobuz(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_Genius(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_7digital(client, artist, title, cancelToken));
-//				taskList.Add(this.GetTags_MusicBrainz(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_MusicBrainz(client, artist, title, cancelToken));
 
 				this.progressBar1.Maximum = taskList.Count;
 				this.progressBar1.Value = 0;
