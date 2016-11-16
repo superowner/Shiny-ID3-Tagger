@@ -40,7 +40,12 @@ namespace GlobalNamespace
 
 						if (artistTemp == tagNew.Artist && titleTemp == tagNew.Title)
 						{
-							tagNew.Lyrics = (string)data.SelectToken("GetLyricResult.Lyric");
+							string response = (string)data.SelectToken("GetLyricResult.Lyric");
+							if (!string.IsNullOrWhiteSpace(response))
+							{
+								tagNew.Lyrics = response;
+								this.Log("search", new[] { "  Lyrics taken from Chartlyrics"});
+							}							
 						}
 					}
 				}

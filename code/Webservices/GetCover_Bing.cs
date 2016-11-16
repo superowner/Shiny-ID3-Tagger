@@ -5,6 +5,7 @@
 // <author>ShinyId3Tagger Team</author>
 // <summary>Retrieves an image via normal Bing Web Search</summary>
 // https://datamarket.azure.com/dataset/explore/bing/search
+// Will be shut down at 2016-12-14
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

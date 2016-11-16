@@ -30,13 +30,13 @@ namespace GlobalNamespace
 
 			this.progressBar2.Maximum = this.dataGridView1.Rows.Count;
 			this.progressBar2.Value = 0;
-			
+
 			this.progressBar1.Visible = true;
 			this.progressBar2.Visible = true;
-			
+
 			Runtime.TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = Runtime.TokenSource.Token;
-			
+
 			HttpClient client = InitiateHttpClient();
 			Stopwatch sw = new Stopwatch();
 
@@ -51,7 +51,7 @@ namespace GlobalNamespace
 			foreach (DataGridViewRow row in this.dataGridView1.Rows)
 			{
 				sw.Restart();
-				
+
 				Id3 tagOld = new Id3();
 				tagOld.Filepath = row.Cells[this.filepath1.Index].Value.ToString();
 				tagOld.Artist = row.Cells[this.artist1.Index].Value.ToString();
@@ -69,17 +69,18 @@ namespace GlobalNamespace
 				bool rowAlreadyExists = (from r in this.dataGridView2.Rows.Cast<DataGridViewRow>()
 									where r.Cells[this.filepath2.Index].Value.ToString() == tagOld.Filepath
 									select r).Any();
-				
+
 				if (rowAlreadyExists == false)
 				{
-					DataTable webserviceResults = await this.StartAsyncTasks(client, tagOld, cancelToken);
-					Id3 tagNew = await this.AnalyzeResults(client, webserviceResults, tagOld, cancelToken);
-
-					if (cancelToken.IsCancellationRequested) 
-					{ 
-						break; 
-					}
+					DataTable webserviceResults = await this.StartWebservicesTasks(client, tagOld, cancelToken);
+					Id3 tagNew = await this.AggregateResults(client, webserviceResults, tagOld, cancelToken);
+					tagNew.Lyrics = await this.StartLyricTasks(client, tagNew, cancelToken);
 					
+					if (cancelToken.IsCancellationRequested)
+					{
+						break;
+					}
+
 					foreach (DataRow r in webserviceResults.Rows)
 					{
 						string albumhit = IncreaseAlbumCounter(r["service"], r["album"], tagNew.Album);
@@ -139,21 +140,21 @@ namespace GlobalNamespace
 						tagNew.TrackCount,
 						tagNew.TrackNumber,
 						tagNew.Lyrics,
-						tagNew.Cover);										
-					
+						tagNew.Cover);
+
 					this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index].ToolTipText = tagNew.Lyrics;
 					this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor = Color.Yellow;
 					this.dataGridView2.FirstDisplayedScrollingRowIndex = this.dataGridView2.RowCount - 1;
 					this.dataGridView2.ClearSelection();
 					webserviceResults.Dispose();
-				}	
+				}
 
 				this.progressBar2.PerformStep();
 			}
 
 			Runtime.TokenSource.Dispose();
 			client.Dispose();
-					
+
 			this.progressBar1.Visible = false;
 			this.progressBar2.Visible = false;
 			this.btnAddFiles.Enabled = true;
@@ -162,13 +163,13 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		private async Task<Id3> AnalyzeResults(HttpMessageInvoker client, DataTable webserviceResults, Id3 tagOld, CancellationToken cancelToken)
+		private async Task<Id3> AggregateResults(HttpMessageInvoker client, DataTable webserviceResults, Id3 tagOld, CancellationToken cancelToken)
 		{
 			Id3 tagNew = new Id3();
 
 			tagNew.Service = "RESULT";
 			tagNew.Filepath = tagOld.Filepath;
-			
+
 			var majorityAlbumRows = (from row in webserviceResults.AsEnumerable()
 							where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
 							orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss")
@@ -231,21 +232,6 @@ namespace GlobalNamespace
 								group row by row.Field<string>("tracknumber") into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
-				
-				if (tagNew.Lyrics == null)
-				{
-					tagNew.Lyrics = await this.GetLyrics_Baidu(client, tagNew, cancelToken);
-				}
-				
-				if (tagNew.Lyrics == null)
-				{
-					tagNew.Lyrics = await this.GetLyrics_Chartlyrics(client, tagNew, cancelToken);	
-				}
-				
-				if (tagNew.Lyrics == null)
-				{
-					tagNew.Lyrics = await this.GetLyrics_Lololyrics(client, tagNew, cancelToken);
-				}
 
 				// While Decibel and Discogs provide a cover URL, their URL is not easily downloadable via code because authorization via header or Oauth is required
 				// Musicgraph does not provide any cover URLs via API at all
@@ -259,24 +245,53 @@ namespace GlobalNamespace
 
 					if (tagNew.Cover != null)
 					{
+						this.Log("search", new[] { "  Cover taken from " + service});
 						break;
 					}
 				}
 			}
-			
+
 			if (User.Settings["UseBingFallback"] && tagNew.Cover == null)
 			{
 				tagNew.Cover = await this.GetCoverBing(client, tagOld, tagNew, cancelToken);
 			}
-			
+
 			return tagNew;
 		}
 
 		// ###########################################################################
-		private async Task<DataTable> StartAsyncTasks(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
-		{			
-			DataTable webserviceResults = Id3.CreateTable();
+		private async Task<string> StartLyricTasks(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
+		{
+			string lyrics = null;
+			var lyricsfoundToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
+			
+			List<Task<string>> taskList = new List<Task<string>>();
+			taskList.Add(this.GetLyrics_Baidu(client, tagNew, lyricsfoundToken.Token));
+			taskList.Add(this.GetLyrics_Chartlyrics(client, tagNew, lyricsfoundToken.Token));
+			taskList.Add(this.GetLyrics_Lololyrics(client, tagNew, lyricsfoundToken.Token));
+
+			while (taskList.Count > 0)
+			{
+				Task<string> finishedTask = await Task.WhenAny(taskList);
+				lyrics = await finishedTask;
+
+				taskList.Remove(finishedTask);
+				finishedTask.Dispose();
+				
+				if (lyrics != null)
+				{
+					lyricsfoundToken.Cancel();
+				}
+			}
+			
+			return lyrics;
+		}
 		
+		// ###########################################################################
+		private async Task<DataTable> StartWebservicesTasks(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
+		{
+			DataTable webserviceResults = Id3.CreateTable();
+
 			string artist = Strip(tagOld.Artist);
 			string title = Strip(tagOld.Title);
 
@@ -285,7 +300,7 @@ namespace GlobalNamespace
 								"Search for: \""  + artist + " - " + title + "\"",
 								"file: \"" + tagOld.Filepath + "\"");
 			this.Log("search", new[] { message });
-					
+
 			for (int i = 1; i <= 2; i++)
 			{
 				List<Task<Id3>> taskList = new List<Task<Id3>>();
@@ -304,7 +319,7 @@ namespace GlobalNamespace
 				taskList.Add(this.GetTags_Qobuz(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_Genius(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_7digital(client, artist, title, cancelToken));
-				taskList.Add(this.GetTags_MusicBrainz(client, artist, title, cancelToken));
+//				taskList.Add(this.GetTags_MusicBrainz(client, artist, title, cancelToken));
 
 				this.progressBar1.Maximum = taskList.Count;
 				this.progressBar1.Value = 0;
@@ -334,7 +349,7 @@ namespace GlobalNamespace
 						null,
 						r.Cover);
 
-					this.progressBar1.PerformStep();					
+					this.progressBar1.PerformStep();
 				}
 
 				string artistTemp = (from row1 in webserviceResults.AsEnumerable()
@@ -361,7 +376,7 @@ namespace GlobalNamespace
 				{
 					artist = artistTemp;
 					title = titleTemp;
-					this.Log("search", new[] { "Spelling mistake detected. New search for: \"" + artist + " - " + title + "\"" });
+					this.Log("search", new[] { "  Spelling mistake detected. New search for: \"" + artist + " - " + title + "\"" });
 
 					webserviceResults.Clear();
 				}
