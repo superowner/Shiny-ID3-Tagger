@@ -30,6 +30,7 @@ namespace GlobalNamespace
 					str = Regex.Replace(str, RegExPattern, string.Empty, RegexOptions.IgnoreCase);
 				}
 
+				str = Regex.Replace(str, @"…", "...");
 				str = Regex.Replace(str, @"[‘’ʼ]", "'");
 				str = Regex.Replace(str, @"[‐‑−－]", "-");		// https://www.cs.tut.fi/~jkorpela/dashes.html
 				str = str.Trim();

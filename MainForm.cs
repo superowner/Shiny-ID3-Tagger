@@ -254,6 +254,7 @@ namespace GlobalNamespace
 		{
 			this.dataGridView1.Rows.Clear();
 			this.dataGridView2.Rows.Clear();
+			Runtime.AlbumHits.Clear();
 			Runtime.ActiveDGV.Refresh();
 		}
 

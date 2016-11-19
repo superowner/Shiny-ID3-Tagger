@@ -1,6 +1,6 @@
 {
 	"PreferTags" 		: true,
-	"RemoveBrackets" 	: false,
+	"RemoveBrackets" 	: true,
 	"RemoveFeaturing" 	: false,
 	"UseBingFallback" 	: true,
 	"OverwriteImage" 	: true,

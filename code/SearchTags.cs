@@ -103,7 +103,9 @@ namespace GlobalNamespace
 							r["lyrics"],
 							r["cover"]);
 
-						if (tagNew.Album != null && r["album"] != null && Strip(tagNew.Album).ToLower() != Strip(r["album"].ToString().ToLower()))
+						if (tagNew.Album == null ||
+							tagNew.Album != null && r["album"] != null
+							&& Strip(tagNew.Album).ToLower() != Strip(r["album"].ToString().ToLower()))
 						{
 							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.ForeColor = Color.Gray;
 						}
@@ -169,11 +171,11 @@ namespace GlobalNamespace
 
 			tagNew.Service = "RESULT";
 			tagNew.Filepath = tagOld.Filepath;
-
+			
 			var majorityAlbumRows = (from row in webserviceResults.AsEnumerable()
 							where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
 							orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss")
-							group row by Capitalize(Strip(row.Field<string>("album"))) into grp
+							group row by Strip(row.Field<string>("album").ToLowerInvariant()) into grp
 							where grp.Count() >= 3
 							orderby grp.Count() descending
 							select grp).FirstOrDefault();
