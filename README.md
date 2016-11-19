@@ -1,5 +1,5 @@
 # Shiny ID3 Tagger
-### Automatic adding of missing ID3 tags for your music via Webservices like iTunes, Amazon, Musicbrainz, Spotify and many more
+### Automatically queries for missing ID3 tags from Web Services like iTunes, Amazon, Musicbrainz or Spotify and aggregates them to the most likely hit
 
 ![Main window](https://cloud.githubusercontent.com/assets/21058782/20148484/28893abe-a6ad-11e6-9941-ab1dfded8c24.png)
 
@@ -20,7 +20,7 @@
 - **Napster**
 - **Qobuz**
 - **Spotify**
-- **Chartlyrics** ( only for lyrics)
+- **Chartlyrics** (only for lyrics)
 - **Lololyrics** (only for lyrics)
 - **Baidu Music** (only for Lyrics)
 - **Bing** (only as fallback image source)

@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Executes all API requests. Has a retry handler built-in</summary>
+// <summary>Executes all API requests. Has a built-in retry handler</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -26,7 +26,6 @@ namespace GlobalNamespace
 			HttpResponseMessage response = new HttpResponseMessage();
 			HttpRequestMessage requestBackup = CloneRequest(request);
 
-			// this.Log("search", new[] { "Get results from " + request.RequestUri.Scheme + "://" + request.RequestUri.Authority });
 			string responseString = string.Empty;
 			
 			for (int i = MaxRetries; i >= 1; i--)

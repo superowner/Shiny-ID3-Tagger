@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Checks if a given string needs to be converted to UTF-8</summary>
+// Source for function: https://stackoverflow.com/questions/10484833/detecting-bad-utf-8-encoding-list-of-bad-characters-to-sniff
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
