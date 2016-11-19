@@ -1,5 +1,5 @@
 {
-	"PreferTags" 		: false,
+	"PreferTags" 		: true,
 	"RemoveBrackets" 	: false,
 	"RemoveFeaturing" 	: false,
 	"UseBingFallback" 	: true,

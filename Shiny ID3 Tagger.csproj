@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="code\AddFiles.cs" />
     <Compile Include="code\GlobalMethods\Capitalize.cs" />
+    <Compile Include="code\GlobalMethods\CheckMalformedUtf8.cs" />
     <Compile Include="code\GlobalMethods\CloneRequest.cs" />
     <Compile Include="code\GlobalMethods\ConvertStringToDate.cs" />
     <Compile Include="code\GlobalMethods\ConvertXmlToJson.cs" />
