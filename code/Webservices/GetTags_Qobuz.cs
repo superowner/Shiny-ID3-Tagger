@@ -6,6 +6,7 @@
 // <summary>Gets ID3 data from Qobuz API for current track</summary>
 // http://www.qobuz.com/account/profile
 // https://github.com/Qobuz/api-documentation/blob/master/endpoints/track/search.md
+// No english genre names possible. API returns french genre names
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

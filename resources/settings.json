@@ -1,9 +1,9 @@
 {
 	"PreferTags" 		: true,
-	"RemoveBrackets" 	: true,
+	"RemoveBrackets" 	: false,
 	"RemoveFeaturing" 	: false,
 	"UseBingFallback" 	: true,
-	"OverwriteImage" 	: true,
+	"OverwriteImage" 	: false,
 	"CoverOrder" 		: "Amazon,Gracenote,iTunes,Deezer,Napster,Spotify,Microsoft Groove,Musixmatch,Musicbrainz,Genius,7digital,Qobuz,Last.fm",
 	"MaxImageSize" 		: 500,
 	"Proxy" 			: "0.0.0.0:8080",

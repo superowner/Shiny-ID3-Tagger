@@ -18,6 +18,7 @@ namespace GlobalNamespace
 	using System.Linq;
 	using System.Net.Http;
 	using System.Net.Mime;
+	using System.Text.RegularExpressions;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
 	using TagLib;
@@ -108,7 +109,7 @@ namespace GlobalNamespace
 				
 				// ###########################################################################
 				// TODO: Move whole "insert jpg cover" section into a new module
-				if (User.Settings["OverwriteImage"] || tagFile.Tag.Pictures[0].Data.Count == 0)
+				if (User.Settings["OverwriteImage"] || !tagFile.Tag.Pictures.Any() || tagFile.Tag.Pictures[0].Data.Count == 0)
 				{
 					HttpRequestMessage request = new HttpRequestMessage();
 					HttpResponseMessage response = new HttpResponseMessage();
@@ -164,7 +165,7 @@ namespace GlobalNamespace
 							taglibpicture.Data = ByteVector.FromStream(stream);
 							taglibpicture.MimeType = MediaTypeNames.Image.Jpeg;
 							taglibpicture.Type = PictureType.FrontCover;
-							taglibpicture.Description = (string)row.Cells[this.cover1.Index].Value;
+							taglibpicture.Description = url;
 							taglibpicture.TextEncoding = StringType.Latin1;
 
 							tagFile.Tag.Pictures = new IPicture[] { taglibpicture };
@@ -306,7 +307,9 @@ namespace GlobalNamespace
 			string newLyrics = (string)row.Cells[this.lyrics1.Index].Value;
 			if (oldLyrics != newLyrics && !string.IsNullOrWhiteSpace(newLyrics))
 			{
-				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Lyrics: " + newLyrics.Take(20), "file: \"" + tagFile.Name + "\"");
+				string lyricPreview = string.Join(string.Empty, newLyrics.Take(50));
+				string cleanPreview = Regex.Replace(lyricPreview, @"\r\n?|\n", string.Empty);
+				string message = string.Format(Runtime.CultEng, "{0,-100}{1}", "Lyrics: " + cleanPreview, "file: \"" + tagFile.Name + "\"");
 				this.Log("write", new[] { message });
 				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
 				frmUSLT.Text = newLyrics;
