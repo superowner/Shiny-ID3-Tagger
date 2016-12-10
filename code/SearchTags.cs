@@ -22,7 +22,7 @@ namespace GlobalNamespace
 	public partial class Form1
 	{
 		// ###########################################################################
-		private async void StartSearching(string[] files)
+		private async void StartSearching()		
 		{
 			this.btnAddFiles.Enabled = false;
 			this.btnWrite.Enabled = false;
@@ -39,14 +39,6 @@ namespace GlobalNamespace
 
 			HttpClient client = InitiateHttpClient();
 			Stopwatch sw = new Stopwatch();
-
-			if (files == null || !files.Any())
-			{
-				files = this.dataGridView1.Rows
-					.Cast<DataGridViewRow>()
-					.Select(row => row.Cells[this.filepath1.Index].Value.ToString())
-					.ToArray();
-			}
 
 			foreach (DataGridViewRow row in this.dataGridView1.Rows)
 			{
@@ -104,8 +96,8 @@ namespace GlobalNamespace
 							r["cover"]);
 
 						if (tagNew.Album == null ||
-							tagNew.Album != null && r["album"] != null
-							&& Strip(tagNew.Album).ToLower() != Strip(r["album"].ToString().ToLower()))
+							(tagNew.Album != null && r["album"] != null &&
+							Strip(tagNew.Album).ToLower() != Strip(r["album"].ToString().ToLower())))
 						{
 							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.ForeColor = Color.Gray;
 						}

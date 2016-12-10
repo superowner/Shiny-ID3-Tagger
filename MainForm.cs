@@ -35,7 +35,7 @@ namespace GlobalNamespace
 			Runtime.CultEng = new CultureInfo("en-US");
 			Runtime.AlbumHits = new Dictionary<string, int>();			
 
-			bool successReadingVariables = this.ReadUserVariables();
+			bool successReadingVariables = this.ReadAccountCredentials();
 			if (successReadingVariables)
 			{
 				this.AddFiles(args);
@@ -71,7 +71,7 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private void BtnSearchClick(object sender, EventArgs e)
 		{
-			this.StartSearching(null);
+			this.StartSearching();
 		}
 
 		// ###########################################################################

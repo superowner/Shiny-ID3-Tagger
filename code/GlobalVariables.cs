@@ -39,7 +39,7 @@ namespace GlobalNamespace
 		
 		internal static CancellationTokenSource TokenSource { get; set; }
 	}
-
+	
 	internal class Id3
 	{
 		internal string Filepath { get; set; }

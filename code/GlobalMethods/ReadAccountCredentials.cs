@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="ReadUserVariables.cs" company="Shiny Id3 Tagger">
+// <copyright file="ReadAccountCredentials.cs" company="Shiny Id3 Tagger">
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -19,7 +19,7 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private bool ReadUserVariables()
+		private bool ReadAccountCredentials()
 		{
 			try
 			{

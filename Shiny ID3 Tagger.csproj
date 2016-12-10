@@ -99,7 +99,7 @@
     <Compile Include="code\GlobalMethods\LevenshteinDistance.cs" />
     <Compile Include="code\GlobalMethods\Log.cs" />
     <Compile Include="code\GlobalMethods\MarkChange.cs" />
-    <Compile Include="code\GlobalMethods\ReadUserVariables.cs" />
+    <Compile Include="code\GlobalMethods\ReadAccountCredentials.cs" />
     <Compile Include="code\GlobalMethods\Strip.cs" />
     <Compile Include="code\GlobalMethods\WellFormedCsvValue.cs" />
     <Compile Include="code\GlobalVariables.cs" />

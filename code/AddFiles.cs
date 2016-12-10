@@ -81,12 +81,17 @@ namespace GlobalNamespace
 			
 			Runtime.TokenSource.Dispose();
 				
-			this.dataGridView1.ClearSelection();
-			
+			this.dataGridView1.ClearSelection();						
+						
 			this.progressBar1.Visible = false;				
 			this.btnSearch.Enabled = true;
 			this.btnWrite.Enabled = true;
 			this.btnAddFiles.Enabled = true;
+			
+			if (User.Settings["AutoSearch"])
+			{
+				this.StartSearching();
+			}
 		}
 
 		// ###########################################################################
