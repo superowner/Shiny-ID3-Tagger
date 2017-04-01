@@ -65,7 +65,7 @@ namespace GlobalNamespace
 				if (rowAlreadyExists == false)
 				{
 					DataTable webserviceResults = await this.StartWebservicesTasks(client, tagOld, cancelToken);
-					Id3 tagNew = await this.AggregateResults(client, webserviceResults, tagOld, cancelToken);
+					Id3 tagNew = this.AggregateResults(client, webserviceResults, tagOld, cancelToken);
 					tagNew.Lyrics = await this.StartLyricTasks(client, tagNew, cancelToken);
 					
 					if (cancelToken.IsCancellationRequested)
@@ -157,7 +157,7 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		private async Task<Id3> AggregateResults(HttpMessageInvoker client, DataTable webserviceResults, Id3 tagOld, CancellationToken cancelToken)
+		private Id3 AggregateResults(HttpMessageInvoker client, DataTable webserviceResults, Id3 tagOld, CancellationToken cancelToken)
 		{
 			Id3 tagNew = new Id3();
 
@@ -243,11 +243,6 @@ namespace GlobalNamespace
 						break;
 					}
 				}
-			}
-
-			if (User.Settings["UseBingFallback"] && tagNew.Cover == null)
-			{
-				tagNew.Cover = await this.GetCoverBing(client, tagOld, tagNew, cancelToken);
 			}
 
 			return tagNew;

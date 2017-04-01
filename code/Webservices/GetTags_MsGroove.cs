@@ -4,11 +4,10 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Microsoft Groove API for current track</summary>
-// https://msdn.microsoft.com/en-us/library/dn546659.aspx
-// https://msdn.microsoft.com/en-us/library/dn546686.aspx
-// https://msdn.microsoft.com/en-us/library/dn546671.aspx
-// https://msdn.microsoft.com/en-us/library/dn546695.aspx
-// https://datamarket.azure.com/account/datasets
+// https://apps.dev.microsoft.com/#/appList
+// https://developer.microsoft.com/de-de/dashboard/groove
+// https://msdn.microsoft.com/en-us/library/ff512387.aspx
+// https://docs.microsoft.com/en-us/groove/groove-service-rest-reference/uri-search-content#examples
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -37,13 +36,14 @@ namespace GlobalNamespace
 			// ###########################################################################
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
 
-			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13");
+			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://login.live.com/accesstoken.srf");
 			request.Content = new FormUrlEncodedContent(new[]
 				{
+					new KeyValuePair<string, string>("grant_type", "client_credentials"),
 					new KeyValuePair<string, string>("client_id", User.Accounts["MsClientId"]),
 					new KeyValuePair<string, string>("client_secret", User.Accounts["MsClientSecret"]),
-					new KeyValuePair<string, string>("scope", "http://music.xboxlive.com"),
-					new KeyValuePair<string, string>("grant_type", "client_credentials")
+					new KeyValuePair<string, string>("scope", "app.music.xboxlive.com")
+					
 				});
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
@@ -52,10 +52,13 @@ namespace GlobalNamespace
 			if (data1 != null && data1.SelectToken("access_token") != null)
 			{
 				string token = WebUtility.UrlEncode((string)data1.SelectToken("access_token"));
-				request = new HttpRequestMessage();
-				request.RequestUri = new Uri("https://music.xboxlive.com/1/content/music/search?q=" + searchTermEnc + 
-					"&accessToken=Bearer+" + token + "&maxItems=1&filters=tracks&contentType=JSON&language=US&country=US");
+				token = "Bearer" + " " + token;
 
+				request = new HttpRequestMessage();
+				request.Headers.Add("Authorization", token);
+				request.RequestUri = new Uri("https://music.xboxlive.com/1/content/music/search?q=" + searchTermEnc +
+					"&maxItems=1&filters=tracks&contentType=JSON&language=US&country=US");
+				
 				// ###########################################################################
 				string content2 = await this.GetRequest(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());

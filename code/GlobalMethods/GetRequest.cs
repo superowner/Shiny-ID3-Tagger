@@ -51,6 +51,7 @@ namespace GlobalNamespace
 						(request.RequestUri.Host == "coverartarchive.org" && response.StatusCode == HttpStatusCode.NotFound) ||
 						(request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.NotFound) ||
 						(request.RequestUri.Host == "api.lololyrics.com" && response.StatusCode == HttpStatusCode.NotFound) ||
+						(request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.NotFound) ||
 						(request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.InternalServerError) ||
 						(request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.InternalServerError) ||
 						(request.RequestUri.Host == "data.quantonemusic.com" && response.StatusCode == HttpStatusCode.Forbidden))
