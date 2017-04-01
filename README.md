@@ -23,7 +23,6 @@
 - **Chartlyrics** (only for lyrics)
 - **Lololyrics** (only for lyrics)
 - **Baidu Music** (only for Lyrics)
-- **Bing** (only as fallback image source)
 
 
 ## Key Features

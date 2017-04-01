@@ -146,7 +146,6 @@ namespace GlobalNamespace
 				this.progressBar2.PerformStep();
 			}
 
-			Runtime.TokenSource.Dispose();
 			client.Dispose();
 
 			this.progressBar1.Visible = false;

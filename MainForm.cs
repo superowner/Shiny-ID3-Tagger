@@ -252,10 +252,13 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private void ClearResults_MenuItemClick(object sender, EventArgs e)
 		{
-			this.dataGridView1.Rows.Clear();
-			this.dataGridView2.Rows.Clear();
+			Runtime.TokenSource.Cancel();
 			Runtime.AlbumHits.Clear();
 			Runtime.ActiveDGV.Refresh();
+			
+			this.btnCancel.Visible = false;
+			this.dataGridView1.Rows.Clear();
+			this.dataGridView2.Rows.Clear();
 		}
 
 		// ###########################################################################

@@ -79,8 +79,6 @@ namespace GlobalNamespace
 				}
 			}
 			
-			Runtime.TokenSource.Dispose();
-				
 			this.dataGridView1.ClearSelection();						
 						
 			this.progressBar1.Visible = false;				

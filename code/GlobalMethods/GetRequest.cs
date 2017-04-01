@@ -67,16 +67,24 @@ namespace GlobalNamespace
 					}
 					else
 					{
-						// response was not successful. But it was also not a common error. Try to parse HTML and show it to the user via GUI
+						// response was not successful. But it was also not a common error
 						string errorResponse = response.Content.ReadAsStringAsync().Result;
 
+						// Try to extract the HTML body
 						Match match = Regex.Match(errorResponse, "(?<=<body>)(?<text>.*?)(?=</body>)", RegexOptions.Singleline);
 						if (match.Success)
 						{
 							errorResponse = match.Groups["text"].Value.Trim();
 						}
 
-						// If HTML parsing failed, show the complete response including HTML tags
+						// Try to extract the XML error message (Amazon API specific)
+						match = Regex.Match(errorResponse, "(?<=<Message>)(?<text>.*?)(?=</Message>)", RegexOptions.Singleline);
+						if (match.Success)
+						{
+							errorResponse = match.Groups["text"].Value.Trim();
+						}						
+
+						// Show the complete response including HTML tags OR the extracted body/message if extracting was successful
 						string[] errorMsg =
 							{
 								"ERROR: Server response was unsuccessful",
