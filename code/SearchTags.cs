@@ -65,7 +65,7 @@ namespace GlobalNamespace
 				if (rowAlreadyExists == false)
 				{
 					DataTable webserviceResults = await this.StartWebservicesTasks(client, tagOld, cancelToken);
-					Id3 tagNew = this.AggregateResults(client, webserviceResults, tagOld, cancelToken);
+					Id3 tagNew = this.AggregateResults(webserviceResults, tagOld);
 					tagNew.Lyrics = await this.StartLyricTasks(client, tagNew, cancelToken);
 					
 					if (cancelToken.IsCancellationRequested)
@@ -156,7 +156,7 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		private Id3 AggregateResults(HttpMessageInvoker client, DataTable webserviceResults, Id3 tagOld, CancellationToken cancelToken)
+		private Id3 AggregateResults(DataTable webserviceResults, Id3 tagOld)
 		{
 			Id3 tagNew = new Id3();
 
@@ -165,8 +165,8 @@ namespace GlobalNamespace
 			
 			var majorityAlbumRows = (from row in webserviceResults.AsEnumerable()
 							where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
-							orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss")
-							group row by Strip(row.Field<string>("album").ToLowerInvariant()) into grp
+							orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", Runtime.CultEng)
+							group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
 							where grp.Count() >= 3
 							orderby grp.Count() descending
 							select grp).FirstOrDefault();

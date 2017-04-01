@@ -35,9 +35,9 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			// const string Server = "https://musicbrainz.org";
-			const string Server = "https://beta.musicbrainz.org/";
 			// const string Server = "http://musicbrainz-mirror.eu:5000";
-			// const string Server = "http://musicbrainz.fin-alice.de:5000";								// info: http://www.tranquilbase.org/category/musicbrainz/
+			// const string Server = "http://musicbrainz.fin-alice.de:5000";								
+			const string Server = "https://beta.musicbrainz.org/";							// info: http://www.tranquilbase.org/category/musicbrainz/
 			
 			const string InvalidChars = @"[#!(){}/;:\[\]\^\\\\&""]";
 			

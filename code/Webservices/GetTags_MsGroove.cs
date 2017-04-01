@@ -43,7 +43,6 @@ namespace GlobalNamespace
 					new KeyValuePair<string, string>("client_id", User.Accounts["MsClientId"]),
 					new KeyValuePair<string, string>("client_secret", User.Accounts["MsClientSecret"]),
 					new KeyValuePair<string, string>("scope", "app.music.xboxlive.com")
-					
 				});
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
