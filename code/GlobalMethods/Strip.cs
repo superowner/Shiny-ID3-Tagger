@@ -30,6 +30,7 @@ namespace GlobalNamespace
 					str = Regex.Replace(str, RegExPattern, string.Empty, RegexOptions.IgnoreCase);
 				}
 
+				str = Regex.Replace(str, @"[\u202F\u00A0\u2005\u2009\u200B\u2060\u3000\uFEFF]", " ");
 				str = Regex.Replace(str, @"…", "...");
 				str = Regex.Replace(str, @"[‘’ʼ]", "'");
 				str = Regex.Replace(str, @"[‐‑−－]", "-");		// https://www.cs.tut.fi/~jkorpela/dashes.html
