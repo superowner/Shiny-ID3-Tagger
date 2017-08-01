@@ -18,11 +18,12 @@
 - **Musicgraph**
 - **Musixmatch**
 - **Napster**
+- **Netease**
 - **Qobuz**
+- **QQ**
 - **Spotify**
 - **Chartlyrics** (only for lyrics)
 - **Lololyrics** (only for lyrics)
-- **Baidu Music** (only for Lyrics)
 
 
 ## Key Features
