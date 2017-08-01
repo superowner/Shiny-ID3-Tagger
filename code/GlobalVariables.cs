@@ -8,11 +8,27 @@
 
 namespace GlobalNamespace
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
 	using System.Threading;	
 	using System.Windows.Forms;
+	
+	public partial class Form1
+	{
+		private static CultureInfo cultEng = new CultureInfo("en-US");
+
+		private static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		
+		private static Dictionary<string, int> albumHits = new Dictionary<string, int>();		
+		
+		private static DataGridView ActiveDGV { get; set; }
+		
+		private static string LastUsedFolder { get; set; }
+		
+		private static CancellationTokenSource TokenSource { get; set; }
+	}
 	
 	internal static class User
 	{
@@ -25,19 +41,6 @@ namespace GlobalNamespace
 		internal static DataTable MgAccounts { get; set; }
 		
 		internal static DataTable MmAccounts { get; set; }
-	}
-	
-	internal static class Runtime
-	{
-		internal static DataGridView ActiveDGV { get; set; }
-		
-		internal static Dictionary<string, int> AlbumHits { get; set; }
-		
-		internal static CultureInfo CultEng { get; set; }
-		
-		internal static string LastUsedFolder { get; set; }
-		
-		internal static CancellationTokenSource TokenSource { get; set; }
 	}
 	
 	internal class Id3
@@ -70,10 +73,10 @@ namespace GlobalNamespace
 
 		internal string Cover { get; set; }
 
+		// TODO Set locale
 		internal static DataTable CreateTable()
 		{
 			DataTable table = new DataTable();
-			table.Locale = Runtime.CultEng;
 			table.Columns.Add("number", typeof(uint));
 			table.Columns.Add("filepath", typeof(string));
 			table.Columns.Add("service", typeof(string));

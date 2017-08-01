@@ -40,7 +40,6 @@ namespace GlobalNamespace
 				var timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
 				timeoutToken.CancelAfter(TimeSpan.FromSeconds(Timeout));
 
-				// TODO: skip a webservice for the rest of the run if it wasn't reachable three times before
 				try
 				{
 					response = await client.SendAsync(request, timeoutToken.Token);

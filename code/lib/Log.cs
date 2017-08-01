@@ -23,7 +23,7 @@ namespace GlobalNamespace
 
 			try
 			{
-				string message = DateTime.Now.ToString("HH:mm:ss   ", Runtime.CultEng) + string.Join(Environment.NewLine + "           ", values);
+				string message = DateTime.Now.ToString("HH:mm:ss   ", cultEng) + string.Join(Environment.NewLine + "           ", values);
 
 				switch (logtype)
 				{

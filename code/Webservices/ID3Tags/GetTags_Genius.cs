@@ -32,9 +32,9 @@ namespace GlobalNamespace
 			sw.Start();			
 			
 			// ###########################################################################
-			// Is this token valid forever? If not, this method does not work and Oauth must be used
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
 			
+			// Is this access token valid forever? If not, this method does not work and Oauth must be used
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.RequestUri = new Uri("https://api.genius.com/search?q=" + searchTermEnc + "&access_token=" + User.Accounts["GeAccessToken"]);
 

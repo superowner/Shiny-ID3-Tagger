@@ -34,8 +34,8 @@ namespace GlobalNamespace
 			this.progressBar1.Visible = true;
 			this.progressBar2.Visible = true;
 
-			Runtime.TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = Runtime.TokenSource.Token;
+			TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = TokenSource.Token;
 
 			HttpClient client = InitiateHttpClient();
 			Stopwatch sw = new Stopwatch();
@@ -165,7 +165,7 @@ namespace GlobalNamespace
 			
 			var majorityAlbumRows = (from row in webserviceResults.AsEnumerable()
 							where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
-							orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", Runtime.CultEng)
+							orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
 							group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
 							where grp.Count() >= 3
 							orderby grp.Count() descending
@@ -192,7 +192,7 @@ namespace GlobalNamespace
 
 				tagNew.Date = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("date"))
-								group row by this.ConvertStringToDate(row.Field<string>("date")).Year.ToString(Runtime.CultEng) into grp
+								group row by this.ConvertStringToDate(row.Field<string>("date")).Year.ToString(cultEng) into grp
 								orderby grp.Count() descending, grp.Key ascending
 								select grp.Key).FirstOrDefault();
 
@@ -201,7 +201,7 @@ namespace GlobalNamespace
 								group row by Capitalize(Strip(row.Field<string>("genre"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
-
+				
 				tagNew.DiscCount = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("disccount"))
 								group row by row.Field<string>("disccount") into grp
@@ -254,7 +254,6 @@ namespace GlobalNamespace
 			var lyricsfoundToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
 			
 			List<Task<string>> taskList = new List<Task<string>>();
-			taskList.Add(this.GetLyrics_Baidu(client, tagNew, lyricsfoundToken.Token));
 			taskList.Add(this.GetLyrics_Chartlyrics(client, tagNew, lyricsfoundToken.Token));
 			taskList.Add(this.GetLyrics_Lololyrics(client, tagNew, lyricsfoundToken.Token));
 
@@ -292,22 +291,24 @@ namespace GlobalNamespace
 			for (int i = 1; i <= 2; i++)
 			{
 				List<Task<Id3>> taskList = new List<Task<Id3>>();
-				taskList.Add(this.GetTags_Deezer(client, artist, title, cancelToken));
-				taskList.Add(this.GetTags_Itunes(client, artist, title, cancelToken));
-				taskList.Add(this.GetTags_Spotify(client, artist, title, cancelToken));
-				taskList.Add(this.GetTags_Decibel(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_7digital(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_Amazon(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_Decibel(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_Deezer(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_Discogs(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_Genius(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_Gracenote(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_Itunes(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_LastFm(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_MsGroove(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_MusicBrainz(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_MusicGraph(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_MusixMatch(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_Napster(client, artist, title, cancelToken));
-				taskList.Add(this.GetTags_MusicGraph(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_Netease(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_Qobuz(client, artist, title, cancelToken));
-				taskList.Add(this.GetTags_Genius(client, artist, title, cancelToken));
-				taskList.Add(this.GetTags_7digital(client, artist, title, cancelToken));
-				taskList.Add(this.GetTags_MusicBrainz(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_QQ(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_Spotify(client, artist, title, cancelToken));
 
 				this.progressBar1.Maximum = taskList.Count;
 				this.progressBar1.Value = 0;

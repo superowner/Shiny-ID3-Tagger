@@ -39,7 +39,7 @@ namespace GlobalNamespace
 				}
 
 				string message = string.Format(
-									Runtime.CultEng,
+									cultEng,
 									"{0,-100}{1}",
 									"ERROR: Not a valid MP3 file",
 									"file: \"" + filepath + "\"");
@@ -49,7 +49,7 @@ namespace GlobalNamespace
 			catch (FileNotFoundException)
 			{
 				string message = string.Format(
-									Runtime.CultEng,
+									cultEng,
 									"{0,-100}{1}",
 									"ERROR: File not found",
 									"file: \"" + filepath + "\"");
@@ -59,7 +59,7 @@ namespace GlobalNamespace
 			catch (IOException)
 			{
 				string message = string.Format(
-									Runtime.CultEng,
+									cultEng,
 									"{0,-100}{1}",
 									"ERROR: Cannot access file. Already in use",
 									"file: \"" + filepath + "\"");

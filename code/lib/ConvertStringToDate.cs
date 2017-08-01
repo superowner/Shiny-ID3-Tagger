@@ -32,17 +32,17 @@ namespace GlobalNamespace
 					"MM/dd/yyyy HH",
 					"MM/dd/yyyy HH:mm",
 					"MM/dd/yyyy HH:mm:ss",
-					"MM.dd.yyyy HH:mm:ss"
+					"dd.MM.yyyy HH:mm:ss"
 				};
 	
 				DateTime resultDate = new DateTime();
-				if (DateTime.TryParseExact(dateString, formats, Runtime.CultEng, DateTimeStyles.None, out resultDate))
+				if (DateTime.TryParseExact(dateString, formats, cultEng, DateTimeStyles.None, out resultDate))
 				{
 					return resultDate;
 				}
 				else
 				{
-					string message = string.Format(Runtime.CultEng, "ERROR: Could not convert \"" + dateString + "\" to a date");
+					string message = string.Format(cultEng, "ERROR: Could not convert \"" + dateString + "\" to a date");
 					this.Log("error", new[] { message });					
 				}
 			}

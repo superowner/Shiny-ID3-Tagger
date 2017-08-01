@@ -70,7 +70,7 @@ namespace GlobalNamespace
 				{
 					o.Genre = (string)data2.SelectToken("Results[0].Genres[0].Name");
 					o.TrackCount = (string)data2.SelectToken("Results[0].Recordings[-1:].AlbumSequence");
-					o.Cover = "https://data.quantonemusic.com/v3/Images/" + (string)data2.SelectToken("Results[0].ImageId");
+					o.Cover = "https://data.quantonemusic.com/v3/Images/" + (string)data2.SelectToken("Results[0].ImageId"); // don't include in settings.json CoverOrder
 
 					foreach (JToken recording in data2.SelectTokens("Results[0].Recordings[*]"))
 					{

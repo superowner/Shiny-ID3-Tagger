@@ -41,7 +41,6 @@ namespace GlobalNamespace
 				User.Settings = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(plainString);
 
 				User.DbAccounts = new DataTable();
-				User.DbAccounts.Locale = Runtime.CultEng;
 				User.DbAccounts.Columns.Add("lastUsed", typeof(double));
 				User.DbAccounts.Columns.Add("id", typeof(string));
 				User.DbAccounts.Columns.Add("key", typeof(string));
@@ -52,15 +51,14 @@ namespace GlobalNamespace
 				User.DbAccounts.Rows.Add(5, User.Accounts["DbAppId5"], User.Accounts["DbAppKey5"]);
 
 				User.MgAccounts = new DataTable();
-				User.MgAccounts.Locale = Runtime.CultEng;
 				User.MgAccounts.Columns.Add("lastUsed", typeof(double));
 				User.MgAccounts.Columns.Add("key", typeof(string));
 				User.MgAccounts.Rows.Add(1, User.Accounts["MgAppKey1"]);
 				User.MgAccounts.Rows.Add(2, User.Accounts["MgAppKey2"]);
 				User.MgAccounts.Rows.Add(3, User.Accounts["MgAppKey3"]);
 
+				// TODO Set locale
 				User.MmAccounts = new DataTable();
-				User.MmAccounts.Locale = Runtime.CultEng;
 				User.MmAccounts.Columns.Add("lastUsed", typeof(double));
 				User.MmAccounts.Columns.Add("key", typeof(string));
 				User.MmAccounts.Rows.Add(1, User.Accounts["MmApiKey1"]);

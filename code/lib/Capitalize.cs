@@ -44,16 +44,16 @@ namespace GlobalNamespace
 
 					// Search special words and lowercase them. But ignore the first/last word. They must be capitalized
 					// "and" => stays "and"			"And" => goes "and"		"AND" => stays "AND"
-					if (lowercase.Contains(word.ToLower(Runtime.CultEng)) && w.Index != firstIndex && w.Index != lastIndex)
+					if (lowercase.Contains(word.ToLower(cultEng)) && w.Index != firstIndex && w.Index != lastIndex)
 					{
-						string newWord = word.ToLower(Runtime.CultEng);
+						string newWord = word.ToLower(cultEng);
 						str = str.Remove(w.Index, w.Length).Insert(w.Index, newWord);
 						continue;
 					}
 
 					// All remaining lowercase only words are capitalized
 					// edge cases like "iTunes" or "CHURCHES" stay as they are since they are not "lowercase only"
-					if (word == word.ToLower(Runtime.CultEng))
+					if (word == word.ToLower(cultEng))
 					{
 						string newWord = word.First().ToString().ToUpperInvariant() + word.Substring(1);
 						str = str.Remove(w.Index, w.Length).Insert(w.Index, newWord);

@@ -5,7 +5,7 @@
 	"UseBingFallback" 	: true,
 	"OverwriteImage" 	: false,
 	"AutoSearch" 		: true,
-	"CoverOrder" 		: "Amazon,Gracenote,iTunes,Deezer,Napster,Spotify,Microsoft Groove,Musixmatch,Musicbrainz,Genius,7digital,Qobuz,Last.fm",
+	"CoverOrder" 		: "Amazon,Gracenote,iTunes,Deezer,Discogs,Napster,Spotify,Microsoft Groove,Musicbrainz,Netease,Genius,7digital,Qobuz,Last.fm",
 	"MaxImageSize" 		: 500,
 	"Proxy" 			: "0.0.0.0:8080",
 	"UserAgent" 		: "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",	

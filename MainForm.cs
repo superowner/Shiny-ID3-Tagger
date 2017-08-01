@@ -32,9 +32,6 @@ namespace GlobalNamespace
 			Version version = new Version(Application.ProductVersion);
 			this.Text = Application.ProductName + " " + version.Major + "." + version.Minor;
 			
-			Runtime.CultEng = new CultureInfo("en-US");
-			Runtime.AlbumHits = new Dictionary<string, int>();			
-
 			bool successReadingVariables = this.ReadAccountCredentials();
 			if (successReadingVariables)
 			{
@@ -89,7 +86,7 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private void BtnCancelClick(object sender, EventArgs e)
 		{
-			Runtime.TokenSource.Cancel();
+			TokenSource.Cancel();
 			this.btnCancel.Visible = false;
 		}
 
@@ -220,16 +217,16 @@ namespace GlobalNamespace
 		{
 			VistaFolderBrowserDialog fbd = new VistaFolderBrowserDialog();
 
-			if (Runtime.LastUsedFolder == null)
+			if (LastUsedFolder == null)
 			{
-				Runtime.LastUsedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + @"\";
+				LastUsedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + @"\";
 			}
 
-			fbd.SelectedPath = Runtime.LastUsedFolder;
+			fbd.SelectedPath = LastUsedFolder;
 
 			if (fbd.ShowDialog() == DialogResult.OK)
 			{
-				Runtime.LastUsedFolder = fbd.SelectedPath;
+				LastUsedFolder = fbd.SelectedPath;
 				string[] folderpath = { fbd.SelectedPath };
 				this.AddFiles(folderpath);
 			}
@@ -241,10 +238,10 @@ namespace GlobalNamespace
 			switch (this.tabControl1.SelectedIndex)
 			{
 				case 0:
-					Runtime.ActiveDGV = this.dataGridView1;
+					ActiveDGV = this.dataGridView1;
 					break;
 				case 1:
-					Runtime.ActiveDGV = this.dataGridView2;
+					ActiveDGV = this.dataGridView2;
 					break;
 			}
 	}
@@ -252,9 +249,9 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private void ClearResults_MenuItemClick(object sender, EventArgs e)
 		{
-			Runtime.TokenSource.Cancel();
-			Runtime.AlbumHits.Clear();
-			Runtime.ActiveDGV.Refresh();
+			TokenSource.Cancel();
+			albumHits.Clear();
+			ActiveDGV.Refresh();
 			
 			this.btnCancel.Visible = false;
 			this.dataGridView1.Rows.Clear();
@@ -267,10 +264,10 @@ namespace GlobalNamespace
 			StringBuilder csvContent = new StringBuilder();
 			string seperator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 
-			IEnumerable<DataGridViewColumn> headers = Runtime.ActiveDGV.Columns.Cast<DataGridViewColumn>();
+			IEnumerable<DataGridViewColumn> headers = ActiveDGV.Columns.Cast<DataGridViewColumn>();
 			csvContent.AppendLine(string.Join(seperator, headers.Select(column => WellFormedCsvValue(column.HeaderCell.Value)).ToArray()));
 
-			foreach (DataGridViewRow row in Runtime.ActiveDGV.Rows)
+			foreach (DataGridViewRow row in ActiveDGV.Rows)
 			{
 				IEnumerable<DataGridViewCell> cells = row.Cells.Cast<DataGridViewCell>();
 				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => WellFormedCsvValue(cell.Value)).ToArray()));
@@ -278,7 +275,7 @@ namespace GlobalNamespace
 
 			SaveFileDialog dialog = new SaveFileDialog();
 			dialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-			dialog.FileName = "Shiny ID3 Tagger Export " + DateTime.Now.ToString("yy-MM-dd HH-mm-ss", Runtime.CultEng);
+			dialog.FileName = "Shiny ID3 Tagger Export " + DateTime.Now.ToString("yy-MM-dd HH-mm-ss", cultEng);
 			dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
 			if (dialog.ShowDialog() == DialogResult.OK)

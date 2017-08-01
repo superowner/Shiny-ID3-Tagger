@@ -40,12 +40,11 @@ namespace GlobalNamespace
 			string content = await this.GetRequest(client, request, cancelToken);
 			JObject data = JsonConvert.DeserializeObject<JObject>(content, this.GetJsonSettings());
 
-			if (data != null && data.SelectToken("tracks") != null)
+			if (data != null && data.SelectToken("tracks.items[0]") != null)
 			{
 				o.Artist = (string)data.SelectToken("tracks.items[0].performer.name");
 				o.Title = (string)data.SelectToken("tracks.items[0].title");
 				o.Album = (string)data.SelectToken("tracks.items[0].album.title");
-				o.Date = (string)data.SelectToken("tracks.items[0].album.released_at");
 				o.Genre = (string)data.SelectToken("tracks.items[0].album.genre.name");
 				o.DiscCount = (string)data.SelectToken("tracks.items[0].album.media_count");
 				o.DiscNumber = (string)data.SelectToken("tracks.items[0].media_number");
@@ -53,11 +52,11 @@ namespace GlobalNamespace
 				o.TrackNumber = (string)data.SelectToken("tracks.items[0].track_number");
 				o.Cover = (string)data.SelectToken("tracks.items[0].album.image.large");
 				
-				int intDate;
-				if (int.TryParse(o.Date, out intDate))
+				long seconds;
+				string strSeconds = (string)data.SelectToken("tracks.items[0].album.released_at");
+				if (long.TryParse(strSeconds, out seconds))
 				{
-					DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-					o.Date = epoch.AddSeconds(intDate).ToString("MM/dd/yyyy hh:mm:ss");
+					o.Date = epoch.AddSeconds(seconds).ToString();
 				}
 			}
 			

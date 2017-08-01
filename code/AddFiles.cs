@@ -26,8 +26,8 @@ namespace GlobalNamespace
 			this.btnWrite.Enabled = false;
 			this.btnAddFiles.Enabled = false;			
 
-			Runtime.TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = Runtime.TokenSource.Token;
+			TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = TokenSource.Token;
 			
 			if (files == null || !files.Any())
 			{
@@ -35,16 +35,16 @@ namespace GlobalNamespace
 				dialog.Filter = "MP3 Files|*.mp3";
 				dialog.Multiselect = true;
 
-				if (Runtime.LastUsedFolder == null)
+				if (LastUsedFolder == null)
 				{
-					Runtime.LastUsedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + @"\";
+					LastUsedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + @"\";
 				}
 			
-				dialog.InitialDirectory = Runtime.LastUsedFolder;
+				dialog.InitialDirectory = LastUsedFolder;
 			
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					Runtime.LastUsedFolder = Path.GetDirectoryName(dialog.FileNames[0]);
+					LastUsedFolder = Path.GetDirectoryName(dialog.FileNames[0]);
 					files = dialog.FileNames;
 				}
 			}
@@ -186,12 +186,12 @@ namespace GlobalNamespace
 				// ReaderWriterLock in AllowDrop remaining Id3 GetTags_7digital from file
 				// Replace possible null values with empty strings. This avoids many additional null checks later
 				tagOld.Album = tagFile.Tag.Album ?? string.Empty;
-				tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(Runtime.CultEng) : string.Empty;
+				tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : string.Empty;
 				tagOld.Genre = tagFile.Tag.FirstGenre ?? string.Empty;
-				tagOld.DiscCount = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(Runtime.CultEng) : string.Empty;
-				tagOld.DiscNumber = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(Runtime.CultEng) : string.Empty;
-				tagOld.TrackCount = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(Runtime.CultEng) : string.Empty;
-				tagOld.TrackNumber = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(Runtime.CultEng) : string.Empty;
+				tagOld.DiscCount = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : string.Empty;
+				tagOld.DiscNumber = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : string.Empty;
+				tagOld.TrackCount = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : string.Empty;
+				tagOld.TrackNumber = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : string.Empty;
 				tagOld.Lyrics = tagFile.Tag.Lyrics ?? string.Empty;
 				tagOld.Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty;								
 				

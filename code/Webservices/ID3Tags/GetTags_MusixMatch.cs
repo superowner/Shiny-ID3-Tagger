@@ -51,15 +51,6 @@ namespace GlobalNamespace
 				o.Title = (string)data1.SelectToken("message.body.track_list[0].track.track_name");
 				o.Album = (string)data1.SelectToken("message.body.track_list[0].track.album_name");
 				o.Genre = (string)data1.SelectToken("message.body.track_list[0].track.primary_genres.music_genre_list[0].music_genre.music_genre_name");
-
-				foreach (string size in new[] { "800x800", "500x500", "350x350" })
-				{
-					o.Cover = (string)data1.SelectToken("message.body.track_list[0].track.album_coverart_" + size);
-					if (o.Cover != string.Empty)
-					{
-						break;
-					}
-				}
 				
 				// ###########################################################################
 				string albumid = (string)data1.SelectToken("message.body.track_list[0].track.album_id");
@@ -77,6 +68,9 @@ namespace GlobalNamespace
 					o.TrackNumber = null;
 					o.DiscCount = null;
 					o.DiscNumber = null;
+
+					// Muxixmatch has several fields prepared for cover URLs. But they are never used/filled with data
+					o.Cover = null;
 				}
 			}
 			
