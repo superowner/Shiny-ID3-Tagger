@@ -256,6 +256,7 @@ namespace GlobalNamespace
 			List<Task<string>> taskList = new List<Task<string>>();
 			taskList.Add(this.GetLyrics_Chartlyrics(client, tagNew, lyricsfoundToken.Token));
 			taskList.Add(this.GetLyrics_Lololyrics(client, tagNew, lyricsfoundToken.Token));
+			taskList.Add(this.GetLyrics_Xiami(client, tagNew, lyricsfoundToken.Token));
 
 			while (taskList.Count > 0)
 			{

@@ -73,10 +73,10 @@ namespace GlobalNamespace
 
 		internal string Cover { get; set; }
 
-		// TODO Set locale
 		internal static DataTable CreateTable()
 		{
 			DataTable table = new DataTable();
+			table.Locale = new CultureInfo("en-US");
 			table.Columns.Add("number", typeof(uint));
 			table.Columns.Add("filepath", typeof(string));
 			table.Columns.Add("service", typeof(string));
