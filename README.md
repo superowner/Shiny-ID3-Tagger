@@ -22,12 +22,15 @@
 - **Qobuz**
 - **QQ**
 - **Spotify**
+- **Tidal**
 - **Chartlyrics** (only for lyrics)
 - **Lololyrics** (only for lyrics)
-
+- **Xiami** (only for lyrics)
 
 ## Key Features
-- Queries large online databases to get the right tags. No handwork needed
+- Queries 19 online databases at the same time and selects/adds the most common results.
+  This means, if for example 10 webservices respond with "Beyoncé" as artist name and only 5 webservices say it's "Beyonce" (note the difference) than the
+  program assumes that the majority is right and selects the first variant. This is the way it works for all tags
 - Supports the following ID3v2.3 tags
   - **Artist name**
   - **Track title**
@@ -38,9 +41,9 @@
   - **Disc number**
   - **Track count**
   - **Track number**
-- Auto downloads and embedds an **album cover**
-- Adds lyrics as ID3 tag
-- Corrects casing and spelling mistakes
+- Auto downloads and embedds the **album cover**
+- Adds lyrics as ID3 tag *Unsynced lyrics*
+- Corrects casing and spelling mistakes in all tags
 
 ## How To Install
 - [Download and extract the latest release](https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest)

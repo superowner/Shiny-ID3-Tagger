@@ -122,6 +122,7 @@
     <Compile Include="code\Webservices\ID3Tags\GetTags_Qobuz.cs" />
     <Compile Include="code\Webservices\ID3Tags\GetTags_QQ.cs" />
     <Compile Include="code\Webservices\ID3Tags\GetTags_Spotify.cs" />
+    <Compile Include="code\Webservices\ID3Tags\GetTags_Tidal.cs" />
     <Compile Include="code\Webservices\Lyrics\GetLyrics_Chartlyrics.cs" />
     <Compile Include="code\Webservices\Lyrics\GetLyrics_Lololyrics.cs" />
     <Compile Include="code\Webservices\Lyrics\GetLyrics_Xiami.cs" />
@@ -138,7 +139,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Encryptor\Test\bin\Debug\accounts_plain.json">
+    <None Include="..\Encryptor\Test\accounts_plain.json">
       <Link>resources\accounts_plain.json</Link>
     </None>
     <None Include="app.config" />

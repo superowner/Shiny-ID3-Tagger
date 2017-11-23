@@ -310,6 +310,7 @@ namespace GlobalNamespace
 				taskList.Add(this.GetTags_Qobuz(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_QQ(client, artist, title, cancelToken));
 				taskList.Add(this.GetTags_Spotify(client, artist, title, cancelToken));
+				taskList.Add(this.GetTags_Tidal(client, artist, title, cancelToken));
 
 				this.progressBar1.Maximum = taskList.Count;
 				this.progressBar1.Value = 0;
