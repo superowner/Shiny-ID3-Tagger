@@ -57,18 +57,25 @@ namespace GlobalNamespace
 			string content = await this.GetRequest(client, request, cancelToken);
 			JObject data = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content), this.GetJsonSettings());
 
-			if (data != null && data.SelectToken("RESPONSES.RESPONSE") != null)
+			if (data != null && data.SelectToken("RESPONSES.MESSAGE") != null)
+			{				
+				this.Log("error", new[] { "Gracenote error:", (string)data.SelectToken("RESPONSES.MESSAGE") });	
+			}
+			else
 			{
-				o.Artist = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.ARTIST");
-				o.Title = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.TRACK.TITLE");
-				o.Album = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.TITLE");
-				o.Date = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.DATE");
-				o.Genre = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.GENRE.#text");
-				o.DiscCount = null;
-				o.DiscNumber = null;
-				o.TrackCount = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.TRACK_COUNT");
-				o.TrackNumber = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.MATCHED_TRACK_NUM");
-				o.Cover = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.URL.#text");
+				if (data != null && data.SelectToken("RESPONSES.RESPONSE") != null)
+				{
+					o.Artist = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.ARTIST");
+					o.Title = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.TRACK.TITLE");
+					o.Album = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.TITLE");
+					o.Date = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.DATE");
+					o.Genre = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.GENRE.#text");
+					o.DiscCount = null;
+					o.DiscNumber = null;
+					o.TrackCount = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.TRACK_COUNT");
+					o.TrackNumber = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.MATCHED_TRACK_NUM");
+					o.Cover = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.URL.#text");
+				}	
 			}
 			
 			// ###########################################################################
