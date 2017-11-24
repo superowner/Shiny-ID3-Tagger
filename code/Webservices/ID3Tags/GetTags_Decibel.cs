@@ -28,7 +28,7 @@ namespace GlobalNamespace
 		private async Task<Id3> GetTags_Decibel(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3();
-			o.Service = "Decibel";
+			o.Service = "Decibel (Quantone Music)";
 			
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

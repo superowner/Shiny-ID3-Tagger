@@ -1,8 +1,7 @@
 {
 	"PreferTags" 		: true,
-	"RemoveBrackets" 	: false,
-	"RemoveFeaturing" 	: false,
-	"UseBingFallback" 	: true,
+	"RemoveBrackets" 	: true,
+	"RemoveFeaturing" 	: false,	
 	"OverwriteImage" 	: false,
 	"AutoSearch" 		: true,
 	"CoverOrder" 		: "Amazon,Gracenote,iTunes,Deezer,Discogs,Napster,Spotify,Microsoft Groove,Musicbrainz,Netease,Genius,7digital,Qobuz,Last.fm",

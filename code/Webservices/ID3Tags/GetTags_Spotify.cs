@@ -53,7 +53,7 @@ namespace GlobalNamespace
 			if (data1 != null && data1.SelectToken("access_token") != null)
 			{
 				request = new HttpRequestMessage();
-				request.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEnc + "\"* title:\"" + titleEnc + "\"*&type=track&limit=1");
+				request.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEnc + "\" title:\"" + titleEnc + "\"&type=track&limit=1");
 				request.Headers.Add("Authorization", "Bearer " + data1.SelectToken("access_token"));
 	
 				string content2 = await this.GetRequest(client, request, cancelToken);

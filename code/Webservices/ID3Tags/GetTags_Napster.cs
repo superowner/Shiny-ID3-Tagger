@@ -24,7 +24,7 @@ namespace GlobalNamespace
 		private async Task<Id3> GetTags_Napster(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3();
-			o.Service = "Napster";
+			o.Service = "Napster (Rhapsody)";
 			
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
