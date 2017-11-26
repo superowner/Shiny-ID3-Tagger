@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright file="GetTags_LastFm.cs" company="Shiny Id3 Tagger">
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
@@ -23,7 +23,7 @@ namespace GlobalNamespace
 	using System.Threading.Tasks;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
-
+	
 	public partial class Form1
 	{
 		private async Task<Id3> GetTags_LastFm(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
@@ -66,9 +66,8 @@ namespace GlobalNamespace
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
 				if (data2 != null && data2.SelectToken("album") != null)
-				{
-					// documentation says "releasedate" property exists. But I have never seen it in reality
-					o.Date = (string)data2.SelectToken("album.releasedate");		
+				{					
+					o.Date = null;	// "releasedate" property is broken on lastfm's site. They said they eventually fix this in 2018 with a new API (https://getsatisfaction.com/lastfm/topics/album-getinfo-is-missing-releasedate)
 					o.DiscCount = null;
 					o.DiscNumber = null;
 					o.TrackCount = (string)data2.SelectToken("album.tracks.track[-1:].@attr.rank");					
@@ -79,7 +78,7 @@ namespace GlobalNamespace
 					}
 				}
 			}
-
+			
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

@@ -35,9 +35,6 @@ namespace GlobalNamespace
 			string titleTemp = string.Join("* ", title.Split(' ')) + "*";
 			string searchTermEnc = WebUtility.UrlEncode(artistTemp + " " + titleTemp);
 
-			// This API is strange. You can either search for a release and don't get the album. Or you search for the album but don't get the release			
-			// You can do one search with "format=album" to maybe get the album and a second search without "format=album" to maybe get the single and therefore the track title
-			// But no one will guarantee that the second search shows a title which is on your album from the first search
 			HttpRequestMessage request = new HttpRequestMessage();			
 			request.RequestUri = new Uri("https://api.discogs.com/database/search?q=" + searchTermEnc +
 				"&format=album" +
@@ -62,10 +59,14 @@ namespace GlobalNamespace
 				string content2 = await this.GetRequest(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
+				// This API is strange. You can either search for a release and don't get the album. Or you search for the album but don't get the release			
+				// You can do one search with "format=album" to maybe get the album and a second search without "format=album" to maybe get the single and therefore the track title
+				// But no one will guarantee that the second search shows a title which is on your album from the first search
+				// How can I get a response which holds the album and title at the same time?
 				if (data2 != null)
 				{
 					o.Artist = (string)data2.SelectToken("artists[0].name");
-					o.Title = null; 
+					o.Title = null;				
 					o.Album = (string)data2.SelectToken("title");
 					o.Date = (string)data2.SelectToken("year");
 					o.Genre = (string)data2.SelectToken("genres[0]");

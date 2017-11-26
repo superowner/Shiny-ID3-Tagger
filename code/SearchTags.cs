@@ -6,6 +6,11 @@
 // <summary>Code fired when "Search tags" button is clicked. Calls all webservice APIs</summary>
 //-----------------------------------------------------------------------
 
+// TODO Move column for album hits to the right/end of table
+// TODO Move column for API duration per track to the right/end of table
+// TODO Add a new column for accumulated API duration which sums up all API durations per track to one big number
+// TODO Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
+
 namespace GlobalNamespace
 {
 	using System;
