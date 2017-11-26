@@ -52,6 +52,7 @@ namespace GlobalNamespace
 						|| (request.RequestUri.Host == "api.lololyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.InternalServerError)
+						|| (request.RequestUri.Host == "accounts.spotify.com" && response.StatusCode == HttpStatusCode.BadGateway)
 						
 					// The following errors where once common during testing. Now as of 2017 they only occur very rarely so I decided to let them pop up
 //						|| (request.RequestUri.Host == "api.spotify.com" && response.StatusCode == HttpStatusCode.NotFound)
