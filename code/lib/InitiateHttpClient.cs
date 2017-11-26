@@ -19,6 +19,7 @@ namespace GlobalNamespace
 		private static HttpClient InitiateHttpClient()
 		{
 			HttpClientHandler handler = new HttpClientHandler();
+			handler.UseCookies = false;
 
 			Ping ping = new Ping();
 
