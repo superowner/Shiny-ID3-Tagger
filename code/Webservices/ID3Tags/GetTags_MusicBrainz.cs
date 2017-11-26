@@ -130,7 +130,7 @@ namespace GlobalNamespace
 							select tag;
 
 						JToken objGenre = objGenres.ToArray()[0];
-						o.Genre = (string)objGenre["name"];
+						o.Genre = (string)objGenre["name"];				// Not many results for genres because musicbrainz does not support them (https://wiki.musicbrainz.org/Genre)
 					}
 				}
 
