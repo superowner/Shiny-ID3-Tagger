@@ -6,6 +6,8 @@
 // <summary>Module executed when "Write tags" button is clicked. Loops through all rows and writes their results as tags to current file</summary>
 //-----------------------------------------------------------------------
 
+// TODO Write all results to all mp3 files. But save playback stats to file before and get them back afterwards
+
 namespace GlobalNamespace
 {
 	using System;
