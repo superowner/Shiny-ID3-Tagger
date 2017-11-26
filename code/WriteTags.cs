@@ -7,6 +7,7 @@
 //-----------------------------------------------------------------------
 
 // TODO Write all results to all mp3 files. But save playback stats to file before and get them back afterwards
+// TODO Add option to add replay gain info
 
 namespace GlobalNamespace
 {
