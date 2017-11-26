@@ -52,9 +52,9 @@ namespace GlobalNamespace
 				o.Album = (string)data1.SelectToken("message.body.track_list[0].track.album_name");
 				o.Genre = (string)data1.SelectToken("message.body.track_list[0].track.primary_genres.music_genre_list[0].music_genre.music_genre_name");
 				
-				// ###########################################################################
 				string albumid = (string)data1.SelectToken("message.body.track_list[0].track.album_id");
-
+				
+				// ###########################################################################
 				request = new HttpRequestMessage();
 				request.RequestUri = new Uri("https://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account[0]["key"]);
 
@@ -65,12 +65,30 @@ namespace GlobalNamespace
 				{
 					o.Date = (string)data2.SelectToken("message.body.album.album_release_date");					
 					o.TrackCount = (string)data2.SelectToken("message.body.album.album_track_count");
-					o.TrackNumber = null;
 					o.DiscCount = null;
 					o.DiscNumber = null;
 
-					// Muxixmatch has several fields prepared for cover URLs. But they are never used/filled with data
+					// Musixmatch (when using "album.get" instead of "album.tracks.get" method) provides several fields for cover URLs. But they are never used/filled with data
 					o.Cover = null;
+				}
+				
+				// ###########################################################################
+				request = new HttpRequestMessage();
+				request.RequestUri = new Uri("https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account[0]["key"]);
+
+				string content3 = await this.GetRequest(client, request, cancelToken);
+				JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
+
+				if (data3 != null && data3.SelectToken("message.body.track_list") != null)
+				{
+					JToken[] tracklist = data3.SelectTokens("message.body.track_list[*].track.track_name").ToArray();
+					Debug.WriteLine(tracklist.Length);
+					int temp = Array.FindIndex(tracklist, t => t.ToString().Equals(o.Title, StringComparison.InvariantCultureIgnoreCase));
+					if (temp != -1)
+					{
+						o.TrackNumber = (temp + 1).ToString();
+					}					
+
 				}
 			}
 			
