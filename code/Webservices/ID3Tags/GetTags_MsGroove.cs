@@ -55,8 +55,7 @@ namespace GlobalNamespace
 
 				request = new HttpRequestMessage();
 				request.Headers.Add("Authorization", token);
-				request.RequestUri = new Uri("https://music.xboxlive.com/1/content/music/search?q=" + searchTermEnc +
-					"&maxItems=1&filters=tracks&contentType=JSON&language=US&country=US");
+				request.RequestUri = new Uri("https://music.xboxlive.com/1/content/music/search?q=" + searchTermEnc + "&maxItems=1&filters=tracks&contentType=JSON");
 				
 				// ###########################################################################
 				string content2 = await this.GetRequest(client, request, cancelToken);
