@@ -40,8 +40,7 @@ namespace GlobalNamespace
 			string titleEnc = WebUtility.UrlEncode(title);
 			
 			HttpRequestMessage request = new HttpRequestMessage();
-			request.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account[0]["key"] + 
-										 "&prefix=wonderf&artist_name=" + artistEnc + "&title=" + titleEnc + "&limit=5");
+			request.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account[0]["key"] + "&artist_name=" + artistEnc + "&title=" + titleEnc + "&limit=5");
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
@@ -63,6 +62,7 @@ namespace GlobalNamespace
 				o.TrackNumber = (string)track.SelectToken("track_index");
 
 				// ###########################################################################
+				// musicgraph has a database flaw where many album IDs in track responses point to non-existing albums in their database resulting in 404 "Not found" errors
 				string albumid = (string)track.SelectToken("track_album_id");
 
 				request = new HttpRequestMessage();
