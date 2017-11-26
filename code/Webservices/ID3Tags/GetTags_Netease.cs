@@ -4,7 +4,9 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Netease API for current track</summary>
+// https://music.163.com/
 // https://github.com/JounQin/netease-muisc-api/tree/master/api
+// https://github.com/yanunon/NeteaseCloudMusic/wiki/NetEase-cloud-music-analysis-API-%5BEN%5D
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -33,7 +35,8 @@ namespace GlobalNamespace
 			// ###########################################################################
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
 			
-			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://music.163.com/api/search/pc/");
+			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://music.163.com/api/search/pc/");			
+			request.Headers.Add("Referer", "http://music.163.com");
 			request.Content = new FormUrlEncodedContent(new[]
 				{
 					new KeyValuePair<string, string>("s", searchTermEnc),
@@ -54,7 +57,7 @@ namespace GlobalNamespace
 					o.Artist = (string)albums[0].SelectToken("artists[0].name");
 					o.Title = (string)albums[0].SelectToken("name");
 					o.Album = (string)albums[0].SelectToken("album.name");
-					o.Genre = null;
+					o.Genre = null;			//Netease provide a detailed album query with a property called "tags". But the value seems always empty
 					o.DiscCount = null;
 					o.DiscNumber = (string)albums[0].SelectToken("disc");
 					o.TrackCount = (string)albums[0].SelectToken("album.size");

@@ -46,7 +46,7 @@ namespace GlobalNamespace
 			byte[] credidsBytes = Encoding.UTF8.GetBytes(credidsPlain);
 			string creditsBase64 = Convert.ToBase64String(credidsBytes);
 			request.Headers.Add("Authorization", "Basic " + creditsBase64);
-			
+
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 			
