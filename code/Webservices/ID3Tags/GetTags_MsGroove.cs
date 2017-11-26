@@ -51,10 +51,9 @@ namespace GlobalNamespace
 			if (data1 != null && data1.SelectToken("access_token") != null)
 			{
 				string token = WebUtility.UrlEncode((string)data1.SelectToken("access_token"));
-				token = "Bearer" + " " + token;
 
 				request = new HttpRequestMessage();
-				request.Headers.Add("Authorization", token);
+				request.Headers.Add("Authorization", "Bearer " + token);
 				request.RequestUri = new Uri("https://music.xboxlive.com/1/content/music/search?q=" + searchTermEnc + "&maxItems=1&filters=tracks&contentType=JSON");
 				
 				// ###########################################################################
@@ -71,8 +70,20 @@ namespace GlobalNamespace
 					o.Cover = (string)data2.SelectToken("Tracks.Items[0].Album.ImageUrl");
 					o.DiscCount = null;
 					o.DiscNumber = null;
-					o.TrackCount = null;
 					o.TrackNumber = (string)data2.SelectToken("Tracks.Items[0].TrackNumber");
+					
+					// ###########################################################################
+					request = new HttpRequestMessage();
+					request.Headers.Add("Authorization", "Bearer " + token);
+					request.RequestUri = new Uri("https://music.xboxlive.com/1/content/" + (string)data2.SelectToken("Tracks.Items[0].Album.Id") + "/lookup?contentType=JSON");
+				
+					string content3 = await this.GetRequest(client, request, cancelToken);
+					JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
+
+					if (data3 != null && data3.SelectToken("Albums.Items") != null)
+					{
+						o.TrackCount = (string)data3.SelectToken("Albums.Items[0].TrackCount");
+					}
 				}
 			}
 

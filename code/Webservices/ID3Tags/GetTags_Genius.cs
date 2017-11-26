@@ -54,11 +54,8 @@ namespace GlobalNamespace
 					o.Artist = (string)data2.SelectToken("response.song.primary_artist.name");
 					o.Title = (string)data2.SelectToken("response.song.title");	
 					o.Album = (string)data2.SelectToken("response.song.album.name");					
-					o.Genre = null;  // They don't offer genre or tags via API (https://genius.com/discussions/279491-Are-genius-song-tags-rap-rock-etc-exposed-through-the-songs-api)
-					o.DiscCount = null;
-					o.DiscNumber = null;
-					o.TrackCount = null;
-					o.TrackNumber = null;	
+					o.Genre = null;			// They don't offer this tag via API (https://genius.com/discussions/279491-Are-genius-song-tags-rap-rock-etc-exposed-through-the-songs-api)
+	
 					o.Cover = (string)data2.SelectToken("response.song.album.cover_art_url");
 							
 					var albumPath = data2.SelectToken("response.song.album.api_path");
@@ -69,9 +66,13 @@ namespace GlobalNamespace
 					
 						string content3 = await this.GetRequest(client, request, cancelToken);
 						JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
-						
+
 						if (data3 != null)
 						{
+							o.DiscCount = null;			// Not provided in API response
+							o.DiscNumber = null;		// Not provided in API response
+							o.TrackCount = null;		// Not provided in API response
+							o.TrackNumber = null;		// Not provided in API response
 							o.Date = (string)data3.SelectToken("response.album.release_date");
 						}
 					}
