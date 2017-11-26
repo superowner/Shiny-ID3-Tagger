@@ -38,7 +38,7 @@ namespace GlobalNamespace
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());			
-
+			
 			if (data1 != null)
 			{
 				o.Artist = (string)data1.SelectToken("data[0].artistName");
@@ -46,7 +46,7 @@ namespace GlobalNamespace
 				o.Album = (string)data1.SelectToken("data[0].albumName");
 				o.TrackNumber = (string)data1.SelectToken("data[0].index");
 				o.DiscNumber = (string)data1.SelectToken("data[0].disc");
-				o.Genre = (string)data1.SelectToken("data[0].linked.genres.ids[0]");
+				o.Genre = (string)data1.SelectToken("data[0].linked.genres[0].name");
 
 				if (data1.SelectToken("data[0].albumId") != null)
 				{
