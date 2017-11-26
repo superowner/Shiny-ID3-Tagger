@@ -54,7 +54,7 @@ namespace GlobalNamespace
 					o.Artist = (string)data2.SelectToken("response.song.primary_artist.name");
 					o.Title = (string)data2.SelectToken("response.song.title");	
 					o.Album = (string)data2.SelectToken("response.song.album.name");					
-					o.Genre = null;
+					o.Genre = null;  // They don't offer genre or tags via API (https://genius.com/discussions/279491-Are-genius-song-tags-rap-rock-etc-exposed-through-the-songs-api)
 					o.DiscCount = null;
 					o.DiscNumber = null;
 					o.TrackCount = null;
@@ -66,10 +66,10 @@ namespace GlobalNamespace
 					{					
 						request = new HttpRequestMessage();
 						request.RequestUri = new Uri("https://api.genius.com" + albumPath + "?access_token=" + User.Accounts["GeAccessToken"]);
-		
+					
 						string content3 = await this.GetRequest(client, request, cancelToken);
 						JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
-					
+						
 						if (data3 != null)
 						{
 							o.Date = (string)data3.SelectToken("response.album.release_date");
