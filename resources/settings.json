@@ -4,11 +4,11 @@
 	"RemoveFeaturing" 	: false,	
 	"OverwriteImage" 	: false,
 	"AutoSearch" 		: true,
-	"CoverOrder" 		: "Amazon,Gracenote,iTunes,Deezer,Discogs,Napster,Spotify,Microsoft Groove,Musicbrainz,Netease,Genius,7digital,Qobuz,Last.fm",
+	"CoverOrder" 		: "Amazon,Gracenote,iTunes,Deezer,Discogs,Napster,Spotify,Microsoft Groove,Musicbrainz,Netease,Tidal,Genius,7digital,Qobuz,QQ,Netease,Last.fm,",
 	"MaxImageSize" 		: 500,
 	"Proxy" 			: "0.0.0.0:8080",
 	"UserAgent" 		: "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",	
-	"UserFrames"		: "SKIP,PERFORMER,replaygain_track_gain,replaygain_track_peak,replaygain_album_gain,replaygain_album_peak",
+	"UserFrames"		: "SKIP,PERFORMER,added_timestamp,last_played_timestamp,play_count,first_played_timestamp,replaygain_track_gain,replaygain_track_peak,replaygain_album_gain,replaygain_album_peak",
 	"DefaultFrames" 	: "APIC,TPE1,TIT2,TALB,TYER,TDRC,TCON,TCOM,TPE2,TRCK,TPOS,COMM,TXXX,USLT",
 	"allowedEditPercent": 30
 }
