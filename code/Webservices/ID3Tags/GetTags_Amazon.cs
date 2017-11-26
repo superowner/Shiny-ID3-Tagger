@@ -53,7 +53,7 @@ namespace GlobalNamespace
 			// ###########################################################################
 			const string Server = "webservices.amazon.com";
 			
-			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 			timestamp = Uri.EscapeDataString(timestamp);
 			
 			string artistEnc = Uri.EscapeDataString(artist).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
@@ -70,10 +70,8 @@ namespace GlobalNamespace
 								"&Title=" + titleEnc +
 								"&Version=2013-08-01";
 			
-			string signature = CreateSignature(Server, parameters);
-
 			HttpRequestMessage request = new HttpRequestMessage();
-			request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + signature);
+			request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content1), this.GetJsonSettings());
@@ -83,25 +81,24 @@ namespace GlobalNamespace
 				JToken item = null;
 				if (data1.SelectToken("ItemSearchResponse.Items.Item") != null)
 				{
-					if ((int)data1.SelectToken("ItemSearchResponse.Items.TotalResults") == 1)
-					{
-						item = data1.SelectToken("ItemSearchResponse.Items.Item");
-					}
-					else
+					if (data1.SelectToken("ItemSearchResponse.Items.Item").Type == JTokenType.Array)
 					{
 						item = data1.SelectToken("ItemSearchResponse.Items.Item[0]");
 					}
+					else
+					{
+						item = data1.SelectToken("ItemSearchResponse.Items.Item");
+					}
 				}
-
+				
 				o.Artist = (string)item.SelectToken("ItemAttributes.Creator.#text");
 				o.Title = (string)item.SelectToken("ItemAttributes.Title");
 				o.Date = (string)item.SelectToken("ItemAttributes.PublicationDate");
-				o.Genre = (string)item.SelectToken("ItemAttributes.Genre");
 				o.TrackNumber = (string)item.SelectToken("ItemAttributes.TrackSequence");
 				o.DiscCount = null;
 				o.DiscNumber = null;
-				o.TrackCount = null;
 
+				o.Genre = (string)item.SelectToken("ItemAttributes.Genre");
 				if (o.Genre != null)
 				{
 					o.Genre = o.Genre.Replace("-music", string.Empty);
@@ -118,23 +115,46 @@ namespace GlobalNamespace
 							"&ItemId=" + asin +
 							"&Operation=ItemLookup" +
 							"&RelationshipType=Tracks" +
-							"&ResponseGroup=RelatedItems%2CLarge" +
+							"&ResponseGroup=RelatedItems" +
 							"&Service=AWSECommerceService" +
 							"&Timestamp=" + timestamp +
 							"&Version=2013-08-01";
 
-				signature = CreateSignature(Server, parameters);
-
 				request = new HttpRequestMessage();
-				request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + signature);
+				request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 				string content2 = await this.GetRequest(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content2), this.GetJsonSettings());
 
-				if (data2 != null)
+				if (data2 != null && data2.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItem.Item.ASIN") != null)
 				{
-					o.Album = (string)data2.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItem.Item.ItemAttributes.Title");
-					o.Cover = (string)data2.SelectToken("ItemLookupResponse.Items.Item.LargeImage.URL");
+					asin = (string)data2.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItem.Item.ASIN");
+
+					parameters = "AWSAccessKeyId=" + User.Accounts["AmAccessKey"] +
+								"&AssociateTag=" + User.Accounts["AmAssociateTag"] +
+								"&Condition=All" +
+								"&IdType=ASIN" +
+								"&ItemId=" + asin +
+								"&Operation=ItemLookup" +
+								"&RelationshipType=Tracks" +
+								"&ResponseGroup=RelatedItems%2CLarge" +						
+								"&Service=AWSECommerceService" +
+								"&Timestamp=" + timestamp +
+								"&Version=2013-08-01";
+	
+					request = new HttpRequestMessage();
+					request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
+	
+					string content3 = await this.GetRequest(client, request, cancelToken);
+					JObject data3 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content3), this.GetJsonSettings());
+	
+					
+					if (data3 != null)
+					{
+						o.TrackCount = (string)data3.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItemCount");;	
+						o.Album = (string)data3.SelectToken("ItemLookupResponse.Items.Item.ItemAttributes.Title");
+						o.Cover = (string)data3.SelectToken("ItemLookupResponse.Items.Item.ImageSets.ImageSet.HiResImage.URL");						
+					}
 				}
 			}
 
