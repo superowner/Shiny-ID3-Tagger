@@ -57,7 +57,7 @@ namespace GlobalNamespace
 					o.Artist = (string)albums[0].SelectToken("artists[0].name");
 					o.Title = (string)albums[0].SelectToken("name");
 					o.Album = (string)albums[0].SelectToken("album.name");
-					o.Genre = null;			//Netease provide a detailed album query with a property called "tags". But the value seems always empty
+					o.Genre = null;			// Netease provide a detailed album query with a property called "tags". But the value seems always empty
 					o.DiscCount = null;
 					o.DiscNumber = (string)albums[0].SelectToken("disc");
 					o.TrackCount = (string)albums[0].SelectToken("album.size");

@@ -46,20 +46,18 @@ namespace GlobalNamespace
 
 					// These are common errors ie when a queried track does not exist.
 					// We suppress them and return with an empty string
+					// The following errors where once common during testing. Now as of 2017 they only occur very rarely so I decided to let them pop up
+					// (request.RequestUri.Host == "api.spotify.com" && response.StatusCode == HttpStatusCode.NotFound)
+					// (request.RequestUri.Host == "qobuz.com" && response.StatusCode == HttpStatusCode.NotFound)
+					// (request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.InternalServerError)
+					// (request.RequestUri.Host == "data.quantonemusic.com" && response.StatusCode == HttpStatusCode.Forbidden)
 					if ((request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "music.xboxlive.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "coverartarchive.org" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.lololyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.InternalServerError)
-						|| (request.RequestUri.Host == "accounts.spotify.com" && response.StatusCode == HttpStatusCode.BadGateway)
-						
-					// The following errors where once common during testing. Now as of 2017 they only occur very rarely so I decided to let them pop up
-//						|| (request.RequestUri.Host == "api.spotify.com" && response.StatusCode == HttpStatusCode.NotFound)
-//						|| (request.RequestUri.Host == "qobuz.com" && response.StatusCode == HttpStatusCode.NotFound)
-//						|| (request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.InternalServerError)
-//						|| (request.RequestUri.Host == "data.quantonemusic.com" && response.StatusCode == HttpStatusCode.Forbidden)
-						)
+						|| (request.RequestUri.Host == "accounts.spotify.com" && response.StatusCode == HttpStatusCode.BadGateway))						
 					{
 						break;
 					}

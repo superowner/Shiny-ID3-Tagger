@@ -34,7 +34,7 @@ namespace GlobalNamespace
 			// ###########################################################################
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
 			
-			// Is this access token valid forever? If not, this method does not work and Oauth must be used
+			// Does this access_token expire ever? Docs don't mention a expire time when requesting an access_token
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.RequestUri = new Uri("https://api.genius.com/search?q=" + searchTermEnc + "&access_token=" + User.Accounts["GeAccessToken"]);
 

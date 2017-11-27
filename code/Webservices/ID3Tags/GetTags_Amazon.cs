@@ -147,11 +147,10 @@ namespace GlobalNamespace
 	
 					string content3 = await this.GetRequest(client, request, cancelToken);
 					JObject data3 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content3), this.GetJsonSettings());
-	
 					
 					if (data3 != null)
 					{
-						o.TrackCount = (string)data3.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItemCount");;	
+						o.TrackCount = (string)data3.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItemCount");
 						o.Album = (string)data3.SelectToken("ItemLookupResponse.Items.Item.ItemAttributes.Title");
 						o.Cover = (string)data3.SelectToken("ItemLookupResponse.Items.Item.ImageSets.ImageSet.HiResImage.URL");						
 					}
