@@ -30,6 +30,23 @@ namespace GlobalNamespace
 		private static CancellationTokenSource TokenSource { get; set; }
 	}
 	
+	internal static class SessionData
+	{
+		internal static string MsAccessToken { get; set; }
+		
+		internal static DateTime MsAccessTokenExpireDate { get; set; }
+		
+		internal static string SpAccessToken { get; set; }
+		
+		internal static DateTime SpAccessTokenExpireDate { get; set; }
+		
+		internal static string TiSessionID { get; set; }
+		
+		internal static string TiCountryCode { get; set; }
+		
+		internal static DateTime TiSessionExpireDate { get; set; }
+	}
+	
 	internal static class User
 	{
 		internal static Dictionary<string, dynamic> Settings { get; set; }
