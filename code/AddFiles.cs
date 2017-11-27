@@ -119,13 +119,14 @@ namespace GlobalNamespace
 					fileTitle = match.Groups["title"].Value;
 				}
 				
-				// Extract artist and title from ID3 tags
+				// Extract and set artist from ID3 tags
 				string tagArtist = null;
 				if (!string.IsNullOrWhiteSpace(tagFile.Tag.FirstPerformer))
 				{
 					tagArtist = tagFile.Tag.FirstPerformer;
 				}
 				
+				// Extract and set title from ID3 tags
 				string tagTitle = null;
 				if (!string.IsNullOrWhiteSpace(tagFile.Tag.Title))
 				{
@@ -133,11 +134,13 @@ namespace GlobalNamespace
 				}
 				
 				// Case: artist and title from filename found, but no ID3 tags found
+				// Set artist from filename
 				if (fileArtist != null && tagArtist == null)
 				{
 					tagOld.Artist = fileArtist;
 				}
 				
+				// Set title from filename
 				if (fileTitle != null && tagTitle == null)
 				{
 					tagOld.Title = fileTitle;
@@ -154,7 +157,8 @@ namespace GlobalNamespace
 					tagOld.Title = tagTitle;
 				}
 
-				// Case: Both sources (filename and ID3 tags) have a value. Select source according to user setting "PreferTags"
+				// Case: Both sources (filename and ID3 tags) have a value
+				// Select artist according to user setting "PreferTags"
 				if (fileArtist != null && tagArtist != null)
 				{
 					if (User.Settings["PreferTags"])
@@ -167,6 +171,7 @@ namespace GlobalNamespace
 					}
 				}
 				
+				// Select title according to user setting "PreferTags"
 				if (fileTitle != null && tagTitle != null)
 				{
 					if (User.Settings["PreferTags"])
@@ -179,12 +184,11 @@ namespace GlobalNamespace
 					}
 				}
 				
-				// Case: When both sources don't give a valid value, use the whole filename as fallback
+				// Case: When both sources don't have a valid value, use the whole filename as fallback
 				tagOld.Artist = tagOld.Artist ?? filename;
 				tagOld.Title = tagOld.Title ?? filename;				
 				
-				// ReaderWriterLock in AllowDrop remaining Id3 GetTags_7digital from file
-				// Replace possible null values with empty strings. This avoids many additional null checks later
+				// We replace possible null values with empty strings. This avoids many additional null checks later in the code. Hacky, I know
 				tagOld.Album = tagFile.Tag.Album ?? string.Empty;
 				tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : string.Empty;
 				tagOld.Genre = tagFile.Tag.FirstGenre ?? string.Empty;
@@ -195,6 +199,7 @@ namespace GlobalNamespace
 				tagOld.Lyrics = tagFile.Tag.Lyrics ?? string.Empty;
 				tagOld.Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty;								
 				
+				// Show old tags in gridview panel
 				this.Invoke((MethodInvoker)delegate
 				{
 					this.dataGridView1.Rows.Add(
@@ -217,6 +222,7 @@ namespace GlobalNamespace
 					this.MarkChange(row, this.title1.Index, tagTitle, tagOld.Title, true);
 				});
 				
+				// Remove any locks on files
 				tagFile.Dispose();					
 			}				
 		}

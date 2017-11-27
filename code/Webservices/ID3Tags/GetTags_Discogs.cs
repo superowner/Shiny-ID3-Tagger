@@ -75,7 +75,7 @@ namespace GlobalNamespace
 						.Where(t => t.SelectToken("type_").ToString() == "track")
 						.ToArray().Length.ToString();
 					
-					
+					// TODO Find a way to remove this workaround. Currently I get the title only indirectly and rely and spellcorrection through other APIs
 					// This API is strange. You can either search for a release and don't get the album. Or you search for the album but don't get the release			
 					// You can do one search with "format=album" to maybe get the album and a second search without "format=album" to maybe get the single and therefore the track title
 					// But no one will guarantee that the second search shows a title which is on your album from the first search
@@ -84,7 +84,7 @@ namespace GlobalNamespace
 					int temp = Array.FindIndex(tracklist, t => t.ToString().Equals(title, StringComparison.InvariantCultureIgnoreCase));
 					if (temp != -1)
 					{
-						o.Title = title;		// TODO Find a way to remove this workaround. Currently I get the title only indirectly and rely and spellcorrection through other APIs
+						o.Title = title;		
 						o.TrackNumber = (temp + 1).ToString();
 					}
 				}
