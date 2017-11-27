@@ -26,7 +26,7 @@ namespace GlobalNamespace
 		private async Task<Id3> GetTags_Gracenote(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3();
-			o.Service = "Gracenote";
+			o.Service = "Gracenote (Sony)";
 			
 			Stopwatch sw = new Stopwatch();
 			sw.Start();			

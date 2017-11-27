@@ -20,7 +20,7 @@ namespace GlobalNamespace
 	{
 		private async Task<string> GetRequest(HttpMessageInvoker client, HttpRequestMessage request, CancellationToken cancelToken)
 		{
-			const int Timeout = 10;
+			const int Timeout = 15;
 			const int MaxRetries = 3;
 
 			HttpResponseMessage response = new HttpResponseMessage();
