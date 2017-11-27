@@ -66,6 +66,12 @@ namespace GlobalNamespace
 					{
 						// response was successful. Read body and return
 						responseString = await response.Content.ReadAsStringAsync();
+						
+						string[] errorMsg =
+						{
+							"DEBUG: "+ request.RequestUri.OriginalString
+						};
+						this.Log("error", errorMsg);						
 						break;
 					}
 					else

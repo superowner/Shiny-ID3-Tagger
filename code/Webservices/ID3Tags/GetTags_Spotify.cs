@@ -65,7 +65,7 @@ namespace GlobalNamespace
 			if (SessionData.SpAccessToken != null)
 			{
 				request = new HttpRequestMessage();
-				request.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEnc + "\" title:\"" + titleEnc + "\"&type=track&limit=1");
+				request.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEnc + "\"+title:\"" + titleEnc + "\"&type=track&limit=1");
 				request.Headers.Add("Authorization", "Bearer " + SessionData.SpAccessToken);
 	
 				string content1 = await this.GetRequest(client, request, cancelToken);

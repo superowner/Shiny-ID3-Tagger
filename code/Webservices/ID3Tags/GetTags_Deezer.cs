@@ -36,7 +36,7 @@ namespace GlobalNamespace
 			string titleEnc = WebUtility.UrlEncode(title);
 
 			HttpRequestMessage request = new HttpRequestMessage();			
-			request.RequestUri = new Uri("https://api.deezer.com/search?q=artist:\"" + artistEnc + "\" track:\"" + titleEnc + "\"&limit=1&order=RANKING");
+			request.RequestUri = new Uri("https://api.deezer.com/search?q=artist:\"" + artistEnc + "\"+track:\"" + titleEnc + "\"&limit=1&order=RANKING");
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());

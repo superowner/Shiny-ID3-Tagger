@@ -45,7 +45,7 @@ namespace GlobalNamespace
 			string titleTemp = Regex.Replace(title, InvalidChars, string.Empty);
 			
 			HttpRequestMessage request = new HttpRequestMessage();			
-			request.RequestUri = new Uri(Server + "/ws/2/recording?query=artist:(" + artistTemp + ") AND recording:(" + titleTemp  + ") AND status:official AND type:album&limit=10&fmt=json");
+			request.RequestUri = new Uri(Server + "/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistTemp + ") AND recording:(" + titleTemp  + ") AND status:official AND type:album&limit=10&fmt=json"));
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
