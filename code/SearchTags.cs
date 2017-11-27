@@ -10,7 +10,7 @@
 // TODO Move column for API duration per track to the right/end of table
 // TODO Add a new column for accumulated API duration which sums up all API durations per track to one big number
 // TODO Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
-
+// TODO Add a new column for synced lyrics (Xiami and Netease)
 namespace GlobalNamespace
 {
 	using System;
@@ -234,6 +234,7 @@ namespace GlobalNamespace
 				// While Decibel and Discogs provide a cover URL, their URL is not easily downloadable via code because authorization via header or Oauth is required
 				// Musicgraph does not provide any cover URLs via API at all
 				// Therefore these 3 services cannot be used as cover source. This is done by removing them from "CoverOrder" variable in file settings.json
+				// "Amazon,Gracenote (Sony),iTunes,Deezer,Discogs,Napster (Rhapsody),Spotify,Microsoft Groove,Musicbrainz,Netease,Tidal,Genius,7digital,Qobuz,QQ (Tencent),Netease,Last.fm,"
 				foreach (string service in User.Settings["CoverOrder"].Split(','))
 				{
 					tagNew.Cover = (from row in majorityAlbumRows
@@ -259,10 +260,11 @@ namespace GlobalNamespace
 			var lyricsfoundToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
 			
 			List<Task<string>> taskList = new List<Task<string>>();
+			taskList.Add(this.GetLyrics_Netease(client, tagNew, lyricsfoundToken.Token));
 			taskList.Add(this.GetLyrics_Chartlyrics(client, tagNew, lyricsfoundToken.Token));
 			taskList.Add(this.GetLyrics_Lololyrics(client, tagNew, lyricsfoundToken.Token));
 			taskList.Add(this.GetLyrics_Xiami(client, tagNew, lyricsfoundToken.Token));
-
+			
 			while (taskList.Count > 0)
 			{
 				Task<string> finishedTask = await Task.WhenAny(taskList);

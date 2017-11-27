@@ -125,6 +125,7 @@
     <Compile Include="code\Webservices\ID3Tags\GetTags_Tidal.cs" />
     <Compile Include="code\Webservices\Lyrics\GetLyrics_Chartlyrics.cs" />
     <Compile Include="code\Webservices\Lyrics\GetLyrics_Lololyrics.cs" />
+    <Compile Include="code\Webservices\Lyrics\GetLyrics_Netease.cs" />
     <Compile Include="code\Webservices\Lyrics\GetLyrics_Xiami.cs" />
     <Compile Include="code\WriteTags.cs" />
     <Compile Include="MainForm.cs" />
