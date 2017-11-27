@@ -36,8 +36,12 @@ namespace GlobalNamespace
 			// ###########################################################################
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
 
-			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://login.live.com/accesstoken.srf");
-			request.Content = new FormUrlEncodedContent(new[]
+			HttpRequestMessage request = new HttpRequestMessage();
+			
+			if (SessionData.MsAccessToken == null || SessionData.MsAccessTokenExpireDate < DateTime.Now)
+			{
+				request = new HttpRequestMessage(HttpMethod.Post, "https://login.live.com/accesstoken.srf");
+				request.Content = new FormUrlEncodedContent(new[]
 				{
 					new KeyValuePair<string, string>("grant_type", "client_credentials"),
 					new KeyValuePair<string, string>("client_id", User.Accounts["MsClientId"]),
@@ -45,44 +49,51 @@ namespace GlobalNamespace
 					new KeyValuePair<string, string>("scope", "app.music.xboxlive.com")
 				});
 
-			string content1 = await this.GetRequest(client, request, cancelToken);
-			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
-
-			if (data1 != null && data1.SelectToken("access_token") != null)
+				string loginContent = await this.GetRequest(client, request, cancelToken);
+				JObject loginData = JsonConvert.DeserializeObject<JObject>(loginContent, this.GetJsonSettings());
+				
+				if (loginData != null && loginData.SelectToken("access_token") != null)
+				{
+					SessionData.MsAccessToken = (string)loginData.SelectToken("access_token");
+					TimeSpan validDuration = TimeSpan.FromSeconds((int)loginData.SelectToken("expires_in"));
+					SessionData.MsAccessTokenExpireDate = DateTime.Now.Add(validDuration);
+				}
+			}
+				
+			if (SessionData.MsAccessToken != null)
 			{
-				string token = WebUtility.UrlEncode((string)data1.SelectToken("access_token"));
-
-				request = new HttpRequestMessage();
-				request.Headers.Add("Authorization", "Bearer " + token);
-				request.RequestUri = new Uri("https://music.xboxlive.com/1/content/music/search?q=" + searchTermEnc + "&maxItems=1&filters=tracks&contentType=JSON");
+				string tokenEncoded = WebUtility.UrlEncode(SessionData.MsAccessToken);
+				
+				request = new HttpRequestMessage(HttpMethod.Get, "https://music.xboxlive.com/1/content/music/search?q=" + searchTermEnc + "&maxItems=1&filters=tracks&contentType=JSON");
+				request.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 				
 				// ###########################################################################
-				string content2 = await this.GetRequest(client, request, cancelToken);
-				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
+				string content1 = await this.GetRequest(client, request, cancelToken);
+				JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
-				if (data2 != null && data2.SelectToken("Tracks.Items") != null)
+				if (data1 != null && data1.SelectToken("Tracks.Items") != null)
 				{
-					o.Artist = (string)data2.SelectToken("Tracks.Items[0].Artists[0].Artist.Name");
-					o.Title = (string)data2.SelectToken("Tracks.Items[0].Name");
-					o.Album = (string)data2.SelectToken("Tracks.Items[0].Album.Name");
-					o.Date = (string)data2.SelectToken("Tracks.Items[0].ReleaseDate");
-					o.Genre = (string)data2.SelectToken("Tracks.Items[0].Genres[0]");
-					o.Cover = (string)data2.SelectToken("Tracks.Items[0].Album.ImageUrl");
+					o.Artist = (string)data1.SelectToken("Tracks.Items[0].Artists[0].Artist.Name");
+					o.Title = (string)data1.SelectToken("Tracks.Items[0].Name");
+					o.Album = (string)data1.SelectToken("Tracks.Items[0].Album.Name");
+					o.Date = (string)data1.SelectToken("Tracks.Items[0].ReleaseDate");
+					o.Genre = (string)data1.SelectToken("Tracks.Items[0].Genres[0]");
+					o.Cover = (string)data1.SelectToken("Tracks.Items[0].Album.ImageUrl");
 					o.DiscCount = null;
 					o.DiscNumber = null;
-					o.TrackNumber = (string)data2.SelectToken("Tracks.Items[0].TrackNumber");
+					o.TrackNumber = (string)data1.SelectToken("Tracks.Items[0].TrackNumber");
 					
 					// ###########################################################################
 					request = new HttpRequestMessage();
-					request.Headers.Add("Authorization", "Bearer " + token);
-					request.RequestUri = new Uri("https://music.xboxlive.com/1/content/" + (string)data2.SelectToken("Tracks.Items[0].Album.Id") + "/lookup?contentType=JSON");
+					request.Headers.Add("Authorization", "Bearer " + tokenEncoded);
+					request.RequestUri = new Uri("https://music.xboxlive.com/1/content/" + (string)data1.SelectToken("Tracks.Items[0].Album.Id") + "/lookup?contentType=JSON");
 				
-					string content3 = await this.GetRequest(client, request, cancelToken);
-					JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
+					string content2 = await this.GetRequest(client, request, cancelToken);
+					JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
-					if (data3 != null && data3.SelectToken("Albums.Items") != null)
+					if (data2 != null && data2.SelectToken("Albums.Items") != null)
 					{
-						o.TrackCount = (string)data3.SelectToken("Albums.Items[0].TrackCount");
+						o.TrackCount = (string)data2.SelectToken("Albums.Items[0].TrackCount");
 					}
 				}
 			}
