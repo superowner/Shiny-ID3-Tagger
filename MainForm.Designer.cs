@@ -230,6 +230,7 @@ namespace GlobalNamespace
 			this.rtbSearchLog.TabIndex = 4;
 			this.rtbSearchLog.TabStop = false;
 			this.rtbSearchLog.Text = "";
+			this.rtbSearchLog.WordWrap = false;
 			// 
 			// tabPage2
 			// 
