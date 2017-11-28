@@ -12,6 +12,7 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Linq;
+	using System.Net;
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
@@ -24,8 +25,11 @@ namespace GlobalNamespace
 		{
 			if (tagNew.Artist != null && tagNew.Title != null)
 			{
+				string artistEnc = WebUtility.UrlEncode(tagNew.Artist);
+				string titleEnc = WebUtility.UrlEncode(tagNew.Title);
+				
 				HttpRequestMessage request = new HttpRequestMessage();
-				request.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + tagNew.Artist + "&song=" + tagNew.Title);
+				request.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + artistEnc + "&song=" + titleEnc);
 
 				string content = await this.GetRequest(client, request, cancelToken);
 
@@ -48,7 +52,7 @@ namespace GlobalNamespace
 								response = CheckMalformedUtf8(response);
 								
 								tagNew.Lyrics = response;
-								this.Log("search", new[] { "  Lyrics taken from Chartlyrics" });
+								this.PrintLogMessage("search", new[] { "  Lyrics taken from Chartlyrics" });
 							}
 						}
 					}
