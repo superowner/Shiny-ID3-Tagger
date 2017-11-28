@@ -57,12 +57,8 @@ namespace GlobalNamespace
 			string content = await this.GetRequest(client, request, cancelToken);
 			JObject data = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content), this.GetJsonSettings());
 
-			if (data != null && data.SelectToken("RESPONSES.MESSAGE") != null)
+			if (data != null && data.SelectToken("RESPONSES.RESPONSE") != null)
 			{				
-				this.Log("error", new[] { "Gracenote error:", (string)data.SelectToken("RESPONSES.MESSAGE") });	
-			}
-			else
-			{
 				if (data != null && data.SelectToken("RESPONSES.RESPONSE") != null)
 				{
 					o.Artist = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.ARTIST");
