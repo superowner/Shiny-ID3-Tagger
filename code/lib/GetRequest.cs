@@ -61,9 +61,9 @@ namespace GlobalNamespace
 					// These are common errors ie when a queried track does not exist.Suppress them and return with an empty string					
 					if ((request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "music.xboxlive.com" && response.StatusCode == HttpStatusCode.NotFound)
-						|| (request.RequestUri.Host == "coverartarchive.org" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.lololyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
+						|| (request.RequestUri.Host == "coverartarchive.org" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.InternalServerError)
 						|| (request.RequestUri.Host == "accounts.spotify.com" && response.StatusCode == HttpStatusCode.BadGateway))						
 					{
@@ -72,9 +72,8 @@ namespace GlobalNamespace
 
 					if (response.IsSuccessStatusCode)
 					{
-						// response was successful. Read body and return
+						// Response was successful. Read content from response and return content
 						responseString = await response.Content.ReadAsStringAsync();
-												
 						break;
 					}
 					else

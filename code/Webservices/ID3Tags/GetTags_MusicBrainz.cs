@@ -16,6 +16,7 @@ namespace GlobalNamespace
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
+	using System.Net.Http.Headers;
 	using System.Net.Http;
 	using System.Text.RegularExpressions;
 	using System.Threading;
@@ -137,15 +138,18 @@ namespace GlobalNamespace
 				}
 
 				// ###########################################################################
+				
+				// TODO coverartarchive.org is really slow. It takes between 2-3 seconds for a response
 				request = new HttpRequestMessage();
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
+				request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 				request.RequestUri = new Uri("https://coverartarchive.org/release-group/" + releasegroupid);
-
+				
 				string content3 = await this.GetRequest(client, request, cancelToken);
-
-				if (content3.StartsWith("{", StringComparison.Ordinal) && content3.EndsWith("}", StringComparison.Ordinal))
+				JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
+				
+				if (data3 != null)
 				{
-					JObject data3 = JObject.Parse(content3);
 					o.Cover = (string)data3.SelectToken("images[0].image");
 				}
 			}
