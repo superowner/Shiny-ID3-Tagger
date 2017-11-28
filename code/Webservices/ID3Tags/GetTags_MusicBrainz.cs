@@ -36,7 +36,7 @@ namespace GlobalNamespace
 			// ###########################################################################
 			// const string Server = "https://musicbrainz.org";
 			// const string Server = "http://musicbrainz-mirror.eu:5000";
-			// const string Server = "http://musicbrainz.fin-alice.de:5000";								
+			// const string Server = "http://musicbrainz.fin-alice.de:5000";
 			const string Server = "https://beta.musicbrainz.org/";							// info: http://www.tranquilbase.org/category/musicbrainz/
 			
 			const string InvalidChars = @"[#!(){}/;:\[\]\^\\\\&""]";
@@ -44,7 +44,8 @@ namespace GlobalNamespace
 			string artistTemp = Regex.Replace(artist, InvalidChars, string.Empty);
 			string titleTemp = Regex.Replace(title, InvalidChars, string.Empty);
 			
-			HttpRequestMessage request = new HttpRequestMessage();			
+			HttpRequestMessage request = new HttpRequestMessage();
+			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 			request.RequestUri = new Uri(Server + "/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistTemp + ") AND recording:(" + titleTemp  + ") AND status:official AND type:album&limit=10&fmt=json"));
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
@@ -111,7 +112,8 @@ namespace GlobalNamespace
 				// ###########################################################################
 				string releasegroupid = (string)bestRelease["release-group"]["id"];
 
-				request = new HttpRequestMessage();				
+				request = new HttpRequestMessage();	
+				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 				request.RequestUri = new Uri(Server + "/ws/2/release-group/" + releasegroupid + "?inc=tags+ratings+artists&fmt=json");
 
 				string content2 = await this.GetRequest(client, request, cancelToken);
@@ -136,6 +138,7 @@ namespace GlobalNamespace
 
 				// ###########################################################################
 				request = new HttpRequestMessage();
+				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 				request.RequestUri = new Uri("https://coverartarchive.org/release-group/" + releasegroupid);
 
 				string content3 = await this.GetRequest(client, request, cancelToken);

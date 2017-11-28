@@ -35,7 +35,8 @@ namespace GlobalNamespace
 			string titleTemp = string.Join("* ", title.Split(' ')) + "*";
 			string searchTermEnc = WebUtility.UrlEncode(artistTemp + " " + titleTemp);
 			
-			HttpRequestMessage request = new HttpRequestMessage();			
+			HttpRequestMessage request = new HttpRequestMessage();
+			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 			request.RequestUri = new Uri("https://api.discogs.com/database/search?q=" + searchTermEnc +
 				"&format=album" +
 				"&type=master" + 
@@ -49,7 +50,8 @@ namespace GlobalNamespace
 			if (data1 != null && data1.SelectToken("results").Any())
 			{
 				request = new HttpRequestMessage();				
-
+				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
+			
 				string url = (string)data1.SelectToken("results[0].resource_url") + "?key=" + User.Accounts["DcKey"] + "&secret=" + User.Accounts["DcSecret"];
 				if (IsValidUrl(url))
 				{

@@ -71,6 +71,7 @@ namespace GlobalNamespace
 								"&Version=2013-08-01";
 			
 			HttpRequestMessage request = new HttpRequestMessage();
+			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 			request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
@@ -121,6 +122,7 @@ namespace GlobalNamespace
 							"&Version=2013-08-01";
 
 				request = new HttpRequestMessage();
+				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);				
 				request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 				string content2 = await this.GetRequest(client, request, cancelToken);
@@ -143,6 +145,7 @@ namespace GlobalNamespace
 								"&Version=2013-08-01";
 	
 					request = new HttpRequestMessage();
+					request.Headers.Add("User-Agent", User.Settings["UserAgent"]);					
 					request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 	
 					string content3 = await this.GetRequest(client, request, cancelToken);

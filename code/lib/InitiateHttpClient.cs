@@ -44,8 +44,6 @@ namespace GlobalNamespace
 
 			HttpClient client = new HttpClient(handler);
 			client.MaxResponseContentBufferSize = 256000000;
-			client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-			client.DefaultRequestHeaders.Add("User-Agent", User.Settings["UserAgent"]);
 
 			ping.Dispose();
 			return client;
