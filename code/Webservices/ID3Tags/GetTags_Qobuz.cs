@@ -5,6 +5,7 @@
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Qobuz API for current track</summary>
 // http://www.qobuz.com/account/profile
+// https://github.com/Qobuz/api-documentation
 // https://github.com/Qobuz/api-documentation/blob/master/endpoints/track/search.md
 // No english genre names possible. API returns french genre names
 //-----------------------------------------------------------------------
@@ -42,7 +43,7 @@ namespace GlobalNamespace
 
 			if (data != null && data.SelectToken("tracks.items[0]") != null)
 			{
-				o.Artist = (string)data.SelectToken("tracks.items[0].performer.name");
+				o.Artist = (string)data.SelectToken("tracks.items[0].album.artist.name");
 				o.Title = (string)data.SelectToken("tracks.items[0].title");
 				o.Album = (string)data.SelectToken("tracks.items[0].album.title");
 				o.Genre = (string)data.SelectToken("tracks.items[0].album.genre.name");
