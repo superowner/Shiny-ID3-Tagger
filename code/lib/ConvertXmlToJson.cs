@@ -27,13 +27,16 @@ namespace GlobalNamespace
 				}
 				catch (XmlException error)
 				{
-					string[] errorMsg =
+					if (User.Settings["DebugLevel"] >= 2)
 					{
-						"ERROR: Could not convert XML to JSON",
-						"XML string: " + xmlstring.TrimEnd('\r', '\n'),
-						error.Message.Trim()
-					};
-					this.Log("error", errorMsg);
+						string[] errorMsg =
+						{
+							"ERROR:    Could not convert XML to JSON!",
+							"String:   " + xmlstring.TrimEnd('\r', '\n'),
+							"Message:  " + error.Message.Trim()
+						};
+						this.PrintLogMessage("error", errorMsg);
+					}
 				}
 			}
 

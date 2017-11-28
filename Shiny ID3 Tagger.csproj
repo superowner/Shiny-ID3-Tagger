@@ -97,7 +97,8 @@
     <Compile Include="code\lib\IsValidMp3.cs" />
     <Compile Include="code\lib\IsValidUrl.cs" />
     <Compile Include="code\lib\LevenshteinDistance.cs" />
-    <Compile Include="code\lib\Log.cs" />
+    <Compile Include="code\lib\PrintLogMessage.cs" />
+    <Compile Include="code\lib\BuildLogMessage.cs" />
     <Compile Include="code\lib\MarkChange.cs" />
     <Compile Include="code\lib\ReadAccountCredentials.cs" />
     <Compile Include="code\lib\Strip.cs" />

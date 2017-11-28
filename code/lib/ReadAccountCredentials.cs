@@ -21,11 +21,22 @@ namespace GlobalNamespace
 	{
 		private bool ReadAccountCredentials()
 		{
+			Action<Exception> errorHandler = (ex) => 
+			{
+				// settings.json or accounts.json coult not be parsed or read correctly
+				if (User.Settings["DebugLevel"] >= 1)
+				{
+					string[] errorMsg =
+						{
+						@"ERROR:    Could not read all values from 'resources\settings.json' or 'resources\accounts.json'!",
+					 	"Message:  " + ex.Message.TrimEnd('\r', '\n')
+					};
+					this.PrintLogMessage("error", errorMsg);
+				}
+			};
+			
 			try
 			{
-				// The key for decryption is hardcoded on purpose. It doesn't matter how good you protect the login credentials: If someone already reads this, he's probably also able to debug
-				// the crucial parts in Visual Studio, setting a breakpoint and read out all API keys. Therefore I created new API keys just for this program
-				// So why the encryption at all? Because plaintext API keys on Github are searchable through a simple google search. Encrypted API keys are a bit harder to copy.
 				var decryptor = Aes.Create();
 				var key = new byte[] { 90, 181, 178, 196, 110, 221, 12, 79, 98, 48, 40, 239, 237, 175, 23, 69, 42, 201, 36, 157, 170, 67, 161, 9, 69, 114, 232, 179, 195, 158, 151, 124 };
 				var iv = new byte[] { 221, 237, 248, 138, 53, 16, 87, 148, 28, 20, 30, 199, 195, 221, 209, 188 };
@@ -69,19 +80,23 @@ namespace GlobalNamespace
 
 				return true;
 			}
-			catch (NullReferenceException)
+			catch (NullReferenceException ex)
 			{
-				this.Log("error", new[] { @"ERROR: Could not read all values from 'resources\settings.json' or 'resources\accounts.json'" });
+				errorHandler(ex);
 			}
-			catch (JsonReaderException)
+			catch (JsonReaderException ex)
 			{
-				this.Log("error", new[] { @"ERROR: Could not read all values from 'resources\settings.json' or 'resources\accounts.json'" });
+				errorHandler(ex);
 			}
-			catch (KeyNotFoundException)
+			catch (JsonSerializationException ex)
 			{
-				this.Log("error", new[] { @"ERROR: Could not read all values from 'resources\settings.json' or 'resources\accounts.json'" });
+				errorHandler(ex);
 			}
-
+			catch (KeyNotFoundException ex)
+			{
+				errorHandler(ex);
+			}
+			
 			return false;
 		}
 	}

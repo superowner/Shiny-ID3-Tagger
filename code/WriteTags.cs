@@ -57,9 +57,16 @@ namespace GlobalNamespace
 				successWrite = await this.SaveAndDisposeFile(tagFile);
 				if (!successWrite)
 				{
-					string message = string.Format("{0,-100}{1}", "ERROR: Could not access file", "file: \"" + filepath + "\"");										
-					this.Log("error", new[] { message });
-			
+					if (User.Settings["DebugLevel"] >= 1)
+					{
+						string[] errorMsg =
+						{
+							"ERROR:    Could not access file!",
+							"File:     " + filepath
+						};
+						this.PrintLogMessage("error", errorMsg);
+					}
+										
 					continue;
 				}
 
@@ -89,7 +96,7 @@ namespace GlobalNamespace
 							else
 							{
 								string message = string.Format("{0,-100}{1}", "Tag removed: " + frameDesc, "file: \"" + filepath + "\"");
-								this.Log("write", new[] { message });								
+								this.PrintLogMessage("write", new[] { message });								
 							}
 						}
 						else
@@ -100,7 +107,7 @@ namespace GlobalNamespace
 					else
 					{
 						string message = string.Format("{0,-100}{1}", "Tag removed: " + frameId, "file: \"" + filepath + "\"");
-						this.Log("write", new[] { message });
+						this.PrintLogMessage("write", new[] { message });
 					}
 				}
 				
@@ -126,7 +133,7 @@ namespace GlobalNamespace
 						if (response.Content.Headers.ContentType.ToString().StartsWith("image/", StringComparison.InvariantCultureIgnoreCase))
 						{
 							string message = string.Format("{0,-100}{1}", "Picture source: " + request.RequestUri.Authority, "file: \"" + filepath + "\"");
-							this.Log("write", new[] { message });							
+							this.PrintLogMessage("write", new[] { message });							
 							
 							MemoryStream stream = (MemoryStream)await response.Content.ReadAsStreamAsync();
 							Image image = Image.FromStream(stream);
@@ -175,11 +182,15 @@ namespace GlobalNamespace
 						}
 						else
 						{
-							string message = string.Format(
-												"{0,-100}{1}",
-												"ERROR: Downloaded cover from server is not a valid image format",
-												"received content type: \"" + response.Content.Headers.ContentType + "\"");
-							this.Log("error", new[] { message });
+							if (User.Settings["DebugLevel"] >= 1)
+							{
+								string[] errorMsg =
+								{
+									"ERROR:    Downloaded cover from server is not a valid image format!",
+									"Format:   " + response.Content.Headers.ContentType
+								};
+								this.PrintLogMessage("error", errorMsg);
+							}
 						}
 					}
 
@@ -220,7 +231,7 @@ namespace GlobalNamespace
 			if (oldArtist != newArtist && !string.IsNullOrWhiteSpace(newArtist))
 			{
 				string message = string.Format(cultEng, "{0,-100}{1}", "Artist: " + newArtist, "file: \"" + tagFile.Name + "\"");
-				this.Log("write", new[] { message });
+				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TPE1");
 				id3v2.SetTextFrame("TPE1", newArtist);	
 			}
@@ -230,7 +241,7 @@ namespace GlobalNamespace
 			if (oldTitle != newTitle && !string.IsNullOrWhiteSpace(newTitle))
 			{
 				string message = string.Format(cultEng, "{0,-100}{1}", "Title: " + newTitle, "file: \"" + tagFile.Name + "\"");
-				this.Log("write", new[] { message });
+				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TIT2");
 				id3v2.SetTextFrame("TIT2", newTitle);	
 			}
@@ -240,7 +251,7 @@ namespace GlobalNamespace
 			if (oldAlbum != newAlbum && !string.IsNullOrWhiteSpace(newAlbum))
 			{
 				string message = string.Format(cultEng, "{0,-100}{1}", "Album: " + newAlbum, "file: \"" + tagFile.Name + "\"");
-				this.Log("write", new[] { message });
+				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TALB");
 				id3v2.SetTextFrame("TALB", newAlbum);	
 			}
@@ -250,7 +261,7 @@ namespace GlobalNamespace
 			if (oldGenre != newGenre && !string.IsNullOrWhiteSpace(newGenre))
 			{
 				string message = string.Format(cultEng, "{0,-100}{1}", "Genre: " + newGenre, "file: \"" + tagFile.Name + "\"");
-				this.Log("write", new[] { message });
+				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TCON");
 				id3v2.SetTextFrame("TCON", newGenre);	
 			}
@@ -265,7 +276,7 @@ namespace GlobalNamespace
 				newDiscnumber = string.IsNullOrWhiteSpace(newDiscnumber) ? oldDiscnumber : newDiscnumber;
 				newDisccount = string.IsNullOrWhiteSpace(newDisccount) ? oldDisccount : newDisccount;
 				string message = string.Format(cultEng, "{0,-100}{1}", "Disc: " + newDiscnumber + "/" + newDisccount, "file: \"" + tagFile.Name + "\"");
-				this.Log("write", new[] { message });
+				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TPOS");
 				id3v2.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 			}
@@ -280,7 +291,7 @@ namespace GlobalNamespace
 				newTracknumber = string.IsNullOrWhiteSpace(newTracknumber) ? oldTracknumber : newTracknumber;
 				newTrackcount = string.IsNullOrWhiteSpace(newTrackcount) ? oldTrackcount : newTrackcount;
 				string message = string.Format(cultEng, "{0,-100}{1}", "Track: " + newTracknumber + "/" + newTrackcount, "file: \"" + tagFile.Name + "\"");
-				this.Log("write", new[] { message });
+				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TRCK");
 				id3v2.SetTextFrame("TRCK", newTracknumber + "/" + newTrackcount);
 			}
@@ -293,7 +304,7 @@ namespace GlobalNamespace
 			if (oldDate != newDate && !string.IsNullOrWhiteSpace(newDate))
 			{
 				string message = string.Format(cultEng, "{0,-100}{1}", "Date: " + newDate, "file: \"" + tagFile.Name + "\"");
-				this.Log("write", new[] { message });
+				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TDRC");
 				id3v2.RemoveFrames("TYER");
 				id3v2.RemoveFrames("TDAT");
@@ -310,7 +321,7 @@ namespace GlobalNamespace
 				string lyricPreview = string.Join(string.Empty, newLyrics.Take(50));
 				string cleanPreview = Regex.Replace(lyricPreview, @"\r\n?|\n", string.Empty);
 				string message = string.Format(cultEng, "{0,-100}{1}", "Lyrics: " + cleanPreview, "file: \"" + tagFile.Name + "\"");
-				this.Log("write", new[] { message });
+				this.PrintLogMessage("write", new[] { message });
 				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
 				frmUSLT.Text = newLyrics;
 				id3v2.RemoveFrames("USLT");

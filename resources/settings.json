@@ -1,8 +1,9 @@
 {
+	"DebugLevel" 		: 2,
 	"PreferTags" 		: true,
 	"RemoveBrackets" 	: true,
-	"RemoveFeaturing" 	: false,	
-	"OverwriteImage" 	: false,
+	"RemoveFeaturing" 	: true,	
+	"OverwriteImage" 	: true,
 	"AutoSearch" 		: true,
 	"CoverOrder" 		: "Amazon,Gracenote,iTunes,Deezer,Discogs,Napster,Spotify,Microsoft Groove,Musicbrainz,Netease,Tidal,Genius,7digital,Qobuz,QQ,Netease,Last.fm,",
 	"MaxImageSize" 		: 500,

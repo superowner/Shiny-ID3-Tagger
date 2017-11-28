@@ -3,16 +3,16 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Executes all API requests. Has a built-in retry handler</summary>
+// <summary>Executes all API requests. Has a built-in retry handler and a logger</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
 {
 	using System;
+	using System.Collections.Generic;	
 	using System.Linq;
 	using System.Net;
-	using System.Net.Http;
-	using System.Text.RegularExpressions;
+	using System.Net.Http;	
 	using System.Threading;
 	using System.Threading.Tasks;
 
@@ -20,7 +20,7 @@ namespace GlobalNamespace
 	{
 		private async Task<string> GetRequest(HttpMessageInvoker client, HttpRequestMessage request, CancellationToken cancelToken)
 		{
-			const int Timeout = 15;
+			const int Timeout = 10;
 			const int MaxRetries = 3;
 
 			HttpResponseMessage response = new HttpResponseMessage();
@@ -35,6 +35,7 @@ namespace GlobalNamespace
 					return string.Empty;
 				}
 
+				string requestContent = string.Empty;
 				request = CloneRequest(requestBackup);
 
 				var timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
@@ -42,15 +43,22 @@ namespace GlobalNamespace
 
 				try
 				{
+					// Save the request content for later reuse when an error occurs or debuging enabled is
+					if (request.Content != null)
+					{
+						requestContent = request.Content.ReadAsStringAsync().Result;
+					}
+					
+					// If debugging level is 3 (DEBUG) or higher, print out ALL requests
+					if (User.Settings["DebugLevel"] >= 3)
+					{
+						List<string> errorMsg = BuildLogMessage(request, requestContent, null);
+						this.PrintLogMessage("error", errorMsg.ToArray());
+					}
+					
 					response = await client.SendAsync(request, timeoutToken.Token);
 
-					// These are common errors ie when a queried track does not exist.
-					// We suppress them and return with an empty string
-					// The following errors where once common during testing. Now as of 2017 they only occur very rarely so I decided to let them pop up
-					// (request.RequestUri.Host == "api.spotify.com" && response.StatusCode == HttpStatusCode.NotFound)
-					// (request.RequestUri.Host == "qobuz.com" && response.StatusCode == HttpStatusCode.NotFound)
-					// (request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.InternalServerError)
-					// (request.RequestUri.Host == "data.quantonemusic.com" && response.StatusCode == HttpStatusCode.Forbidden)
+					// These are common errors ie when a queried track does not exist.Suppress them and return with an empty string					
 					if ((request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "music.xboxlive.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "coverartarchive.org" && response.StatusCode == HttpStatusCode.NotFound)
@@ -66,75 +74,63 @@ namespace GlobalNamespace
 					{
 						// response was successful. Read body and return
 						responseString = await response.Content.ReadAsStringAsync();
-						
-						string[] errorMsg =
-						{
-							"DEBUG: "+ request.RequestUri.OriginalString
-						};
-						this.Log("error", errorMsg);						
+												
 						break;
 					}
 					else
 					{
-						// response was not successful. But it was also not a common error
-						string errorResponse = response.Content.ReadAsStringAsync().Result;
-
-						// Try to extract the HTML body
-						Match match = Regex.Match(errorResponse, "(?<=<body>)(?<text>.*?)(?=</body>)", RegexOptions.Singleline);
-						if (match.Success)
+						// Response was not successful. But it was also not a common error
+						if (!cancelToken.IsCancellationRequested)
 						{
-							errorResponse = match.Groups["text"].Value.Trim();
-						}
-
-						// Try to extract the XML error message (Amazon API specific)
-						match = Regex.Match(errorResponse, "(?<=<Message>)(?<text>.*?)(?=</Message>)", RegexOptions.Singleline);
-						if (match.Success)
-						{
-							errorResponse = match.Groups["text"].Value.Trim();
-						}						
-
-						// Show the complete response including HTML tags OR the extracted body/message if extracting was successful
-						string[] errorMsg =
+							// If debugging is enabled in settings, print out all request properties
+							if (User.Settings["DebugLevel"] >= 2)
 							{
-								"ERROR: Server response was unsuccessful",
-								"Response code: " + response.ReasonPhrase + ": " + (int)response.StatusCode,
-								"Requst URL: " + request.RequestUri.OriginalString,
-								"Response message: " + errorResponse,
-								"Retries left: " + i + "/" + MaxRetries
-							};
-						this.Log("error", errorMsg);
+								List<string> errorMsg = new List<string> { "ERROR:    Response was unsuccessful!" };
+								errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+								errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
+								
+								this.PrintLogMessage("error", errorMsg.ToArray());								
+							}
+						}
 					}
 				}
 				catch (TaskCanceledException)
 				{
-					// The request timed out
+					// The request timed out. Server took too long to respond
 					if (!cancelToken.IsCancellationRequested)
 					{
-						string[] errorMsg =
+						// If debugging is enabled in settings, print out all request properties
+						if (User.Settings["DebugLevel"] >= 2)
 						{
-							"ERROR: Server response took longer than " + Timeout + " seconds",
-							"Requst URL: " + request.RequestUri.OriginalString
-						};
-						this.Log("error", errorMsg);
-					}
+							List<string> errorMsg = new List<string> { "ERROR:    Server took longer than " + Timeout + " seconds to respond!" };
+							errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
+
+							this.PrintLogMessage("error", errorMsg.ToArray());								
+						}
+					}					
 					
-					// Search was canceled by user. Be quiet in this case
 					break;
 				}
-				catch (Exception ex)
+				catch (Exception error)
 				{
 					// An unknown application error occured
-					string[] errorMsg =
+					if (!cancelToken.IsCancellationRequested)
 					{
-						"ERROR: Unknown error occured",
-						"Requst URL: " + request.RequestUri.OriginalString,
-						ex.ToString()
-					};
-					this.Log("error", errorMsg);
+						// If debugging is enabled in settings, print out all request properties
+						if (User.Settings["DebugLevel"] >= 1)
+						{
+							string[] errorMsg =
+							{
+								"ERROR:    An unknown application error occured!",
+								"Message:  " + error.ToString().TrimEnd('\r', '\n')
+							};
+							this.PrintLogMessage("error", errorMsg);
+						}
+					}	
 
 					break;
 				}
-
+				
 				await Task.Delay(2000);
 			}
 

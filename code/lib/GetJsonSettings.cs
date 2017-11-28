@@ -19,8 +19,15 @@ namespace GlobalNamespace
 			JsonSerializerSettings jsonSettings = new JsonSerializerSettings();
 			jsonSettings.Error += (obj, errorArgs) =>
 			{
-				this.Log("error", new[] { "ERROR: Could not convert server response to JSON", errorArgs.ErrorContext.Error.Message });
-				errorArgs.ErrorContext.Handled = true;
+				if (User.Settings["DebugLevel"] >= 2)
+				{
+					string[] errorMsg =
+					{
+						"ERROR:    Could not convert response to JSON!",
+						"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
+					};
+					this.PrintLogMessage("error", errorMsg);
+				}		
 			};
 			
 			jsonSettings.Formatting = Formatting.Indented;

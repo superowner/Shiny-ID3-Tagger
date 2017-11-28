@@ -244,7 +244,7 @@ namespace GlobalNamespace
 
 					if (tagNew.Cover != null)
 					{
-						this.Log("search", new[] { "  Cover taken from " + service });
+						this.PrintLogMessage("search", new[] { "  Cover taken from " + service });
 						break;
 					}
 				}
@@ -294,7 +294,7 @@ namespace GlobalNamespace
 								"{0,-100}{1}",
 								"Search for: \""  + artist + " - " + title + "\"",
 								"file: \"" + tagOld.Filepath + "\"");
-			this.Log("search", new[] { message });
+			this.PrintLogMessage("search", new[] { message });
 
 			for (int i = 1; i <= 2; i++)
 			{
@@ -374,7 +374,7 @@ namespace GlobalNamespace
 				{
 					artist = artistTemp;
 					title = titleTemp;
-					this.Log("search", new[] { "  Spelling mistake detected. New search for: \"" + artist + " - " + title + "\"" });
+					this.PrintLogMessage("search", new[] { "  Spelling mistake detected. New search for: \"" + artist + " - " + title + "\"" });
 
 					webserviceResults.Clear();
 				}

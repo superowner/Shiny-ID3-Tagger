@@ -148,9 +148,9 @@ namespace GlobalNamespace
 				{
 					string[] errorMsg =
 					{
-						"ERROR: Invalid URL: " + url
+						"ERROR:    Invalid URL found: " + url
 					};
-					this.Log("error", errorMsg);
+					this.PrintLogMessage("error", errorMsg);
 				}
 			}
 		}

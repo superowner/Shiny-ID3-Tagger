@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="Log.cs" company="Shiny Id3 Tagger">
+// <copyright file="PrintLogMessage.cs" company="Shiny Id3 Tagger">
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -13,11 +13,11 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private void Log(string logtype, string[] values)
+		private void PrintLogMessage(string logtype, string[] values)
 		{
 			if (InvokeRequired)
 			{
-				Invoke(new Action<string, string[]>(this.Log), new object[] { logtype, values });
+				Invoke(new Action<string, string[]>(this.PrintLogMessage), new object[] { logtype, values });
 				return;
 			}
 

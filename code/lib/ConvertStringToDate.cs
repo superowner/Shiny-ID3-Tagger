@@ -42,8 +42,11 @@ namespace GlobalNamespace
 				}
 				else
 				{
-					string message = string.Format(cultEng, "ERROR: Could not convert \"" + dateString + "\" to a date");
-					this.Log("error", new[] { message });					
+					if (User.Settings["DebugLevel"] >= 2)
+					{
+						string[] errorMsg =	{ "ERROR:    Could not convert \"" + dateString + "\" to a date!" };
+						this.PrintLogMessage("error", errorMsg);
+					}
 				}
 			}
 			
