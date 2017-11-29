@@ -97,7 +97,7 @@ namespace GlobalNamespace
 					// Response was not suceessfull (No status code 200)
 					// Response was not in the exceltopn list of common status codes
 					// Continue with loop, but wait some seconds before you try it again
-					Task.Delay(RetryDelay * 1000);
+					Task wait = Task.Delay(RetryDelay * 1000);
 				}
 				catch (TaskCanceledException)
 				{

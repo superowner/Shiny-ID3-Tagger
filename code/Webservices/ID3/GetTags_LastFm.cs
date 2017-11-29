@@ -75,7 +75,7 @@ namespace GlobalNamespace
 
 					if (o.Cover != null)
 					{
-						o.Cover = o.Cover.Replace("/i/u/300x300/" , "/i/u/600x600/");		// Largest version on lastfm image servers seems to be 600x600 px
+						o.Cover = o.Cover.Replace("/i/u/300x300/", "/i/u/600x600/");		// Largest version on lastfm image servers seems to be 600x600 px
 					}
 				}
 			}
