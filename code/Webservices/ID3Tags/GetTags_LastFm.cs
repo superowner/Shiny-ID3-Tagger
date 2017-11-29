@@ -38,7 +38,7 @@ namespace GlobalNamespace
 			string artistEnc = WebUtility.UrlEncode(artist);
 			string titleEnc = WebUtility.UrlEncode(title);			
 			
-			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://ws.audioscrobbler.com/2.0/");
+			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://ws.audioscrobbler.com/2.0/");
 			request.Headers.ExpectContinue = false;
 			request.Content = new StringContent("api_key=" + User.Accounts["LaApiKey"] +
 				"&format=json&method=track.getInfo&artist=" + artistEnc + "&track=" + titleEnc + "&autocorrect=1");
@@ -57,7 +57,7 @@ namespace GlobalNamespace
 				// ###########################################################################
 				string albumid = (string)data1.SelectToken("track.album.mbid");
 
-				request = new HttpRequestMessage(HttpMethod.Post, "https://ws.audioscrobbler.com/2.0/");
+				request = new HttpRequestMessage(HttpMethod.Post, "http://ws.audioscrobbler.com/2.0/");
 				request.Headers.ExpectContinue = false;
 				request.Content = new StringContent("api_key=" + User.Accounts["LaApiKey"] +
 					"&format=json&method=album.getInfo&mbid=" + albumid);
@@ -72,9 +72,10 @@ namespace GlobalNamespace
 					o.DiscNumber = null;
 					o.TrackCount = (string)data2.SelectToken("album.tracks.track[-1:].@attr.rank");					
 					o.Cover = (string)data2.SelectToken("album.image[-1:].#text");
+
 					if (o.Cover != null)
 					{
-						o.Cover = o.Cover.Replace("http://img2-ak.lst.fm/i/u/arQ", "http://img2-ak.lst.fm/i/u");
+						o.Cover = o.Cover.Replace("/i/u/300x300/" , "/i/u/600x600/");		// Largest version on lastfm image servers seems to be 600x600 px
 					}
 				}
 			}
