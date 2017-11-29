@@ -139,7 +139,6 @@ namespace GlobalNamespace
 
 				// ###########################################################################
 				
-				// TODO coverartarchive.org is really slow. It takes between 2-3 seconds for a response
 				request = new HttpRequestMessage();
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 				request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
