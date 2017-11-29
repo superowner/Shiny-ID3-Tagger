@@ -231,10 +231,9 @@ namespace GlobalNamespace
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
-				// While Decibel and Discogs provide a cover URL, their URL is not easily downloadable via code because authorization via header or Oauth is required
-				// Musicgraph does not provide any cover URLs via API at all
-				// Therefore these 3 services cannot be used as cover source. This is done by removing them from "CoverOrder" variable in file settings.json
-				// "Amazon,Gracenote (Sony),iTunes,Deezer,Discogs,Napster (Rhapsody),Spotify,Microsoft Groove,Musicbrainz,Netease,Tidal,Genius,7digital,Qobuz,QQ (Tencent),Netease,Last.fm,"
+				// Musixmatch and Musicgraph do not provide any cover URL via API
+				// Despite Decibel provides a cover URL, the URL is not so easy to download because authorization via API key in a header is required
+				// Therefore these services must be skipped as cover source. This is done by removing them from "CoverOrder" variable in settings.json
 				foreach (string service in User.Settings["CoverOrder"].Split(','))
 				{
 					tagNew.Cover = (from row in majorityAlbumRows

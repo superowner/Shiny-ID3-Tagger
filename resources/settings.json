@@ -5,7 +5,7 @@
 	"RemoveFeaturing" 	: true,	
 	"OverwriteImage" 	: true,
 	"AutoSearch" 		: true,
-	"CoverOrder" 		: "Amazon,Gracenote,iTunes,Deezer,Discogs,Napster,Spotify,Microsoft Groove,Musicbrainz,Netease,Tidal,Genius,7digital,Qobuz,QQ,Netease,Last.fm,",
+	"CoverOrder" 		: "Amazon,Gracenote,iTunes,Deezer,Discogs,Napster (Rhapsody),Spotify,Microsoft Groove,Musicbrainz,Netease,Discogs,Tidal,7digital,Qobuz,QQ (Tencent),Netease,Last.fm,Genius",
 	"MaxImageSize" 		: 500,
 	"Proxy" 			: "0.0.0.0:8080",
 	"UserAgent" 		: "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",	

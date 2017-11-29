@@ -349,6 +349,7 @@ namespace GlobalNamespace
 				}
 				catch (IOException ex)
 				{
+					// TODO Remove this debug info and find a good error message and write error only to GUI
 					Debug.WriteLine(ex);
 				}
 				
@@ -368,6 +369,7 @@ namespace GlobalNamespace
 					}
 					catch (IOException ex)
 					{
+						// TODO Remove this debug info and find a good error message and write error only to GUI
 						Debug.WriteLine(ex);
 					}
 					
@@ -388,6 +390,7 @@ namespace GlobalNamespace
 					}
 					catch (IOException ex)
 					{
+						// TODO Remove this debug info and find a good error message and write error only to GUI
 						Debug.WriteLine(ex);
 					}
 					
