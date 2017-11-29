@@ -11,6 +11,7 @@
 namespace GlobalNamespace
 {
 	using System;
+	using System.Diagnostics;
 	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
@@ -43,16 +44,20 @@ namespace GlobalNamespace
 						string artistTemp = (string)data.SelectToken("GetLyricResult.LyricArtist");
 						string titleTemp = (string)data.SelectToken("GetLyricResult.LyricSong");
 
-						if (artistTemp == tagNew.Artist && titleTemp == tagNew.Title)
+						if (artistTemp == tagNew.Artist && titleTemp == tagNew.Title && (string)data.SelectToken("GetLyricResult.Lyric") != null)
 						{
-							string response = (string)data.SelectToken("GetLyricResult.Lyric");
+							string rawLyrics = (string)data.SelectToken("GetLyricResult.Lyric");
 
-							if (!string.IsNullOrWhiteSpace(response))
+							// Sanitize lyrics
+							rawLyrics = CheckMalformedUtf8(rawLyrics);											// Checks and converts a string to UTF-8 if needed/possible
+							rawLyrics = rawLyrics.Trim('\r','n').Trim().Trim('\r','n');							// Remove leading or ending line breaks and white space
+
+							if (rawLyrics.Length > 1)
 							{
-								response = CheckMalformedUtf8(response);
-								
-								tagNew.Lyrics = response.Trim('\r','n').Trim().Trim('\r','n');							// Remove leading or ending line breaks and white space
-								this.PrintLogMessage("search", new[] { "  Lyrics taken from Chartlyrics" });
+								tagNew.Lyrics = rawLyrics;
+								this.PrintLogMessage("search", new[] { "  Lyrics taken from Xiami" });
+								Debug.WriteLine("Chartlyrics ################################################");
+								Debug.WriteLine(tagNew.Lyrics);
 							}
 						}
 					}
