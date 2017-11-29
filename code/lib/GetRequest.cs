@@ -20,7 +20,7 @@ namespace GlobalNamespace
 	{
 		private async Task<string> GetRequest(HttpMessageInvoker client, HttpRequestMessage request, CancellationToken cancelToken)
 		{
-			const int Timeout = 10;
+			const int Timeout = 15;
 			const int MaxRetries = 3;
 
 			HttpResponseMessage response = new HttpResponseMessage();
@@ -103,16 +103,15 @@ namespace GlobalNamespace
 						{
 							List<string> errorMsg = new List<string> { "ERROR:    Server took longer than " + Timeout + " seconds to respond!" };
 							errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
-
+							errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
+							
 							this.PrintLogMessage("error", errorMsg.ToArray());								
 						}
 					}					
-					
-					break;
 				}
 				catch (Exception error)
 				{
-					// An unknown application error occured
+					// An unknown application error occured. Cancel request immediatly and don't try again
 					if (!cancelToken.IsCancellationRequested)
 					{
 						// If debugging is enabled in settings, print out all request properties
