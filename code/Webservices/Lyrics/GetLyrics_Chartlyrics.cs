@@ -51,7 +51,7 @@ namespace GlobalNamespace
 							{
 								response = CheckMalformedUtf8(response);
 								
-								tagNew.Lyrics = response;
+								tagNew.Lyrics = response.Trim('\r','n').Trim().Trim('\r','n');							// Remove leading or ending line breaks and white space
 								this.PrintLogMessage("search", new[] { "  Lyrics taken from Chartlyrics" });
 							}
 						}
