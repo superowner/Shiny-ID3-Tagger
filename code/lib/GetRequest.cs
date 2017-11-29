@@ -22,6 +22,7 @@ namespace GlobalNamespace
 		{
 			const int Timeout = 15;
 			const int MaxRetries = 3;
+			const int RetryDelay = 2;
 
 			HttpResponseMessage response = new HttpResponseMessage();
 			HttpRequestMessage requestBackup = CloneRequest(request);
@@ -92,10 +93,16 @@ namespace GlobalNamespace
 							}
 						}
 					}
+					
+					// Response was not suceessfull (No status code 200)
+					// Response was not in the exceltopn list of common status codes
+					// Continue with loop, but wait some seconds before you try it again
+					Task.Delay(RetryDelay * 1000);
 				}
 				catch (TaskCanceledException)
 				{
 					// The request timed out. Server took too long to respond
+					// Continue with loop
 					if (!cancelToken.IsCancellationRequested)
 					{
 						// If debugging is enabled in settings, print out all request properties
