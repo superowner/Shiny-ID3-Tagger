@@ -37,7 +37,7 @@ namespace GlobalNamespace
 			
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
-			request.RequestUri = new Uri("https://api.discogs.com/database/search?q=" + searchTermEnc +
+			request.RequestUri = new Uri("http://api.discogs.com/database/search?q=" + searchTermEnc +
 				"&format=album" +
 				"&type=master" + 
 				"&per_page=1" +
@@ -53,6 +53,7 @@ namespace GlobalNamespace
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 			
 				string url = (string)data1.SelectToken("results[0].resource_url") + "?key=" + User.Accounts["DcKey"] + "&secret=" + User.Accounts["DcSecret"];
+				url = url.Replace("https://", "http://");						// Non-HTTPS connections tend to be a bit faster. We don't care about security =D
 				if (IsValidUrl(url))
 				{
 					request.RequestUri = new Uri(url);

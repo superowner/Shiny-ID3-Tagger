@@ -40,7 +40,7 @@ namespace GlobalNamespace
 			string titleEnc = WebUtility.UrlEncode(title);
 			
 			HttpRequestMessage request = new HttpRequestMessage();
-			request.RequestUri = new Uri("https://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEnc + "&q_track=" + titleEnc + "&page_size=1&apikey=" + (string)account[0]["key"]);
+			request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEnc + "&q_track=" + titleEnc + "&page_size=1&apikey=" + (string)account[0]["key"]);
 			
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
@@ -56,7 +56,7 @@ namespace GlobalNamespace
 				
 				// ###########################################################################
 				request = new HttpRequestMessage();
-				request.RequestUri = new Uri("https://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account[0]["key"]);
+				request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account[0]["key"]);
 
 				string content2 = await this.GetRequest(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
@@ -74,7 +74,7 @@ namespace GlobalNamespace
 				
 				// ###########################################################################
 				request = new HttpRequestMessage();
-				request.RequestUri = new Uri("https://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account[0]["key"]);
+				request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account[0]["key"]);
 
 				string content3 = await this.GetRequest(client, request, cancelToken);
 				JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());

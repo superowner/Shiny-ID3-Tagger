@@ -38,7 +38,7 @@ namespace GlobalNamespace
 			// const string Server = "https://musicbrainz.org";
 			// const string Server = "http://musicbrainz-mirror.eu:5000";
 			// const string Server = "http://musicbrainz.fin-alice.de:5000";
-			const string Server = "https://beta.musicbrainz.org/";							// info: http://www.tranquilbase.org/category/musicbrainz/
+			const string Server = "http://beta.musicbrainz.org/";							// info: http://www.tranquilbase.org/category/musicbrainz/
 			
 			const string InvalidChars = @"[#!(){}/;:\[\]\^\\\\&""]";
 			
@@ -143,7 +143,7 @@ namespace GlobalNamespace
 				request = new HttpRequestMessage();
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 				request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-				request.RequestUri = new Uri("https://coverartarchive.org/release-group/" + releasegroupid);
+				request.RequestUri = new Uri("http://coverartarchive.org/release-group/" + releasegroupid);
 				
 				string content3 = await this.GetRequest(client, request, cancelToken);
 				JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());

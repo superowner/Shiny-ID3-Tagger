@@ -34,7 +34,7 @@ namespace GlobalNamespace
 			
 			HttpRequestMessage request = new HttpRequestMessage();
 			request = new HttpRequestMessage();
-			request.RequestUri = new Uri("https://api.rhapsody.com/v2/search?q=" + searchTermEnc + "&include=genres&type=track&pretty=true&limit=1&apikey=" + User.Accounts["NaApiKey"]);
+			request.RequestUri = new Uri("http://api.rhapsody.com/v2/search?q=" + searchTermEnc + "&include=genres&type=track&pretty=true&limit=1&apikey=" + User.Accounts["NaApiKey"]);
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());			
@@ -51,7 +51,7 @@ namespace GlobalNamespace
 				if (data1.SelectToken("data[0].albumId") != null)
 				{
 					request = new HttpRequestMessage();
-					request.RequestUri = new Uri("https://api.rhapsody.com/v2/albums/" + (string)data1.SelectToken("data[0].albumId") + "?pretty=true&apikey=" + User.Accounts["NaApiKey"]);
+					request.RequestUri = new Uri("http://api.rhapsody.com/v2/albums/" + (string)data1.SelectToken("data[0].albumId") + "?pretty=true&apikey=" + User.Accounts["NaApiKey"]);
 	
 					string content2 = await this.GetRequest(client, request, cancelToken);
 					JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());

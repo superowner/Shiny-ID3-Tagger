@@ -72,7 +72,7 @@ namespace GlobalNamespace
 			
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
-			request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
+			request.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content1), this.GetJsonSettings());
@@ -123,7 +123,7 @@ namespace GlobalNamespace
 
 				request = new HttpRequestMessage();
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);				
-				request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
+				request.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 				string content2 = await this.GetRequest(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content2), this.GetJsonSettings());
@@ -146,7 +146,7 @@ namespace GlobalNamespace
 	
 					request = new HttpRequestMessage();
 					request.Headers.Add("User-Agent", User.Settings["UserAgent"]);					
-					request.RequestUri = new Uri("https://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
+					request.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 	
 					string content3 = await this.GetRequest(client, request, cancelToken);
 					JObject data3 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content3), this.GetJsonSettings());

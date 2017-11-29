@@ -33,7 +33,7 @@ namespace GlobalNamespace
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
 			
 			HttpRequestMessage request = new HttpRequestMessage();
-			request.RequestUri = new Uri("https://itunes.apple.com/search?term=" + searchTermEnc + "&media=music&limit=1");
+			request.RequestUri = new Uri("http://itunes.apple.com/search?term=" + searchTermEnc + "&media=music&limit=1");
 
 			string content = await this.GetRequest(client, request, cancelToken);
 			JObject data = JsonConvert.DeserializeObject<JObject>(content, this.GetJsonSettings());
