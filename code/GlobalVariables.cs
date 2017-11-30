@@ -90,7 +90,7 @@ namespace GlobalNamespace
 
 		internal string Cover { get; set; }
 
-		internal static DataTable CreateTable()
+		internal static DataTable CreateId3Table()
 		{
 			DataTable table = new DataTable();
 			table.Locale = new CultureInfo("en-US");

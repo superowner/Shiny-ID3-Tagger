@@ -5,7 +5,6 @@
 // <author>ShinyId3Tagger Team</author>
 // <summary>Retrieves track lyrics from chartlyrics.com</summary>
 // http://www.chartlyrics.com/api.aspx
-// https://msdn.microsoft.com/en-us/library/system.text.encodinginfo.getencoding(v=vs.110).aspx
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -22,8 +21,15 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private async Task<string> GetLyrics_Chartlyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
+		private async Task<Id3> GetLyrics_Chartlyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
+			Id3 o = new Id3();
+			o.Service = "Chartlyrics";
+
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+			
+			// ###########################################################################				
 			if (tagNew.Artist != null && tagNew.Title != null)
 			{
 				string artistEnc = WebUtility.UrlEncode(tagNew.Artist);
@@ -49,15 +55,12 @@ namespace GlobalNamespace
 							string rawLyrics = (string)data.SelectToken("GetLyricResult.Lyric");
 
 							// Sanitize lyrics
-							rawLyrics = CheckMalformedUtf8(rawLyrics);											// Checks and converts a string to UTF-8 if needed/possible
-							rawLyrics = rawLyrics.Trim('\r','n').Trim().Trim('\r','n');							// Remove leading or ending line breaks and white space
+							rawLyrics = CheckMalformedUtf8(rawLyrics);												// Checks and converts a string to UTF-8 if needed/possible
+							rawLyrics = rawLyrics.Trim('\r', 'n').Trim().Trim('\r', 'n');							// Remove leading or ending line breaks and white space
 
 							if (rawLyrics.Length > 1)
 							{
-								tagNew.Lyrics = rawLyrics;
-								this.PrintLogMessage("search", new[] { "  Lyrics taken from Xiami" });
-								Debug.WriteLine("Chartlyrics ################################################");
-								Debug.WriteLine(tagNew.Lyrics);
+								o.Lyrics = rawLyrics;
 							}
 						}
 					}
@@ -66,7 +69,11 @@ namespace GlobalNamespace
 				request.Dispose();
 			}
 
-			return tagNew.Lyrics;
+			// ###########################################################################
+			sw.Stop();
+			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+
+			return o;
 		}
 	}
 }
