@@ -1,8 +1,8 @@
 {
 	"DebugLevel" 		: 2,
 	"PreferTags" 		: true,
-	"RemoveBrackets" 	: true,
-	"RemoveFeaturing" 	: true,
+	"RemoveBrackets" 	: false,
+	"RemoveFeaturing" 	: false,
 	"OverwriteImage" 	: true,
 	"AutoSearch" 		: true,
 	"CoverPriority" 	: "Napster (Rhapsody), Discogs, Qobuz, Tidal, Genius, 7digital, Deezer, iTunes, Last.fm, Spotify, Gracenote (Sony), Amazon, Musicbrainz, Netease, QQ (Tencent), Microsoft Groove",
@@ -12,5 +12,5 @@
 	"UserAgent" 		: "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",	
 	"UserFrames"		: "SKIP,PERFORMER,added_timestamp,last_played_timestamp,play_count,first_played_timestamp,replaygain_track_gain,replaygain_track_peak,replaygain_album_gain,replaygain_album_peak",
 	"DefaultFrames" 	: "APIC,TPE1,TIT2,TALB,TYER,TDRC,TCON,TCOM,TPE2,TRCK,TPOS,COMM,TXXX,USLT",
-	"allowedEditPercent": 30
+	"thresholdRedValue"	: 30
 }
