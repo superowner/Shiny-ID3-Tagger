@@ -334,10 +334,27 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private async Task<bool> SaveAndDisposeFile(TagLib.File tagFile)
 		{
+
+			Action<Exception> errorHandler = (ex) => 
+			{
+				// file could not be accessed, read or written
+				if (User.Settings["DebugLevel"] >= 1)
+				{
+					string[] errorMsg =
+						{
+						@"ERROR:    Could not write to file!",
+						"File:     " + tagFile.Name,
+					 	"Message:  " + ex.Message.TrimEnd('\r', '\n')
+					};
+					this.PrintLogMessage("error", errorMsg);
+				}
+			};
+			
 			const int WriteDelay = 50;
 			const int MaxRetries = 3;
 			DateTime lastWriteTime = default(DateTime);
 			
+			// Preserve LastWriteTime
 			bool successWrite = false;
 			for (int retry = 0; retry < MaxRetries; retry++)
 			{
@@ -349,13 +366,13 @@ namespace GlobalNamespace
 				}
 				catch (IOException ex)
 				{
-					// TODO Remove this debug info and find a good error message and write error only to GUI
-					Debug.WriteLine(ex);
+					errorHandler(ex);
 				}
 				
 				await Task.Delay(WriteDelay);
 			}
 
+			// Save mp3 tags (lastwritetime will be modified) 
 			if (successWrite)
 			{
 				successWrite = false;
@@ -369,14 +386,14 @@ namespace GlobalNamespace
 					}
 					catch (IOException ex)
 					{
-						// TODO Remove this debug info and find a good error message and write error only to GUI
-						Debug.WriteLine(ex);
+						errorHandler(ex);
 					}
 					
 					await Task.Delay(WriteDelay);
 				}	
 			}
 			
+			// Change lastwritetime to original
 			if (successWrite)
 			{			
 				successWrite = false;
@@ -390,8 +407,7 @@ namespace GlobalNamespace
 					}
 					catch (IOException ex)
 					{
-						// TODO Remove this debug info and find a good error message and write error only to GUI
-						Debug.WriteLine(ex);
+						errorHandler(ex);
 					}
 					
 					await Task.Delay(WriteDelay);
