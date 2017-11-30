@@ -5,7 +5,7 @@
 	"RemoveFeaturing" 	: true,
 	"OverwriteImage" 	: true,
 	"AutoSearch" 		: true,
-	"CoverPriority" 	: "Napster (Rhapsody), Discogs, Qobuz, Tidal, 7digital, Deezer, iTunes, Last.fm, Spotify, Gracenote (Sony), Amazon, Genius, Musicbrainz, Netease, QQ (Tencent), Microsoft Groove",
+	"CoverPriority" 	: "Napster (Rhapsody), Discogs, Qobuz, Tidal, Genius, 7digital, Deezer, iTunes, Last.fm, Spotify, Gracenote (Sony), Amazon, Musicbrainz, Netease, QQ (Tencent), Microsoft Groove",
 	"LyricsPriority" 	: "Lololyrics,Chartlyrics,Netease,Xiami",
 	"MaxImageSize" 		: 500,
 	"Proxy" 			: "0.0.0.0:8080",

@@ -6,10 +6,11 @@
 // <summary>Code fired when "Search tags" button is clicked. Calls all webservice APIs</summary>
 //-----------------------------------------------------------------------
 
-// TODO Move column for album hits to the right/end of table
-// TODO Move column for API duration per track to the right/end of table
-// TODO Add a new column for accumulated API duration which sums up all API durations per track to one big number
-// TODO Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
+// TODO: Move column for album hits to the right/end of table
+// TODO: Move column for API duration per track to the right/end of table
+// TODO: Add a new column for accumulated API duration which sums up all API durations per track to one big number
+// TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
+// TODO: Add right click menu to delete result lines (ie. ones who have red values)
 namespace GlobalNamespace
 {
 	using System;
@@ -68,21 +69,77 @@ namespace GlobalNamespace
 
 				if (rowAlreadyExists == false)
 				{
-					DataTable webserviceResults = await this.StartWebservicesTasks(client, tagOld, cancelToken);
-					
 					Id3 tagNew = new Id3();
 					tagNew.Service = "RESULT";
 					tagNew.Filepath = tagOld.Filepath;
-
-					tagNew = this.CalculateResults(webserviceResults, tagNew);
 					
-					tagNew.Lyrics = await this.StartLyricTasks(client, tagNew, cancelToken);
+					Task<DataTable> webservicesTask = this.StartWebservices(client, tagOld, cancelToken);
+					Task<KeyValuePair<string,string>> lyricSearchTask = this.StartLyricSearch(client, tagOld, cancelToken);
+					
+					await Task.WhenAll(webservicesTask, lyricSearchTask);
+					
+					DataTable webserviceResults = webservicesTask.Result;
+					KeyValuePair<string, string> lyricsNew = lyricSearchTask.Result;
+					
+					string artistNew = (from row1 in webserviceResults.AsEnumerable()
+								where !string.IsNullOrWhiteSpace(row1.Field<string>("artist"))
+								group row1 by Capitalize(Strip(row1.Field<string>("artist"))) into grp
+								where grp.Count() >= 3
+								orderby grp.Count() descending
+								select grp.Key).FirstOrDefault();
+	
+					string titleNew = (from row1 in webserviceResults.AsEnumerable()
+								where !string.IsNullOrWhiteSpace(row1.Field<string>("title"))
+								group row1 by Capitalize(Strip(row1.Field<string>("title"))) into grp
+								where grp.Count() >= 3
+								orderby grp.Count() descending
+								select grp.Key).FirstOrDefault();
+										
+					if (artistNew == null)
+					{
+						artistNew = tagOld.Artist;
+					}
+					
+					if (titleNew == null)
+					{
+						titleNew = tagOld.Title;
+					}
+	
+					// If new artist or title are different from old ones, repeat all searches until new and old ones match.
+					// This happens when spelling mistakes were corrected by many APIs
+					if ( artistNew.ToLower() != tagOld.Artist.ToLower() ||
+						titleNew.ToLower() != tagOld.Title.ToLower())
+					{
+						this.PrintLogMessage("search", new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
+
+						lyricsNew = new KeyValuePair<string, string>();
+						tagNew.Artist = artistNew;
+						tagNew.Title = titleNew;
+						
+						webservicesTask = this.StartWebservices(client, tagNew, cancelToken);
+						lyricSearchTask = this.StartLyricSearch(client, tagNew, cancelToken);
+						
+						await Task.WhenAll(webservicesTask, lyricSearchTask);
+						
+						webserviceResults = webservicesTask.Result;
+						lyricsNew = lyricSearchTask.Result;
+					}
+					
+
+					// Aggregate all API results and select the most frequent values					
+					tagNew = this.CalculateResults(webserviceResults, tagNew);
+
+					if (tagNew.Album != null)
+					{
+						tagNew.Lyrics = lyricsNew.Value;
+						this.PrintLogMessage("search", new[] { "  Lyrics taken from " + lyricsNew.Key });
+					}
 					
 					if (cancelToken.IsCancellationRequested)
 					{
 						break;
 					}
-
+					
 					foreach (DataRow r in webserviceResults.Rows)
 					{
 						string albumhit = IncreaseAlbumCounter(r["service"], r["album"], tagNew.Album);
@@ -105,8 +162,7 @@ namespace GlobalNamespace
 							r["lyrics"],
 							r["cover"]);
 
-						// TODO: Swap the logic, default is grey, matching results go yellow, pay attention to link column color
-						// Change background color for rows to grey if they don't match the result album (= tagNew.Album). Rest stays yellow
+						// Set row background color to grey if current row album doesnt match the most frequent album
 						if (tagNew.Album == null ||
 							(tagNew.Album != null && r["album"] != null &&
 							Strip(tagNew.Album).ToLower() != Strip(r["album"].ToString().ToLower())))
@@ -168,7 +224,8 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		private async Task<string> StartLyricTasks(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
+		// TODO: use configure await to remove sluggishness in GUI
+		private async Task<KeyValuePair<string,string>> StartLyricSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
 			var lyricResults = new Dictionary<string, string>();
 			
@@ -191,17 +248,16 @@ namespace GlobalNamespace
 			
 			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
 			// The lyricsPriority setting in settings.json decides what lyrics should be taken if there are multiple sources available
-			string lyrics = null;
+			KeyValuePair<string, string> lyrics = new KeyValuePair<string, string>();
 			foreach (string service in User.Settings["LyricsPriority"].Split(','))
 			{
 				lyrics = (from kvp in lyricResults
 							where !string.IsNullOrWhiteSpace(kvp.Value)
 							where kvp.Key == service.Trim()
-							select kvp.Value).FirstOrDefault();
+							select kvp).FirstOrDefault();
 
-				if (lyrics != null)
+				if (lyrics.Value != null)
 				{
-					this.PrintLogMessage("search", new[] { "  Lyrics taken from " + service });
 					break;
 				}
 			}
@@ -210,7 +266,8 @@ namespace GlobalNamespace
 		}
 		
 		// ###########################################################################
-		private async Task<DataTable> StartWebservicesTasks(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
+		// TODO: use configure await to remove sluggishness in GUI
+		private async Task<DataTable> StartWebservices(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
 		{
 			DataTable webserviceResults = Id3.CreateId3Table();
 
@@ -223,90 +280,56 @@ namespace GlobalNamespace
 								"file: \"" + tagOld.Filepath + "\"");
 			this.PrintLogMessage("search", new[] { message });
 
-			for (int i = 1; i <= 3; i++)
+			List<Task<Id3>> taskList = new List<Task<Id3>>();
+			taskList.Add(this.GetTags_7digital(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Amazon(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Decibel(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Deezer(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Discogs(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Genius(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Gracenote(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Itunes(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_LastFm(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_MusicBrainz(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_MusixMatch(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Napster(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Netease(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Qobuz(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_QQ(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken));
+			taskList.Add(this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken));
+
+			this.progressBar1.Maximum = taskList.Count;
+			this.progressBar1.Value = 0;
+
+			while (taskList.Count > 0)
 			{
-				List<Task<Id3>> taskList = new List<Task<Id3>>();
-				taskList.Add(this.GetTags_7digital(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Amazon(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Decibel(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Deezer(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Discogs(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Genius(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Gracenote(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Itunes(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_LastFm(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_MusicBrainz(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_MusixMatch(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Napster(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Netease(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Qobuz(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_QQ(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken));
-				taskList.Add(this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken));
+				Task<Id3> finishedTask = await Task.WhenAny(taskList);
+				Id3 r = await finishedTask;
 
-				this.progressBar1.Maximum = taskList.Count;
-				this.progressBar1.Value = 0;
+				taskList.Remove(finishedTask);
+				finishedTask.Dispose();
 
-				while (taskList.Count > 0)
-				{
-					Task<Id3> finishedTask = await Task.WhenAny(taskList);
-					Id3 r = await finishedTask;
+				webserviceResults.Rows.Add(
+					webserviceResults.Rows.Count + 1,
+					tagOld.Filepath,
+					r.Service,
+					r.Duration,
+					r.Artist,
+					r.Title,
+					r.Album,
+					r.Date,
+					r.Genre,
+					r.DiscCount,
+					r.DiscNumber,
+					r.TrackCount,
+					r.TrackNumber,
+					string.Empty,
+					r.Cover);
 
-					taskList.Remove(finishedTask);
-					finishedTask.Dispose();
-
-					webserviceResults.Rows.Add(
-						webserviceResults.Rows.Count + 1,
-						tagOld.Filepath,
-						r.Service,
-						r.Duration,
-						r.Artist,
-						r.Title,
-						r.Album,
-						r.Date,
-						r.Genre,
-						r.DiscCount,
-						r.DiscNumber,
-						r.TrackCount,
-						r.TrackNumber,
-						string.Empty,
-						r.Cover);
-
-					this.progressBar1.PerformStep();
-				}
-
-				string artistResult = (from row1 in webserviceResults.AsEnumerable()
-							where !string.IsNullOrWhiteSpace(row1.Field<string>("artist"))
-							group row1 by Capitalize(Strip(row1.Field<string>("artist"))) into grp
-							where grp.Count() >= 3
-							orderby grp.Count() descending
-							select grp.Key).FirstOrDefault();
-
-				string titleResult = (from row1 in webserviceResults.AsEnumerable()
-							where !string.IsNullOrWhiteSpace(row1.Field<string>("title"))
-							group row1 by Capitalize(Strip(row1.Field<string>("title"))) into grp
-							where grp.Count() >= 3
-							orderby grp.Count() descending
-							select grp.Key).FirstOrDefault();
-
-				// If new artist and title are the same as old ones, break the loop and return with all results
-				if (artistResult == null || titleResult == null || i == 3 ||
-						(artistResult.ToLower() == artistToSearch.ToLower() &&
-							titleResult.ToLower() == titleToSearch.ToLower()))
-				{
-					break;
-				}
-				else
-				{
-					// If new artist or title are different from old ones, repeat all searches until new and old matches (but not more than 3 times)
-					this.PrintLogMessage("search", new[] { "  Spelling mistake detected. New search for: \"" + artistResult + " - " + titleResult + "\"" });
-					artistToSearch = artistResult;
-					titleToSearch = titleResult;
-
-					webserviceResults.Clear();
-				}
+				this.progressBar1.PerformStep();
 			}
 
 			return webserviceResults;
@@ -378,29 +401,31 @@ namespace GlobalNamespace
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
-				// COVER PRIORITY in settings.json
-				// Musixmatch and Musicgraph do not provide any cover URL via API
-				// Despite Decibel provides a cover URL, the URL is not so easy to download because authorization via API key in a header is required
-				// Therefore these services must be skipped as cover source. This is done by removing them from "CoverPriority" variable in settings.json
-				// Napster (Rhapsody)	no CDN, persistent cover URLs									500 px, always squared
-				// Discogs				no CDN, persistent cover URLs									different sizes, 500 to 600 px, can be non-squared
-				// Qobuz				no CDN, persistent cover URLs									600 px, always squared
-				// Tidal				no CDN, persistent cover URLs									1200 px, always squared
-				// 7digital				uses a CDN but URL schema seems fixed							800 px, always squared					
-				// Deezer				uses a CDN and therefore periodically changing cover URLs		500 px, always squared
-				// iTunes				uses a CDN and therefore periodically changing cover URLs		600 px, can be non-squared
-				// Last.fm				uses a CDN and therefore periodically changing cover URLs		600 px, always squared
-				// Spotify				uses a CDN and therefore periodically changing cover URLs		640 px, can be non-squared
-				// Gracenote (Sony)		uses a CDN and therefore periodically changing cover URLs		720 px, can be non-squared
-				// Amazon				uses a CDN and therefore periodically changing cover URLs		different sizes, 1200 to 1500 px, can be non-squared				
-				// Genius				no CDN, persistent cover URLs									different sizes, 600 to 1500 px, can be non-squared
-				// Musicbrainz			no CDN, persistent cover URLs, redirect and slow server			different sizes, 900 to 1800 px, always squared
-				// Netease				no CDN, persistent cover URLs, slow server						different sizes, 600 to 3000 px, can be non-squared
-				// QQ (Tencent)			no CDN, persistent cover URLs, slow server						500 px, always squared				
-				// Microsoft Groove)	no CDN, persistent cover URLs, API shut down soon				different sizes, 1200 to 3000 px, can be non-squared				
-				// Decibel				needs authentication
-				// Musixmatch			no covers
-				// Musicgraph			no covers				
+				/* COVER PRIORITY in settings.json
+				 * Napster (Rhapsody)	no CDN, persistent cover URLs									500 px, always squared
+				 * Discogs				no CDN, persistent cover URLs									different sizes, 500 to 600 px, can be non-squared
+				 * Qobuz				no CDN, persistent cover URLs									600 px, always squared
+				 * Tidal				no CDN, persistent cover URLs									1200 px, always squared
+				 * Genius				no CDN, persistent cover URLs									different sizes, 600 to 1500 px, can be non-squared
+				 * 7digital				uses a CDN and therefore periodically changes cover URLs		800 px, always squared
+				 * Deezer				uses a CDN and therefore periodically changes cover URLs		500 px, always squared
+				 * iTunes				uses a CDN and therefore periodically changes cover URLs		600 px, can be non-squared
+				 * Last.fm				uses a CDN and therefore periodically changes cover URLs		600 px, always squared
+				 * Spotify				uses a CDN and therefore periodically changes cover URLs		640 px, can be non-squared
+				 * Gracenote (Sony)		uses a CDN and therefore periodically changes cover URLs		720 px, can be non-squared
+				 * Amazon				uses a CDN and therefore periodically changes cover URLs		different sizes, 1200 to 1500 px, can be non-squared				
+				 * Musicbrainz			no CDN, persistent cover URLs, redirect and slow server			different sizes, 900 to 1800 px, always squared
+				 * Netease				no CDN, persistent cover URLs, slow server						different sizes, 600 to 3000 px, can be non-squared
+				 * QQ (Tencent)			no CDN, persistent cover URLs, slow server						500 px, always squared				
+				 * Microsoft Groove)	no CDN, persistent cover URLs, API shut down soon				different sizes, 1200 to 3000 px, can be non-squared				
+				 * Decibel				needs authentication
+				 * Musixmatch			no covers
+				 * Musicgraph			no covers				
+				 *
+				 * Musixmatch and Musicgraph do not provide any cover URL via API
+				 * Despite Decibel provides a cover URL, the URL is not so easy to download because authorization via API key in a header is required
+				 * Therefore these services must be skipped as cover source. This is done by removing them from "CoverPriority" variable in settings.json
+				 */
 				foreach (string service in User.Settings["CoverPriority"].Split(','))
 				{
 					tagNew.Cover = (from row in majorityAlbumRows

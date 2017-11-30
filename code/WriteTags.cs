@@ -334,7 +334,6 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private async Task<bool> SaveAndDisposeFile(TagLib.File tagFile)
 		{
-
 			Action<Exception> errorHandler = (ex) => 
 			{
 				// file could not be accessed, read or written

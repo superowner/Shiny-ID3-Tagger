@@ -138,7 +138,6 @@ namespace GlobalNamespace
 				}
 
 				// ###########################################################################
-				
 				request = new HttpRequestMessage();
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 				request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
