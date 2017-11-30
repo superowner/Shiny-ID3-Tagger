@@ -44,7 +44,8 @@ namespace GlobalNamespace
 
 			HttpClient client = new HttpClient(handler);
 			client.MaxResponseContentBufferSize = 256000000;
-
+			client.Timeout = TimeSpan.FromSeconds(15);				// Musicbrainz has 15s timeout. I assume many other APIs do have a small timeout too. The default for client side timeout was 40s
+			
 			ServicePointManager.DefaultConnectionLimit = 10;		// Not sure if it's needed since this limit applies to connection per remote host (per API), not per client
 			
 			ping.Dispose();

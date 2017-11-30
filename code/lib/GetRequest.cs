@@ -85,7 +85,7 @@ namespace GlobalNamespace
 							// If debugging is enabled in settings, print out all request properties
 							if (User.Settings["DebugLevel"] >= 2)
 							{
-								List<string> errorMsg = new List<string> { "ERROR:    Response was unsuccessful!" };
+								List<string> errorMsg = new List<string> { "ERROR:    Response was unsuccessful! Retrying..." };
 								errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 								errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
 								
@@ -94,9 +94,9 @@ namespace GlobalNamespace
 						}
 					}
 					
-					// Response was not suceessfull (No status code 200)
-					// Response was not in the exceltopn list of common status codes
-					// Continue with loop, but wait some seconds before you try it again
+					// Response was not successful (No status code 200)
+					// Response was not in the exception list
+					// Continue with loop, but wait some seconds before you try it again to give the server time to recover
 					Task wait = Task.Delay(RetryDelay * 1000);
 				}
 				catch (TaskCanceledException)
@@ -108,7 +108,7 @@ namespace GlobalNamespace
 						// If debugging is enabled in settings, print out all request properties
 						if (User.Settings["DebugLevel"] >= 2)
 						{
-							List<string> errorMsg = new List<string> { "ERROR:    Server took longer than " + Timeout + " seconds to respond!" };
+							List<string> errorMsg = new List<string> { "ERROR:    Server took longer than " + Timeout + " seconds to respond! Retrying..." };
 							errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
 							errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
 							
@@ -124,10 +124,14 @@ namespace GlobalNamespace
 						// If debugging is enabled in settings, print out all request properties
 						if (User.Settings["DebugLevel"] >= 1)
 						{
+							Exception realerror = error;
+							while (realerror.InnerException != null)
+								realerror = realerror.InnerException;
+							
 							string[] errorMsg =
 							{
 								"ERROR:    An unknown application error occured!",
-								"Message:  " + error.ToString().TrimEnd('\r', '\n')
+								"Message:  " + realerror.ToString().TrimEnd('\r', '\n')
 							};
 							this.PrintLogMessage("error", errorMsg);
 						}

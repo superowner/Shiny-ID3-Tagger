@@ -11,6 +11,8 @@
 // TODO: Add a new column for accumulated API duration which sums up all API durations per track to one big number
 // TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
 // TODO: Add right click menu to delete result lines (ie. ones who have red values)
+// TODO: Add right click menu to open Windows explorer and select file
+// TODO: Change the "ERROR:" text for level 1 to "WARNING:" when its not critical
 namespace GlobalNamespace
 {
 	using System;
@@ -94,21 +96,12 @@ namespace GlobalNamespace
 								where grp.Count() >= 3
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
-										
-					if (artistNew == null)
-					{
-						artistNew = tagOld.Artist;
-					}
-					
-					if (titleNew == null)
-					{
-						titleNew = tagOld.Title;
-					}
 	
 					// If new artist or title are different from old ones, repeat all searches until new and old ones match.
 					// This happens when spelling mistakes were corrected by many APIs
-					if ( artistNew.ToLower() != tagOld.Artist.ToLower() ||
-						titleNew.ToLower() != tagOld.Title.ToLower())
+					if ( artistNew != null && titleNew != null &&
+					    (artistNew.ToLower() != tagOld.Artist.ToLower() ||
+					      titleNew.ToLower() != tagOld.Title.ToLower()))
 					{
 						this.PrintLogMessage("search", new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
 
