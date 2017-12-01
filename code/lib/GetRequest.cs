@@ -80,6 +80,7 @@ namespace GlobalNamespace
 					else
 					{
 						// Response was not successful. But it was also not a common error
+						// Check if user pressed cancel button. If no, print the error
 						if (!cancelToken.IsCancellationRequested)
 						{
 							// If debugging is enabled in settings, print out all request properties
@@ -91,51 +92,44 @@ namespace GlobalNamespace
 								
 								this.PrintLogMessage("error", errorMsg.ToArray());								
 							}
+							
+							// Response was not successful. But it was also not a common error. And the user did not press cancel
+							// This must be an uncommon error. Continue with our retry logic
+							// But wait some seconds before you try it again to give the server time to recover
+							Task wait = Task.Delay(RetryDelay * 1000);
 						}
 					}
-					
-					// Response was not successful (No status code 200)
-					// Response was not in the exception list
-					// Continue with loop, but wait some seconds before you try it again to give the server time to recover
-					Task wait = Task.Delay(RetryDelay * 1000);
 				}
 				catch (TaskCanceledException)
 				{
-					// The request timed out. Server took too long to respond
-					// Continue with loop
-					if (!cancelToken.IsCancellationRequested)
+					// The request timed out. Server took too long to respond. Continue with retry logic
+					// If debugging is enabled in settings, print out all request properties
+					if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 2)
 					{
-						// If debugging is enabled in settings, print out all request properties
-						if (User.Settings["DebugLevel"] >= 2)
-						{
-							List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + Timeout + " seconds to respond! Retrying..." };
-							errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
-							errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
-							
-							this.PrintLogMessage("error", errorMsg.ToArray());								
-						}
+						List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + Timeout + " seconds to respond! Retrying..." };
+						errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
+						errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
+						
+						this.PrintLogMessage("error", errorMsg.ToArray());								
 					}					
 				}
 				catch (Exception error)
 				{
 					// An unknown application error occured. Cancel request immediatly and don't try again
-					if (!cancelToken.IsCancellationRequested)
+					// If debugging is enabled in settings, print out all request properties
+					if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 1)
 					{
-						// If debugging is enabled in settings, print out all request properties
-						if (User.Settings["DebugLevel"] >= 1)
+						Exception realerror = error;
+						while (realerror.InnerException != null)
 						{
-							Exception realerror = error;
-							while (realerror.InnerException != null)
-							{
-								realerror = realerror.InnerException;
-							}
-							
-							List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured!" };
-							errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
-							errorMsg.Add("Message:  " + realerror.ToString().TrimEnd('\r', '\n'));
-								
-							this.PrintLogMessage("error", errorMsg.ToArray());	
+							realerror = realerror.InnerException;
 						}
+						
+						List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured!" };
+						errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
+						errorMsg.Add("Message:  " + realerror.ToString().TrimEnd('\r', '\n'));
+							
+						this.PrintLogMessage("error", errorMsg.ToArray());	
 					}	
 
 					break;
