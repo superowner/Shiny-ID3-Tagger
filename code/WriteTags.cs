@@ -3,10 +3,8 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Module executed when "Write tags" button is clicked. Loops through all rows and writes their results as tags to current file</summary>
+// <summary>Main method for ID3 tag saving. Loops through all result rows and writes their values as tags it's corresponding file</summary>
 //-----------------------------------------------------------------------
-
-// TODO Write all results to all mp3 files. But save playback stats to file before and get them back afterwards
 
 namespace GlobalNamespace
 {

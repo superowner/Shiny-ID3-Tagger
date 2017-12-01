@@ -14,12 +14,9 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private DateTime ConvertStringToDate(string dateString)
-		{
-			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
-			{
-				// Valid date formats according to http://id3.org/id3v2.4.0-structure
-				string[] formats =
+		// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
+		// MSDN about standard datetime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
+		private static string[] dateTimeformats =
 				{
 					"yyyy",
 					"yyyy-MM",
@@ -34,9 +31,13 @@ namespace GlobalNamespace
 					"MM/dd/yyyy HH:mm:ss",
 					"dd.MM.yyyy HH:mm:ss"
 				};
-	
+				
+		private DateTime ConvertStringToDate(string dateString)
+		{
+			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
+			{
 				DateTime resultDate = new DateTime();
-				if (DateTime.TryParseExact(dateString, formats, cultEng, DateTimeStyles.None, out resultDate))
+				if (DateTime.TryParseExact(dateString, dateTimeformats, cultEng, DateTimeStyles.None, out resultDate))
 				{
 					return resultDate;
 				}
@@ -44,7 +45,7 @@ namespace GlobalNamespace
 				{
 					if (User.Settings["DebugLevel"] >= 2)
 					{
-						string[] errorMsg =	{ "ERROR:    Could not convert \"" + dateString + "\" to a date!" };
+						string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
 						this.PrintLogMessage("error", errorMsg);
 					}
 				}
