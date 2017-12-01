@@ -61,7 +61,7 @@ namespace GlobalNamespace
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.ToolStripMenuItem clearResultsToolStripMenuItem;
 		private System.Windows.Forms.ProgressBar progressBar2;
-		private System.Windows.Forms.DataGridViewImageColumn icon1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
 				
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -107,7 +107,7 @@ namespace GlobalNamespace
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.dataGridView1 = new GlobalNamespace.DataGridViewDoubleBuffered();
-			this.icon1 = new System.Windows.Forms.DataGridViewImageColumn();
+			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.filepath1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.artist1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.title1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -319,7 +319,7 @@ namespace GlobalNamespace
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
 			this.tabControl1.Size = new System.Drawing.Size(1646, 641);
-			this.tabControl1.TabIndex = 7;
+			this.tabControl1.TabIndex = 5;
 			this.tabControl1.TabStop = false;
 			this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
 			// 
@@ -359,7 +359,7 @@ namespace GlobalNamespace
 			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-			this.icon1,
+			this.Column1,
 			this.filepath1,
 			this.artist1,
 			this.title1,
@@ -397,15 +397,15 @@ namespace GlobalNamespace
 			this.dataGridView1.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnDataGridViewSortCompare);
 			this.dataGridView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridView_KeyPress);
 			// 
-			// icon1
+			// Column1
 			// 
-			this.icon1.HeaderText = "";
-			this.icon1.MinimumWidth = 25;
-			this.icon1.Name = "icon1";
-			this.icon1.ReadOnly = true;
-			this.icon1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.icon1.ToolTipText = "Icon";
-			this.icon1.Width = 25;
+			this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+			this.Column1.HeaderText = "#";
+			this.Column1.MinimumWidth = 25;
+			this.Column1.Name = "Column1";
+			this.Column1.ReadOnly = true;
+			this.Column1.ToolTipText = "Number";
+			this.Column1.Width = 25;
 			// 
 			// filepath1
 			// 
@@ -514,7 +514,7 @@ namespace GlobalNamespace
 			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage5.Size = new System.Drawing.Size(1638, 615);
 			this.tabPage5.TabIndex = 0;
-			this.tabPage5.Text = "Search Results";
+			this.tabPage5.Text = "Search Details";
 			this.tabPage5.UseVisualStyleBackColor = true;
 			// 
 			// dataGridView2

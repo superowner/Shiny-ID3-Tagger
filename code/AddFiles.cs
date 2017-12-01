@@ -9,7 +9,6 @@
 namespace GlobalNamespace
 {
 	using System;
-	using System.Drawing;
 	using System.IO;
 	using System.Linq;
 	using System.Text.RegularExpressions;
@@ -113,8 +112,6 @@ namespace GlobalNamespace
 				Id3 tagOld = new Id3();
 				tagOld.Filepath = filepath;
 				
-				Bitmap mp3Icon = new Bitmap(Icon.ExtractAssociatedIcon(filepath).ToBitmap(), 16, 16);
-				
 				TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", TagLib.ReadStyle.Average);
 				string filename = Path.GetFileNameWithoutExtension(filepath);
 	
@@ -212,7 +209,7 @@ namespace GlobalNamespace
 				this.Invoke((MethodInvoker)delegate
 				{
 					this.dataGridView1.Rows.Add(
-						mp3Icon,
+						(this.dataGridView1.Rows.Count + 1).ToString(),
 						tagOld.Filepath ?? string.Empty,
 						tagOld.Artist ?? string.Empty,
 						tagOld.Title ?? string.Empty,
