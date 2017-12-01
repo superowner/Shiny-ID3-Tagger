@@ -49,7 +49,7 @@ namespace GlobalNamespace
 					new KeyValuePair<string, string>("scope", "app.music.xboxlive.com")
 				});
 
-				string loginContent = await this.GetRequest(client, request, cancelToken);
+				string loginContent = await this.GetResponse(client, request, cancelToken);
 				JObject loginData = JsonConvert.DeserializeObject<JObject>(loginContent, this.GetJsonSettings());
 				
 				if (loginData != null && loginData.SelectToken("access_token") != null)
@@ -68,7 +68,7 @@ namespace GlobalNamespace
 				request.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 				
 				// ###########################################################################
-				string content1 = await this.GetRequest(client, request, cancelToken);
+				string content1 = await this.GetResponse(client, request, cancelToken);
 				JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
 				if (data1 != null && data1.SelectToken("Tracks.Items") != null)
@@ -88,7 +88,7 @@ namespace GlobalNamespace
 					request.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 					request.RequestUri = new Uri("https://music.xboxlive.com/1/content/" + (string)data1.SelectToken("Tracks.Items[0].Album.Id") + "/lookup?contentType=JSON");
 				
-					string content2 = await this.GetRequest(client, request, cancelToken);
+					string content2 = await this.GetResponse(client, request, cancelToken);
 					JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
 					if (data2 != null && data2.SelectToken("Albums.Items") != null)

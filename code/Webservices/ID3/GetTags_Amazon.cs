@@ -57,27 +57,27 @@ namespace GlobalNamespace
 			timestamp = Uri.EscapeDataString(timestamp);
 			
 			// Replace is needed according to official C# example for product advertising API
-			string artistEnc = Uri.EscapeDataString(artist).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
-			string titleEnc = Uri.EscapeDataString(title).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
+			string artistEncoded = Uri.EscapeDataString(artist).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
+			string titleEncoded = Uri.EscapeDataString(title).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
 			
 			// Initial search
 			string parameters = "AWSAccessKeyId=" + User.Accounts["AmAccessKey"] +
 								"&AssociateTag=" + User.Accounts["AmAssociateTag"] +
-								"&Keywords=" + artistEnc +
+								"&Keywords=" + artistEncoded +
 								"&Operation=ItemSearch" +
 								"&RelationshipType=Tracks" +
 								"&ResponseGroup=ItemAttributes%2CRelatedItems" +	
 								"&SearchIndex=MP3Downloads" +
 								"&Service=AWSECommerceService" +
 								"&Timestamp=" + timestamp +
-								"&Title=" + titleEnc +
+								"&Title=" + titleEncoded +
 								"&Version=2013-08-01";
 			
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 			request.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
-			string content1 = await this.GetRequest(client, request, cancelToken);
+			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content1), this.GetJsonSettings());
 
 			// 1 request per second is ok, after a burst you get throttled to 1 request/10s. Therefore this delay of 1second after every reqiest
@@ -135,7 +135,7 @@ namespace GlobalNamespace
 					request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 					request.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 	
-					string content2 = await this.GetRequest(client, request, cancelToken);
+					string content2 = await this.GetResponse(client, request, cancelToken);
 					JObject data2 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content2), this.GetJsonSettings());
 					
 					wait = Task.Delay(1000);

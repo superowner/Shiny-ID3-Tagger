@@ -30,7 +30,7 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private async void StartSearching()		
 		{
-			// Prepare visual stuff like disable buttons during work, show two progress bars, switch from file tab to search details tab
+			// Prepare visual stuff like disable buttons during work, show two progress bars
 			this.btnAddFiles.Enabled = false;
 			this.btnWrite.Enabled = false;
 			this.btnSearch.Enabled = false;
@@ -39,8 +39,6 @@ namespace GlobalNamespace
 			this.progressBar2.Value = 0;
 			this.progressBar2.Visible = true;
 			this.progressBar1.Visible = true;
-			
-			tabControl1.SelectedTab =  tabControl1.TabPages[1];
 
 			// Issue new cancel token which is used for all requests
 			TokenSource = new CancellationTokenSource();
@@ -125,7 +123,7 @@ namespace GlobalNamespace
 					// Aggregate all API results and select the most frequent values					
 					tagNew = this.CalculateResults(webserviceResults, tagNew);
 
-					if (tagNew.Album != null)
+					if (tagNew.Album != null && lyricsNew.Value != null)
 					{
 						tagNew.Lyrics = lyricsNew.Value;
 						this.PrintLogMessage("search", new[] { "  Lyrics taken from " + lyricsNew.Key });
@@ -303,7 +301,7 @@ namespace GlobalNamespace
 				Id3 r = tpl.Item2;
 				
 				webserviceResults.Rows.Add(
-					webserviceResults.Rows.Count + 1, //test
+					webserviceResults.Rows.Count + 1,
 					tagOld.Filepath,
 					r.Service,
 					r.Duration,

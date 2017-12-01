@@ -37,15 +37,15 @@ namespace GlobalNamespace
 			DataRow[] account = User.DbAccounts.Select("lastused = MIN(lastused)");
 			User.DbAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;
 
-			string artistEnc = WebUtility.UrlEncode(artist);
-			string titleEnc = WebUtility.UrlEncode(title);
+			string artistEncoded = WebUtility.UrlEncode(artist);
+			string titleEncoded = WebUtility.UrlEncode(title);
 
 			HttpRequestMessage request = new HttpRequestMessage();
-			request.RequestUri = new Uri("https://data.quantonemusic.com/v3/Recordings?artists=" + artistEnc + "&title=" + titleEnc + "&depth=genres&PageSize=1&PageNumber=1");
+			request.RequestUri = new Uri("https://data.quantonemusic.com/v3/Recordings?artists=" + artistEncoded + "&title=" + titleEncoded + "&depth=genres&PageSize=1&PageNumber=1");
 			request.Headers.Add("DecibelAppID", (string)account[0]["id"]);
 			request.Headers.Add("DecibelAppKey", (string)account[0]["key"]);
 
-			string content1 = await this.GetRequest(client, request, cancelToken);
+			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
 			if (data1 != null && data1.SelectToken("Results") != null && data1.SelectToken("Results").ToString() != "[]")
@@ -59,11 +59,11 @@ namespace GlobalNamespace
 
 				// ###########################################################################
 				request = new HttpRequestMessage();
-				request.RequestUri = new Uri("https://data.quantonemusic.com/v3/Albums?artists=" + artistEnc + "&recordings=" + titleEnc + "&depth=Genres,Recordings&PageSize=1&PageNumber=1");
+				request.RequestUri = new Uri("https://data.quantonemusic.com/v3/Albums?artists=" + artistEncoded + "&recordings=" + titleEncoded + "&depth=Genres,Recordings&PageSize=1&PageNumber=1");
 				request.Headers.Add("DecibelAppID", (string)account[0]["id"]);
 				request.Headers.Add("DecibelAppKey", (string)account[0]["key"]);
 
-				string content2 = await this.GetRequest(client, request, cancelToken);
+				string content2 = await this.GetResponse(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
 				if (data2 != null && data2.SelectToken("Results") != null && data2.SelectToken("Results").ToString() != "[]")

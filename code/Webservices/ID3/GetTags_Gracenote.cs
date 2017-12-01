@@ -54,7 +54,7 @@ namespace GlobalNamespace
 						</QUERY>
 					</QUERIES>");
 
-			string content = await this.GetRequest(client, request, cancelToken);
+			string content = await this.GetResponse(client, request, cancelToken);
 			JObject data = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content), this.GetJsonSettings());
 
 			if (data != null && data.SelectToken("RESPONSES.RESPONSE") != null)

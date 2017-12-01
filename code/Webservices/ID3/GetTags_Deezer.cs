@@ -32,13 +32,13 @@ namespace GlobalNamespace
 			sw.Start();
 			
 			// ###########################################################################
-			string artistEnc = WebUtility.UrlEncode(artist);
-			string titleEnc = WebUtility.UrlEncode(title);
+			string artistEncoded = WebUtility.UrlEncode(artist);
+			string titleEncoded = WebUtility.UrlEncode(title);
 
 			HttpRequestMessage request = new HttpRequestMessage();			
-			request.RequestUri = new Uri("http://api.deezer.com/search?q=artist:\"" + artistEnc + "\"+track:\"" + titleEnc + "\"&limit=1&order=RANKING");
+			request.RequestUri = new Uri("http://api.deezer.com/search?q=artist:\"" + artistEncoded + "\"+track:\"" + titleEncoded + "\"&limit=1&order=RANKING");
 
-			string content1 = await this.GetRequest(client, request, cancelToken);
+			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
 			if (data1 != null && data1.SelectToken("data") != null)
@@ -50,7 +50,7 @@ namespace GlobalNamespace
 				request = new HttpRequestMessage();
 				request.RequestUri = new Uri("http://api.deezer.com/album/" + data1.SelectToken("data[0].album.id"));
 
-				string content2 = await this.GetRequest(client, request, cancelToken);
+				string content2 = await this.GetResponse(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
 				if (data2 != null)

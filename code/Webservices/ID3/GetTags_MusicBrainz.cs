@@ -49,7 +49,7 @@ namespace GlobalNamespace
 			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 			request.RequestUri = new Uri(Server + "/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistTemp + ") AND recording:(" + titleTemp  + ") AND status:official AND type:album&limit=10&fmt=json"));
 
-			string content1 = await this.GetRequest(client, request, cancelToken);
+			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
 			if (data1 != null && (string)data1.SelectToken("count") != "0")
@@ -117,7 +117,7 @@ namespace GlobalNamespace
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 				request.RequestUri = new Uri(Server + "/ws/2/release-group/" + releasegroupid + "?inc=tags+ratings+artists&fmt=json");
 
-				string content2 = await this.GetRequest(client, request, cancelToken);
+				string content2 = await this.GetResponse(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
 				if (data2 != null)
@@ -143,7 +143,7 @@ namespace GlobalNamespace
 				request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 				request.RequestUri = new Uri("http://coverartarchive.org/release-group/" + releasegroupid);
 				
-				string content3 = await this.GetRequest(client, request, cancelToken);
+				string content3 = await this.GetResponse(client, request, cancelToken);
 				JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
 				
 				if (data3 != null)

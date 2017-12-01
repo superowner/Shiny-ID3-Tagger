@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="GetRequest.cs" company="Shiny Id3 Tagger">
+// <copyright file="GetResponse.cs" company="Shiny Id3 Tagger">
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -18,7 +18,7 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private async Task<string> GetRequest(HttpMessageInvoker client, HttpRequestMessage request, CancellationToken cancelToken)
+		private async Task<string> GetResponse(HttpMessageInvoker client, HttpRequestMessage request, CancellationToken cancelToken)
 		{
 			const int Timeout = 15;
 			const int MaxRetries = 3;
@@ -102,7 +102,7 @@ namespace GlobalNamespace
 				}
 				catch (TaskCanceledException)
 				{
-					// The request timed out. Server took too long to respond. Continue with retry logic
+					// The request timed out. Server took too long to respond. Cancel request immediatly and don't try again
 					// If debugging is enabled in settings, print out all request properties
 					if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 2)
 					{
@@ -111,7 +111,9 @@ namespace GlobalNamespace
 						errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
 						
 						this.PrintLogMessage("error", errorMsg.ToArray());								
-					}					
+					}			
+
+					break;
 				}
 				catch (Exception error)
 				{

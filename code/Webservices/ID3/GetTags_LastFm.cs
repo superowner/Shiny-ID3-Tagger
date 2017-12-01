@@ -35,15 +35,15 @@ namespace GlobalNamespace
 			sw.Start();
 			
 			// ###########################################################################
-			string artistEnc = WebUtility.UrlEncode(artist);
-			string titleEnc = WebUtility.UrlEncode(title);			
+			string artistEncoded = WebUtility.UrlEncode(artist);
+			string titleEncoded = WebUtility.UrlEncode(title);			
 			
 			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://ws.audioscrobbler.com/2.0/");
 			request.Headers.ExpectContinue = false;
 			request.Content = new StringContent("api_key=" + User.Accounts["LaApiKey"] +
-				"&format=json&method=track.getInfo&artist=" + artistEnc + "&track=" + titleEnc + "&autocorrect=1");
+				"&format=json&method=track.getInfo&artist=" + artistEncoded + "&track=" + titleEncoded + "&autocorrect=1");
 
-			string content1 = await this.GetRequest(client, request, cancelToken);
+			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
 			if (data1 != null && data1.SelectToken("track") != null)
@@ -62,7 +62,7 @@ namespace GlobalNamespace
 				request.Content = new StringContent("api_key=" + User.Accounts["LaApiKey"] +
 					"&format=json&method=album.getInfo&mbid=" + albumid);
 
-				string content2 = await this.GetRequest(client, request, cancelToken);
+				string content2 = await this.GetResponse(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
 				if (data2 != null && data2.SelectToken("album") != null)

@@ -36,13 +36,13 @@ namespace GlobalNamespace
 			DataRow[] account = User.MgAccounts.Select("lastused = MIN(lastused)");
 			User.MgAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;
 
-			string artistEnc = WebUtility.UrlEncode(artist);
-			string titleEnc = WebUtility.UrlEncode(title);
+			string artistEncoded = WebUtility.UrlEncode(artist);
+			string titleEncoded = WebUtility.UrlEncode(title);
 			
 			HttpRequestMessage request = new HttpRequestMessage();
-			request.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account[0]["key"] + "&artist_name=" + artistEnc + "&title=" + titleEnc + "&limit=5");
+			request.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account[0]["key"] + "&artist_name=" + artistEncoded + "&title=" + titleEncoded + "&limit=5");
 
-			string content1 = await this.GetRequest(client, request, cancelToken);
+			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
 			if (data1 != null && data1.SelectToken("data") != null && data1.SelectToken("data").Any())
@@ -68,7 +68,7 @@ namespace GlobalNamespace
 				request = new HttpRequestMessage();
 				request.RequestUri = new Uri("http://api.musicgraph.com/api/v2/album/" + albumid + "?api_key=" + (string)account[0]["key"]);
 
-				string content2 = await this.GetRequest(client, request, cancelToken);
+				string content2 = await this.GetResponse(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
 				if (data2 != null && data2.SelectToken("data") != null)

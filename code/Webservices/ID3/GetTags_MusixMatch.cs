@@ -36,13 +36,13 @@ namespace GlobalNamespace
 			DataRow[] account = User.MmAccounts.Select("lastused = MIN(lastused)");
 			User.MmAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;			
 				
-			string artistEnc = WebUtility.UrlEncode(artist);
-			string titleEnc = WebUtility.UrlEncode(title);
+			string artistEncoded = WebUtility.UrlEncode(artist);
+			string titleEncoded = WebUtility.UrlEncode(title);
 			
 			HttpRequestMessage request = new HttpRequestMessage();
-			request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEnc + "&q_track=" + titleEnc + "&page_size=1&apikey=" + (string)account[0]["key"]);
+			request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&page_size=1&apikey=" + (string)account[0]["key"]);
 			
-			string content1 = await this.GetRequest(client, request, cancelToken);
+			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
 			if (data1 != null && data1.SelectToken("message.body.track_list[0].track") != null)
@@ -58,7 +58,7 @@ namespace GlobalNamespace
 				request = new HttpRequestMessage();
 				request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account[0]["key"]);
 
-				string content2 = await this.GetRequest(client, request, cancelToken);
+				string content2 = await this.GetResponse(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
 				if (data2 != null && data2.SelectToken("message.body.album") != null)
@@ -76,7 +76,7 @@ namespace GlobalNamespace
 				request = new HttpRequestMessage();
 				request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account[0]["key"]);
 
-				string content3 = await this.GetRequest(client, request, cancelToken);
+				string content3 = await this.GetResponse(client, request, cancelToken);
 				JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
 
 				if (data3 != null && data3.SelectToken("message.body.track_list") != null)

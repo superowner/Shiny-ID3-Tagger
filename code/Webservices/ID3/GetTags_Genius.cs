@@ -38,7 +38,7 @@ namespace GlobalNamespace
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.RequestUri = new Uri("https://api.genius.com/search?q=" + searchTermEnc + "&access_token=" + User.Accounts["GeAccessToken"]);
 
-			string content1 = await this.GetRequest(client, request, cancelToken);
+			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 			
 			if (data1 != null && data1.SelectToken("response.hits[0].result.api_path") != null)
@@ -46,7 +46,7 @@ namespace GlobalNamespace
 				request = new HttpRequestMessage();
 				request.RequestUri = new Uri("https://api.genius.com" + data1.SelectToken("response.hits[0].result.api_path") + "?access_token=" + User.Accounts["GeAccessToken"]);
 	
-				string content2 = await this.GetRequest(client, request, cancelToken);
+				string content2 = await this.GetResponse(client, request, cancelToken);
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());	
 				
 				if (data2 != null)
@@ -64,7 +64,7 @@ namespace GlobalNamespace
 						request = new HttpRequestMessage();
 						request.RequestUri = new Uri("https://api.genius.com" + albumPath + "?access_token=" + User.Accounts["GeAccessToken"]);
 					
-						string content3 = await this.GetRequest(client, request, cancelToken);
+						string content3 = await this.GetResponse(client, request, cancelToken);
 						JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
 
 						if (data3 != null)

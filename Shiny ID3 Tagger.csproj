@@ -106,7 +106,7 @@
     <Compile Include="code\helper\ConvertStringToDate.cs" />
     <Compile Include="code\helper\ConvertXmlToJson.cs" />
     <Compile Include="code\helper\GetJsonSettings.cs" />
-    <Compile Include="code\helper\GetRequest.cs" />
+    <Compile Include="code\helper\GetResponse.cs" />
     <Compile Include="code\GUI\ExportCSV_MenuItemClick.cs" />
     <Compile Include="code\helper\IncreaseAlbumCounter.cs" />
     <Compile Include="code\helper\InitiateHttpClient.cs" />

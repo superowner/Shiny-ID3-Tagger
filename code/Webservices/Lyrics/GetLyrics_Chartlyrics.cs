@@ -32,13 +32,13 @@ namespace GlobalNamespace
 			// ###########################################################################				
 			if (tagNew.Artist != null && tagNew.Title != null)
 			{
-				string artistEnc = WebUtility.UrlEncode(tagNew.Artist);
-				string titleEnc = WebUtility.UrlEncode(tagNew.Title);
+				string artistEncoded = WebUtility.UrlEncode(tagNew.Artist);
+				string titleEncoded = WebUtility.UrlEncode(tagNew.Title);
 				
 				HttpRequestMessage request = new HttpRequestMessage();
-				request.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + artistEnc + "&song=" + titleEnc);
+				request.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + artistEncoded + "&song=" + titleEncoded);
 
-				string content = await this.GetRequest(client, request, cancelToken);
+				string content = await this.GetResponse(client, request, cancelToken);
 				JObject data = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content), this.GetJsonSettings());
 
 				if (data != null && data.SelectToken("GetLyricResult.Lyric") != null)

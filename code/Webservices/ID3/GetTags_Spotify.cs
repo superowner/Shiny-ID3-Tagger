@@ -33,8 +33,8 @@ namespace GlobalNamespace
 			sw.Start();
 			
 			// ###########################################################################
-			string artistEnc = WebUtility.UrlEncode(artist);
-			string titleEnc = WebUtility.UrlEncode(title);
+			string artistEncoded = WebUtility.UrlEncode(artist);
+			string titleEncoded = WebUtility.UrlEncode(title);
 			
 			HttpRequestMessage request = new HttpRequestMessage();
 			
@@ -51,7 +51,7 @@ namespace GlobalNamespace
 				string creditsBase64 = Convert.ToBase64String(credidsBytes);
 				request.Headers.Add("Authorization", "Basic " + creditsBase64);
 	
-				string loginContent = await this.GetRequest(client, request, cancelToken);
+				string loginContent = await this.GetResponse(client, request, cancelToken);
 				JObject loginData = JsonConvert.DeserializeObject<JObject>(loginContent, this.GetJsonSettings());
 
 				if (loginData != null && loginData.SelectToken("access_token") != null)
@@ -65,10 +65,10 @@ namespace GlobalNamespace
 			if (SessionData.SpAccessToken != null)
 			{
 				request = new HttpRequestMessage();
-				request.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEnc + "\"+title:\"" + titleEnc + "\"&type=track&limit=1");
+				request.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEncoded + "\"+title:\"" + titleEncoded + "\"&type=track&limit=1");
 				request.Headers.Add("Authorization", "Bearer " + SessionData.SpAccessToken);
 	
-				string content1 = await this.GetRequest(client, request, cancelToken);
+				string content1 = await this.GetResponse(client, request, cancelToken);
 				JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 	
 				if (data1 != null && data1.SelectToken("tracks.items") != null && data1.SelectToken("tracks.items").Any())
@@ -88,7 +88,7 @@ namespace GlobalNamespace
 					{
 						request.RequestUri = new Uri(url); 
 					
-						string content2 = await this.GetRequest(client, request, cancelToken);
+						string content2 = await this.GetResponse(client, request, cancelToken);
 						JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 		
 						if (data2 != null)

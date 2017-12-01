@@ -43,7 +43,7 @@ namespace GlobalNamespace
 					new KeyValuePair<string, string>("type", "1")
 				});
 			
-			string content = await this.GetRequest(client, request, cancelToken);
+			string content = await this.GetResponse(client, request, cancelToken);
 			JObject data = JsonConvert.DeserializeObject<JObject>(content, this.GetJsonSettings());			
 
 			if (data != null && data.SelectToken("result.songs") != null)

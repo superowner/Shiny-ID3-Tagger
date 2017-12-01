@@ -38,7 +38,7 @@ namespace GlobalNamespace
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.RequestUri = new Uri("http://www.qobuz.com/api.json/0.2/track/search?limit=1&app_id=" + User.Accounts["QoAppId"] + "&query=" + searchTermEnc);
 
-			string content = await this.GetRequest(client, request, cancelToken);
+			string content = await this.GetResponse(client, request, cancelToken);
 			JObject data = JsonConvert.DeserializeObject<JObject>(content, this.GetJsonSettings());
 
 			if (data != null && data.SelectToken("tracks.items[0]") != null)
