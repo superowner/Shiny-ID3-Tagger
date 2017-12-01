@@ -138,22 +138,22 @@ namespace GlobalNamespace
 						string albumhit = IncreaseAlbumCounter(r["service"], r["album"], tagNew.Album);
 
 						this.dataGridView2.Rows.Add(
-							this.dataGridView2.Rows.Count + 1,
-							tagNew.Filepath,
-							r["service"],
-							r["duration"],
-							albumhit,
-							r["artist"],
-							r["title"],
-							r["album"],
-							r["date"],
-							r["genre"],
-							r["disccount"],
-							r["discnumber"],
-							r["trackcount"],
-							r["tracknumber"],
-							r["lyrics"],
-							r["cover"]);
+							(this.dataGridView2.Rows.Count + 1).ToString(),
+							tagNew.Filepath ?? string.Empty,
+							r["service"] ?? string.Empty,
+							r["duration"] ?? string.Empty,
+							albumhit ?? string.Empty,
+							r["artist"] ?? string.Empty,
+							r["title"] ?? string.Empty,
+							r["album"] ?? string.Empty,
+							r["date"] ?? string.Empty,
+							r["genre"] ?? string.Empty,
+							r["disccount"] ?? string.Empty,
+							r["discnumber"] ?? string.Empty,
+							r["trackcount"] ?? string.Empty,
+							r["tracknumber"] ?? string.Empty,
+							r["lyrics"] ?? string.Empty,
+							r["cover"] ?? string.Empty);
 
 						// Set row background color to grey if current row album doesnt match the most frequent album
 						if (tagNew.Album == null ||
@@ -180,22 +180,22 @@ namespace GlobalNamespace
 					tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
 
 					this.dataGridView2.Rows.Add(
-						this.dataGridView2.Rows.Count + 1,
-						tagNew.Filepath,
-						tagNew.Service,
-						tagNew.Duration,
+						(this.dataGridView2.Rows.Count + 1).ToString(),
+						tagNew.Filepath ?? string.Empty,
+						tagNew.Service ?? string.Empty,
+						tagNew.Duration ?? string.Empty,
 						string.Empty,
-						tagNew.Artist,
-						tagNew.Title,
-						tagNew.Album,
-						tagNew.Date,
-						tagNew.Genre,
-						tagNew.DiscCount,
-						tagNew.DiscNumber,
-						tagNew.TrackCount,
-						tagNew.TrackNumber,
-						tagNew.Lyrics,
-						tagNew.Cover);
+						tagNew.Artist ?? string.Empty,
+						tagNew.Title ?? string.Empty,
+						tagNew.Album ?? string.Empty,
+						tagNew.Date ?? string.Empty,
+						tagNew.Genre ?? string.Empty,
+						tagNew.DiscCount ?? string.Empty,
+						tagNew.DiscNumber ?? string.Empty,
+						tagNew.TrackCount ?? string.Empty,
+						tagNew.TrackNumber ?? string.Empty,
+						tagNew.Lyrics ?? string.Empty,
+						tagNew.Cover ?? string.Empty);
 
 					this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index].ToolTipText = tagNew.Lyrics;
 					this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor = Color.Yellow;

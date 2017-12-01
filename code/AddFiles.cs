@@ -198,33 +198,33 @@ namespace GlobalNamespace
 				tagOld.Title = tagOld.Title ?? filename;				
 				
 				// We replace possible null values with empty strings. This avoids many additional null checks later in the code. Hacky, I know
-				tagOld.Album = tagFile.Tag.Album ?? string.Empty;
-				tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : string.Empty;
-				tagOld.Genre = tagFile.Tag.FirstGenre ?? string.Empty;
-				tagOld.DiscCount = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : string.Empty;
-				tagOld.DiscNumber = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : string.Empty;
-				tagOld.TrackCount = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : string.Empty;
-				tagOld.TrackNumber = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : string.Empty;
-				tagOld.Lyrics = tagFile.Tag.Lyrics ?? string.Empty;
-				tagOld.Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty;								
+				tagOld.Album = tagFile.Tag.Album;
+				tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : null;
+				tagOld.Genre = tagFile.Tag.FirstGenre;
+				tagOld.DiscCount = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : null;
+				tagOld.DiscNumber = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : null;
+				tagOld.TrackCount = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : null;
+				tagOld.TrackNumber = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : null;
+				tagOld.Lyrics = tagFile.Tag.Lyrics;
+				tagOld.Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : null;
 				
 				// Show old tags in gridview panel
 				this.Invoke((MethodInvoker)delegate
 				{
 					this.dataGridView1.Rows.Add(
 						mp3Icon,
-						tagOld.Filepath,
-						tagOld.Artist,
-						tagOld.Title,
-						tagOld.Album,
-						tagOld.Date,
-						tagOld.Genre,
-						tagOld.DiscCount,
-						tagOld.DiscNumber,
-						tagOld.TrackCount,
-						tagOld.TrackNumber,
-						tagOld.Lyrics,
-						tagOld.Cover);
+						tagOld.Filepath ?? string.Empty,
+						tagOld.Artist ?? string.Empty,
+						tagOld.Title ?? string.Empty,
+						tagOld.Album ?? string.Empty,
+						tagOld.Date ?? string.Empty,
+						tagOld.Genre ?? string.Empty,
+						tagOld.DiscCount ?? string.Empty,
+						tagOld.DiscNumber ?? string.Empty,
+						tagOld.TrackCount ?? string.Empty,
+						tagOld.TrackNumber ?? string.Empty,
+						tagOld.Lyrics ?? string.Empty,
+						tagOld.Cover ?? string.Empty);
 
 					int lastRow = this.dataGridView1.RowCount - 1;
 					this.MarkChange(lastRow, this.artist1.Index, tagArtist, tagOld.Artist, true);
