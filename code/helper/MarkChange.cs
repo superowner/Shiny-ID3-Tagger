@@ -43,7 +43,7 @@ namespace GlobalNamespace
 				}
 				catch (ArgumentOutOfRangeException)
 				{
-					// User cleared all or current row. Therefore we would get a ArgumentOutOfRangeException. But we just continue
+					// If user cleared all or current row an ArgumentOutOfRangeException would occur. Catch the error and continue
 				}
 			}
 		}

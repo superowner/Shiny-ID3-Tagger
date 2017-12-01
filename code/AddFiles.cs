@@ -25,11 +25,11 @@ namespace GlobalNamespace
 			this.btnWrite.Enabled = false;
 			this.btnAddFiles.Enabled = false;			
 
-			// Issue a new token each time we add files so we can cancel if when we ie read in hundreds of files and ID3 tags
+			// Issue a new token each time new files are added 
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
 			
-			// If no files were passed through command line, open a new file dialog. files can be an empty array, so we use any() to check this
+			// If no files were passed through command line, open a new file dialog. files can be an empty array, so use any() to check this
 			if (files == null || !files.Any())
 			{
 				OpenFileDialog dialog = new OpenFileDialog();
@@ -194,7 +194,7 @@ namespace GlobalNamespace
 				tagOld.Artist = tagOld.Artist ?? filename;
 				tagOld.Title = tagOld.Title ?? filename;				
 				
-				// We replace possible null values with empty strings. This avoids many additional null checks later in the code. Hacky, I know
+				// Read in existing ID3 tags from file
 				tagOld.Album = tagFile.Tag.Album;
 				tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : null;
 				tagOld.Genre = tagFile.Tag.FirstGenre;

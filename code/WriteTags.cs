@@ -295,7 +295,7 @@ namespace GlobalNamespace
 			}
 
 			// TDRC (date of recording) stores full date+time info and consolidates TYER (YYYY), TDAT (DDMM) and TIME (HHMM)
-			// But TDRC is only available in v2.4 - and we use 2.3 for Windows Explorer compatibility
+			// But TDRC is only available in ID3 v2.4 - and this program uses ID3 v2.3 for Windows Explorer compatibility
 			// Strangely you have to use TDRC to remove TYER frames. Maybe because taglib operates with 2.4 frame names internally
 			string oldDate = tagFile.Tag.Year.ToString(cultEng);
 			string newDate = (string)row.Cells[this.date1.Index].Value;
@@ -310,7 +310,7 @@ namespace GlobalNamespace
 				id3v2.SetNumberFrame("TYER", (uint)this.ConvertStringToDate(newDate).Year, 0);
 			}
 							
-			// Only by removing and adding the whole frame back again, we can set "eng" as language
+			// To set "eng" as language you have to remove and add the whole frame back again
 			// Otherwise taglib sets system default language e.g "deu" or "esp" as lyrics language if USLT tag already existed
 			string oldLyrics = tagFile.Tag.Lyrics;
 			string newLyrics = (string)row.Cells[this.lyrics1.Index].Value;
