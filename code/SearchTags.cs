@@ -76,7 +76,7 @@ namespace GlobalNamespace
 					tagNew.Filepath = tagOld.Filepath;
 					
 					Task<DataTable> webservicesTask = this.StartWebservices(client, tagOld, cancelToken);
-					Task<KeyValuePair<string,string>> lyricSearchTask = this.StartLyricSearch(client, tagOld, cancelToken);
+					Task<KeyValuePair<string, string>> lyricSearchTask = this.StartLyricSearch(client, tagOld, cancelToken);
 					
 					await Task.WhenAll(webservicesTask, lyricSearchTask);
 					
@@ -99,12 +99,14 @@ namespace GlobalNamespace
 	
 					// If new artist or title are different from old ones, repeat all searches until new and old ones match.
 					// This happens when spelling mistakes were corrected by many APIs
-					if ( artistNew != null && titleNew != null &&
+					if (artistNew != null && titleNew != null &&
 					    (artistNew.ToLower() != tagOld.Artist.ToLower() ||
 					      titleNew.ToLower() != tagOld.Title.ToLower()))
 					{
 						this.PrintLogMessage("search", new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
 
+						sw.Restart();
+						
 						lyricsNew = new KeyValuePair<string, string>();
 						tagNew.Artist = artistNew;
 						tagNew.Title = titleNew;
@@ -118,7 +120,6 @@ namespace GlobalNamespace
 						lyricsNew = lyricSearchTask.Result;
 					}
 					
-
 					// Aggregate all API results and select the most frequent values					
 					tagNew = this.CalculateResults(webserviceResults, tagNew);
 
@@ -218,7 +219,7 @@ namespace GlobalNamespace
 
 		// ###########################################################################
 		// TODO: use configure await to remove sluggishness in GUI
-		private async Task<KeyValuePair<string,string>> StartLyricSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
+		private async Task<KeyValuePair<string, string>> StartLyricSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
 			var lyricResults = new Dictionary<string, string>();
 			

@@ -761,7 +761,7 @@ namespace GlobalNamespace
 			this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
 			this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
 			this.openFolderToolStripMenuItem.Text = "Add Directory";
-			this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.AddFiles_MenuItemClick);
+			this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.AddFolder_MenuItemClick);
 			// 
 			// clearResultsToolStripMenuItem
 			// 
