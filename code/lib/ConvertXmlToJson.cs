@@ -31,7 +31,7 @@ namespace GlobalNamespace
 					{
 						string[] errorMsg =
 						{
-							"ERROR:    Could not convert XML to JSON!",
+							"WARNING:  Could not convert XML to JSON!",
 							"String:   " + xmlstring.TrimEnd('\r', '\n'),
 							"Message:  " + error.Message.Trim()
 						};

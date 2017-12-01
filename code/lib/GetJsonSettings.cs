@@ -23,7 +23,7 @@ namespace GlobalNamespace
 				{
 					string[] errorMsg =
 					{
-						"ERROR:    Could not convert response to JSON!",
+						"WARNING:  Could not convert response to JSON!",
 						"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
 					};
 					this.PrintLogMessage("error", errorMsg);

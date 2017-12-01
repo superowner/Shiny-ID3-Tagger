@@ -85,7 +85,7 @@ namespace GlobalNamespace
 							// If debugging is enabled in settings, print out all request properties
 							if (User.Settings["DebugLevel"] >= 2)
 							{
-								List<string> errorMsg = new List<string> { "ERROR:    Response was unsuccessful! Retrying..." };
+								List<string> errorMsg = new List<string> { "WARNING:  Response was unsuccessful! Retrying..." };
 								errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 								errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
 								
@@ -108,7 +108,7 @@ namespace GlobalNamespace
 						// If debugging is enabled in settings, print out all request properties
 						if (User.Settings["DebugLevel"] >= 2)
 						{
-							List<string> errorMsg = new List<string> { "ERROR:    Server took longer than " + Timeout + " seconds to respond! Retrying..." };
+							List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + Timeout + " seconds to respond! Retrying..." };
 							errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
 							errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
 							

@@ -12,7 +12,6 @@
 // TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
 // TODO: Add right click menu to delete result lines (ie. ones who have red values)
 // TODO: Add right click menu to open Windows explorer and select file
-// TODO: Change the "ERROR:" text for level 1 to "WARNING:" when its not critical
 namespace GlobalNamespace
 {
 	using System;
@@ -218,7 +217,6 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		// TODO: use configure await to remove sluggishness in GUI
 		private async Task<KeyValuePair<string, string>> StartLyricSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
 			var lyricResults = new Dictionary<string, string>();
@@ -260,7 +258,6 @@ namespace GlobalNamespace
 		}
 		
 		// ###########################################################################
-		// TODO: use configure await to remove sluggishness in GUI
 		private async Task<DataTable> StartWebservices(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
 		{
 			DataTable webserviceResults = Id3.CreateId3Table();

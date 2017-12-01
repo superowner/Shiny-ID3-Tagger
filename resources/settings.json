@@ -1,8 +1,8 @@
 {
 	"DebugLevel" 		: 2,
 	"PreferTags" 		: true,
-	"RemoveBrackets" 	: false,
-	"RemoveFeaturing" 	: false,
+	"RemoveBrackets" 	: true,
+	"RemoveFeaturing" 	: true,
 	"OverwriteImage" 	: true,
 	"AutoSearch" 		: true,
 	"CoverPriority" 	: "Napster (Rhapsody), Discogs, Qobuz, Tidal, Genius, 7digital, Deezer, iTunes, Last.fm, Spotify, Gracenote (Sony), Amazon, Musicbrainz, Netease, QQ (Tencent), Microsoft Groove",
