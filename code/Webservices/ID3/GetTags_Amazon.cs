@@ -8,7 +8,7 @@
 // https://docs.aws.amazon.com/AWSECommerceService/latest/DG/APPNDX_SortValuesArticle.html
 // https://docs.aws.amazon.com/AWSECommerceService/latest/DG/rest-signature.html
 // https://docs.aws.amazon.com/AWSECommerceService/latest/DG/LocaleUS.html
-// https://stackoverflow.com/questions/12097650/use-powershell-to-get-book-metadata-from-amazon
+// https://webservices.amazon.com/scratchpad/index.html
 // in addition to .NET 4.0 EscapeDataString		forbidden:	!'()*
 // in addition to .NET 4.0 EscapeDataString		allowed:	-_.~
 // replace after EscapeDataString				!=%21	'=%27	(=%28	)=%29	*=%2A
@@ -56,14 +56,17 @@ namespace GlobalNamespace
 			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 			timestamp = Uri.EscapeDataString(timestamp);
 			
+			// Replace is needed according to official C# example for product advertising API
 			string artistEnc = Uri.EscapeDataString(artist).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
 			string titleEnc = Uri.EscapeDataString(title).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
 			
+			// Initial search
 			string parameters = "AWSAccessKeyId=" + User.Accounts["AmAccessKey"] +
 								"&AssociateTag=" + User.Accounts["AmAssociateTag"] +
 								"&Keywords=" + artistEnc +
 								"&Operation=ItemSearch" +
-								"&ResponseGroup=ItemAttributes" +
+								"&RelationshipType=Tracks" +
+								"&ResponseGroup=ItemAttributes%2CRelatedItems" +	
 								"&SearchIndex=MP3Downloads" +
 								"&Service=AWSECommerceService" +
 								"&Timestamp=" + timestamp +
@@ -77,6 +80,10 @@ namespace GlobalNamespace
 			string content1 = await this.GetRequest(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content1), this.GetJsonSettings());
 
+			// 1 request per second is ok, after a burst you get throttled to 1 request/10s. Therefore this delay of 1second after every reqiest
+			// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines			
+			Task wait = Task.Delay(1000);
+			
 			if (data1 != null && data1.SelectToken("ItemSearchResponse.Items.Item") != null)
 			{
 				JToken item = null;
@@ -94,6 +101,7 @@ namespace GlobalNamespace
 				
 				o.Artist = (string)item.SelectToken("ItemAttributes.Creator.#text");
 				o.Title = (string)item.SelectToken("ItemAttributes.Title");
+				o.Album = (string)item.SelectToken("RelatedItems.RelatedItem.Item.ItemAttributes.Title");
 				o.Date = (string)item.SelectToken("ItemAttributes.PublicationDate");
 				o.TrackNumber = (string)item.SelectToken("ItemAttributes.TrackSequence");
 				o.DiscCount = null;
@@ -105,33 +113,12 @@ namespace GlobalNamespace
 					o.Genre = o.Genre.Replace("-music", string.Empty);
 					o.Genre = o.Genre.Replace("-", " ");
 				}
-
-				string asin = (string)item.SelectToken("ASIN");
-
+				
 				// ###########################################################################
-				parameters = "AWSAccessKeyId=" + User.Accounts["AmAccessKey"] +
-							"&AssociateTag=" + User.Accounts["AmAssociateTag"] +
-							"&Condition=All" +
-							"&IdType=ASIN" +
-							"&ItemId=" + asin +
-							"&Operation=ItemLookup" +
-							"&RelationshipType=Tracks" +
-							"&ResponseGroup=RelatedItems" +
-							"&Service=AWSECommerceService" +
-							"&Timestamp=" + timestamp +
-							"&Version=2013-08-01";
-
-				request = new HttpRequestMessage();
-				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);				
-				request.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
-
-				string content2 = await this.GetRequest(client, request, cancelToken);
-				JObject data2 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content2), this.GetJsonSettings());
-
-				if (data2 != null && data2.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItem.Item.ASIN") != null)
+				// Get related items from album (this shows up all tracks on the album, add 'large' as respondgroup to include cover links)				
+				string asin = (string)item.SelectToken("RelatedItems.RelatedItem.Item.ASIN");
+				if (asin != null)
 				{
-					asin = (string)data2.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItem.Item.ASIN");
-
 					parameters = "AWSAccessKeyId=" + User.Accounts["AmAccessKey"] +
 								"&AssociateTag=" + User.Accounts["AmAssociateTag"] +
 								"&Condition=All" +
@@ -139,23 +126,24 @@ namespace GlobalNamespace
 								"&ItemId=" + asin +
 								"&Operation=ItemLookup" +
 								"&RelationshipType=Tracks" +
-								"&ResponseGroup=RelatedItems%2CLarge" +						
+								"&ResponseGroup=RelatedItems%2CLarge" +
 								"&Service=AWSECommerceService" +
 								"&Timestamp=" + timestamp +
 								"&Version=2013-08-01";
 	
 					request = new HttpRequestMessage();
-					request.Headers.Add("User-Agent", User.Settings["UserAgent"]);					
+					request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 					request.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 	
-					string content3 = await this.GetRequest(client, request, cancelToken);
-					JObject data3 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content3), this.GetJsonSettings());
+					string content2 = await this.GetRequest(client, request, cancelToken);
+					JObject data2 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content2), this.GetJsonSettings());
 					
-					if (data3 != null)
+					wait = Task.Delay(1000);
+			
+					if (data2 != null)
 					{
-						o.TrackCount = (string)data3.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItemCount");
-						o.Album = (string)data3.SelectToken("ItemLookupResponse.Items.Item.ItemAttributes.Title");
-						o.Cover = (string)data3.SelectToken("ItemLookupResponse.Items.Item.ImageSets.ImageSet.HiResImage.URL");						
+						o.TrackCount = (string)data2.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItemCount");
+						o.Cover = (string)data2.SelectToken("ItemLookupResponse.Items.Item.ImageSets.ImageSet.HiResImage.URL");						
 					}
 				}
 			}
