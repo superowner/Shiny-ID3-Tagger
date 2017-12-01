@@ -30,16 +30,19 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private async void StartSearching()		
 		{
+			// Prepare visual stuff like disable buttons during work, show two progress bars, switch from file tab to search details tab
 			this.btnAddFiles.Enabled = false;
 			this.btnWrite.Enabled = false;
 			this.btnSearch.Enabled = false;
 
 			this.progressBar2.Maximum = this.dataGridView1.Rows.Count;
 			this.progressBar2.Value = 0;
-
-			this.progressBar1.Visible = true;
 			this.progressBar2.Visible = true;
+			this.progressBar1.Visible = true;
+			
+			tabControl1.SelectedTab =  tabControl1.TabPages[1];
 
+			// Issue new cancel token which is used for all requests
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
 
