@@ -9,6 +9,7 @@
 namespace GlobalNamespace
 {
 	using System;
+	using System.Diagnostics;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 
@@ -20,20 +21,20 @@ namespace GlobalNamespace
 			{
 				if (User.Settings["RemoveBrackets"])
 				{
-					const string RegExPattern = @"[\(\[\{].*?[\)\]\}]";
+					const string RegExPattern = @"\s[\(\[].*?(version|edition|deluxe|explicit).*?[\)\]]";
 					str = Regex.Replace(str, RegExPattern, string.Empty, RegexOptions.IgnoreCase);
 				}
 
 				if (User.Settings["RemoveFeaturing"])
 				{
-					const string RegExPattern = @" ([\(\[\{])?(feat(\.)?|ft(\.)?|featuring)(.*?[\)\]\}]|.*)";
+					const string RegExPattern = @"\s([\(\[])?\s(feat(\.)?|ft(\.)?|featuring)(.*?[\)\]]|.*)";
 					str = Regex.Replace(str, RegExPattern, string.Empty, RegexOptions.IgnoreCase);
 				}
 
-				str = Regex.Replace(str, @"[\u202F\u00A0\u2005\u2009\u200B\u2060\u3000\uFEFF]", " ");
-				str = Regex.Replace(str, @"…", "...");
-				str = Regex.Replace(str, @"[‘’ʼ]", "'");
-				str = Regex.Replace(str, @"[‐‑−－]", "-");		// https://www.cs.tut.fi/~jkorpela/dashes.html
+				str = Regex.Replace(str, @"[\u202F\u00A0\u2005\u2009\u200B\u2060\u3000\uFEFF]", " ");  // Replace uncommon spaces
+				str = Regex.Replace(str, @"…", "...");			// Replace single sign elipsis with 3 dots.	https://en.wikipedia.org/wiki/Ellipsis
+				str = Regex.Replace(str, @"[‘’ʼ]", "'");		// Replace uncommon apostrophe
+				str = Regex.Replace(str, @"[‐‑−－]", "-");		// Replace uncommon dashes					https://www.cs.tut.fi/~jkorpela/dashes.html
 				str = str.Trim();
 			}
 
