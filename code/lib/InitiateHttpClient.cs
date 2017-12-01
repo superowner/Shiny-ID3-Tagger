@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Create a single HTTP client which is used later for all Web API requests</summary>
+// https://contrivedexample.com/2017/07/01/using-httpclient-as-it-was-intended-because-youre-not/
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -12,43 +13,25 @@ namespace GlobalNamespace
 	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
-	using System.Net.NetworkInformation;
 
 	public partial class Form1
 	{
 		private static HttpClient InitiateHttpClient()
 		{
+			// DEFAULT SETTINGS FOR ALL CONNECTIONS
 			HttpClientHandler handler = new HttpClientHandler();
-			handler.UseCookies = false;
-
-			Ping ping = new Ping();
-
-			try
-			{
-				PingReply reply = ping.Send(User.Settings["Proxy"].Split(':')[0], 100);
-
-				if (reply.Status == IPStatus.Success)
-				{
-					handler.Proxy = new WebProxy(User.Settings["Proxy"], false);
-					handler.UseProxy = true;
-				}
-			}
-			catch (ArgumentException)
-			{
-				// user entered an invalid "proxy:port" string in settings.json e.g. "0.0.0.0:0000"
-			}
-			catch (NullReferenceException)
-			{
-				// User closed the window while ping was still running
-			}
+			handler.UseCookies = false;										// this setting is needed for netease
+			handler.AutomaticDecompression = DecompressionMethods.GZip 
+				| DecompressionMethods.Deflate;								// enable compression (depends on if server supports it)
 
 			HttpClient client = new HttpClient(handler);
-			client.MaxResponseContentBufferSize = 256000000;
-			client.Timeout = TimeSpan.FromSeconds(15);				// Musicbrainz has 15s timeout. I assume many other APIs do have a small timeout too. The default for client side timeout was 40s
+			client.DefaultRequestHeaders.Clear();					
+			client.DefaultRequestHeaders.ConnectionClose = false;			// Will attempt to keep the connection open which makes more efficient use of the client.
+			client.DefaultRequestHeaders.Connection.Add("Keep-Alive");		// Will attempt to keep the connection open which makes more efficient use of the client.
+			client.Timeout = TimeSpan.FromSeconds(15);						// Musicbrainz has 15s timeout in response header. Dont know if this setting is needed
+			client.MaxResponseContentBufferSize = 256000000;		
+			ServicePointManager.DefaultConnectionLimit = 24;				// Not sure if it's needed since this limit applies to connections per remote host (per API), not in total per client
 			
-			ServicePointManager.DefaultConnectionLimit = 10;		// Not sure if it's needed since this limit applies to connection per remote host (per API), not per client
-			
-			ping.Dispose();
 			return client;
 		}
 	}
