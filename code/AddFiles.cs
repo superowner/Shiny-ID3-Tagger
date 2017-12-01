@@ -26,9 +26,11 @@ namespace GlobalNamespace
 			this.btnWrite.Enabled = false;
 			this.btnAddFiles.Enabled = false;			
 
+			// Issue a new token each time we add files so we can cancel if when we ie read in hundreds of files and ID3 tags
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
 			
+			// If no files were passed through command line, open a new file dialog. files can be an empty array, so we use any() to check this
 			if (files == null || !files.Any())
 			{
 				OpenFileDialog dialog = new OpenFileDialog();
@@ -49,6 +51,7 @@ namespace GlobalNamespace
 				}
 			}
 			
+			// If anything was selected in the previous dialog, check if it was a folder and get it's mp3 files
 			if (files != null && files.Any())
 			{				
 				if (Directory.Exists(files[0]))
@@ -57,12 +60,14 @@ namespace GlobalNamespace
 				}
 			}
 	
+			// If any files were retrieved previously (either directly selected, via command line or from a folder)
 			if (files != null)
 			{
 				this.progressBar1.Maximum = files.Length;
 				this.progressBar1.Value = 0;
 				this.progressBar1.Visible = true;
 			
+				// Loop through each file and add it to the first datagridview
 				foreach (string filepath in files)
 				{
 					if (cancelToken.IsCancellationRequested)
@@ -70,6 +75,7 @@ namespace GlobalNamespace
 						break;
 					}
 					
+					// TODO Remember the reason why I used Task.Run()
 					await Task.Run(() =>
 					{
 						AddFileToTable(filepath);
@@ -79,6 +85,7 @@ namespace GlobalNamespace
 				}
 			}
 			
+			// Work finished, reenable all buttons and hide progress bar
 			this.dataGridView1.ClearSelection();						
 						
 			this.progressBar1.Visible = false;				
@@ -86,6 +93,7 @@ namespace GlobalNamespace
 			this.btnWrite.Enabled = true;
 			this.btnAddFiles.Enabled = true;
 			
+			// If the setting allows it, continue straight with searching for tags without the need to press the search button
 			if (User.Settings["AutoSearch"])
 			{
 				this.StartSearching();
@@ -93,6 +101,7 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
+		// Adds a single file to first datagridview with all its present ID3 tags
 		private void AddFileToTable(string filepath)
 		{
 			bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
@@ -217,9 +226,9 @@ namespace GlobalNamespace
 						tagOld.Lyrics,
 						tagOld.Cover);
 
-					int row = this.dataGridView1.RowCount - 1;
-					this.MarkChange(row, this.artist1.Index, tagArtist, tagOld.Artist, true);
-					this.MarkChange(row, this.title1.Index, tagTitle, tagOld.Title, true);
+					int lastRow = this.dataGridView1.RowCount - 1;
+					this.MarkChange(lastRow, this.artist1.Index, tagArtist, tagOld.Artist, true);
+					this.MarkChange(lastRow, this.title1.Index, tagTitle, tagOld.Title, true);
 				});
 				
 				// Remove any locks on files
