@@ -39,29 +39,24 @@ namespace GlobalNamespace
 				request.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + artistEnc + "&song=" + titleEnc);
 
 				string content = await this.GetRequest(client, request, cancelToken);
+				JObject data = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content), this.GetJsonSettings());
 
-				if (!content.StartsWith("SearchLyricDirect:", StringComparison.InvariantCultureIgnoreCase))
+				if (data != null && data.SelectToken("GetLyricResult.Lyric") != null)
 				{
-					string xml = this.ConvertXmlToJson(content);
-					JObject data = JsonConvert.DeserializeObject<JObject>(xml, this.GetJsonSettings());
+					string artistTemp = (string)data.SelectToken("GetLyricResult.LyricArtist");
+					string titleTemp = (string)data.SelectToken("GetLyricResult.LyricSong");
 
-					if (data != null && data.SelectToken("GetLyricResult.Lyric") != null)
+					if (artistTemp == tagNew.Artist && titleTemp == tagNew.Title && (string)data.SelectToken("GetLyricResult.Lyric") != null)
 					{
-						string artistTemp = (string)data.SelectToken("GetLyricResult.LyricArtist");
-						string titleTemp = (string)data.SelectToken("GetLyricResult.LyricSong");
+						string rawLyrics = (string)data.SelectToken("GetLyricResult.Lyric");
 
-						if (artistTemp == tagNew.Artist && titleTemp == tagNew.Title && (string)data.SelectToken("GetLyricResult.Lyric") != null)
+						// Sanitize lyrics
+						rawLyrics = CheckMalformedUtf8(rawLyrics);												// Checks and converts a string to UTF-8 if needed/possible
+						rawLyrics = rawLyrics.Trim('\r', 'n').Trim().Trim('\r', 'n');							// Remove leading or ending line breaks and white space
+
+						if (rawLyrics.Length > 1)
 						{
-							string rawLyrics = (string)data.SelectToken("GetLyricResult.Lyric");
-
-							// Sanitize lyrics
-							rawLyrics = CheckMalformedUtf8(rawLyrics);												// Checks and converts a string to UTF-8 if needed/possible
-							rawLyrics = rawLyrics.Trim('\r', 'n').Trim().Trim('\r', 'n');							// Remove leading or ending line breaks and white space
-
-							if (rawLyrics.Length > 1)
-							{
-								o.Lyrics = rawLyrics;
-							}
+							o.Lyrics = rawLyrics;
 						}
 					}
 				}
