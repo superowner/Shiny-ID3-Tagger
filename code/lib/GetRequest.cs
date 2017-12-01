@@ -126,14 +126,15 @@ namespace GlobalNamespace
 						{
 							Exception realerror = error;
 							while (realerror.InnerException != null)
-								realerror = realerror.InnerException;
-							
-							string[] errorMsg =
 							{
-								"ERROR:    An unknown application error occured!",
-								"Message:  " + realerror.ToString().TrimEnd('\r', '\n')
-							};
-							this.PrintLogMessage("error", errorMsg);
+								realerror = realerror.InnerException;
+							}
+							
+							List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured!" };
+							errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
+							errorMsg.Add("Message:  " + realerror.ToString().TrimEnd('\r', '\n'));
+								
+							this.PrintLogMessage("error", errorMsg.ToArray());	
 						}
 					}	
 
