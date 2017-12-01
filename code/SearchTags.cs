@@ -74,8 +74,8 @@ namespace GlobalNamespace
 					tagNew.Service = "RESULT";
 					tagNew.Filepath = tagOld.Filepath;
 					
-					Task<DataTable> webservicesTask = this.StartWebservices(client, tagOld, cancelToken);
-					Task<KeyValuePair<string, string>> lyricSearchTask = this.StartLyricSearch(client, tagOld, cancelToken);
+					Task<DataTable> webservicesTask = this.StartId3Search(client, tagOld, cancelToken);
+					Task<KeyValuePair<string, string>> lyricSearchTask = this.StartLyricsSearch(client, tagOld, cancelToken);
 					
 					await Task.WhenAll(webservicesTask, lyricSearchTask);
 					
@@ -110,8 +110,8 @@ namespace GlobalNamespace
 						tagNew.Artist = artistNew;
 						tagNew.Title = titleNew;
 						
-						webservicesTask = this.StartWebservices(client, tagNew, cancelToken);
-						lyricSearchTask = this.StartLyricSearch(client, tagNew, cancelToken);
+						webservicesTask = this.StartId3Search(client, tagNew, cancelToken);
+						lyricSearchTask = this.StartLyricsSearch(client, tagNew, cancelToken);
 						
 						await Task.WhenAll(webservicesTask, lyricSearchTask);
 						
@@ -217,7 +217,7 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		private async Task<KeyValuePair<string, string>> StartLyricSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
+		private async Task<KeyValuePair<string, string>> StartLyricsSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
 			var lyricResults = new Dictionary<string, string>();
 			
@@ -229,11 +229,9 @@ namespace GlobalNamespace
 
 			while (taskList.Count > 0)
 			{
-				Task<Id3> finishedTask = await Task.WhenAny(taskList);
-				Id3 r = await finishedTask;
-
-				taskList.Remove(finishedTask);
-				finishedTask.Dispose();
+				Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
+				taskList = tpl.Item1;
+				Id3 r = tpl.Item2;
 				
 				lyricResults.Add(r.Service, r.Lyrics);
 			}
@@ -258,7 +256,7 @@ namespace GlobalNamespace
 		}
 		
 		// ###########################################################################
-		private async Task<DataTable> StartWebservices(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
+		private async Task<DataTable> StartId3Search(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
 		{
 			DataTable webserviceResults = Id3.CreateId3Table();
 
@@ -294,17 +292,15 @@ namespace GlobalNamespace
 
 			this.progressBar1.Maximum = taskList.Count;
 			this.progressBar1.Value = 0;
-
+			
 			while (taskList.Count > 0)
 			{
-				Task<Id3> finishedTask = await Task.WhenAny(taskList);
-				Id3 r = await finishedTask;
-
-				taskList.Remove(finishedTask);
-				finishedTask.Dispose();
-
+				Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
+				taskList = tpl.Item1;
+				Id3 r = tpl.Item2;
+				
 				webserviceResults.Rows.Add(
-					webserviceResults.Rows.Count + 1,
+					webserviceResults.Rows.Count + 1, //test
 					tagOld.Filepath,
 					r.Service,
 					r.Duration,
@@ -324,6 +320,21 @@ namespace GlobalNamespace
 			}
 
 			return webserviceResults;
+		}
+
+		private async Task<Tuple<List<Task<Id3>>, Id3>> CollectTaskResults(List<Task<Id3>> taskList)
+		{
+				// Use configureAwait(false) to remove sluggishness in GUI
+				// https://www.thomaslevesque.com/2015/11/11/explicitly-switch-to-the-ui-thread-in-an-async-method/
+				Task<Id3> finishedTask = await Task.WhenAny(taskList).ConfigureAwait(false);
+				Id3 r = await finishedTask;
+				
+				taskList.Remove(finishedTask);
+				finishedTask.Dispose();
+				
+				// We return 2 values with a tuple. First the new taskList which is one item smaller than before, because one task was finished
+				// Second value is the actual result from that finished task. We hand this value back to a thread which updates the GUI
+				return new Tuple<List<Task<Id3>>, Id3>(taskList, r);
 		}
 		
 		// ###########################################################################
