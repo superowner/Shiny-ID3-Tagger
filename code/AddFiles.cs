@@ -74,7 +74,7 @@ namespace GlobalNamespace
 						break;
 					}
 					
-					// TODO Remember the reason why I used Task.Run()
+					// Start a separate thread to decrease UI sluggishness
 					await Task.Run(() =>
 					{
 						AddFileToTable(filepath);
