@@ -55,7 +55,7 @@ namespace GlobalNamespace
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem openFolderToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem webserviceAccountsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem openSettingsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem exportCSVToolStripMenuItem;
 		private System.Windows.Forms.DataGridViewTextBoxColumn albumhits;
 		private System.Windows.Forms.Button btnCancel;
@@ -144,7 +144,7 @@ namespace GlobalNamespace
 			this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.clearResultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.webserviceAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.progressBar2 = new System.Windows.Forms.ProgressBar();
@@ -773,22 +773,23 @@ namespace GlobalNamespace
 			// optionsToolStripMenuItem
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.webserviceAccountsToolStripMenuItem,
+			this.openSettingsToolStripMenuItem,
 			this.exportCSVToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
 			this.optionsToolStripMenuItem.Text = "Tools";
 			// 
-			// webserviceAccountsToolStripMenuItem
+			// openSettingsToolStripMenuItem
 			// 
-			this.webserviceAccountsToolStripMenuItem.Name = "webserviceAccountsToolStripMenuItem";
-			this.webserviceAccountsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-			this.webserviceAccountsToolStripMenuItem.Text = "User Settings";
+			this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
+			this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.openSettingsToolStripMenuItem.Text = "User Settings";
+			this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.OpenSettings_ItemClick);
 			// 
 			// exportCSVToolStripMenuItem
 			// 
 			this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
-			this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+			this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.exportCSVToolStripMenuItem.Text = "Export CSV";
 			this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.ExportCSV_MenuItemClick);
 			// 

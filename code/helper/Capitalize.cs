@@ -14,16 +14,18 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
+		private static string[] lowercase =
+		{
+			"a", "an", "the", "and", "but", "or", "nor", "at", "by", "for", "from", "in",
+			"into", "of", "off", "on", "onto", "out", "over", "to", "up", "with", "as"
+		};
+						
 		private static string Capitalize(string str)
 		{
-			if (!string.IsNullOrWhiteSpace(str))
+			// If string is not empty and user setting "AutoCapitalize" is set to true
+			// If str contains any uppercase character you can assume the API is case sensitive. Do nothing then
+			if (User.Settings["AutoCapitalize"] && !string.IsNullOrWhiteSpace(str) && !str.Any(char.IsUpper))
 			{
-				string[] lowercase =
-				{
-					"a", "an", "the", "and", "but", "or", "nor", "at", "by", "for", "from", "in",
-					"into", "of", "off", "on", "onto", "out", "over", "to", "up", "with", "as"
-				};
-
 				// Use regex to extract all words from str. Use custom word seperators
 				// Edge case "P!nk" is not split into two words since the exclamation mark is not included in seperator list
 				// Edge case "Mind the G.A.T.T" is not split into several words since the point is not included in seperator list
@@ -32,18 +34,14 @@ namespace GlobalNamespace
 
 				int firstIndex = words[0].Index;
 				int lastIndex = words[words.Count - 1].Index;
-
+				
 				foreach (Match w in words)
 				{
-					// ALL CAPS words should stay in uppercase. Except the "A"
 					string word = w.Value;
-					if (word == word.ToUpperInvariant() && word != "A")
-					{
-						continue;
-					}
-
-					// Search special words and lowercase them. But ignore the first/last word. They must be capitalized
+					
+					// Search special words and lowercase them
 					// "and" => stays "and"			"And" => goes "and"		"AND" => stays "AND"
+					// But ignore the first/last word. They must always be capitalized
 					if (lowercase.Contains(word.ToLower(cultEng)) && w.Index != firstIndex && w.Index != lastIndex)
 					{
 						string newWord = word.ToLower(cultEng);

@@ -95,6 +95,7 @@
     <Compile Include="code\GUI\DataGridView_CellMouseEnter.cs" />
     <Compile Include="code\GUI\DataGridView_CellMouseLeave.cs" />
     <Compile Include="code\GUI\DataGridView_KeyPress.cs" />
+    <Compile Include="code\GUI\OpenSettings_ItemClick.cs" />
     <Compile Include="code\GUI\OnDataGridViewSortCompare.cs" />
     <Compile Include="code\GUI\ProgressBar1_VisibleChanged.cs" />
     <Compile Include="code\GUI\RichTexBox_LinkClicked.cs" />

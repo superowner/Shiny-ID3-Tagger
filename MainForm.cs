@@ -51,6 +51,6 @@ namespace GlobalNamespace
 			base.OnShown(e);
 			string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();
 			this.Form1Shown(args);
-		}		
+		}
 	}
 }
