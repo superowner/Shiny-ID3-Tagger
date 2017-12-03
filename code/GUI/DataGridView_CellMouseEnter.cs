@@ -6,8 +6,6 @@
 // <summary>Highlights currently selected row/rows</summary>
 //-----------------------------------------------------------------------
 
-// TODO: Small blue border on mouse hover around row if already selected
-// TODO: Make new selection when right clicking
 namespace GlobalNamespace
 {
 	using System;

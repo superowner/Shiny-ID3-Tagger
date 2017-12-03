@@ -7,6 +7,12 @@
 // https://social.msdn.microsoft.com/Forums/windows/en-US/43a85553-2b94-4f4e-9db3-498311af4ecd/datagridview-sorting-with-null-values?forum=winforms
 //-----------------------------------------------------------------------
 
+// TODO: Move column for album hits to the right/end of table
+// TODO: Move column for API duration per track to the right/end of table
+// TODO: Add a new column for accumulated API duration which sums up all API durations per track to one big number
+// TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
+// TODO: Add right click menu to open Windows explorer and select file
+// TODO: Small blue border on mouse hover around row if already selected
 namespace GlobalNamespace
 {
 	using System;

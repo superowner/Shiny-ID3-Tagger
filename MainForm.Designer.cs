@@ -335,12 +335,12 @@ namespace GlobalNamespace
 			this.PopupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.removeLines});
 			this.PopupMenu.Name = "PopupMenu";
-			this.PopupMenu.Size = new System.Drawing.Size(153, 48);
+			this.PopupMenu.Size = new System.Drawing.Size(118, 26);
 			// 
 			// removeLines
 			// 
 			this.removeLines.Name = "removeLines";
-			this.removeLines.Size = new System.Drawing.Size(152, 22);
+			this.removeLines.Size = new System.Drawing.Size(117, 22);
 			this.removeLines.Text = "Remove";
 			this.removeLines.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.removeLines.ToolTipText = "Removes the selected lines";
@@ -415,6 +415,7 @@ namespace GlobalNamespace
 			this.dataGridView1.TabStop = false;
 			this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellContentClick);
 			this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellDoubleClick);
+			this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_CellMouseDown);
 			this.dataGridView1.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseEnter);
 			this.dataGridView1.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
 			this.dataGridView1.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnDataGridViewSortCompare);
@@ -602,6 +603,7 @@ namespace GlobalNamespace
 			this.dataGridView2.TabStop = false;
 			this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellContentClick);
 			this.dataGridView2.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellDoubleClick);
+			this.dataGridView2.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_CellMouseDown);
 			this.dataGridView2.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseEnter);
 			this.dataGridView2.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
 			this.dataGridView2.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnDataGridViewSortCompare);

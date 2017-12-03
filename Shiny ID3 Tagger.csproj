@@ -92,6 +92,7 @@
     <Compile Include="code\GUI\ClearResults_MenuItemClick.cs" />
     <Compile Include="code\GUI\DataGridView_CellContentClick.cs" />
     <Compile Include="code\GUI\DataGridView_CellDoubleClick.cs" />
+    <Compile Include="code\GUI\DataGridView_CellMouseDown.cs" />
     <Compile Include="code\GUI\DataGridView_CellMouseEnter.cs" />
     <Compile Include="code\GUI\DataGridView_CellMouseLeave.cs" />
     <Compile Include="code\GUI\DataGridView_KeyPress.cs" />
