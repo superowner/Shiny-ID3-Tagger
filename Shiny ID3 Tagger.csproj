@@ -84,24 +84,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="code\AddFiles.cs" />
-    <Compile Include="code\GUI\AddFolder_MenuItemClick.cs" />
-    <Compile Include="code\GUI\BtnAddFilesClick.cs" />
-    <Compile Include="code\GUI\BtnCancelClick.cs" />
-    <Compile Include="code\GUI\BtnSearchClick.cs" />
-    <Compile Include="code\GUI\BtnWriteClick.cs" />
-    <Compile Include="code\GUI\ClearResults_MenuItemClick.cs" />
+    <Compile Include="code\GUI\MenuItemClick_AddFolder.cs" />
+    <Compile Include="code\GUI\Button_AddFilesClick.cs" />
+    <Compile Include="code\GUI\Button_CancelClick.cs" />
+    <Compile Include="code\GUI\Button_SearchClick.cs" />
+    <Compile Include="code\GUI\Button_WriteClick.cs" />
+    <Compile Include="code\GUI\MenuItemClick_ClearResults.cs" />
     <Compile Include="code\GUI\DataGridView_CellContentClick.cs" />
     <Compile Include="code\GUI\DataGridView_CellDoubleClick.cs" />
     <Compile Include="code\GUI\DataGridView_CellMouseDown.cs" />
     <Compile Include="code\GUI\DataGridView_CellMouseEnter.cs" />
     <Compile Include="code\GUI\DataGridView_CellMouseLeave.cs" />
     <Compile Include="code\GUI\DataGridView_KeyPress.cs" />
-    <Compile Include="code\GUI\OpenSettings_ItemClick.cs" />
-    <Compile Include="code\GUI\OnDataGridViewSortCompare.cs" />
+    <Compile Include="code\GUI\MenuItemClick_OpenSettings.cs" />
+    <Compile Include="code\GUI\DataGridView_SortCompare.cs" />
+    <Compile Include="code\GUI\Popup_ShowExplorerClick.cs" />
     <Compile Include="code\GUI\ProgressBar1_VisibleChanged.cs" />
-    <Compile Include="code\GUI\RemoveLines_PopupClick.cs" />
+    <Compile Include="code\GUI\Popup_RemoveClick.cs" />
     <Compile Include="code\GUI\RichTexBox_LinkClicked.cs" />
-    <Compile Include="code\GUI\TabControl1_SelectedIndexChanged.cs" />
+    <Compile Include="code\GUI\TabControl_SelectedIndexChanged.cs" />
     <Compile Include="code\helper\Capitalize.cs" />
     <Compile Include="code\helper\CheckMalformedUtf8.cs" />
     <Compile Include="code\helper\CloneRequest.cs" />
@@ -109,7 +110,7 @@
     <Compile Include="code\helper\ConvertXmlToJson.cs" />
     <Compile Include="code\helper\GetJsonSettings.cs" />
     <Compile Include="code\helper\GetResponse.cs" />
-    <Compile Include="code\GUI\ExportCSV_MenuItemClick.cs" />
+    <Compile Include="code\GUI\MenuItemClick_ExportCSV.cs" />
     <Compile Include="code\helper\IncreaseAlbumCounter.cs" />
     <Compile Include="code\helper\InitiateHttpClient.cs" />
     <Compile Include="code\helper\IsValidMp3.cs" />

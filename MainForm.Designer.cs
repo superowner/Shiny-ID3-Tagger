@@ -64,6 +64,7 @@ namespace GlobalNamespace
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
 		private System.Windows.Forms.ContextMenuStrip PopupMenu;
 		private System.Windows.Forms.ToolStripMenuItem removeLines;
+		private System.Windows.Forms.ToolStripMenuItem showInExplorerToolStripMenuItem;
 				
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -110,6 +111,7 @@ namespace GlobalNamespace
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.PopupMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.removeLines = new System.Windows.Forms.ToolStripMenuItem();
+			this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.dataGridView1 = new GlobalNamespace.DataGridViewDoubleBuffered();
 			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -178,7 +180,7 @@ namespace GlobalNamespace
 			this.btnSearch.TabStop = false;
 			this.btnSearch.Text = "Search tags";
 			this.btnSearch.UseVisualStyleBackColor = true;
-			this.btnSearch.Click += new System.EventHandler(this.BtnSearchClick);
+			this.btnSearch.Click += new System.EventHandler(this.Button_SearchClick);
 			// 
 			// btnWrite
 			// 
@@ -192,7 +194,7 @@ namespace GlobalNamespace
 			this.btnWrite.TabStop = false;
 			this.btnWrite.Text = "Write tags";
 			this.btnWrite.UseVisualStyleBackColor = true;
-			this.btnWrite.Click += new System.EventHandler(this.BtnWriteClick);
+			this.btnWrite.Click += new System.EventHandler(this.Button_WriteClick);
 			// 
 			// tabControl2
 			// 
@@ -310,7 +312,7 @@ namespace GlobalNamespace
 			this.btnAddFiles.TabStop = false;
 			this.btnAddFiles.Text = "Add files";
 			this.btnAddFiles.UseVisualStyleBackColor = true;
-			this.btnAddFiles.Click += new System.EventHandler(this.BtnAddFilesClick);
+			this.btnAddFiles.Click += new System.EventHandler(this.Button_AddFilesClick);
 			// 
 			// tabControl1
 			// 
@@ -328,23 +330,31 @@ namespace GlobalNamespace
 			this.tabControl1.Size = new System.Drawing.Size(1646, 641);
 			this.tabControl1.TabIndex = 5;
 			this.tabControl1.TabStop = false;
-			this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
+			this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
 			// 
 			// PopupMenu
 			// 
 			this.PopupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.removeLines});
+			this.removeLines,
+			this.showInExplorerToolStripMenuItem});
 			this.PopupMenu.Name = "PopupMenu";
-			this.PopupMenu.Size = new System.Drawing.Size(118, 26);
+			this.PopupMenu.Size = new System.Drawing.Size(162, 70);
 			// 
 			// removeLines
 			// 
 			this.removeLines.Name = "removeLines";
-			this.removeLines.Size = new System.Drawing.Size(117, 22);
+			this.removeLines.Size = new System.Drawing.Size(161, 22);
 			this.removeLines.Text = "Remove";
 			this.removeLines.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.removeLines.ToolTipText = "Removes the selected lines";
-			this.removeLines.Click += new System.EventHandler(this.RemoveLines_PopupClick);
+			this.removeLines.Click += new System.EventHandler(this.Popup_RemoveClick);
+			// 
+			// showInExplorerToolStripMenuItem
+			// 
+			this.showInExplorerToolStripMenuItem.Name = "showInExplorerToolStripMenuItem";
+			this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.showInExplorerToolStripMenuItem.Text = "Show in Explorer";
+			this.showInExplorerToolStripMenuItem.Click += new System.EventHandler(this.Popup_ShowExplorerClick);
 			// 
 			// tabPage4
 			// 
@@ -418,7 +428,7 @@ namespace GlobalNamespace
 			this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_CellMouseDown);
 			this.dataGridView1.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseEnter);
 			this.dataGridView1.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
-			this.dataGridView1.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnDataGridViewSortCompare);
+			this.dataGridView1.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.DataGridView_SortCompare);
 			this.dataGridView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridView_KeyPress);
 			// 
 			// Column1
@@ -606,7 +616,7 @@ namespace GlobalNamespace
 			this.dataGridView2.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_CellMouseDown);
 			this.dataGridView2.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseEnter);
 			this.dataGridView2.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
-			this.dataGridView2.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnDataGridViewSortCompare);
+			this.dataGridView2.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.DataGridView_SortCompare);
 			this.dataGridView2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridView_KeyPress);
 			// 
 			// number2
@@ -787,14 +797,14 @@ namespace GlobalNamespace
 			this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
 			this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
 			this.openFolderToolStripMenuItem.Text = "Add Directory";
-			this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.AddFolder_MenuItemClick);
+			this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_AddFolder);
 			// 
 			// clearResultsToolStripMenuItem
 			// 
 			this.clearResultsToolStripMenuItem.Name = "clearResultsToolStripMenuItem";
 			this.clearResultsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
 			this.clearResultsToolStripMenuItem.Text = "Clear Table";
-			this.clearResultsToolStripMenuItem.Click += new System.EventHandler(this.ClearResults_MenuItemClick);
+			this.clearResultsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ClearResults);
 			// 
 			// optionsToolStripMenuItem
 			// 
@@ -810,14 +820,14 @@ namespace GlobalNamespace
 			this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
 			this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
 			this.openSettingsToolStripMenuItem.Text = "User Settings";
-			this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.OpenSettings_ItemClick);
+			this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_OpenSettings);
 			// 
 			// exportCSVToolStripMenuItem
 			// 
 			this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
 			this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
 			this.exportCSVToolStripMenuItem.Text = "Export CSV";
-			this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.ExportCSV_MenuItemClick);
+			this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ExportCSV);
 			// 
 			// btnCancel
 			// 
@@ -833,7 +843,7 @@ namespace GlobalNamespace
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
 			this.btnCancel.Visible = false;
-			this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
+			this.btnCancel.Click += new System.EventHandler(this.Button_CancelClick);
 			// 
 			// progressBar2
 			// 
@@ -872,7 +882,7 @@ namespace GlobalNamespace
 			this.Name = "Form1";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Shiny ID3 Tagger";
-			this.Load += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
+			this.Load += new System.EventHandler(this.TabControl_SelectedIndexChanged);
 			this.tabControl2.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
