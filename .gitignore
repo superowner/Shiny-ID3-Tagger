@@ -1,3 +1,5 @@
+.gitattributes
+.vs
 StyleCopViolations.xml
 ProfilingSessions/
 obj/
