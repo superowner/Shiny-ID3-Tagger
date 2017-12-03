@@ -10,13 +10,18 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Linq;
+	using System.Threading;	
 	using System.Windows.Forms;
 
 	public partial class Form1 : Form
 	{
 		private void Button_SearchClick(object sender, EventArgs e)
 		{
-			this.StartSearching();
+			// Refresh cancel token which is used for all requests
+			TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = TokenSource.Token;
+			
+			this.StartSearching(cancelToken);
 		}
 	}
 }

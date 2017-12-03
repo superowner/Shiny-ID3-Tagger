@@ -10,6 +10,7 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Linq;
+	using System.Threading;	
 	using System.Windows.Forms;
 	using Ookii.Dialogs;
 
@@ -17,6 +18,10 @@ namespace GlobalNamespace
 	{
 		private async void MenuItemClick_AddFolder(object sender, EventArgs e)
 		{
+			// Refresh cancel token
+			TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = TokenSource.Token;
+			
 			// Ookii dialog (3rd party library) looks more like the normal files selection dialog. (default dialog looks ugly)
 			VistaFolderBrowserDialog fbd = new VistaFolderBrowserDialog();
 
@@ -26,19 +31,19 @@ namespace GlobalNamespace
 			}
 
 			fbd.SelectedPath = LastUsedFolder;
-
+			
 			if (fbd.ShowDialog() == DialogResult.OK)
 			{
 				LastUsedFolder = fbd.SelectedPath;
 				string[] folderpath = { fbd.SelectedPath };
 				
 				// Add new files
-				bool newFiles = await this.AddFiles(folderpath);
+				bool newFiles = await this.AddFiles(folderpath, cancelToken);
 				
 				// If the setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
-				if (User.Settings["AutoSearch"] && newFiles)
+				if (User.Settings["AutoSearch"] && newFiles && !cancelToken.IsCancellationRequested)
 				{
-					this.StartSearching();
+					this.StartSearching(cancelToken);
 				}
 			}
 		}

@@ -22,7 +22,7 @@ namespace GlobalNamespace
 	public partial class Form1
 	{
 		// ###########################################################################
-		private async void StartSearching()		
+		private async void StartSearching(CancellationToken cancelToken)		
 		{
 			// Prepare visual stuff like disable buttons during work, show two progress bars
 			this.btnAddFiles.Enabled = false;
@@ -33,10 +33,6 @@ namespace GlobalNamespace
 			this.progressBar2.Value = 0;
 			this.progressBar2.Visible = true;
 			this.progressBar1.Visible = true;
-
-			// Issue new cancel token which is used for all requests
-			TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = TokenSource.Token;
 
 			HttpClient client = InitiateHttpClient();
 			Stopwatch sw = new Stopwatch();

@@ -19,7 +19,7 @@ namespace GlobalNamespace
 	public partial class Form1
 	{
 		// ###########################################################################
-		private async Task<bool> AddFiles(string[] files)
+		private async Task<bool> AddFiles(string[] files, CancellationToken cancelToken)
 		{
 			// Work starts, disable all buttons to prevent side effects when user clicks them despite an already running task
 			this.btnSearch.Enabled = false;
@@ -28,10 +28,6 @@ namespace GlobalNamespace
 
 			// Return value which indicates if any new files were successfully added to datagridview1
 			bool newFiles = false;
-			
-			// Issue out a new token each time new files are added
-			TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = TokenSource.Token;
 			
 			// If no files were passed through command line, open a new file dialog. files can be an empty array, so use any() to check this
 			if (files == null || !files.Any())
