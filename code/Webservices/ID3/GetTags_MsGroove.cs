@@ -38,7 +38,7 @@ namespace GlobalNamespace
 
 			HttpRequestMessage request = new HttpRequestMessage();
 			
-			if (SessionData.MsAccessToken == null || SessionData.MsAccessTokenExpireDate < DateTime.Now)
+			if (ApiSessionData.MsAccessToken == null || ApiSessionData.MsAccessTokenExpireDate < DateTime.Now)
 			{
 				request = new HttpRequestMessage(HttpMethod.Post, "https://login.live.com/accesstoken.srf");
 				request.Content = new FormUrlEncodedContent(new[]
@@ -54,15 +54,15 @@ namespace GlobalNamespace
 				
 				if (loginData != null && loginData.SelectToken("access_token") != null)
 				{
-					SessionData.MsAccessToken = (string)loginData.SelectToken("access_token");
+					ApiSessionData.MsAccessToken = (string)loginData.SelectToken("access_token");
 					TimeSpan validDuration = TimeSpan.FromSeconds((int)loginData.SelectToken("expires_in"));
-					SessionData.MsAccessTokenExpireDate = DateTime.Now.Add(validDuration);
+					ApiSessionData.MsAccessTokenExpireDate = DateTime.Now.Add(validDuration);
 				}
 			}
 				
-			if (SessionData.MsAccessToken != null)
+			if (ApiSessionData.MsAccessToken != null)
 			{
-				string tokenEncoded = WebUtility.UrlEncode(SessionData.MsAccessToken);
+				string tokenEncoded = WebUtility.UrlEncode(ApiSessionData.MsAccessToken);
 				
 				request = new HttpRequestMessage(HttpMethod.Get, "https://music.xboxlive.com/1/content/music/search?q=" + searchTermEnc + "&maxItems=1&filters=tracks&contentType=JSON");
 				request.Headers.Add("Authorization", "Bearer " + tokenEncoded);

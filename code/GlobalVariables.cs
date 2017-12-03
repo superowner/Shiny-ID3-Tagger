@@ -30,7 +30,7 @@ namespace GlobalNamespace
 		private static CancellationTokenSource TokenSource { get; set; }
 	}
 	
-	internal static class SessionData
+	internal static class ApiSessionData
 	{
 		internal static string MsAccessToken { get; set; }
 		

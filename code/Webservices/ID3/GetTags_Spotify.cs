@@ -38,7 +38,7 @@ namespace GlobalNamespace
 			
 			HttpRequestMessage request = new HttpRequestMessage();
 			
-			if (SessionData.SpAccessToken == null || SessionData.SpAccessTokenExpireDate < DateTime.Now)
+			if (ApiSessionData.SpAccessToken == null || ApiSessionData.SpAccessTokenExpireDate < DateTime.Now)
 			{			
 				request = new HttpRequestMessage(HttpMethod.Post, "https://accounts.spotify.com/api/token");
 				
@@ -56,17 +56,17 @@ namespace GlobalNamespace
 
 				if (loginData != null && loginData.SelectToken("access_token") != null)
 				{
-					SessionData.SpAccessToken = (string)loginData.SelectToken("access_token");
+					ApiSessionData.SpAccessToken = (string)loginData.SelectToken("access_token");
 					TimeSpan validDuration = TimeSpan.FromSeconds((int)loginData.SelectToken("expires_in"));
-					SessionData.SpAccessTokenExpireDate = DateTime.Now.Add(validDuration);					
+					ApiSessionData.SpAccessTokenExpireDate = DateTime.Now.Add(validDuration);					
 				}				
 			}
 			
-			if (SessionData.SpAccessToken != null)
+			if (ApiSessionData.SpAccessToken != null)
 			{
 				request = new HttpRequestMessage();
 				request.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEncoded + "\"+title:\"" + titleEncoded + "\"&type=track&limit=1");
-				request.Headers.Add("Authorization", "Bearer " + SessionData.SpAccessToken);
+				request.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 	
 				string content1 = await this.GetResponse(client, request, cancelToken);
 				JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
@@ -81,7 +81,7 @@ namespace GlobalNamespace
 	
 					// ###########################################################################
 					request = new HttpRequestMessage();
-					request.Headers.Add("Authorization", "Bearer " + SessionData.SpAccessToken);
+					request.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 					
 					string url = (string)data1.SelectToken("tracks.items[0].album.href");
 					if (IsValidUrl(url))

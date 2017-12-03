@@ -36,7 +36,7 @@ namespace GlobalNamespace
 			
 			HttpRequestMessage request = new HttpRequestMessage();
 
-			if (SessionData.TiSessionID == null || SessionData.TiSessionExpireDate < DateTime.Now)
+			if (ApiSessionData.TiSessionID == null || ApiSessionData.TiSessionExpireDate < DateTime.Now)
 			{				
 				request = new HttpRequestMessage(HttpMethod.Post, "http://api.tidalhifi.com/v1/login/username");
 				request.Headers.Add("X-Tidal-Token", User.Accounts["TiToken"]);
@@ -51,13 +51,13 @@ namespace GlobalNamespace
 				
 				if (loginData != null && loginData.SelectToken("sessionId") != null)
 				{
-					SessionData.TiSessionID = (string)loginData.SelectToken("sessionId");
-					SessionData.TiCountryCode = (string)loginData.SelectToken("countryCode");
+					ApiSessionData.TiSessionID = (string)loginData.SelectToken("sessionId");
+					ApiSessionData.TiCountryCode = (string)loginData.SelectToken("countryCode");
 
 					string userID = (string)loginData.SelectToken("userId");
 					
 					request = new HttpRequestMessage(HttpMethod.Get, "http://api.tidalhifi.com/v1/users/" + userID + "/subscription");
-					request.Headers.Add("X-Tidal-SessionId", SessionData.TiSessionID);
+					request.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
 					
 					string sessionContent = await this.GetResponse(client, request, cancelToken);
 					JObject sessionData = JsonConvert.DeserializeObject<JObject>(sessionContent, this.GetJsonSettings());
@@ -66,17 +66,17 @@ namespace GlobalNamespace
 					{
 						// 30mins is the "offlineGracePeriod" which I asume is the timespan a session is valid. I could be wrong since there is no documentation about this :(
 						TimeSpan validDuration = TimeSpan.FromSeconds((int)sessionData.SelectToken("subscription.offlineGracePeriod") * 60); 
-						SessionData.TiSessionExpireDate = DateTime.Now.Add(validDuration);
+						ApiSessionData.TiSessionExpireDate = DateTime.Now.Add(validDuration);
 					}
 				}
 			}
 			
-			if (SessionData.TiSessionID != null)
+			if (ApiSessionData.TiSessionID != null)
 			{
 				request = new HttpRequestMessage();			
 				request.Headers.Add("Origin", "http://listen.tidal.com");
-				request.Headers.Add("X-Tidal-SessionId", SessionData.TiSessionID);
-				request.RequestUri = new Uri("http://api.tidalhifi.com/v1/search?types=TRACKS&countryCode=" + SessionData.TiCountryCode + "&query=" + searchTermEnc);
+				request.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
+				request.RequestUri = new Uri("http://api.tidalhifi.com/v1/search?types=TRACKS&countryCode=" + ApiSessionData.TiCountryCode + "&query=" + searchTermEnc);
 				
 				string content1 = await this.GetResponse(client, request, cancelToken);
 				JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
@@ -93,8 +93,8 @@ namespace GlobalNamespace
 					{
 						request = new HttpRequestMessage();			
 						request.Headers.Add("Origin", "http://listen.tidal.com");
-						request.Headers.Add("X-Tidal-SessionId", SessionData.TiSessionID);				
-						request.RequestUri = new Uri("http://api.tidalhifi.com/v1/albums/" + (string)data1.SelectToken("tracks.items[0].album.id") + "?countryCode=" + SessionData.TiCountryCode);
+						request.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);				
+						request.RequestUri = new Uri("http://api.tidalhifi.com/v1/albums/" + (string)data1.SelectToken("tracks.items[0].album.id") + "?countryCode=" + ApiSessionData.TiCountryCode);
 		
 						string content2 = await this.GetResponse(client, request, cancelToken);
 						JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
