@@ -165,10 +165,11 @@ namespace GlobalNamespace
 						}
 					}
 
+					// Color cells green, yellow or red according to Levenshtein and allowedEditPercent setting
 					this.MarkChange(row.Index, this.artist1.Index, tagOld.Artist, tagNew.Artist, true);
 					this.MarkChange(row.Index, this.title1.Index, tagOld.Title, tagNew.Title, true);
 					this.MarkChange(row.Index, this.album1.Index, tagOld.Album, tagNew.Album, true);
-					this.MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date, true);
+					this.MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date, false);
 					this.MarkChange(row.Index, this.genre1.Index, tagOld.Genre, tagNew.Genre, true);
 					this.MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount, false);
 					this.MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber, false);
