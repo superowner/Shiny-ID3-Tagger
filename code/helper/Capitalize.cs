@@ -3,7 +3,21 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Capitalize a given string according to the rules #1, #2 and #4 taken from http://aitech.ac.jp/~ckelly/midi/help/caps.html</summary>
+// <summary>Capitalize a given string according to the rules from the link below</summary>
+// http://aitech.ac.jp/~ckelly/midi/help/caps.html
+// #1	The first and last words are always capitalized, and all except the words listed below are capitalized.
+// #2	These are lower-case, unless they are the first word or last word.
+//		- articles: a, an, the
+//		- conjunctions: and, but, or, nor
+//		- prepositions that are less than five letters long: at, by, for, from, in, into, of, off, on, onto, out, over, to, up, with
+//		- as (only if it is followed by a noun)
+// #3	Prepositions are sometimes capitalized.
+//		- Prepositions are capitalized when they are the first or last word.
+//		- Prepositions that are part of two-word "phrasal verbs" (Come On, Hold On, etc....) are capitalized.
+//		- Prepositions that are over four letters long. (across, after, among, beyond, ...)
+// #4	These short words are capitalized.
+//		- also, be, if, than, that, thus, when
+//		- as (if it is followed by a verb)
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -23,8 +37,7 @@ namespace GlobalNamespace
 		private static string Capitalize(string str)
 		{
 			// If string is not empty and user setting "AutoCapitalize" is set to true
-			// If str contains any uppercase character you can assume the API is case sensitive. Do nothing then
-			if (User.Settings["AutoCapitalize"] && !string.IsNullOrWhiteSpace(str) && !str.Any(char.IsUpper))
+			if (User.Settings["AutoCapitalize"] && !string.IsNullOrWhiteSpace(str))
 			{
 				// Use regex to extract all words from str. Use custom word seperators
 				// Edge case "P!nk" is not split into two words since the exclamation mark is not included in seperator list
@@ -49,9 +62,9 @@ namespace GlobalNamespace
 						continue;
 					}
 
-					// All remaining lowercase only words are capitalized
-					// edge cases like "iTunes" or "CHURCHES" stay as they are since they are not "lowercase only"
-					if (word == word.ToLower(cultEng))
+					// All remaining lowercase words are capitalized
+					// But if the whole string contains any uppercase character you can assume the API is case sensitive. Do nothing then
+					if (word == word.ToLower(cultEng) && !str.Any(char.IsUpper))
 					{
 						string newWord = word.First().ToString().ToUpperInvariant() + word.Substring(1);
 						str = str.Remove(w.Index, w.Length).Insert(w.Index, newWord);
