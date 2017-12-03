@@ -98,6 +98,7 @@
     <Compile Include="code\GUI\OpenSettings_ItemClick.cs" />
     <Compile Include="code\GUI\OnDataGridViewSortCompare.cs" />
     <Compile Include="code\GUI\ProgressBar1_VisibleChanged.cs" />
+    <Compile Include="code\GUI\RemoveLines_PopupClick.cs" />
     <Compile Include="code\GUI\RichTexBox_LinkClicked.cs" />
     <Compile Include="code\GUI\TabControl1_SelectedIndexChanged.cs" />
     <Compile Include="code\helper\Capitalize.cs" />

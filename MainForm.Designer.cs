@@ -62,6 +62,8 @@ namespace GlobalNamespace
 		private System.Windows.Forms.ToolStripMenuItem clearResultsToolStripMenuItem;
 		private System.Windows.Forms.ProgressBar progressBar2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+		private System.Windows.Forms.ContextMenuStrip PopupMenu;
+		private System.Windows.Forms.ToolStripMenuItem removeLines;
 				
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -84,6 +86,7 @@ namespace GlobalNamespace
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -105,6 +108,8 @@ namespace GlobalNamespace
 			this.rtbErrorLog = new System.Windows.Forms.RichTextBox();
 			this.btnAddFiles = new System.Windows.Forms.Button();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
+			this.PopupMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.removeLines = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.dataGridView1 = new GlobalNamespace.DataGridViewDoubleBuffered();
 			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -153,6 +158,7 @@ namespace GlobalNamespace
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.tabControl1.SuspendLayout();
+			this.PopupMenu.SuspendLayout();
 			this.tabPage4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.tabPage5.SuspendLayout();
@@ -311,6 +317,7 @@ namespace GlobalNamespace
 			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 			| System.Windows.Forms.AnchorStyles.Left) 
 			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl1.ContextMenuStrip = this.PopupMenu;
 			this.tabControl1.Controls.Add(this.tabPage4);
 			this.tabControl1.Controls.Add(this.tabPage5);
 			this.tabControl1.Location = new System.Drawing.Point(5, 24);
@@ -322,6 +329,22 @@ namespace GlobalNamespace
 			this.tabControl1.TabIndex = 5;
 			this.tabControl1.TabStop = false;
 			this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
+			// 
+			// PopupMenu
+			// 
+			this.PopupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.removeLines});
+			this.PopupMenu.Name = "PopupMenu";
+			this.PopupMenu.Size = new System.Drawing.Size(153, 48);
+			// 
+			// removeLines
+			// 
+			this.removeLines.Name = "removeLines";
+			this.removeLines.Size = new System.Drawing.Size(152, 22);
+			this.removeLines.Text = "Remove";
+			this.removeLines.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.removeLines.ToolTipText = "Removes the selected lines";
+			this.removeLines.Click += new System.EventHandler(this.RemoveLines_PopupClick);
 			// 
 			// tabPage4
 			// 
@@ -578,6 +601,7 @@ namespace GlobalNamespace
 			this.dataGridView2.TabIndex = 9;
 			this.dataGridView2.TabStop = false;
 			this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellContentClick);
+			this.dataGridView2.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellDoubleClick);
 			this.dataGridView2.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseEnter);
 			this.dataGridView2.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
 			this.dataGridView2.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.OnDataGridViewSortCompare);
@@ -782,14 +806,14 @@ namespace GlobalNamespace
 			// openSettingsToolStripMenuItem
 			// 
 			this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
-			this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
 			this.openSettingsToolStripMenuItem.Text = "User Settings";
 			this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.OpenSettings_ItemClick);
 			// 
 			// exportCSVToolStripMenuItem
 			// 
 			this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
-			this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
 			this.exportCSVToolStripMenuItem.Text = "Export CSV";
 			this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.ExportCSV_MenuItemClick);
 			// 
@@ -852,6 +876,7 @@ namespace GlobalNamespace
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
+			this.PopupMenu.ResumeLayout(false);
 			this.tabPage4.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.tabPage5.ResumeLayout(false);
