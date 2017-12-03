@@ -19,13 +19,17 @@ namespace GlobalNamespace
 	public partial class Form1
 	{
 		// ###########################################################################
-		private async void AddFiles(string[] files)
+		private async Task<bool> AddFiles(string[] files)
 		{
+			// Work starts, disable all buttons to prevent side effects when user clicks them despite an already running task
 			this.btnSearch.Enabled = false;
 			this.btnWrite.Enabled = false;
 			this.btnAddFiles.Enabled = false;			
 
-			// Issue a new token each time new files are added 
+			// Return value which indicates if any new files were successfully added to datagridview1
+			bool newFiles = false;
+			
+			// Issue out a new token each time new files are added
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
 			
@@ -74,163 +78,160 @@ namespace GlobalNamespace
 						break;
 					}
 					
-					// Start a separate thread to decrease UI sluggishness
+					// Start this in separate thread to decrease UI sluggishness
 					await Task.Run(() =>
 					{
-						AddFileToTable(filepath);
+						// Check if the file was already added
+						bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
+							where row.Cells[this.filepath1.Index].Value.ToString() == filepath
+							select row).Any();
+			
+						// Check if the file is a valid mp3 file
+						if (this.IsValidMp3(filepath) && !rowAlreadyExists)
+						{
+							AddFileToTable(filepath);
+							newFiles = true;
+						}
 					});					
 				
 					this.progressBar1.PerformStep();
 				}
 			}
 			
-			// Work finished, reenable all buttons and hide progress bar
-			this.dataGridView1.ClearSelection();						
-						
+			// Work finished, re-enable all buttons and hide progress bar
 			this.progressBar1.Visible = false;				
 			this.btnSearch.Enabled = true;
 			this.btnWrite.Enabled = true;
-			this.btnAddFiles.Enabled = true;
-			
-			// If the setting allows it, continue straight with searching for tags without the need to press the search button
-			if (User.Settings["AutoSearch"])
-			{
-				this.StartSearching();
-			}
+			this.btnAddFiles.Enabled = true;	
+
+			return newFiles;			
 		}
 
 		// ###########################################################################
 		// Adds a single file to first datagridview with all its present ID3 tags
 		private void AddFileToTable(string filepath)
 		{
-			bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
-									where row.Cells[this.filepath1.Index].Value.ToString() == filepath
-									select row).Any();
+			Id3 tagOld = new Id3();
+			tagOld.Filepath = filepath;
 			
-			if (this.IsValidMp3(filepath) && rowAlreadyExists == false)
+			TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", TagLib.ReadStyle.Average);
+			string filename = Path.GetFileNameWithoutExtension(filepath);
+
+			// Extract artist and title from filename
+			string fileArtist = null;
+			string fileTitle = null;
+			Match match = Regex.Match(filename, @"^(?<artist>.*\w+) - (?<title>\w+.*)$");
+			if (match.Success)
 			{
-				Id3 tagOld = new Id3();
-				tagOld.Filepath = filepath;
-				
-				TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", TagLib.ReadStyle.Average);
-				string filename = Path.GetFileNameWithoutExtension(filepath);
-	
-				// Extract artist and title from filename
-				string fileArtist = null;
-				string fileTitle = null;
-				Match match = Regex.Match(filename, @"^(?<artist>.*\w+) - (?<title>\w+.*)$");
-				if (match.Success)
+				fileArtist = match.Groups["artist"].Value;
+				fileTitle = match.Groups["title"].Value;
+			}
+			
+			// Extract and set artist from ID3 tags
+			string tagArtist = null;
+			if (!string.IsNullOrWhiteSpace(tagFile.Tag.FirstPerformer))
+			{
+				tagArtist = tagFile.Tag.FirstPerformer;
+			}
+			
+			// Extract and set title from ID3 tags
+			string tagTitle = null;
+			if (!string.IsNullOrWhiteSpace(tagFile.Tag.Title))
+			{
+				tagTitle = tagFile.Tag.Title;
+			}
+			
+			// Case: artist and title from filename found, but no ID3 tags found
+			// Set artist from filename
+			if (fileArtist != null && tagArtist == null)
+			{
+				tagOld.Artist = fileArtist;
+			}
+			
+			// Set title from filename
+			if (fileTitle != null && tagTitle == null)
+			{
+				tagOld.Title = fileTitle;
+			}
+
+			// Case: ID3 tags found, but no artist and title from filename (pattern didn't match)
+			if (fileArtist == null && tagArtist != null)
+			{
+				tagOld.Artist = tagArtist;
+			}
+			
+			if (fileTitle == null && tagTitle != null)
+			{
+				tagOld.Title = tagTitle;
+			}
+
+			// Case: Both sources (filename and ID3 tags) have a value
+			// Select artist according to user setting "PreferTags"
+			if (fileArtist != null && tagArtist != null)
+			{
+				if (User.Settings["PreferTags"])
 				{
-					fileArtist = match.Groups["artist"].Value;
-					fileTitle = match.Groups["title"].Value;
+					tagOld.Artist = tagArtist;	
 				}
-				
-				// Extract and set artist from ID3 tags
-				string tagArtist = null;
-				if (!string.IsNullOrWhiteSpace(tagFile.Tag.FirstPerformer))
-				{
-					tagArtist = tagFile.Tag.FirstPerformer;
-				}
-				
-				// Extract and set title from ID3 tags
-				string tagTitle = null;
-				if (!string.IsNullOrWhiteSpace(tagFile.Tag.Title))
-				{
-					tagTitle = tagFile.Tag.Title;
-				}
-				
-				// Case: artist and title from filename found, but no ID3 tags found
-				// Set artist from filename
-				if (fileArtist != null && tagArtist == null)
+				else
 				{
 					tagOld.Artist = fileArtist;
 				}
-				
-				// Set title from filename
-				if (fileTitle != null && tagTitle == null)
+			}
+			
+			// Select title according to user setting "PreferTags"
+			if (fileTitle != null && tagTitle != null)
+			{
+				if (User.Settings["PreferTags"])
+				{
+					tagOld.Title = tagTitle;	
+				}
+				else
 				{
 					tagOld.Title = fileTitle;
 				}
+			}
+			
+			// Case: When both sources don't have a valid value, use the whole filename as fallback
+			tagOld.Artist = tagOld.Artist ?? filename;
+			tagOld.Title = tagOld.Title ?? filename;				
+			
+			// Read in existing ID3 tags from file
+			tagOld.Album = tagFile.Tag.Album;
+			tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : null;
+			tagOld.Genre = tagFile.Tag.FirstGenre;
+			tagOld.DiscCount = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : null;
+			tagOld.DiscNumber = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : null;
+			tagOld.TrackCount = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : null;
+			tagOld.TrackNumber = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : null;
+			tagOld.Lyrics = tagFile.Tag.Lyrics;
+			tagOld.Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : null;
+			
+			// Show old tags in gridview panel
+			this.Invoke((MethodInvoker)delegate
+			{
+				this.dataGridView1.Rows.Add(
+					(this.dataGridView1.Rows.Count + 1).ToString(cultEng),
+					tagOld.Filepath ?? string.Empty,
+					tagOld.Artist ?? string.Empty,
+					tagOld.Title ?? string.Empty,
+					tagOld.Album ?? string.Empty,
+					tagOld.Date ?? string.Empty,
+					tagOld.Genre ?? string.Empty,
+					tagOld.DiscCount ?? string.Empty,
+					tagOld.DiscNumber ?? string.Empty,
+					tagOld.TrackCount ?? string.Empty,
+					tagOld.TrackNumber ?? string.Empty,
+					tagOld.Lyrics ?? string.Empty,
+					tagOld.Cover ?? string.Empty);
 
-				// Case: ID3 tags found, but no artist and title from filename (pattern didn't match)
-				if (fileArtist == null && tagArtist != null)
-				{
-					tagOld.Artist = tagArtist;
-				}
-				
-				if (fileTitle == null && tagTitle != null)
-				{
-					tagOld.Title = tagTitle;
-				}
-
-				// Case: Both sources (filename and ID3 tags) have a value
-				// Select artist according to user setting "PreferTags"
-				if (fileArtist != null && tagArtist != null)
-				{
-					if (User.Settings["PreferTags"])
-					{
-						tagOld.Artist = tagArtist;	
-					}
-					else
-					{
-						tagOld.Artist = fileArtist;
-					}
-				}
-				
-				// Select title according to user setting "PreferTags"
-				if (fileTitle != null && tagTitle != null)
-				{
-					if (User.Settings["PreferTags"])
-					{
-						tagOld.Title = tagTitle;	
-					}
-					else
-					{
-						tagOld.Title = fileTitle;
-					}
-				}
-				
-				// Case: When both sources don't have a valid value, use the whole filename as fallback
-				tagOld.Artist = tagOld.Artist ?? filename;
-				tagOld.Title = tagOld.Title ?? filename;				
-				
-				// Read in existing ID3 tags from file
-				tagOld.Album = tagFile.Tag.Album;
-				tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : null;
-				tagOld.Genre = tagFile.Tag.FirstGenre;
-				tagOld.DiscCount = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : null;
-				tagOld.DiscNumber = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : null;
-				tagOld.TrackCount = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : null;
-				tagOld.TrackNumber = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : null;
-				tagOld.Lyrics = tagFile.Tag.Lyrics;
-				tagOld.Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : null;
-				
-				// Show old tags in gridview panel
-				this.Invoke((MethodInvoker)delegate
-				{
-					this.dataGridView1.Rows.Add(
-						(this.dataGridView1.Rows.Count + 1).ToString(),
-						tagOld.Filepath ?? string.Empty,
-						tagOld.Artist ?? string.Empty,
-						tagOld.Title ?? string.Empty,
-						tagOld.Album ?? string.Empty,
-						tagOld.Date ?? string.Empty,
-						tagOld.Genre ?? string.Empty,
-						tagOld.DiscCount ?? string.Empty,
-						tagOld.DiscNumber ?? string.Empty,
-						tagOld.TrackCount ?? string.Empty,
-						tagOld.TrackNumber ?? string.Empty,
-						tagOld.Lyrics ?? string.Empty,
-						tagOld.Cover ?? string.Empty);
-
-					int lastRow = this.dataGridView1.RowCount - 1;
-					this.MarkChange(lastRow, this.artist1.Index, tagArtist, tagOld.Artist, true);
-					this.MarkChange(lastRow, this.title1.Index, tagTitle, tagOld.Title, true);
-				});
-				
-				// Remove any locks on files
-				tagFile.Dispose();					
-			}				
+				int lastRow = this.dataGridView1.RowCount - 1;
+				this.MarkChange(lastRow, this.artist1.Index, tagArtist, tagOld.Artist, true);
+				this.MarkChange(lastRow, this.title1.Index, tagTitle, tagOld.Title, true);
+			});
+			
+			// Remove any locks on files
+			tagFile.Dispose();
 		}
 	}
 }

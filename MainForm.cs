@@ -21,7 +21,7 @@ namespace GlobalNamespace
 		}
 		
 		// ###########################################################################
-		internal void Form1Shown(string[] args)
+		internal async void Form1Shown(string[] args)
 		{						
 			Version version = new Version(Application.ProductVersion);
 			this.Text = Application.ProductName + " " + version.Major + "." + version.Minor;
@@ -29,7 +29,14 @@ namespace GlobalNamespace
 			bool successReadingVariables = this.ReadAccountCredentials();
 			if (successReadingVariables)
 			{
-				this.AddFiles(args);
+				// Add new files
+				bool newFiles = await this.AddFiles(args);
+				
+				// If the setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
+				if (User.Settings["AutoSearch"] && newFiles)
+				{
+					this.StartSearching();
+				}				
 			}
 			else
 			{
