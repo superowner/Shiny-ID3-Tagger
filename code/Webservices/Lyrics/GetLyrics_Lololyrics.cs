@@ -48,7 +48,7 @@ namespace GlobalNamespace
 					// Sanitize lyrics
 					rawLyrics = WebUtility.HtmlDecode(rawLyrics);												// URL decode lyrics
 					rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));					// Remove leading or ending white space per line
-					rawLyrics = rawLyrics.Trim()		;														// Remove leading or ending line breaks and white space
+					rawLyrics = rawLyrics.Trim();																// Remove leading or ending line breaks and white space
 					
 					if (rawLyrics.Length > 1)
 					{

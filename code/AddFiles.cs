@@ -89,7 +89,7 @@ namespace GlobalNamespace
 							newFiles = true;
 						}
 					});					
-				
+
 					this.progressBar1.PerformStep();
 				}
 			}
