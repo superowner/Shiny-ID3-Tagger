@@ -4,9 +4,9 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Decibel API for current track</summary>
-// https://developer.decibel.net/authentication-v3
-// https://developer.decibel.net/rest-api-v3#classQueryAlbums
-// https://developer.decibel.net/object-documentation
+// https://developer.quantonemusic.com/authentication-v3
+// https://developer.quantonemusic.com/rest-api-v3#classQueryAlbums
+// https://developer.quantonemusic.com/object-documentation
 // titleSearchType=PartialName has poorer results than without
 //-----------------------------------------------------------------------
 

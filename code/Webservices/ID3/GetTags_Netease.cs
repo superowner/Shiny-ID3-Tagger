@@ -4,7 +4,6 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Netease API for current track</summary>
-// https://music.163.com/
 // https://github.com/JounQin/netease-muisc-api/tree/master/api
 // https://github.com/yanunon/NeteaseCloudMusic/wiki/NetEase-cloud-music-analysis-API-%5BEN%5D
 //-----------------------------------------------------------------------

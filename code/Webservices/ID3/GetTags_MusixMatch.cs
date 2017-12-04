@@ -6,7 +6,7 @@
 // <summary>Gets ID3 data from MusixMatch API for current track</summary>
 // https://developer.musixmatch.com/documentation/api-reference/track-search
 // https://developer.musixmatch.com/documentation/input-parameters
-// Only 1000 hits per day. Since 2 calls per file are needed, you can only search for 500 files a day. That's not much
+// Only 1000 hits per day. Since 3 calls per file are needed, you can only search for 333 files a day. That's not much
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

@@ -6,9 +6,6 @@
 // <summary>Gets ID3 data from Last.fm API for current track</summary>
 // http://www.last.fm/api/rest
 // http://www.last.fm/api/show/track.getInfo
-// http://www.dennisdel.com/?p=24
-// http://stackoverflow.com/questions/21956358/can-anyone-provide-a-code-example-for-accessing-this-last-fm-api
-// http://geekswithblogs.net/THines01/archive/2010/12/03/responsestatusline.aspx
 // limit=1 not available for track.getInfo or album.getInfo method
 //-----------------------------------------------------------------------
 

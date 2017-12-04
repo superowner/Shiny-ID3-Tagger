@@ -6,7 +6,6 @@
 // <summary>Gets ID3 data from Genius API for current track</summary>
 // https://genius.com/api-clients
 // https://docs.genius.com/#search-h2
-// https://docs.genius.com/#artists-h2
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

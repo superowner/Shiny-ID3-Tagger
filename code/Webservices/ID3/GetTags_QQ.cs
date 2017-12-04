@@ -5,6 +5,7 @@
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from qq.com API for current track</summary>
 // https://github.com/LIU9293/musicAPI/blob/master/src/qq.js
+// https://github.com/metowolf/TencentMusicApi/blob/master/TencentMusicAPI.php
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

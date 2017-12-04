@@ -5,7 +5,6 @@
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Amazon API for current track</summary>
 // https://docs.aws.amazon.com/AWSECommerceService/latest/DG/prod-adv-api-dg.pdf
-// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/APPNDX_SortValuesArticle.html
 // https://docs.aws.amazon.com/AWSECommerceService/latest/DG/rest-signature.html
 // https://docs.aws.amazon.com/AWSECommerceService/latest/DG/LocaleUS.html
 // https://webservices.amazon.com/scratchpad/index.html

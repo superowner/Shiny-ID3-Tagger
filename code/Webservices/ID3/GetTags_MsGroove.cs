@@ -6,7 +6,6 @@
 // <summary>Gets ID3 data from Microsoft Groove API for current track</summary>
 // https://apps.dev.microsoft.com/#/appList
 // https://developer.microsoft.com/de-de/dashboard/groove
-// https://msdn.microsoft.com/en-us/library/ff512387.aspx
 // https://docs.microsoft.com/en-us/groove/groove-service-rest-reference/uri-search-content#examples
 //-----------------------------------------------------------------------
 
