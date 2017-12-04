@@ -82,7 +82,7 @@ namespace GlobalNamespace
 					// How can I get a response which holds the album and title at the same time?
 					// Currently I'm just checking if the album track list contains a title which equals the initial title (from filename or ID3 tag)
 					JToken[] tracklist = data2.SelectTokens("tracklist[*].title").ToArray();
-					int temp = Array.FindIndex(tracklist, t => t.ToString().Equals(title, StringComparison.InvariantCultureIgnoreCase));
+					int temp = Array.FindIndex(tracklist, t => t.ToString().Equals(title, StringComparison.OrdinalIgnoreCase));
 					if (temp != -1)
 					{
 						o.Title = title;

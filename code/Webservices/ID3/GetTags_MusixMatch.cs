@@ -82,7 +82,7 @@ namespace GlobalNamespace
 				if (data3 != null && data3.SelectToken("message.body.track_list") != null)
 				{
 					JToken[] tracklist = data3.SelectTokens("message.body.track_list[*].track.track_name").ToArray();
-					int temp = Array.FindIndex(tracklist, t => t.ToString().Equals(o.Title, StringComparison.InvariantCultureIgnoreCase));
+					int temp = Array.FindIndex(tracklist, t => t.ToString().Equals(o.Title, StringComparison.OrdinalIgnoreCase));
 					if (temp != -1)
 					{
 						o.TrackNumber = (temp + 1).ToString();

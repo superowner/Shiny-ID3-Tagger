@@ -128,7 +128,7 @@ namespace GlobalNamespace
 
 					if (response != null && response.Content != null)
 					{
-						if (response.Content.Headers.ContentType.ToString().StartsWith("image/", StringComparison.InvariantCultureIgnoreCase))
+						if (response.Content.Headers.ContentType.ToString().StartsWith("image/", StringComparison.OrdinalIgnoreCase))
 						{
 							string message = string.Format("{0,-100}{1}", "Picture source: " + request.RequestUri.Authority, "file: \"" + filepath + "\"");
 							this.PrintLogMessage("write", new[] { message });							
