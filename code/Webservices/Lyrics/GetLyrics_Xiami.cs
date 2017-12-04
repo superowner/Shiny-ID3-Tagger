@@ -6,6 +6,7 @@
 // <summary>Retrieves track lyrics from xiami.com</summary>
 // #https://github.com/LIU9293/musicAPI/tree/master/src
 //-----------------------------------------------------------------------
+// TODO: Compare artist and title
 
 namespace GlobalNamespace
 {
@@ -52,14 +53,15 @@ namespace GlobalNamespace
 					if (!string.IsNullOrWhiteSpace(content2))
 					{
 						string rawLyrics = content2;
-						
+
 						// Sanitize
 						rawLyrics = Regex.Replace(rawLyrics, @"[\r\n]\[x-trans\].*", string.Empty);					// Remove [x-trans] lines (chinese translation)
 						rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);	// Remove timestamps like [01:01:123] or [01:01]
 						rawLyrics = Regex.Replace(rawLyrics, @".*?[\u4E00-\u9FFF]+.*?[\r\n]", string.Empty);		// Remove lines where chinese characters are. Most of time they are credits like [by: xyz]
 						rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);								// Remove square brackets [by: XYZ] credits
 						rawLyrics = Regex.Replace(rawLyrics, @"<\d+>", string.Empty);								// Remove angle brackets <123>. No idea for what they are. Example track is "ABBA - Gimme Gimme Gimme"
-						rawLyrics = rawLyrics.Trim('\r', 'n').Trim().Trim('\r', 'n');								// Remove leading or ending line breaks and white space
+						rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));					// Remove leading or ending white space per line
+						rawLyrics = rawLyrics.Trim();																// Remove leading or ending line breaks
 						
 						if (rawLyrics.Length > 1)
 						{

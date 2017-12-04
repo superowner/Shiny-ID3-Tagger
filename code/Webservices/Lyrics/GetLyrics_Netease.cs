@@ -72,7 +72,8 @@ namespace GlobalNamespace
 							rawLyrics = Regex.Replace(rawLyrics, @".*?[\u4E00-\u9FFF]+.*?[\r\n]", string.Empty);		// Remove lines where chinese characters are. Most of time they are credits like [by: xyz]
 							rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);								// Remove square brackets [by: XYZ] credits
 							rawLyrics = Regex.Replace(rawLyrics, @"<\d+>", string.Empty);								// Remove angle brackets <123>. No idea for what they are. Example track is "ABBA - Gimme Gimme Gimme"
-							rawLyrics = rawLyrics.Trim('\r', 'n').Trim().Trim('\r', 'n');								// Remove leading or ending line breaks and white space
+							rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));					// Remove leading or ending white space per line
+							rawLyrics = rawLyrics.Trim();																// Remove leading or ending line breaks and white space
 							
 							if (rawLyrics.Length > 1)
 							{

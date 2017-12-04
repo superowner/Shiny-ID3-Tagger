@@ -12,6 +12,7 @@
 // TODO: Add a new column for accumulated API duration which sums up all API durations per track to one big number
 // TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
 // TODO: Small blue border on mouse hover around row if already selected
+// TODO: Auto scroll to middle of lines for dgv1
 namespace GlobalNamespace
 {
 	using System;

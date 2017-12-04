@@ -22,7 +22,7 @@ namespace GlobalNamespace
 			if (e.RowIndex > -1)
 			{
 				// Define pen and color for selected row borders
-				Pen selectedPen = new Pen(Color.FromArgb(255,153, 209, 255), 1);
+				Pen selectedPen = new Pen(Color.FromArgb(255, 153, 209, 255), 1);
 				Pen gridlinePen = new Pen(Color.FromArgb(255, 227, 227, 227), 1);
 				Pen backGroundPen = new Pen(Color.FromArgb(255, 205, 232, 255), 1);
 					
