@@ -48,7 +48,7 @@ namespace GlobalNamespace
 				if (User.Settings["AutoSearch"] && newFiles && !cancelToken.IsCancellationRequested)
 				{
 					this.StartSearching(cancelToken);
-				}				
+				}
 			}
 			else
 			{
