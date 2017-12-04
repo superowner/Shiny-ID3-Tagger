@@ -12,7 +12,6 @@
 // TODO: Add a new column for accumulated API duration which sums up all API durations per track to one big number
 // TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
 // TODO: Small blue border on mouse hover around row if already selected
-// TODO: Cancel button must cancel Add Files AND Start search, use cancelToken to check if pressed
 namespace GlobalNamespace
 {
 	using System;
@@ -33,6 +32,8 @@ namespace GlobalNamespace
 			// Refresh cancel token
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
+			
+			ActiveDGV = this.dataGridView1;
 			
 			Version version = new Version(Application.ProductVersion);
 			this.Text = Application.ProductName + " " + version.Major + "." + version.Minor;
