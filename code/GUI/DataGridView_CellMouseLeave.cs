@@ -28,7 +28,7 @@ namespace GlobalNamespace
 				else
 				{
 					Color foreColor = dgv.Rows[e.RowIndex].DefaultCellStyle.ForeColor;
-					dgv.Rows[e.RowIndex].DefaultCellStyle = null;	
+					dgv.Rows[e.RowIndex].DefaultCellStyle = null;
 					dgv.Rows[e.RowIndex].DefaultCellStyle.ForeColor = foreColor;
 				}
 			}		

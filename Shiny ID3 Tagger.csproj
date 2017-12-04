@@ -84,6 +84,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="code\AddFiles.cs" />
+    <Compile Include="code\GUI\DataGridView_CellPainting.cs" />
+    <Compile Include="code\GUI\Form_KeyDown.cs" />
     <Compile Include="code\GUI\MenuItemClick_AddFolder.cs" />
     <Compile Include="code\GUI\Button_AddFilesClick.cs" />
     <Compile Include="code\GUI\Button_CancelClick.cs" />
