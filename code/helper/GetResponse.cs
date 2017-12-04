@@ -9,10 +9,10 @@
 namespace GlobalNamespace
 {
 	using System;
-	using System.Collections.Generic;	
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Net;
-	using System.Net.Http;	
+	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
 
@@ -28,7 +28,7 @@ namespace GlobalNamespace
 			HttpRequestMessage requestBackup = CloneRequest(request);
 
 			string responseString = string.Empty;
-			
+
 			for (int i = MaxRetries; i >= 1; i--)
 			{
 				if (cancelToken.IsCancellationRequested)
@@ -49,24 +49,24 @@ namespace GlobalNamespace
 					{
 						requestContent = request.Content.ReadAsStringAsync().Result;
 					}
-					
+
 					// If debugging level is 3 (DEBUG) or higher, print out ALL requests
 					if (User.Settings["DebugLevel"] >= 3)
 					{
 						List<string> errorMsg = BuildLogMessage(request, requestContent, null);
 						this.PrintLogMessage("error", errorMsg.ToArray());
 					}
-					
+
 					response = await client.SendAsync(request, timeoutToken.Token);
 
-					// These are common errors ie when a queried track does not exist.Suppress them and return with an empty string					
+					// These are common errors ie when a queried track does not exist.Suppress them and return with an empty string
 					if ((request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "music.xboxlive.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.lololyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "coverartarchive.org" && response.StatusCode == HttpStatusCode.NotFound)
 						|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.InternalServerError)
-						|| (request.RequestUri.Host == "accounts.spotify.com" && response.StatusCode == HttpStatusCode.BadGateway))						
+						|| (request.RequestUri.Host == "accounts.spotify.com" && response.StatusCode == HttpStatusCode.BadGateway))
 					{
 						break;
 					}
@@ -89,10 +89,10 @@ namespace GlobalNamespace
 								List<string> errorMsg = new List<string> { "WARNING:  Response was unsuccessful! Retrying..." };
 								errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 								errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
-								
-								this.PrintLogMessage("error", errorMsg.ToArray());								
+
+								this.PrintLogMessage("error", errorMsg.ToArray());
 							}
-							
+
 							// Response was not successful. But it was also not a common error. And the user did not press cancel
 							// This must be an uncommon error. Continue with our retry logic
 							// But wait some seconds before you try it again to give the server time to recover
@@ -109,9 +109,9 @@ namespace GlobalNamespace
 						List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + Timeout + " seconds to respond! Retrying..." };
 						errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
 						errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
-						
-						this.PrintLogMessage("error", errorMsg.ToArray());								
-					}			
+
+						this.PrintLogMessage("error", errorMsg.ToArray());
+					}
 
 					break;
 				}
@@ -126,17 +126,17 @@ namespace GlobalNamespace
 						{
 							realerror = realerror.InnerException;
 						}
-						
+
 						List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured!" };
 						errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
 						errorMsg.Add("Message:  " + realerror.ToString().TrimEnd('\r', '\n'));
-							
-						this.PrintLogMessage("error", errorMsg.ToArray());	
-					}	
+
+						this.PrintLogMessage("error", errorMsg.ToArray());
+					}
 
 					break;
 				}
-				
+
 				await Task.Delay(2000);
 			}
 

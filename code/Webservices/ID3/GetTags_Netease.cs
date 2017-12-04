@@ -27,30 +27,30 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "Netease";
-			
+
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
+
 			// ###########################################################################
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
-			
-			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://music.163.com/api/search/pc/");			
+
+			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://music.163.com/api/search/pc/");
 			request.Headers.Add("Referer", "http://music.163.com");
 			request.Content = new FormUrlEncodedContent(new[]
 				{
 					new KeyValuePair<string, string>("s", searchTermEnc),
 					new KeyValuePair<string, string>("type", "1")
 				});
-			
+
 			string content = await this.GetResponse(client, request, cancelToken);
-			JObject data = JsonConvert.DeserializeObject<JObject>(content, this.GetJsonSettings());			
+			JObject data = JsonConvert.DeserializeObject<JObject>(content, this.GetJsonSettings());
 
 			if (data != null && data.SelectToken("result.songs") != null)
 			{
 				List<JToken> albums = (from songs in data.SelectToken("result.songs")
 					where (string)songs["album"]["type"] == "专辑"  // Chinese transation is "album", excludes EPs and compilations and stuff like that
 					select songs).ToList();
-				
+
 				if (albums.Count > 0)
 				{
 					o.Artist = (string)albums[0].SelectToken("artists[0].name");
@@ -68,7 +68,7 @@ namespace GlobalNamespace
 					if (long.TryParse(strMilliseconds, out milliseconds))
 					{
 						o.Date = epoch.AddMilliseconds(milliseconds).ToString();
-					}					
+					}
 				}
 			}
 

@@ -30,7 +30,7 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "Musicbrainz";
-			
+
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
 
@@ -39,12 +39,12 @@ namespace GlobalNamespace
 			// const string Server = "http://musicbrainz-mirror.eu:5000";
 			// const string Server = "http://musicbrainz.fin-alice.de:5000";
 			const string Server = "http://beta.musicbrainz.org/";							// info: http://www.tranquilbase.org/category/musicbrainz/
-			
+
 			const string InvalidChars = @"[#!(){}/;:\[\]\^\\\\&""]";
-			
+
 			string artistTemp = Regex.Replace(artist, InvalidChars, string.Empty);
 			string titleTemp = Regex.Replace(title, InvalidChars, string.Empty);
-			
+
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 			request.RequestUri = new Uri(Server + "/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistTemp + ") AND recording:(" + titleTemp  + ") AND status:official AND type:album&limit=10&fmt=json"));
@@ -91,7 +91,7 @@ namespace GlobalNamespace
 						onlyAlbumReleases.Add(curRelease);
 					}
 				}
-				
+
 				JToken bestRelease = onlyAlbumReleases.Any() ? onlyAlbumReleases[0] : allReleases[0];
 				foreach (JToken curRelease in onlyAlbumReleases)
 				{
@@ -102,7 +102,7 @@ namespace GlobalNamespace
 						bestRelease = curRelease;
 					}
 				}
-				
+
 				o.Title = (string)bestRelease["media"][0]["track"][0]["title"];
 				o.Album = (string)bestRelease["title"];
 				o.DiscCount = null;
@@ -113,7 +113,7 @@ namespace GlobalNamespace
 				// ###########################################################################
 				string releasegroupid = (string)bestRelease["release-group"]["id"];
 
-				request = new HttpRequestMessage();	
+				request = new HttpRequestMessage();
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 				request.RequestUri = new Uri(Server + "/ws/2/release-group/" + releasegroupid + "?inc=tags+ratings+artists&fmt=json");
 
@@ -142,10 +142,10 @@ namespace GlobalNamespace
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 				request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 				request.RequestUri = new Uri("http://coverartarchive.org/release-group/" + releasegroupid);
-				
+
 				string content3 = await this.GetResponse(client, request, cancelToken);
 				JObject data3 = JsonConvert.DeserializeObject<JObject>(content3, this.GetJsonSettings());
-				
+
 				if (data3 != null)
 				{
 					o.Cover = (string)data3.SelectToken("images[0].image");

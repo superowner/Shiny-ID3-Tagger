@@ -15,7 +15,7 @@ namespace GlobalNamespace
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
-	
+
 	public partial class Form1
 	{
 		// ###########################################################################
@@ -24,11 +24,11 @@ namespace GlobalNamespace
 			// Work starts, disable all buttons to prevent side effects when user clicks them despite an already running task
 			this.btnSearch.Enabled = false;
 			this.btnWrite.Enabled = false;
-			this.btnAddFiles.Enabled = false;			
+			this.btnAddFiles.Enabled = false;
 
 			// Return value which indicates if any new files were successfully added to datagridview1
 			bool newFiles = false;
-			
+
 			// If no files were passed through command line, open a new file dialog. files can be an empty array, so use any() to check this
 			if (files == null || !files.Any())
 			{
@@ -40,32 +40,32 @@ namespace GlobalNamespace
 				{
 					LastUsedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + @"\";
 				}
-			
+
 				dialog.InitialDirectory = LastUsedFolder;
-			
+
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
 					LastUsedFolder = Path.GetDirectoryName(dialog.FileNames[0]);
 					files = dialog.FileNames;
 				}
 			}
-			
+
 			// If anything was selected in the previous dialog, check if it was a folder and get it's mp3 files
 			if (files != null && files.Any())
-			{				
+			{
 				if (Directory.Exists(files[0]))
 				{
-					files = Directory.GetFiles(files[0], "*.mp3", SearchOption.AllDirectories);	
+					files = Directory.GetFiles(files[0], "*.mp3", SearchOption.AllDirectories);
 				}
 			}
-	
+
 			// If any files were retrieved previously (either directly selected, via command line or from a folder)
 			if (files != null)
 			{
 				this.progressBar1.Maximum = files.Length;
 				this.progressBar1.Value = 0;
 				this.progressBar1.Visible = true;
-			
+
 				// Loop through each file and add it to the first datagridview
 				foreach (string filepath in files)
 				{
@@ -73,7 +73,7 @@ namespace GlobalNamespace
 					{
 						break;
 					}
-					
+
 					// Start this in separate thread to decrease UI sluggishness
 					await Task.Run(() =>
 					{
@@ -81,26 +81,26 @@ namespace GlobalNamespace
 						bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
 							where row.Cells[this.filepath1.Index].Value.ToString() == filepath
 							select row).Any();
-			
+
 						// Check if the file is a valid mp3 file
 						if (this.IsValidMp3(filepath) && !rowAlreadyExists)
 						{
 							AddFileToTable(filepath);
 							newFiles = true;
 						}
-					});					
+					});
 
 					this.progressBar1.PerformStep();
 				}
 			}
-			
+
 			// Work finished, re-enable all buttons and hide progress bar
-			this.progressBar1.Visible = false;				
+			this.progressBar1.Visible = false;
 			this.btnSearch.Enabled = true;
 			this.btnWrite.Enabled = true;
-			this.btnAddFiles.Enabled = true;	
+			this.btnAddFiles.Enabled = true;
 
-			return newFiles;			
+			return newFiles;
 		}
 
 		// ###########################################################################
@@ -109,7 +109,7 @@ namespace GlobalNamespace
 		{
 			Id3 tagOld = new Id3();
 			tagOld.Filepath = filepath;
-			
+
 			TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", TagLib.ReadStyle.Average);
 			string filename = Path.GetFileNameWithoutExtension(filepath);
 
@@ -122,28 +122,28 @@ namespace GlobalNamespace
 				fileArtist = match.Groups["artist"].Value;
 				fileTitle = match.Groups["title"].Value;
 			}
-			
+
 			// Extract and set artist from ID3 tags
 			string tagArtist = null;
 			if (!string.IsNullOrWhiteSpace(tagFile.Tag.FirstPerformer))
 			{
 				tagArtist = tagFile.Tag.FirstPerformer;
 			}
-			
+
 			// Extract and set title from ID3 tags
 			string tagTitle = null;
 			if (!string.IsNullOrWhiteSpace(tagFile.Tag.Title))
 			{
 				tagTitle = tagFile.Tag.Title;
 			}
-			
+
 			// Case: artist and title from filename found, but no ID3 tags found
 			// Set artist from filename
 			if (fileArtist != null && tagArtist == null)
 			{
 				tagOld.Artist = fileArtist;
 			}
-			
+
 			// Set title from filename
 			if (fileTitle != null && tagTitle == null)
 			{
@@ -155,7 +155,7 @@ namespace GlobalNamespace
 			{
 				tagOld.Artist = tagArtist;
 			}
-			
+
 			if (fileTitle == null && tagTitle != null)
 			{
 				tagOld.Title = tagTitle;
@@ -167,31 +167,31 @@ namespace GlobalNamespace
 			{
 				if (User.Settings["PreferTags"])
 				{
-					tagOld.Artist = tagArtist;	
+					tagOld.Artist = tagArtist;
 				}
 				else
 				{
 					tagOld.Artist = fileArtist;
 				}
 			}
-			
+
 			// Select title according to user setting "PreferTags"
 			if (fileTitle != null && tagTitle != null)
 			{
 				if (User.Settings["PreferTags"])
 				{
-					tagOld.Title = tagTitle;	
+					tagOld.Title = tagTitle;
 				}
 				else
 				{
 					tagOld.Title = fileTitle;
 				}
 			}
-			
+
 			// Case: When both sources don't have a valid value, use the whole filename as fallback
 			tagOld.Artist = tagOld.Artist ?? filename;
-			tagOld.Title = tagOld.Title ?? filename;				
-			
+			tagOld.Title = tagOld.Title ?? filename;
+
 			// Read in existing ID3 tags from file
 			tagOld.Album = tagFile.Tag.Album;
 			tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : null;
@@ -202,7 +202,7 @@ namespace GlobalNamespace
 			tagOld.TrackNumber = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : null;
 			tagOld.Lyrics = tagFile.Tag.Lyrics;
 			tagOld.Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : null;
-			
+
 			// Show old tags in gridview panel
 			this.Invoke((MethodInvoker)delegate
 			{
@@ -225,7 +225,7 @@ namespace GlobalNamespace
 				this.MarkChange(lastRow, this.artist1.Index, tagArtist, tagOld.Artist, true);
 				this.MarkChange(lastRow, this.title1.Index, tagTitle, tagOld.Title, true);
 			});
-			
+
 			// Remove any locks on files
 			tagFile.Dispose();
 		}

@@ -28,17 +28,17 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "Musicgraph";
-			
+
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
+
 			// ###########################################################################
 			DataRow[] account = User.MgAccounts.Select("lastused = MIN(lastused)");
 			User.MgAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;
 
 			string artistEncoded = WebUtility.UrlEncode(artist);
 			string titleEncoded = WebUtility.UrlEncode(title);
-			
+
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account[0]["key"] + "&artist_name=" + artistEncoded + "&title=" + titleEncoded + "&limit=5");
 
@@ -79,7 +79,7 @@ namespace GlobalNamespace
 					o.Cover = null;
 				}
 			}
-			
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

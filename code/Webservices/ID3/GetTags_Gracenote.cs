@@ -27,14 +27,14 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "Gracenote (Sony)";
-			
+
 			Stopwatch sw = new Stopwatch();
-			sw.Start();			
-			
+			sw.Start();
+
 			// ###########################################################################
 			string artistTemp = Regex.Replace(artist, "&(?!(amp|apos|quot|lt|gt);)", "&amp;");
 			string titleTemp = Regex.Replace(title, "&(?!(amp|apos|quot|lt|gt);)", "&amp;");
-			
+
 			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://c123.web.cddbp.net/webapi/xml/1.0/");
 			request.Content = new StringContent(@"
 					<QUERIES>
@@ -58,7 +58,7 @@ namespace GlobalNamespace
 			JObject data = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content), this.GetJsonSettings());
 
 			if (data != null && data.SelectToken("RESPONSES.RESPONSE") != null)
-			{				
+			{
 				if (data != null && data.SelectToken("RESPONSES.RESPONSE") != null)
 				{
 					o.Artist = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.ARTIST");
@@ -71,9 +71,9 @@ namespace GlobalNamespace
 					o.TrackCount = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.TRACK_COUNT");
 					o.TrackNumber = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.MATCHED_TRACK_NUM");
 					o.Cover = (string)data.SelectToken("RESPONSES.RESPONSE.ALBUM.URL.#text");
-				}	
+				}
 			}
-			
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

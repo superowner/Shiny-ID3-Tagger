@@ -29,7 +29,7 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "Decibel (Quantone Music)";
-			
+
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
 

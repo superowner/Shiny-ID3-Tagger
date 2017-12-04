@@ -31,7 +31,7 @@ namespace GlobalNamespace
 		{
 			this.btnAddFiles.Enabled = false;
 			this.btnSearch.Enabled = false;
-			this.btnWrite.Enabled = false;			
+			this.btnWrite.Enabled = false;
 			this.progressBar1.Visible = true;
 
 			HttpClient client = InitiateHttpClient();
@@ -42,12 +42,12 @@ namespace GlobalNamespace
 				string filepath = (string)row.Cells[this.filepath1.Index].Value;
 				this.progressBar1.Maximum = this.dataGridView1.Rows.Count;
 				this.progressBar1.Value = 0;
-				
+
 				// Taglib does not convert ID3v2.4 encoded frames(UTF-8) to ID3v2.3 encoding (UTF-16)
 				// Even with "ForceDefaultEncoding = true". The workaround is to clear and rebuild all tags from scratch
 				TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average);
 				TagLib.Id3v2.Tag oldId3v2 = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
-				
+
 				// ###########################################################################
 				// Clear all tags and save mp3 file without any tags
 				tagFile.RemoveTags(TagTypes.AllTags);
@@ -64,7 +64,7 @@ namespace GlobalNamespace
 						};
 						this.PrintLogMessage("error", errorMsg);
 					}
-										
+
 					continue;
 				}
 
@@ -74,10 +74,10 @@ namespace GlobalNamespace
 
 				tagFile.RemoveTags(TagTypes.Id3v1);
 				id3v2.Version = 3;
-								
+
 				string[] defaultFrames = User.Settings["DefaultFrames"].Split(',');
 				string[] userFrames = User.Settings["UserFrames"].Split(',');
-			
+
 				IEnumerable<Frame> oldFrameList = oldId3v2.GetFrames<Frame>();
 				foreach (Frame frm in oldFrameList)
 				{
@@ -89,12 +89,12 @@ namespace GlobalNamespace
 							string frameDesc = ((UserTextInformationFrame)frm).Description;
 							if (userFrames.Contains(frameDesc))
 							{
-								id3v2.AddFrame(frm);	
+								id3v2.AddFrame(frm);
 							}
 							else
 							{
 								string message = string.Format("{0,-100}{1}", "Tag removed: " + frameDesc, "file: \"" + filepath + "\"");
-								this.PrintLogMessage("write", new[] { message });								
+								this.PrintLogMessage("write", new[] { message });
 							}
 						}
 						else
@@ -108,11 +108,11 @@ namespace GlobalNamespace
 						this.PrintLogMessage("write", new[] { message });
 					}
 				}
-				
+
 				// ###########################################################################
 				// Write tags (artist, title, album, genre, date, disc, track, lyrics) to file
 				id3v2 = this.WriteTags(tagFile, row, id3v2);
-				
+
 				// ###########################################################################
 				if (User.Settings["OverwriteImage"] || !tagFile.Tag.Pictures.Any() || tagFile.Tag.Pictures[0].Data.Count == 0)
 				{
@@ -131,8 +131,8 @@ namespace GlobalNamespace
 						if (response.Content.Headers.ContentType.ToString().StartsWith("image/", StringComparison.OrdinalIgnoreCase))
 						{
 							string message = string.Format("{0,-100}{1}", "Picture source: " + request.RequestUri.Authority, "file: \"" + filepath + "\"");
-							this.PrintLogMessage("write", new[] { message });							
-							
+							this.PrintLogMessage("write", new[] { message });
+
 							MemoryStream stream = (MemoryStream)await response.Content.ReadAsStreamAsync();
 							Image image = Image.FromStream(stream);
 							stream.Position = 0;
@@ -195,7 +195,7 @@ namespace GlobalNamespace
 					request.Dispose();
 					response.Dispose();
 				}
-				
+
 				// ###########################################################################
 				Task.WaitAll();
 
@@ -219,7 +219,7 @@ namespace GlobalNamespace
 			this.btnSearch.Enabled = true;
 			this.btnWrite.Enabled = true;
 		}
-		
+
 		// ###########################################################################
 		private TagLib.Id3v2.Tag WriteTags(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag id3v2)
 		{
@@ -231,7 +231,7 @@ namespace GlobalNamespace
 				string message = string.Format(cultEng, "{0,-100}{1}", "Artist: " + newArtist, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TPE1");
-				id3v2.SetTextFrame("TPE1", newArtist);	
+				id3v2.SetTextFrame("TPE1", newArtist);
 			}
 
 			string oldTitle = tagFile.Tag.Title;
@@ -241,7 +241,7 @@ namespace GlobalNamespace
 				string message = string.Format(cultEng, "{0,-100}{1}", "Title: " + newTitle, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TIT2");
-				id3v2.SetTextFrame("TIT2", newTitle);	
+				id3v2.SetTextFrame("TIT2", newTitle);
 			}
 
 			string oldAlbum = tagFile.Tag.Album;
@@ -251,7 +251,7 @@ namespace GlobalNamespace
 				string message = string.Format(cultEng, "{0,-100}{1}", "Album: " + newAlbum, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TALB");
-				id3v2.SetTextFrame("TALB", newAlbum);	
+				id3v2.SetTextFrame("TALB", newAlbum);
 			}
 
 			string oldGenre = tagFile.Tag.FirstGenre;
@@ -261,7 +261,7 @@ namespace GlobalNamespace
 				string message = string.Format(cultEng, "{0,-100}{1}", "Genre: " + newGenre, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage("write", new[] { message });
 				id3v2.RemoveFrames("TCON");
-				id3v2.SetTextFrame("TCON", newGenre);	
+				id3v2.SetTextFrame("TCON", newGenre);
 			}
 
 			string oldDiscnumber = tagFile.Tag.Disc.ToString(cultEng);
@@ -270,7 +270,7 @@ namespace GlobalNamespace
 			string newDisccount = (string)row.Cells[this.disccount1.Index].Value;
 			if ((oldDiscnumber != newDiscnumber && !string.IsNullOrWhiteSpace(newDiscnumber)) ||
 				(oldDisccount  != newDisccount  && !string.IsNullOrWhiteSpace(newDisccount)))
-			{				
+			{
 				newDiscnumber = string.IsNullOrWhiteSpace(newDiscnumber) ? oldDiscnumber : newDiscnumber;
 				newDisccount = string.IsNullOrWhiteSpace(newDisccount) ? oldDisccount : newDisccount;
 				string message = string.Format(cultEng, "{0,-100}{1}", "Disc: " + newDiscnumber + "/" + newDisccount, "file: \"" + tagFile.Name + "\"");
@@ -278,14 +278,14 @@ namespace GlobalNamespace
 				id3v2.RemoveFrames("TPOS");
 				id3v2.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 			}
-			
+
 			string oldTracknumber = tagFile.Tag.Track.ToString(cultEng);
 			string oldTrackcount = tagFile.Tag.TrackCount.ToString(cultEng);
 			string newTracknumber = (string)row.Cells[this.tracknumber1.Index].Value;
 			string newTrackcount = (string)row.Cells[this.trackcount1.Index].Value;
 			if ((oldTracknumber != newTracknumber && !string.IsNullOrWhiteSpace(newTracknumber)) ||
 				(oldTrackcount  != newTrackcount  && !string.IsNullOrWhiteSpace(newTrackcount)))
-			{				
+			{
 				newTracknumber = string.IsNullOrWhiteSpace(newTracknumber) ? oldTracknumber : newTracknumber;
 				newTrackcount = string.IsNullOrWhiteSpace(newTrackcount) ? oldTrackcount : newTrackcount;
 				string message = string.Format(cultEng, "{0,-100}{1}", "Track: " + newTracknumber + "/" + newTrackcount, "file: \"" + tagFile.Name + "\"");
@@ -309,7 +309,7 @@ namespace GlobalNamespace
 				id3v2.RemoveFrames("TIME");
 				id3v2.SetNumberFrame("TYER", (uint)this.ConvertStringToDate(newDate).Year, 0);
 			}
-							
+
 			// To set "eng" as language you have to remove and add the whole frame back again
 			// Otherwise taglib sets system default language e.g "deu" or "esp" as lyrics language if USLT tag already existed
 			string oldLyrics = tagFile.Tag.Lyrics;
@@ -325,14 +325,14 @@ namespace GlobalNamespace
 				id3v2.RemoveFrames("USLT");
 				id3v2.AddFrame(frmUSLT);
 			}
-			
+
 			return id3v2;
 		}
-		
+
 		// ###########################################################################
 		private async Task<bool> SaveAndDisposeFile(TagLib.File tagFile)
 		{
-			Action<Exception> errorHandler = (ex) => 
+			Action<Exception> errorHandler = (ex) =>
 			{
 				// file could not be accessed, read or written
 				if (User.Settings["DebugLevel"] >= 1)
@@ -346,11 +346,11 @@ namespace GlobalNamespace
 					this.PrintLogMessage("error", errorMsg);
 				}
 			};
-			
+
 			const int WriteDelay = 50;
 			const int MaxRetries = 3;
 			DateTime lastWriteTime = default(DateTime);
-			
+
 			// Preserve LastWriteTime
 			bool successWrite = false;
 			for (int retry = 0; retry < MaxRetries; retry++)
@@ -365,11 +365,11 @@ namespace GlobalNamespace
 				{
 					errorHandler(ex);
 				}
-				
+
 				await Task.Delay(WriteDelay);
 			}
 
-			// Save mp3 tags (lastwritetime will be modified) 
+			// Save mp3 tags (lastwritetime will be modified)
 			if (successWrite)
 			{
 				successWrite = false;
@@ -385,14 +385,14 @@ namespace GlobalNamespace
 					{
 						errorHandler(ex);
 					}
-					
+
 					await Task.Delay(WriteDelay);
-				}	
+				}
 			}
-			
+
 			// Change lastwritetime to original
 			if (successWrite)
-			{			
+			{
 				successWrite = false;
 				for (int retry = 0; retry < MaxRetries; retry++)
 				{
@@ -406,19 +406,19 @@ namespace GlobalNamespace
 					{
 						errorHandler(ex);
 					}
-					
+
 					await Task.Delay(WriteDelay);
 				}
 			}
-		
+
 			tagFile.Dispose();
 
 			if (successWrite)
 			{
 				return true;
 			}
-			
-			return false;			
+
+			return false;
 		}
 	}
 }

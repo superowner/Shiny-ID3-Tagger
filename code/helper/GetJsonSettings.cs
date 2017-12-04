@@ -27,11 +27,11 @@ namespace GlobalNamespace
 						"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
 					};
 					this.PrintLogMessage("error", errorMsg);
-				}		
+				}
 			};
-			
+
 			jsonSettings.Formatting = Formatting.Indented;
-			
+
 			return jsonSettings;
 		}
 	}

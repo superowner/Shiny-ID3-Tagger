@@ -20,7 +20,7 @@ namespace GlobalNamespace
 		private void Popup_ShowExplorerClick(object sender, EventArgs e)
 		{
 			string filePath = ActiveDGV.CurrentRow.Cells[this.filepath1.Index].Value.ToString();
-			
+
 			if (File.Exists(filePath))
 			{
 				string argument = "/select, \"" + filePath + "\"";

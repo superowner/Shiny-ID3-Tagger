@@ -11,7 +11,7 @@ namespace GlobalNamespace
 	using System;
 	using System.IO;
 	using System.Linq;
-	
+
 	public partial class Form1
 	{
 		private bool IsValidMp3(string filepath)
@@ -50,7 +50,7 @@ namespace GlobalNamespace
 					};
 					this.PrintLogMessage("error", errorMsg);
 				}
-				
+
 				return false;
 			}
 			catch (FileNotFoundException)
@@ -66,7 +66,7 @@ namespace GlobalNamespace
 					this.PrintLogMessage("error", errorMsg);
 				}
 
-				return false;				
+				return false;
 			}
 			catch (IOException)
 			{
@@ -80,7 +80,7 @@ namespace GlobalNamespace
 					};
 					this.PrintLogMessage("error", errorMsg);
 				}
-								
+
 				return false;
 			}
 		}

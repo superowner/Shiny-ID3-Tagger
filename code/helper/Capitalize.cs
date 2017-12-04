@@ -33,7 +33,7 @@ namespace GlobalNamespace
 			"a", "an", "the", "and", "but", "or", "nor", "at", "by", "for", "from", "in",
 			"into", "of", "off", "on", "onto", "out", "over", "to", "up", "with", "as"
 		};
-						
+
 		private static string Capitalize(string str)
 		{
 			// If string is not empty and user setting "AutoCapitalize" is set to true
@@ -47,11 +47,11 @@ namespace GlobalNamespace
 
 				int firstIndex = words[0].Index;
 				int lastIndex = words[words.Count - 1].Index;
-				
+
 				foreach (Match w in words)
 				{
 					string word = w.Value;
-					
+
 					// Search special words and lowercase them
 					// "and" => stays "and"			"And" => goes "and"		"AND" => stays "AND"
 					// But ignore the first/last word. They must always be capitalized

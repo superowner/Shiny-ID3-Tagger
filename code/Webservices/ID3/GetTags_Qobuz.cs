@@ -28,13 +28,13 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "Qobuz";
-			
+
 			Stopwatch sw = new Stopwatch();
-			sw.Start();			
-			
+			sw.Start();
+
 			// ###########################################################################
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
-			
+
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.RequestUri = new Uri("http://www.qobuz.com/api.json/0.2/track/search?limit=1&app_id=" + User.Accounts["QoAppId"] + "&query=" + searchTermEnc);
 
@@ -52,7 +52,7 @@ namespace GlobalNamespace
 				o.TrackCount = (string)data.SelectToken("tracks.items[0].album.tracks_count");
 				o.TrackNumber = (string)data.SelectToken("tracks.items[0].track_number");
 				o.Cover = (string)data.SelectToken("tracks.items[0].album.image.large");
-				
+
 				long seconds;
 				string strSeconds = (string)data.SelectToken("tracks.items[0].album.released_at");
 				if (long.TryParse(strSeconds, out seconds))
@@ -60,7 +60,7 @@ namespace GlobalNamespace
 					o.Date = epoch.AddSeconds(seconds).ToString();
 				}
 			}
-			
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

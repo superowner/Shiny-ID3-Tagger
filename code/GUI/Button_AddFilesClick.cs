@@ -10,7 +10,7 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Linq;
-	using System.Threading;	
+	using System.Threading;
 	using System.Windows.Forms;
 
 	public partial class Form1 : Form
@@ -20,10 +20,10 @@ namespace GlobalNamespace
 			// Refresh cancel token
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
-			
+
 			// Add new files
 			bool newFiles = await this.AddFiles(null, cancelToken);
-			
+
 			// If the setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
 			if (User.Settings["AutoSearch"] && newFiles && !cancelToken.IsCancellationRequested)
 			{

@@ -19,9 +19,9 @@ namespace GlobalNamespace
 		{
 			DataGridView dgv = (DataGridView)sender;
 			if (e.RowIndex >= 0)
-			{				
+			{
 				dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(229, 243, 255);
-			}	
-		}	
+			}
+		}
 	}
 }

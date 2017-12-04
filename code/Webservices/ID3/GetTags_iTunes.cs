@@ -25,13 +25,13 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "iTunes";
-			
+
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
+
 			// ###########################################################################
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
-			
+
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.RequestUri = new Uri("http://itunes.apple.com/search?term=" + searchTermEnc + "&media=music&limit=1");
 
@@ -55,7 +55,7 @@ namespace GlobalNamespace
 					o.Cover = o.Cover.Replace("100x100", "600x600");
 				}
 			}
-			
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

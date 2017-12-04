@@ -20,21 +20,21 @@ namespace GlobalNamespace
 	using System.Threading.Tasks;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
-	
+
 	public partial class Form1
 	{
 		private async Task<Id3> GetTags_LastFm(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3();
 			o.Service = "Last.fm";
-			
+
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
+
 			// ###########################################################################
 			string artistEncoded = WebUtility.UrlEncode(artist);
-			string titleEncoded = WebUtility.UrlEncode(title);			
-			
+			string titleEncoded = WebUtility.UrlEncode(title);
+
 			HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://ws.audioscrobbler.com/2.0/");
 			request.Headers.ExpectContinue = false;
 			request.Content = new StringContent("api_key=" + User.Accounts["LaApiKey"] +
@@ -63,11 +63,11 @@ namespace GlobalNamespace
 				JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 
 				if (data2 != null && data2.SelectToken("album") != null)
-				{					
+				{
 					o.Date = null;	// "releasedate" property is broken on lastfm's site. They said they eventually fix this in 2018 with a new API (https://getsatisfaction.com/lastfm/topics/album-getinfo-is-missing-releasedate)
 					o.DiscCount = null;
 					o.DiscNumber = null;
-					o.TrackCount = (string)data2.SelectToken("album.tracks.track[-1:].@attr.rank");					
+					o.TrackCount = (string)data2.SelectToken("album.tracks.track[-1:].@attr.rank");
 					o.Cover = (string)data2.SelectToken("album.image[-1:].#text");
 
 					if (o.Cover != null)
@@ -76,7 +76,7 @@ namespace GlobalNamespace
 					}
 				}
 			}
-			
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

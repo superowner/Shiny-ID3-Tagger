@@ -15,7 +15,7 @@ namespace GlobalNamespace
 	public partial class Form1 : Form
 	{
 		private void DataGridView_KeyPress(object sender, KeyPressEventArgs e)
-		{			
+		{
 			if (e.KeyChar == (char)Keys.Escape)
 			{
 				DataGridView dgv = (DataGridView)sender;

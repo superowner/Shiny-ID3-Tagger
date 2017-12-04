@@ -40,7 +40,7 @@ namespace GlobalNamespace
 						this.rtbErrorLog.AppendText(message + Environment.NewLine);
 						this.rtbErrorLog.ScrollToCaret();
 						this.tabControl2.SelectTab(2);
-						break;						
+						break;
 				}
 			}
 			catch (ObjectDisposedException)

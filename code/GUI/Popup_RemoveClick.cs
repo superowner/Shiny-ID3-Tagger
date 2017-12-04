@@ -16,7 +16,7 @@ namespace GlobalNamespace
 	{
 		private void Popup_RemoveClick(object sender, EventArgs e)
 		{
-			foreach (DataGridViewRow row in ActiveDGV.SelectedRows) 
+			foreach (DataGridViewRow row in ActiveDGV.SelectedRows)
 			{
 				ActiveDGV.Rows.Remove(row);
 			}

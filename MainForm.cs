@@ -16,7 +16,7 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Linq;
-	using System.Threading;	
+	using System.Threading;
 	using System.Windows.Forms;
 
 	public partial class Form1 : Form
@@ -25,25 +25,25 @@ namespace GlobalNamespace
 		{
 			this.InitializeComponent();
 		}
-		
+
 		// ###########################################################################
 		internal async void Form1Shown(string[] args)
-		{						
+		{
 			// Refresh cancel token
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
-			
+
 			ActiveDGV = this.dataGridView1;
-			
+
 			Version version = new Version(Application.ProductVersion);
 			this.Text = Application.ProductName + " " + version.Major + "." + version.Minor;
-			
+
 			bool successReadingVariables = this.ReadAccountCredentials();
 			if (successReadingVariables)
 			{
 				// Add new files
 				bool newFiles = await this.AddFiles(args, cancelToken);
-				
+
 				// If the setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
 				if (User.Settings["AutoSearch"] && newFiles && !cancelToken.IsCancellationRequested)
 				{
@@ -59,7 +59,7 @@ namespace GlobalNamespace
 					MessageBoxIcon.Question,
 					MessageBoxDefaultButton.Button1,
 					new MessageBoxOptions());
-				
+
 				Application.Exit();
 			}
 		}

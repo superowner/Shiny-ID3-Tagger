@@ -18,7 +18,7 @@ namespace GlobalNamespace
 	using System;
 	using System.Diagnostics;
 	using System.Linq;
-	using System.Net.Http;	
+	using System.Net.Http;
 	using System.Security.Cryptography;
 	using System.Text;
 	using System.Threading;
@@ -31,7 +31,7 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private static string CreateSignature(string server, string parameters)
 		{
-			string stringToSign = "GET" + "\n" + server + "\n" + "/onca/xml" + "\n" + parameters;		
+			string stringToSign = "GET" + "\n" + server + "\n" + "/onca/xml" + "\n" + parameters;
 			byte[] bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
 			HMACSHA256 hmacSha = new HMACSHA256();
 			hmacSha.Key = Encoding.UTF8.GetBytes(User.Accounts["AmSecretKey"]);
@@ -40,7 +40,7 @@ namespace GlobalNamespace
 			string sigEncoded = Uri.EscapeDataString(sigBase64);
 			return sigEncoded;
 		}
-		
+
 		private async Task<Id3> GetTags_Amazon(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3();
@@ -48,30 +48,30 @@ namespace GlobalNamespace
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
+
 			// ###########################################################################
 			const string Server = "webservices.amazon.com";
-			
+
 			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 			timestamp = Uri.EscapeDataString(timestamp);
-			
+
 			// Replace is needed according to official C# example for product advertising API
 			string artistEncoded = Uri.EscapeDataString(artist).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
 			string titleEncoded = Uri.EscapeDataString(title).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
-			
+
 			// Initial search
 			string parameters = "AWSAccessKeyId=" + User.Accounts["AmAccessKey"] +
 								"&AssociateTag=" + User.Accounts["AmAssociateTag"] +
 								"&Keywords=" + artistEncoded +
 								"&Operation=ItemSearch" +
 								"&RelationshipType=Tracks" +
-								"&ResponseGroup=ItemAttributes%2CRelatedItems" +	
+								"&ResponseGroup=ItemAttributes%2CRelatedItems" +
 								"&SearchIndex=MP3Downloads" +
 								"&Service=AWSECommerceService" +
 								"&Timestamp=" + timestamp +
 								"&Title=" + titleEncoded +
 								"&Version=2013-08-01";
-			
+
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 			request.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
@@ -80,9 +80,9 @@ namespace GlobalNamespace
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content1), this.GetJsonSettings());
 
 			// 1 request per second is ok, after a burst you get throttled to 1 request/10s. Therefore this delay of 1second after every reqiest
-			// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines			
+			// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines
 			Task wait = Task.Delay(1000);
-			
+
 			if (data1 != null && data1.SelectToken("ItemSearchResponse.Items.Item") != null)
 			{
 				JToken item = null;
@@ -97,7 +97,7 @@ namespace GlobalNamespace
 						item = data1.SelectToken("ItemSearchResponse.Items.Item");
 					}
 				}
-				
+
 				o.Artist = (string)item.SelectToken("ItemAttributes.Creator.#text");
 				o.Title = (string)item.SelectToken("ItemAttributes.Title");
 				o.Album = (string)item.SelectToken("RelatedItems.RelatedItem.Item.ItemAttributes.Title");
@@ -112,9 +112,9 @@ namespace GlobalNamespace
 					o.Genre = o.Genre.Replace("-music", string.Empty);
 					o.Genre = o.Genre.Replace("-", " ");
 				}
-				
+
 				// ###########################################################################
-				// Get related items from album (this shows up all tracks on the album, add 'large' as respondgroup to include cover links)				
+				// Get related items from album (this shows up all tracks on the album, add 'large' as respondgroup to include cover links)
 				string asin = (string)item.SelectToken("RelatedItems.RelatedItem.Item.ASIN");
 				if (asin != null)
 				{
@@ -129,20 +129,20 @@ namespace GlobalNamespace
 								"&Service=AWSECommerceService" +
 								"&Timestamp=" + timestamp +
 								"&Version=2013-08-01";
-	
+
 					request = new HttpRequestMessage();
 					request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 					request.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
-	
+
 					string content2 = await this.GetResponse(client, request, cancelToken);
 					JObject data2 = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content2), this.GetJsonSettings());
-					
+
 					wait = Task.Delay(1000);
-			
+
 					if (data2 != null)
 					{
 						o.TrackCount = (string)data2.SelectToken("ItemLookupResponse.Items.Item.RelatedItems.RelatedItemCount");
-						o.Cover = (string)data2.SelectToken("ItemLookupResponse.Items.Item.ImageSets.ImageSet.HiResImage.URL");						
+						o.Cover = (string)data2.SelectToken("ItemLookupResponse.Items.Item.ImageSets.ImageSet.HiResImage.URL");
 					}
 				}
 			}

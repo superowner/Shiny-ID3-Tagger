@@ -11,7 +11,7 @@ namespace GlobalNamespace
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Net.Http;	
+	using System.Net.Http;
 	using System.Text.RegularExpressions;
 
 	public partial class Form1
@@ -22,11 +22,11 @@ namespace GlobalNamespace
 			List<string> errorMsg = new List<string>();
 			errorMsg.Add("Request:  " + request.Method + " " + request.RequestUri.OriginalString);
 
-			foreach (var element in request.Headers) 
+			foreach (var element in request.Headers)
 			{
 				errorMsg.Add("Header:   " + element.Key + ": " + string.Join(" ", element.Value));
 			}
-			
+
 			if (!string.IsNullOrEmpty(requestContent))
 			{
 				errorMsg.Add("Body:     " + requestContent);
@@ -50,13 +50,13 @@ namespace GlobalNamespace
 				if (match.Success)
 				{
 					responseContent = match.Groups["text"].Value.Trim();
-				}						
+				}
 
 				// Show the complete response including HTML tags OR the extracted body/message if extracting was successful
 				errorMsg.Add("Code:     " + response.ReasonPhrase + ": " + (int)response.StatusCode);
 				errorMsg.Add("Response: " + responseContent);
 			}
-			
+
 			return errorMsg;
 		}
 	}

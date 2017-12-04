@@ -28,20 +28,20 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "Musixmatch";
-			
+
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
+
 			// ###########################################################################
 			DataRow[] account = User.MmAccounts.Select("lastused = MIN(lastused)");
-			User.MmAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;			
-				
+			User.MmAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;
+
 			string artistEncoded = WebUtility.UrlEncode(artist);
 			string titleEncoded = WebUtility.UrlEncode(title);
-			
+
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&page_size=1&apikey=" + (string)account[0]["key"]);
-			
+
 			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
@@ -51,9 +51,9 @@ namespace GlobalNamespace
 				o.Title = (string)data1.SelectToken("message.body.track_list[0].track.track_name");
 				o.Album = (string)data1.SelectToken("message.body.track_list[0].track.album_name");
 				o.Genre = (string)data1.SelectToken("message.body.track_list[0].track.primary_genres.music_genre_list[0].music_genre.music_genre_name");
-				
+
 				string albumid = (string)data1.SelectToken("message.body.track_list[0].track.album_id");
-				
+
 				// ###########################################################################
 				request = new HttpRequestMessage();
 				request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account[0]["key"]);
@@ -63,7 +63,7 @@ namespace GlobalNamespace
 
 				if (data2 != null && data2.SelectToken("message.body.album") != null)
 				{
-					o.Date = (string)data2.SelectToken("message.body.album.album_release_date");					
+					o.Date = (string)data2.SelectToken("message.body.album.album_release_date");
 					o.TrackCount = (string)data2.SelectToken("message.body.album.album_track_count");
 					o.DiscCount = null;
 					o.DiscNumber = null;
@@ -71,7 +71,7 @@ namespace GlobalNamespace
 					// Musixmatch (when using "album.get" instead of "album.tracks.get" method) provides several fields for cover URLs. But they are never used/filled with data
 					o.Cover = null;
 				}
-				
+
 				// ###########################################################################
 				request = new HttpRequestMessage();
 				request.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account[0]["key"]);
@@ -86,10 +86,10 @@ namespace GlobalNamespace
 					if (temp != -1)
 					{
 						o.TrackNumber = (temp + 1).ToString();
-					}					
+					}
 				}
 			}
-			
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

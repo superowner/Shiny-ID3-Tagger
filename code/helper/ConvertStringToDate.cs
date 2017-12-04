@@ -31,7 +31,7 @@ namespace GlobalNamespace
 					"MM/dd/yyyy HH:mm:ss",
 					"dd.MM.yyyy HH:mm:ss"
 				};
-				
+
 		private DateTime ConvertStringToDate(string dateString)
 		{
 			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
@@ -50,7 +50,7 @@ namespace GlobalNamespace
 					}
 				}
 			}
-			
+
 			return default(DateTime);
 		}
 	}

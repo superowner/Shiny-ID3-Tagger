@@ -23,7 +23,7 @@ namespace GlobalNamespace
 			this.rtbSearchLog.Clear();
 			this.rtbWriteLog.Clear();
 			this.rtbErrorLog.Clear();
-			
+
 			this.btnCancel.Visible = false;
 			this.dataGridView1.Rows.Clear();
 			this.dataGridView2.Rows.Clear();

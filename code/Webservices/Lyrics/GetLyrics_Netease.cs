@@ -13,7 +13,7 @@ namespace GlobalNamespace
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
-	using System.Net;	
+	using System.Net;
 	using System.Net.Http;
 	using System.Text.RegularExpressions;
 	using System.Threading;
@@ -30,11 +30,11 @@ namespace GlobalNamespace
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
-			// ###########################################################################				
+
+			// ###########################################################################
 			if (tagNew.Artist != null && tagNew.Title != null)
 			{
-				HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://music.163.com/api/search/get/");			
+				HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://music.163.com/api/search/get/");
 				request.Headers.Add("referer", "http://music.163.com");
 				request.Headers.Add("Cookie", "appver=2.0.2");
 				request.Content = new FormUrlEncodedContent(new[]
@@ -42,9 +42,9 @@ namespace GlobalNamespace
 						new KeyValuePair<string, string>("s", WebUtility.UrlEncode(tagNew.Artist + " - " + tagNew.Title)),
 						new KeyValuePair<string, string>("type", "1")
 					});
-				
+
 				string content1 = await this.GetResponse(client, request, cancelToken);
-				JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());	
+				JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
 				if (data1 != null)
 				{
@@ -52,24 +52,24 @@ namespace GlobalNamespace
 					JToken song = (from track in data1.SelectTokens("result.songs[*]")
 					               where string.Equals((string)track.SelectToken("artists[0].name"), tagNew.Artist, StringComparison.OrdinalIgnoreCase)
 					               where string.Equals((string)track.SelectToken("name"), tagNew.Title, StringComparison.OrdinalIgnoreCase)
-					               select track).FirstOrDefault();					
-						
+					               select track).FirstOrDefault();
+
 					if (song != null && song.SelectToken("id") != null)
 					{
 						string songid = (string)song.SelectToken("id");
-						
+
 						request = new HttpRequestMessage();
 						request.Headers.Add("referer", "http://music.163.com");
 						request.Headers.Add("Cookie", "appver=2.0.2");
 						request.RequestUri = new Uri("http://music.163.com/api/song/lyric/?id=" + songid + "&lv=-1&kv=-1&tv=-1");
-						
+
 						string content2 = await this.GetResponse(client, request, cancelToken);
 						JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
-						
+
 						if (data2 != null && data2.SelectToken("lrc.lyric") != null)
 						{
 							string rawLyrics = (string)data2.SelectToken("lrc.lyric");
-							
+
 							// Sanitize lyrics
 							rawLyrics = Regex.Replace(rawLyrics, @"[\r\n]\[x-trans\].*", string.Empty);					// Remove [x-trans] lines (chinese translation)
 							rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);	// Remove timestamps like [01:01:123] or [01:01]
@@ -78,18 +78,18 @@ namespace GlobalNamespace
 							rawLyrics = Regex.Replace(rawLyrics, @"<\d+>", string.Empty);								// Remove angle brackets <123>. No idea for what they are. Example track is "ABBA - Gimme Gimme Gimme"
 							rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));					// Remove leading or ending white space per line
 							rawLyrics = rawLyrics.Trim();																// Remove leading or ending line breaks and white space
-							
+
 							if (rawLyrics.Length > 1)
 							{
 								o.Lyrics = rawLyrics;
 							}
 						}
 					}
-				}		
-				
+				}
+
 				request.Dispose();
 			}
-			
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

@@ -10,7 +10,7 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Linq;
-	
+
 	public partial class Form1
 	{
 		private static string IncreaseAlbumCounter(object service, object webserviceAlbum, string majorityAlbum)
@@ -19,7 +19,7 @@ namespace GlobalNamespace
 			{
 				albumHits.Add(service.ToString(), 0);
 			}
-			
+
 			if (webserviceAlbum != null && majorityAlbum != null)
 			{
 				if (Strip(webserviceAlbum.ToString().ToLower(cultEng)) == Strip(majorityAlbum.ToLower(cultEng)))
@@ -27,9 +27,9 @@ namespace GlobalNamespace
 					albumHits[service.ToString()] += 1;
 				}
 			}
-			
+
 			string result = albumHits[service.ToString()].ToString(cultEng);
-			
+
 			return result;
 		}
 	}

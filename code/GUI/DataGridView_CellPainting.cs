@@ -25,7 +25,7 @@ namespace GlobalNamespace
 				Pen selectedPen = new Pen(Color.FromArgb(255, 153, 209, 255), 1);
 				Pen gridlinePen = new Pen(Color.FromArgb(255, 227, 227, 227), 1);
 				Pen backGroundPen = new Pen(Color.FromArgb(255, 205, 232, 255), 1);
-					
+
 				// Cell coordinates
 				var topLeftPoint = new Point(e.CellBounds.Left, e.CellBounds.Top);
 				var topRightPoint = new Point(e.CellBounds.Right - 1, e.CellBounds.Top);
@@ -37,28 +37,28 @@ namespace GlobalNamespace
 				{
 					// Paint all parts except borders.
 					e.Paint(e.ClipBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);
-					
+
 					// Hide left border through using background color
 					e.Graphics.DrawLine(backGroundPen, topLeftPoint, bottomleftPoint);
-					
+
 					// Paint right border with grid color
 					e.Graphics.DrawLine(gridlinePen, topRightPoint, bottomRightPoint);
-					
+
 					// Paint top border slighly darker as background color
 					e.Graphics.DrawLine(selectedPen, topLeftPoint, topRightPoint);
-					
+
 					// Paint bottom border slighly darker as background color
 					e.Graphics.DrawLine(selectedPen, bottomleftPoint, bottomRightPoint);
-					
+
 					// Handled painting for this cell, Stop default rendering
 					e.Handled = true;
 				}
-					
+
 				// Release all pen objects to free up memory
 				selectedPen.Dispose();
 				gridlinePen.Dispose();
 				backGroundPen.Dispose();
-			}	
+			}
 		}
 	}
 }

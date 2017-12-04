@@ -28,13 +28,13 @@ namespace GlobalNamespace
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
-			// ###########################################################################				
+
+			// ###########################################################################
 			if (tagNew.Artist != null && tagNew.Title != null)
 			{
 				string artistEncoded = WebUtility.UrlEncode(tagNew.Artist);
 				string titleEncoded = WebUtility.UrlEncode(tagNew.Title);
-				
+
 				HttpRequestMessage request = new HttpRequestMessage();
 				request.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + artistEncoded + "&song=" + titleEncoded);
 
@@ -45,7 +45,7 @@ namespace GlobalNamespace
 				{
 					string artistLrc = (string)data.SelectToken("GetLyricResult.LyricArtist");
 					string titleLrc = (string)data.SelectToken("GetLyricResult.LyricSong");
-						
+
 					if (string.Equals(artistLrc, tagNew.Artist, StringComparison.OrdinalIgnoreCase) &&
 						string.Equals(titleLrc, tagNew.Title, StringComparison.OrdinalIgnoreCase) &&
 						(string)data.SelectToken("GetLyricResult.Lyric") != null)

@@ -9,7 +9,7 @@
 namespace GlobalNamespace
 {
 	using System;
-	using System.Globalization;	
+	using System.Globalization;
 	using System.Linq;
 	using System.Windows.Forms;
 
@@ -24,7 +24,7 @@ namespace GlobalNamespace
 				e.Handled = true;
 				return;
 			}
-			
+
 			// If first value is null/DBNull
 			if (e.CellValue1 == null || e.CellValue1 == DBNull.Value)
 			{
@@ -32,7 +32,7 @@ namespace GlobalNamespace
 				e.Handled = true;
 				return;
 			}
-			
+
 			// If second value is null/DBNull
 			if (e.CellValue2 == null || e.CellValue2 == DBNull.Value)
 			{
@@ -40,18 +40,18 @@ namespace GlobalNamespace
 				e.Handled = true;
 				return;
 			}
-			
+
 			// If both values can be converted to dateTime
 			DateTime outDate1;
 			DateTime outDate2;
-			if (DateTime.TryParseExact((string)e.CellValue1, dateTimeformats, cultEng, DateTimeStyles.None, out outDate1) && 
+			if (DateTime.TryParseExact((string)e.CellValue1, dateTimeformats, cultEng, DateTimeStyles.None, out outDate1) &&
 			    DateTime.TryParseExact((string)e.CellValue2, dateTimeformats, cultEng, DateTimeStyles.None, out outDate2))
 			{
 				e.SortResult = DateTime.Compare(outDate1, outDate2);
 				e.Handled = true;
 				return;
 			}
-			
+
 			// If both values can be converted to decimal
 			decimal outDecimal1;
 			decimal outDecimal2;
@@ -61,11 +61,11 @@ namespace GlobalNamespace
 				e.Handled = true;
 				return;
 			}
-			
+
 			// Default comparison, probably only string comparisons
 			e.SortResult = ((IComparable)e.CellValue1).CompareTo(e.CellValue2);
-			e.Handled = true;			
+			e.Handled = true;
 			return;
-		}		
+		}
 	}
 }

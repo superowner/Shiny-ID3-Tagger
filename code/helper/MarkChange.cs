@@ -11,7 +11,7 @@ namespace GlobalNamespace
 	using System;
 	using System.Drawing;
 	using System.Linq;
-	
+
 	public partial class Form1
 	{
 		private void MarkChange(int row, int col, string oldValue, string newValue, bool signalBigChanges)

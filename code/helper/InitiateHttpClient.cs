@@ -21,17 +21,17 @@ namespace GlobalNamespace
 			// DEFAULT SETTINGS FOR ALL CONNECTIONS
 			HttpClientHandler handler = new HttpClientHandler();
 			handler.UseCookies = false;										// this setting is needed for netease
-			handler.AutomaticDecompression = DecompressionMethods.GZip 
+			handler.AutomaticDecompression = DecompressionMethods.GZip
 				| DecompressionMethods.Deflate;								// enable compression (depends on if server supports it)
 
 			HttpClient client = new HttpClient(handler);
-			client.DefaultRequestHeaders.Clear();					
+			client.DefaultRequestHeaders.Clear();
 			client.DefaultRequestHeaders.ConnectionClose = false;			// Will attempt to keep the connection open which makes more efficient use of the client.
 			client.DefaultRequestHeaders.Connection.Add("Keep-Alive");		// Will attempt to keep the connection open which makes more efficient use of the client.
 			client.Timeout = TimeSpan.FromSeconds(15);						// Musicbrainz has 15s timeout in response header. Dont know if this setting is needed
-			client.MaxResponseContentBufferSize = 256000000;		
+			client.MaxResponseContentBufferSize = 256000000;
 			ServicePointManager.DefaultConnectionLimit = 24;				// Not sure if it's needed since this limit applies to connections per remote host (per API), not in total per client
-			
+
 			return client;
 		}
 	}

@@ -28,7 +28,7 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "Microsoft Groove";
-			
+
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
 
@@ -36,7 +36,7 @@ namespace GlobalNamespace
 			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
 
 			HttpRequestMessage request = new HttpRequestMessage();
-			
+
 			if (ApiSessionData.MsAccessToken == null || ApiSessionData.MsAccessTokenExpireDate < DateTime.Now)
 			{
 				request = new HttpRequestMessage(HttpMethod.Post, "https://login.live.com/accesstoken.srf");
@@ -50,7 +50,7 @@ namespace GlobalNamespace
 
 				string loginContent = await this.GetResponse(client, request, cancelToken);
 				JObject loginData = JsonConvert.DeserializeObject<JObject>(loginContent, this.GetJsonSettings());
-				
+
 				if (loginData != null && loginData.SelectToken("access_token") != null)
 				{
 					ApiSessionData.MsAccessToken = (string)loginData.SelectToken("access_token");
@@ -58,14 +58,14 @@ namespace GlobalNamespace
 					ApiSessionData.MsAccessTokenExpireDate = DateTime.Now.Add(validDuration);
 				}
 			}
-				
+
 			if (ApiSessionData.MsAccessToken != null)
 			{
 				string tokenEncoded = WebUtility.UrlEncode(ApiSessionData.MsAccessToken);
-				
+
 				request = new HttpRequestMessage(HttpMethod.Get, "https://music.xboxlive.com/1/content/music/search?q=" + searchTermEnc + "&maxItems=1&filters=tracks&contentType=JSON");
 				request.Headers.Add("Authorization", "Bearer " + tokenEncoded);
-				
+
 				// ###########################################################################
 				string content1 = await this.GetResponse(client, request, cancelToken);
 				JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
@@ -81,12 +81,12 @@ namespace GlobalNamespace
 					o.DiscCount = null;
 					o.DiscNumber = null;
 					o.TrackNumber = (string)data1.SelectToken("Tracks.Items[0].TrackNumber");
-					
+
 					// ###########################################################################
 					request = new HttpRequestMessage();
 					request.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 					request.RequestUri = new Uri("https://music.xboxlive.com/1/content/" + (string)data1.SelectToken("Tracks.Items[0].Album.Id") + "/lookup?contentType=JSON");
-				
+
 					string content2 = await this.GetResponse(client, request, cancelToken);
 					JObject data2 = JsonConvert.DeserializeObject<JObject>(content2, this.GetJsonSettings());
 

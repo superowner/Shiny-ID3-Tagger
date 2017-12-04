@@ -10,7 +10,7 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Linq;
-	using System.Threading;	
+	using System.Threading;
 	using System.Windows.Forms;
 
 	public partial class Form1 : Form
@@ -20,7 +20,7 @@ namespace GlobalNamespace
 			// Refresh cancel token which is used for all requests
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
-			
+
 			this.StartSearching(cancelToken);
 		}
 	}

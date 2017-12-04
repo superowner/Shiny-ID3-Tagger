@@ -21,7 +21,7 @@ namespace GlobalNamespace
 	{
 		private bool ReadAccountCredentials()
 		{
-			Action<Exception> errorHandler = (ex) => 
+			Action<Exception> errorHandler = (ex) =>
 			{
 				// settings.json or accounts.json coult not be parsed or read correctly
 				if (User.Settings["DebugLevel"] >= 1)
@@ -34,14 +34,14 @@ namespace GlobalNamespace
 					this.PrintLogMessage("error", errorMsg);
 				}
 			};
-			
+
 			try
 			{
 				var decryptor = Aes.Create();
 				var key = new byte[] { 90, 181, 178, 196, 110, 221, 12, 79, 98, 48, 40, 239, 237, 175, 23, 69, 42, 201, 36, 157, 170, 67, 161, 9, 69, 114, 232, 179, 195, 158, 151, 124 };
 				var iv = new byte[] { 221, 237, 248, 138, 53, 16, 87, 148, 28, 20, 30, 199, 195, 221, 209, 188 };
 				var decryptorTransformer = decryptor.CreateDecryptor(key, iv);
-				
+
 				string encryptedString = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"\resources\accounts.json");
 				byte[] encryptedBytes = Convert.FromBase64String(encryptedString);
 				var decryptedBytes = decryptorTransformer.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
@@ -96,7 +96,7 @@ namespace GlobalNamespace
 			{
 				errorHandler(ex);
 			}
-			
+
 			return false;
 		}
 	}

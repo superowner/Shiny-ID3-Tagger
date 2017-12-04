@@ -27,15 +27,15 @@ namespace GlobalNamespace
 		{
 			Id3 o = new Id3();
 			o.Service = "Deezer";
-			
+
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
+
 			// ###########################################################################
 			string artistEncoded = WebUtility.UrlEncode(artist);
 			string titleEncoded = WebUtility.UrlEncode(title);
 
-			HttpRequestMessage request = new HttpRequestMessage();			
+			HttpRequestMessage request = new HttpRequestMessage();
 			request.RequestUri = new Uri("http://api.deezer.com/search?q=artist:\"" + artistEncoded + "\"+track:\"" + titleEncoded + "\"&limit=1&order=RANKING");
 
 			string content1 = await this.GetResponse(client, request, cancelToken);

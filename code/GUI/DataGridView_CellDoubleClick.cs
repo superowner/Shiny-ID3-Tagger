@@ -19,7 +19,7 @@ namespace GlobalNamespace
 		{
 			DataGridView dgv = (DataGridView)sender;
 			if (e.RowIndex >= 0)
-			{				
+			{
 				string filepath = dgv.Rows[e.RowIndex].Cells[this.filepath1.Index].Value.ToString();
 				Process.Start(filepath);
 			}

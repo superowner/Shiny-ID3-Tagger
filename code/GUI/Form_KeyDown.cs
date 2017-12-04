@@ -19,7 +19,7 @@ namespace GlobalNamespace
 			if (e.KeyCode == Keys.Escape)
 			{
 				TokenSource.Cancel();
-			}	
+			}
 		}
 	}
 }

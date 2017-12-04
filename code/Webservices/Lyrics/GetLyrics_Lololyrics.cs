@@ -28,37 +28,37 @@ namespace GlobalNamespace
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
-			
-			// ###########################################################################				
+
+			// ###########################################################################
 			if (tagNew.Artist != null && tagNew.Title != null)
 			{
 				string artistEncoded = WebUtility.UrlEncode(tagNew.Artist);
 				string titleEncoded = WebUtility.UrlEncode(tagNew.Title);
-				
+
 				HttpRequestMessage request = new HttpRequestMessage();
 				request.RequestUri = new Uri("http://api.lololyrics.com/0.5/getLyric?artist=" + artistEncoded + "&track=" + titleEncoded + "&rawutf8=1");
-				
+
 				string content = await this.GetResponse(client, request, cancelToken);
 				JObject data = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(content), this.GetJsonSettings());
 
 				if (data != null && data.SelectToken("result.response") != null)
 				{
 					string rawLyrics = (string)data.SelectToken("result.response");
-				
+
 					// Sanitize lyrics
 					rawLyrics = WebUtility.HtmlDecode(rawLyrics);												// URL decode lyrics
 					rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));					// Remove leading or ending white space per line
 					rawLyrics = rawLyrics.Trim();																// Remove leading or ending line breaks and white space
-					
+
 					if (rawLyrics.Length > 1)
 					{
 						o.Lyrics = rawLyrics;
 					}
 				}
-				
+
 				request.Dispose();
 			}
-			
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

@@ -12,54 +12,54 @@ namespace GlobalNamespace
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
-	using System.Threading;	
+	using System.Threading;
 	using System.Windows.Forms;
-	
+
 	public partial class Form1
 	{
 		private static CultureInfo cultEng = new CultureInfo("en-US");
 
 		private static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-		
-		private static Dictionary<string, int> albumHits = new Dictionary<string, int>();		
-		
+
+		private static Dictionary<string, int> albumHits = new Dictionary<string, int>();
+
 		private static DataGridView ActiveDGV { get; set; }
-		
+
 		private static string LastUsedFolder { get; set; }
-		
+
 		private static CancellationTokenSource TokenSource { get; set; }
 	}
-	
+
 	internal static class ApiSessionData
 	{
 		internal static string MsAccessToken { get; set; }
-		
+
 		internal static DateTime MsAccessTokenExpireDate { get; set; }
-		
+
 		internal static string SpAccessToken { get; set; }
-		
+
 		internal static DateTime SpAccessTokenExpireDate { get; set; }
-		
+
 		internal static string TiSessionID { get; set; }
-		
+
 		internal static string TiCountryCode { get; set; }
-		
+
 		internal static DateTime TiSessionExpireDate { get; set; }
 	}
-	
+
 	internal static class User
 	{
 		internal static Dictionary<string, dynamic> Settings { get; set; }
-		
+
 		internal static Dictionary<string, string> Accounts { get; set; }
 
 		internal static DataTable DbAccounts { get; set; }
-		
+
 		internal static DataTable MgAccounts { get; set; }
-		
+
 		internal static DataTable MmAccounts { get; set; }
 	}
-	
+
 	internal class Id3
 	{
 		internal string Filepath { get; set; }
@@ -67,7 +67,7 @@ namespace GlobalNamespace
 		internal string Service { get; set; }
 
 		internal string Duration { get; set; }
-		
+
 		internal string Artist { get; set; }
 
 		internal string Title { get; set; }
@@ -119,5 +119,5 @@ namespace GlobalNamespace
 		{
 			this.DoubleBuffered = true;
 		}
-	}	
+	}
 }

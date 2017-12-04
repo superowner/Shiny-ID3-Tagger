@@ -19,11 +19,11 @@ namespace GlobalNamespace
 		{
 			DataGridView dgv = (DataGridView)sender;
 			if (e.RowIndex >= 0)
-			{	
+			{
 				// Ugly workaround until I found a better way to preserve yellow background color for result rows
 				if (dgv.Name == "dataGridView2" && dgv.Rows[e.RowIndex].Cells[this.service2.Index].Value.ToString() == "RESULT")
 				{
-					dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Yellow;	
+					dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Yellow;
 				}
 				else
 				{
@@ -31,7 +31,7 @@ namespace GlobalNamespace
 					dgv.Rows[e.RowIndex].DefaultCellStyle = null;
 					dgv.Rows[e.RowIndex].DefaultCellStyle.ForeColor = foreColor;
 				}
-			}		
+			}
 		}
 	}
 }

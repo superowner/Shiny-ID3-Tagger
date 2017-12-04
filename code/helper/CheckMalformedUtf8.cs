@@ -14,7 +14,7 @@ namespace GlobalNamespace
 	using System.Linq;
 	using System.Text;
 	using System.Text.RegularExpressions;
-	
+
 	public partial class Form1
 	{
 		public static string CheckMalformedUtf8(string data)
@@ -29,7 +29,7 @@ namespace GlobalNamespace
 				return data;
 			}
 		}
-		
+
 		public static Regex CreateRegex()
 		{
 			const string Specials = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö";
@@ -37,7 +37,7 @@ namespace GlobalNamespace
 			List<string> flags = new List<string>();
 			foreach (char c in Specials)
 			{
-				string interpretedAsLatin1 = Encoding.GetEncoding("iso-8859-1").GetString(Encoding.UTF8.GetBytes(c.ToString())).Trim();		
+				string interpretedAsLatin1 = Encoding.GetEncoding("iso-8859-1").GetString(Encoding.UTF8.GetBytes(c.ToString())).Trim();
 				if (interpretedAsLatin1.Length > 0)
 				{
 					flags.Add(interpretedAsLatin1);
@@ -51,10 +51,10 @@ namespace GlobalNamespace
 				{
 					regex += '|';
 				}
-				
+
 				regex += s;
 			}
-			
+
 			return new Regex("(" + regex + ")");
 		}
 	}

@@ -23,35 +23,35 @@ namespace GlobalNamespace
 	public partial class Form1
 	{
 		private async Task<Id3> GetTags_Discogs(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
-		{			
+		{
 			Id3 o = new Id3();
 			o.Service = "Discogs";
-			
+
 			Stopwatch sw = new Stopwatch();
-			sw.Start();			
+			sw.Start();
 
 			// ###########################################################################
 			string artistTemp = string.Join("* ", artist.Split(' ')) + "*";
 			string titleTemp = string.Join("* ", title.Split(' ')) + "*";
 			string searchTermEnc = WebUtility.UrlEncode(artistTemp + " " + titleTemp);
-			
+
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 			request.RequestUri = new Uri("https://api.discogs.com/database/search?q=" + searchTermEnc +
 				"&format=album" +
-				"&type=master" + 
+				"&type=master" +
 				"&per_page=1" +
 				"&key=" + User.Accounts["DcKey"] +
 				"&secret=" + User.Accounts["DcSecret"]);
-			
+
 			string content1 = await this.GetResponse(client, request, cancelToken);
 			JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
-			
+
 			if (data1 != null && data1.SelectToken("results").Any())
 			{
-				request = new HttpRequestMessage();				
+				request = new HttpRequestMessage();
 				request.Headers.Add("User-Agent", User.Settings["UserAgent"]);
-			
+
 				string url = (string)data1.SelectToken("results[0].resource_url") + "?key=" + User.Accounts["DcKey"] + "&secret=" + User.Accounts["DcSecret"];
 				if (IsValidUrl(url))
 				{
@@ -71,12 +71,12 @@ namespace GlobalNamespace
 					o.DiscCount = null;
 					o.DiscNumber = null;
 					o.Cover = (string)data2.SelectToken("images[0].uri");
-	
+
 					o.TrackCount = data2.SelectTokens("tracklist[*]")
 						.Where(t => t.SelectToken("type_").ToString() == "track")
 						.ToArray().Length.ToString();
-					
-					// This API is strange. You can either search for a release and don't get the album. Or you search for the album but don't get the release			
+
+					// This API is strange. You can either search for a release and don't get the album. Or you search for the album but don't get the release
 					// You can do one search with "format=album" to maybe get the album and a second search without "format=album" to maybe get the single and therefore the track title
 					// But no one will guarantee that the second search shows a title which is on your album from the first search
 					// How can I get a response which holds the album and title at the same time?
@@ -90,7 +90,7 @@ namespace GlobalNamespace
 					}
 				}
 			}
-			
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

@@ -22,7 +22,7 @@ namespace GlobalNamespace
 	public partial class Form1
 	{
 		// ###########################################################################
-		private async void StartSearching(CancellationToken cancelToken)		
+		private async void StartSearching(CancellationToken cancelToken)
 		{
 			// Prepare visual stuff like disable buttons during work, show two progress bars
 			this.btnAddFiles.Enabled = false;
@@ -64,29 +64,29 @@ namespace GlobalNamespace
 					Id3 tagNew = new Id3();
 					tagNew.Service = "RESULT";
 					tagNew.Filepath = tagOld.Filepath;
-					
+
 					Task<DataTable> webservicesTask = this.StartId3Search(client, tagOld, cancelToken);
 					Task<KeyValuePair<string, string>> lyricSearchTask = this.StartLyricsSearch(client, tagOld, cancelToken);
-					
+
 					await Task.WhenAll(webservicesTask, lyricSearchTask);
-					
+
 					DataTable webserviceResults = webservicesTask.Result;
 					KeyValuePair<string, string> lyricsNew = lyricSearchTask.Result;
-					
+
 					string artistNew = (from row1 in webserviceResults.AsEnumerable()
 								where !string.IsNullOrWhiteSpace(row1.Field<string>("artist"))
 								group row1 by Capitalize(Strip(row1.Field<string>("artist"))) into grp
 								where grp.Count() >= 3
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
-	
+
 					string titleNew = (from row1 in webserviceResults.AsEnumerable()
 								where !string.IsNullOrWhiteSpace(row1.Field<string>("title"))
 								group row1 by Capitalize(Strip(row1.Field<string>("title"))) into grp
 								where grp.Count() >= 3
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
-	
+
 					// If new artist or title are different from old ones, repeat all searches until new and old ones match.
 					// This happens when spelling mistakes were corrected by many APIs
 					if (artistNew != null && titleNew != null &&
@@ -96,21 +96,21 @@ namespace GlobalNamespace
 						this.PrintLogMessage("search", new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
 
 						sw.Restart();
-						
+
 						lyricsNew = new KeyValuePair<string, string>();
 						tagNew.Artist = artistNew;
 						tagNew.Title = titleNew;
-						
+
 						webservicesTask = this.StartId3Search(client, tagNew, cancelToken);
 						lyricSearchTask = this.StartLyricsSearch(client, tagNew, cancelToken);
-						
+
 						await Task.WhenAll(webservicesTask, lyricSearchTask);
-						
+
 						webserviceResults = webservicesTask.Result;
 						lyricsNew = lyricSearchTask.Result;
 					}
-					
-					// Aggregate all API results and select the most frequent values					
+
+					// Aggregate all API results and select the most frequent values
 					tagNew = this.CalculateResults(webserviceResults, tagNew);
 
 					if (tagNew.Album != null && lyricsNew.Value != null)
@@ -118,12 +118,12 @@ namespace GlobalNamespace
 						tagNew.Lyrics = lyricsNew.Value;
 						this.PrintLogMessage("search", new[] { "  Lyrics taken from " + lyricsNew.Key });
 					}
-					
+
 					if (cancelToken.IsCancellationRequested)
 					{
 						break;
 					}
-					
+
 					foreach (DataRow r in webserviceResults.Rows)
 					{
 						string albumhit = IncreaseAlbumCounter(r["service"], r["album"], tagNew.Album);
@@ -212,7 +212,7 @@ namespace GlobalNamespace
 		private async Task<KeyValuePair<string, string>> StartLyricsSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
 			var lyricResults = new Dictionary<string, string>();
-			
+
 			List<Task<Id3>> taskList = new List<Task<Id3>>();
 			taskList.Add(this.GetLyrics_Netease(client, tagNew, cancelToken));
 			taskList.Add(this.GetLyrics_Chartlyrics(client, tagNew, cancelToken));
@@ -224,10 +224,10 @@ namespace GlobalNamespace
 				Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
 				taskList = tpl.Item1;
 				Id3 r = tpl.Item2;
-				
+
 				lyricResults.Add(r.Service, r.Lyrics);
 			}
-			
+
 			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
 			// The lyricsPriority setting in settings.json decides what lyrics should be taken if there are multiple sources available
 			KeyValuePair<string, string> lyrics = new KeyValuePair<string, string>();
@@ -243,10 +243,10 @@ namespace GlobalNamespace
 					break;
 				}
 			}
-			
+
 			return lyrics;
 		}
-		
+
 		// ###########################################################################
 		private async Task<DataTable> StartId3Search(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
 		{
@@ -284,13 +284,13 @@ namespace GlobalNamespace
 
 			this.progressBar1.Maximum = taskList.Count;
 			this.progressBar1.Value = 0;
-			
+
 			while (taskList.Count > 0)
 			{
 				Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
 				taskList = tpl.Item1;
 				Id3 r = tpl.Item2;
-				
+
 				webserviceResults.Rows.Add(
 					webserviceResults.Rows.Count + 1,
 					tagOld.Filepath,
@@ -320,15 +320,15 @@ namespace GlobalNamespace
 				// https://www.thomaslevesque.com/2015/11/11/explicitly-switch-to-the-ui-thread-in-an-async-method/
 				Task<Id3> finishedTask = await Task.WhenAny(taskList).ConfigureAwait(false);
 				Id3 r = await finishedTask;
-				
+
 				taskList.Remove(finishedTask);
 				finishedTask.Dispose();
-				
+
 				// We return 2 values with a tuple. First the new taskList which is one item smaller than before, because one task was finished
 				// Second value is the actual result from that finished task. We hand this value back to a thread which updates the GUI
 				return new Tuple<List<Task<Id3>>, Id3>(taskList, r);
 		}
-		
+
 		// ###########################################################################
 		private Id3 CalculateResults(DataTable webserviceResults, Id3 tagNew)
 		{
@@ -370,7 +370,7 @@ namespace GlobalNamespace
 								group row by Capitalize(Strip(row.Field<string>("genre"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
-				
+
 				tagNew.DiscCount = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("disccount"))
 								group row by row.Field<string>("disccount") into grp
@@ -407,14 +407,14 @@ namespace GlobalNamespace
 				 * Last.fm				uses a CDN and therefore periodically changes cover URLs		600 px, always squared
 				 * Spotify				uses a CDN and therefore periodically changes cover URLs		640 px, can be non-squared
 				 * Gracenote (Sony)		uses a CDN and therefore periodically changes cover URLs		720 px, can be non-squared
-				 * Amazon				uses a CDN and therefore periodically changes cover URLs		different sizes, 1200 to 1500 px, can be non-squared				
+				 * Amazon				uses a CDN and therefore periodically changes cover URLs		different sizes, 1200 to 1500 px, can be non-squared
 				 * Musicbrainz			no CDN, persistent cover URLs, redirect and slow server			different sizes, 900 to 1800 px, always squared
 				 * Netease				no CDN, persistent cover URLs, slow server						different sizes, 600 to 3000 px, can be non-squared
-				 * QQ (Tencent)			no CDN, persistent cover URLs, slow server						500 px, always squared				
-				 * Microsoft Groove)	no CDN, persistent cover URLs, API shut down soon				different sizes, 1200 to 3000 px, can be non-squared				
+				 * QQ (Tencent)			no CDN, persistent cover URLs, slow server						500 px, always squared
+				 * Microsoft Groove)	no CDN, persistent cover URLs, API shut down soon				different sizes, 1200 to 3000 px, can be non-squared
 				 * Decibel				needs authentication
 				 * Musixmatch			no covers
-				 * Musicgraph			no covers				
+				 * Musicgraph			no covers
 				 *
 				 * Musixmatch and Musicgraph do not provide any cover URL via API
 				 * Despite Decibel provides a cover URL, the URL is not so easy to download because authorization via API key in a header is required
@@ -436,6 +436,6 @@ namespace GlobalNamespace
 			}
 
 			return tagNew;
-		}		
+		}
 	}
 }
