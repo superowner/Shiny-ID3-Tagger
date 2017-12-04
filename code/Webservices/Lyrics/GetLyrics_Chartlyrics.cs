@@ -43,10 +43,12 @@ namespace GlobalNamespace
 
 				if (data != null && data.SelectToken("GetLyricResult.Lyric") != null)
 				{
-					string artistTemp = (string)data.SelectToken("GetLyricResult.LyricArtist");
-					string titleTemp = (string)data.SelectToken("GetLyricResult.LyricSong");
+					string artistLrc = (string)data.SelectToken("GetLyricResult.LyricArtist");
+					string titleLrc = (string)data.SelectToken("GetLyricResult.LyricSong");
 
-					if (artistTemp == tagNew.Artist && titleTemp == tagNew.Title && (string)data.SelectToken("GetLyricResult.Lyric") != null)
+					if (artistLrc.ToLowerInvariant == tagNew.Artist.ToLowerInvariant &&
+						titleLrc.ToLowerInvariant == tagNew.Title.ToLowerInvariant &&
+						(string)data.SelectToken("GetLyricResult.Lyric") != null)
 					{
 						string rawLyrics = (string)data.SelectToken("GetLyricResult.Lyric");
 

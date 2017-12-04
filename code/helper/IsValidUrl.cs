@@ -4,6 +4,8 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Checks if a given string is a valid URL</summary>
+// https://dotnetfiddle.net/XduN3A				this method still produces some false positives
+// https://mathiasbynens.be/demo/url-regex		regex validator pattern comparison
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

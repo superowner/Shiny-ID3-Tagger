@@ -6,7 +6,6 @@
 // <summary>Retrieves track lyrics from xiami.com</summary>
 // #https://github.com/LIU9293/musicAPI/tree/master/src
 //-----------------------------------------------------------------------
-// TODO: Compare artist and title
 
 namespace GlobalNamespace
 {
@@ -43,10 +42,16 @@ namespace GlobalNamespace
 				string content1 = await this.GetResponse(client, request, cancelToken);								
 				JObject data1 = JsonConvert.DeserializeObject<JObject>(content1, this.GetJsonSettings());
 
-				if (data1 != null && IsValidUrl((string)data1.SelectToken("data.songs[0].lyric")))
+				// Check if any returned song artist and title match search parameters				
+				JToken song = (from track in data1.SelectTokens("data.songs[*]")
+								where string.Equals((string)track.SelectToken("artist_name"), tagNew.Artist, StringComparison.OrdinalIgnoreCase)
+								where string.Equals((string)track.SelectToken("song_name"), tagNew.Title, StringComparison.OrdinalIgnoreCase)
+								select track.SelectToken("artist_name")).FirstOrDefault();
+				
+				if (song != null && IsValidUrl((string)song.SelectToken("lyric")))
 				{
 					request = new HttpRequestMessage();
-					request.RequestUri = new Uri((string)data1.SelectToken("data.songs[0].lyric"));
+					request.RequestUri = new Uri((string)song.SelectToken("lyric"));
 				
 					string content2 = await this.GetResponse(client, request, cancelToken);
 					
