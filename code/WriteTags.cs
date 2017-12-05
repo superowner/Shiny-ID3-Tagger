@@ -32,43 +32,46 @@ namespace GlobalNamespace
 			this.btnAddFiles.Enabled = false;
 			this.btnSearch.Enabled = false;
 			this.btnWrite.Enabled = false;
-			this.progressBar1.Visible = true;
+
+			this.slowProgressBar.Maximum = this.dataGridView1.Rows.Count;
+			this.slowProgressBar.Value = 0;
+			this.slowProgressBar.Visible = true;
 
 			HttpClient client = InitiateHttpClient();
 
 			foreach (DataGridViewRow row in this.dataGridView1.Rows)
 			{
+				// Check if file is a real file and no virtual file (imported via CSV file)
+				if ((bool)row.Cells[this.isVirtualFile.Index].Value)
+				{
+					// Cancel remaining work for this file and continue with next file
+					this.slowProgressBar.PerformStep();
+					continue;
+				}
+
 				bool successWrite;
 				string filepath = (string)row.Cells[this.filepath1.Index].Value;
-				this.progressBar1.Maximum = this.dataGridView1.Rows.Count;
-				this.progressBar1.Value = 0;
 
-				// Taglib does not convert ID3v2.4 encoded frames(UTF-8) to ID3v2.3 encoding (UTF-16)
+				// Taglib does not convert ID3v2.4 (UTF-8, iTunes compatible) encoded frames to ID3v2.3 encodede frames (UTF-16, Windows Explorer compatible)
 				// Even with "ForceDefaultEncoding = true". The workaround is to clear and rebuild all tags from scratch
 				TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average);
 				TagLib.Id3v2.Tag oldId3v2 = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
 
 				// ###########################################################################
-				// Clear all tags and save mp3 file without any tags
+				// Clear all tags and save mp3 file without any tags. Save is neccessary to wipe all tags
 				tagFile.RemoveTags(TagTypes.AllTags);
 
-				successWrite = await this.SaveAndDisposeFile(tagFile);
+				successWrite = await this.SaveFile(tagFile);
+				tagFile.Dispose();
+
 				if (!successWrite)
 				{
-					if (User.Settings["DebugLevel"] >= 1)
-					{
-						string[] errorMsg =
-						{
-							"ERROR:    Could not access file!",
-							"File:     " + filepath
-						};
-						this.PrintLogMessage("error", errorMsg);
-					}
-
+					// Cancel remaining work for this file and continue with next file if Saving wasn't possible
+					this.slowProgressBar.PerformStep();
 					continue;
 				}
 
-				// Write all old frames from temp variable back to new ID3v2.3 frames (UTF-16)
+				// Write all old frames from backup variable back as ID3v2.3 frames
 				tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average);
 				TagLib.Id3v2.Tag id3v2 = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
 
@@ -199,22 +202,28 @@ namespace GlobalNamespace
 				// ###########################################################################
 				Task.WaitAll();
 
-				successWrite = await this.SaveAndDisposeFile(tagFile);
+				successWrite = await this.SaveFile(tagFile);
+				tagFile.Dispose();
+
 				if (!successWrite)
 				{
+					// Cancel remaining work for this file and continue with next file if Saving wasn't possible
+					this.slowProgressBar.PerformStep();
 					continue;
 				}
 
 				foreach (DataGridViewCell cell in row.Cells)
 				{
 					cell.Style.BackColor = Color.Empty;
-					this.progressBar1.PerformStep();
+
 				}
+
+				this.slowProgressBar.PerformStep();
 			}
 
 			client.Dispose();
 
-			this.progressBar1.Visible = false;
+			this.slowProgressBar.Visible = false;
 			this.btnAddFiles.Enabled = true;
 			this.btnSearch.Enabled = true;
 			this.btnWrite.Enabled = true;
@@ -330,28 +339,13 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		private async Task<bool> SaveAndDisposeFile(TagLib.File tagFile)
+		private async Task<bool> SaveFile(TagLib.File tagFile)
 		{
-			Action<Exception> errorHandler = (ex) =>
-			{
-				// file could not be accessed, read or written
-				if (User.Settings["DebugLevel"] >= 1)
-				{
-					string[] errorMsg =
-						{
-						@"ERROR:    Could not write to file!",
-						"File:     " + tagFile.Name,
-					 	"Message:  " + ex.Message.TrimEnd('\r', '\n')
-					};
-					this.PrintLogMessage("error", errorMsg);
-				}
-			};
-
 			const int WriteDelay = 50;
 			const int MaxRetries = 3;
 			DateTime lastWriteTime = default(DateTime);
 
-			// Preserve LastWriteTime
+			// Read and backup LastWriteTime
 			bool successWrite = false;
 			for (int retry = 0; retry < MaxRetries; retry++)
 			{
@@ -361,15 +355,16 @@ namespace GlobalNamespace
 					successWrite = true;
 					break;
 				}
-				catch (IOException ex)
+				catch (IOException)
 				{
-					errorHandler(ex);
+					successWrite = false;
+					// Do nothing. Error is handled at the end of SaveFile method
 				}
 
 				await Task.Delay(WriteDelay);
 			}
 
-			// Save mp3 tags (lastwritetime will be modified)
+			// Save all mp3 tags (lastwritetime will be modified here)
 			if (successWrite)
 			{
 				successWrite = false;
@@ -381,16 +376,17 @@ namespace GlobalNamespace
 						successWrite = true;
 						break;
 					}
-					catch (IOException ex)
+					catch (IOException)
 					{
-						errorHandler(ex);
+						successWrite = false;
+						// Do nothing. Error is handled at the end of SaveFile method
 					}
 
 					await Task.Delay(WriteDelay);
 				}
 			}
 
-			// Change lastwritetime to original
+			// Change lastwritetime back to original
 			if (successWrite)
 			{
 				successWrite = false;
@@ -402,23 +398,27 @@ namespace GlobalNamespace
 						successWrite = true;
 						break;
 					}
-					catch (IOException ex)
+					catch (IOException)
 					{
-						errorHandler(ex);
+						successWrite = false;
+						// Do nothing. Error is handled at the end of SaveFile method
 					}
 
 					await Task.Delay(WriteDelay);
 				}
 			}
 
-			tagFile.Dispose();
-
-			if (successWrite)
+			if (!successWrite)
 			{
-				return true;
+				string[] errorMsg =
+					{
+						@"ERROR:    Could not read/write file!",
+						"File:     " + tagFile.Name
+					};
+				this.PrintLogMessage("error", errorMsg);
 			}
 
-			return false;
+			return successWrite;
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace GlobalNamespace
 	{
 		private void ProgressBar1_VisibleChanged(object sender, EventArgs e)
 		{
-			if (this.progressBar1.Visible)
+			if (this.fastProgressBar.Visible)
 			{
 				this.btnCancel.Visible = true;
 			}

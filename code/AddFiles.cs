@@ -62,9 +62,9 @@ namespace GlobalNamespace
 			// If any files were retrieved previously (either directly selected, via command line or from a folder)
 			if (files != null)
 			{
-				this.progressBar1.Maximum = files.Length;
-				this.progressBar1.Value = 0;
-				this.progressBar1.Visible = true;
+				this.fastProgressBar.Maximum = files.Length;
+				this.fastProgressBar.Value = 0;
+				this.fastProgressBar.Visible = true;
 
 				// Loop through each file and add it to the first datagridview
 				foreach (string filepath in files)
@@ -90,12 +90,12 @@ namespace GlobalNamespace
 						}
 					});
 
-					this.progressBar1.PerformStep();
+					this.fastProgressBar.PerformStep();
 				}
 			}
 
 			// Work finished, re-enable all buttons and hide progress bar
-			this.progressBar1.Visible = false;
+			this.fastProgressBar.Visible = false;
 			this.btnSearch.Enabled = true;
 			this.btnWrite.Enabled = true;
 			this.btnAddFiles.Enabled = true;
@@ -219,7 +219,8 @@ namespace GlobalNamespace
 					tagOld.TrackCount ?? string.Empty,
 					tagOld.TrackNumber ?? string.Empty,
 					tagOld.Lyrics ?? string.Empty,
-					tagOld.Cover ?? string.Empty);
+					tagOld.Cover ?? string.Empty,
+					false);
 
 				int lastRow = this.dataGridView1.RowCount - 1;
 				this.MarkChange(lastRow, this.artist1.Index, tagArtist, tagOld.Artist, true);
