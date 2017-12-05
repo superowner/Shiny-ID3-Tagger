@@ -29,10 +29,10 @@ namespace GlobalNamespace
 			this.btnWrite.Enabled = false;
 			this.btnSearch.Enabled = false;
 
-			this.progressBar2.Maximum = this.dataGridView1.Rows.Count;
-			this.progressBar2.Value = 0;
-			this.progressBar2.Visible = true;
-			this.progressBar1.Visible = true;
+			this.slowProgressBar.Maximum = this.dataGridView1.Rows.Count;
+			this.slowProgressBar.Value = 0;
+			this.slowProgressBar.Visible = true;
+			this.fastProgressBar.Visible = true;
 
 			HttpClient client = InitiateHttpClient();
 			Stopwatch sw = new Stopwatch();
@@ -126,14 +126,13 @@ namespace GlobalNamespace
 
 					foreach (DataRow r in webserviceResults.Rows)
 					{
-						string albumhit = IncreaseAlbumCounter(r["service"], r["album"], tagNew.Album);
+						string albumhit = IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
+						string durationTotal = IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
 
 						this.dataGridView2.Rows.Add(
 							(this.dataGridView2.Rows.Count + 1).ToString(),
 							tagNew.Filepath ?? string.Empty,
 							r["service"] ?? string.Empty,
-							r["duration"] ?? string.Empty,
-							albumhit ?? string.Empty,
 							r["artist"] ?? string.Empty,
 							r["title"] ?? string.Empty,
 							r["album"] ?? string.Empty,
@@ -144,7 +143,10 @@ namespace GlobalNamespace
 							r["trackcount"] ?? string.Empty,
 							r["tracknumber"] ?? string.Empty,
 							r["lyrics"] ?? string.Empty,
-							r["cover"] ?? string.Empty);
+							r["cover"] ?? string.Empty,
+							r["duration"] ?? string.Empty,
+							durationTotal ?? string.Empty,
+							albumhit ?? string.Empty);
 
 						// Set row background color to grey if current row album doesnt match the most frequent album
 						if (tagNew.Album == null ||
@@ -170,13 +172,12 @@ namespace GlobalNamespace
 
 					sw.Stop();
 					tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+					string allApiDurationTotal = IncreaseTotalDuration(tagNew.Service, tagNew.Duration);
 
 					this.dataGridView2.Rows.Add(
 						(this.dataGridView2.Rows.Count + 1).ToString(),
 						tagNew.Filepath ?? string.Empty,
 						tagNew.Service ?? string.Empty,
-						tagNew.Duration ?? string.Empty,
-						string.Empty,
 						tagNew.Artist ?? string.Empty,
 						tagNew.Title ?? string.Empty,
 						tagNew.Album ?? string.Empty,
@@ -187,7 +188,10 @@ namespace GlobalNamespace
 						tagNew.TrackCount ?? string.Empty,
 						tagNew.TrackNumber ?? string.Empty,
 						tagNew.Lyrics ?? string.Empty,
-						tagNew.Cover ?? string.Empty);
+						tagNew.Cover ?? string.Empty,
+						tagNew.Duration ?? string.Empty,
+						allApiDurationTotal ?? string.Empty,
+						string.Empty);
 
 					this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index].ToolTipText = tagNew.Lyrics;
 					this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor = Color.Yellow;
@@ -196,13 +200,13 @@ namespace GlobalNamespace
 					webserviceResults.Dispose();
 				}
 
-				this.progressBar2.PerformStep();
+				this.slowProgressBar.PerformStep();
 			}
 
 			client.Dispose();
 
-			this.progressBar1.Visible = false;
-			this.progressBar2.Visible = false;
+			this.fastProgressBar.Visible = false;
+			this.slowProgressBar.Visible = false;
 			this.btnAddFiles.Enabled = true;
 			this.btnWrite.Enabled = true;
 			this.btnSearch.Enabled = true;
@@ -282,8 +286,8 @@ namespace GlobalNamespace
 			taskList.Add(this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken));
 			taskList.Add(this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken));
 
-			this.progressBar1.Maximum = taskList.Count;
-			this.progressBar1.Value = 0;
+			this.fastProgressBar.Maximum = taskList.Count;
+			this.fastProgressBar.Value = 0;
 
 			while (taskList.Count > 0)
 			{
@@ -308,7 +312,7 @@ namespace GlobalNamespace
 					string.Empty,
 					r.Cover);
 
-				this.progressBar1.PerformStep();
+				this.fastProgressBar.PerformStep();
 			}
 
 			return webserviceResults;

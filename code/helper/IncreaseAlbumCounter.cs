@@ -13,7 +13,7 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private static string IncreaseAlbumCounter(object service, object webserviceAlbum, string majorityAlbum)
+		private static string IncreaseAlbumCounter(string service, string webserviceAlbum, string majorityAlbum)
 		{
 			if (!albumHits.ContainsKey(service.ToString()))
 			{

@@ -173,6 +173,9 @@
     <Compile Include="code\GUI\MenuItemClick_ExportCSV.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="code\helper\IncreaseTotalDuration.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="code\helper\IncreaseAlbumCounter.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -23,6 +23,8 @@ namespace GlobalNamespace
 
 		private static Dictionary<string, int> albumHits = new Dictionary<string, int>();
 
+		private static Dictionary<string, decimal> totalDuration = new Dictionary<string, decimal>();
+
 		private static DataGridView ActiveDGV { get; set; }
 
 		private static string LastUsedFolder { get; set; }

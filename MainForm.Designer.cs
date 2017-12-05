@@ -20,35 +20,7 @@ namespace GlobalNamespace
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage4;		
 		private System.Windows.Forms.TabPage tabPage5;
-			
-		private System.Windows.Forms.DataGridViewTextBoxColumn filepath1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn artist1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn title1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn album1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn date1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn genre1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn disccount1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn discnumber1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn trackcount1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn tracknumber1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics1;
-		private System.Windows.Forms.DataGridViewLinkColumn cover1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn number2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn filepath2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn duration2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn service2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn artist2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn title2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn album2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn date2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn genre2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn disccount2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn discnumber2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn trackcount2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn tracknumber2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics2;
-		private System.Windows.Forms.DataGridViewLinkColumn cover2;
-		private System.Windows.Forms.ProgressBar progressBar1;
+		private System.Windows.Forms.ProgressBar fastProgressBar;
 		private GlobalNamespace.DataGridViewDoubleBuffered dataGridView1;
 		private GlobalNamespace.DataGridViewDoubleBuffered dataGridView2;
 		private System.Windows.Forms.MenuStrip menuStrip1;
@@ -57,11 +29,9 @@ namespace GlobalNamespace
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem openSettingsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem exportCSVToolStripMenuItem;
-		private System.Windows.Forms.DataGridViewTextBoxColumn albumhits;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.ToolStripMenuItem clearResultsToolStripMenuItem;
-		private System.Windows.Forms.ProgressBar progressBar2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+		private System.Windows.Forms.ProgressBar slowProgressBar;
 		private System.Windows.Forms.ContextMenuStrip PopupMenu;
 		private System.Windows.Forms.ToolStripMenuItem removeLines;
 		private System.Windows.Forms.ToolStripMenuItem showInExplorerToolStripMenuItem;
@@ -92,12 +62,12 @@ namespace GlobalNamespace
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.btnSearch = new System.Windows.Forms.Button();
 			this.btnWrite = new System.Windows.Forms.Button();
 			this.tabControl2 = new System.Windows.Forms.TabControl();
@@ -114,6 +84,35 @@ namespace GlobalNamespace
 			this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.dataGridView1 = new GlobalNamespace.DataGridViewDoubleBuffered();
+			this.tabPage5 = new System.Windows.Forms.TabPage();
+			this.dataGridView2 = new GlobalNamespace.DataGridViewDoubleBuffered();
+			this.number2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.filepath2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.service2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.artist2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.title2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.album2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.date2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.genre2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.disccount2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.discnumber2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.trackcount2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.tracknumber2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.lyrics2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cover2 = new System.Windows.Forms.DataGridViewLinkColumn();
+			this.duration2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.durationTotal2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.albumhits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.fastProgressBar = new System.Windows.Forms.ProgressBar();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.clearResultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.btnCancel = new System.Windows.Forms.Button();
+			this.slowProgressBar = new System.Windows.Forms.ProgressBar();
 			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.filepath1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.artist1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -127,34 +126,7 @@ namespace GlobalNamespace
 			this.tracknumber1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.lyrics1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.cover1 = new System.Windows.Forms.DataGridViewLinkColumn();
-			this.tabPage5 = new System.Windows.Forms.TabPage();
-			this.dataGridView2 = new GlobalNamespace.DataGridViewDoubleBuffered();
-			this.number2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.filepath2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.service2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.duration2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.albumhits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.artist2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.title2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.album2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.date2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.genre2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.disccount2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.discnumber2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.trackcount2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.tracknumber2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.lyrics2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cover2 = new System.Windows.Forms.DataGridViewLinkColumn();
-			this.progressBar1 = new System.Windows.Forms.ProgressBar();
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.clearResultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.btnCancel = new System.Windows.Forms.Button();
-			this.progressBar2 = new System.Windows.Forms.ProgressBar();
+			this.isVirtualFile = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.tabControl2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -199,7 +171,7 @@ namespace GlobalNamespace
 			// tabControl2
 			// 
 			this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl2.Controls.Add(this.tabPage1);
 			this.tabControl2.Controls.Add(this.tabPage2);
 			this.tabControl2.Controls.Add(this.tabPage3);
@@ -224,8 +196,8 @@ namespace GlobalNamespace
 			// rtbSearchLog
 			// 
 			this.rtbSearchLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbSearchLog.BackColor = System.Drawing.SystemColors.Window;
 			this.rtbSearchLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.rtbSearchLog.DetectUrls = false;
@@ -254,8 +226,8 @@ namespace GlobalNamespace
 			// rtbWriteLog
 			// 
 			this.rtbWriteLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbWriteLog.BackColor = System.Drawing.SystemColors.Window;
 			this.rtbWriteLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.rtbWriteLog.DetectUrls = false;
@@ -285,8 +257,8 @@ namespace GlobalNamespace
 			// rtbErrorLog
 			// 
 			this.rtbErrorLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbErrorLog.BackColor = System.Drawing.SystemColors.Window;
 			this.rtbErrorLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.rtbErrorLog.Font = new System.Drawing.Font("Consolas", 8.25F);
@@ -317,8 +289,8 @@ namespace GlobalNamespace
 			// tabControl1
 			// 
 			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl1.ContextMenuStrip = this.PopupMenu;
 			this.tabControl1.Controls.Add(this.tabPage4);
 			this.tabControl1.Controls.Add(this.tabPage5);
@@ -335,8 +307,8 @@ namespace GlobalNamespace
 			// PopupMenu
 			// 
 			this.PopupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.removeLines,
-			this.showInExplorerToolStripMenuItem});
+            this.removeLines,
+            this.showInExplorerToolStripMenuItem});
 			this.PopupMenu.Name = "PopupMenu";
 			this.PopupMenu.Size = new System.Drawing.Size(162, 48);
 			// 
@@ -374,8 +346,8 @@ namespace GlobalNamespace
 			dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
 			this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
 			this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
 			this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.dataGridView1.CausesValidation = false;
@@ -392,19 +364,20 @@ namespace GlobalNamespace
 			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-			this.Column1,
-			this.filepath1,
-			this.artist1,
-			this.title1,
-			this.album1,
-			this.date1,
-			this.genre1,
-			this.disccount1,
-			this.discnumber1,
-			this.trackcount1,
-			this.tracknumber1,
-			this.lyrics1,
-			this.cover1});
+            this.Column1,
+            this.filepath1,
+            this.artist1,
+            this.title1,
+            this.album1,
+            this.date1,
+            this.genre1,
+            this.disccount1,
+            this.discnumber1,
+            this.trackcount1,
+            this.tracknumber1,
+            this.lyrics1,
+            this.cover1,
+            this.isVirtualFile});
 			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
@@ -433,115 +406,6 @@ namespace GlobalNamespace
 			this.dataGridView1.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.DataGridView_SortCompare);
 			this.dataGridView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridView_KeyPress);
 			// 
-			// Column1
-			// 
-			this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-			this.Column1.HeaderText = "#";
-			this.Column1.MinimumWidth = 25;
-			this.Column1.Name = "Column1";
-			this.Column1.ReadOnly = true;
-			this.Column1.ToolTipText = "Number";
-			this.Column1.Width = 25;
-			// 
-			// filepath1
-			// 
-			this.filepath1.HeaderText = "Filepath";
-			this.filepath1.MinimumWidth = 25;
-			this.filepath1.Name = "filepath1";
-			this.filepath1.ToolTipText = "Filepath";
-			this.filepath1.Width = 430;
-			// 
-			// artist1
-			// 
-			this.artist1.HeaderText = "Artist";
-			this.artist1.MinimumWidth = 25;
-			this.artist1.Name = "artist1";
-			this.artist1.ToolTipText = "Artist";
-			// 
-			// title1
-			// 
-			this.title1.HeaderText = "Title";
-			this.title1.MinimumWidth = 25;
-			this.title1.Name = "title1";
-			this.title1.ToolTipText = "Title";
-			// 
-			// album1
-			// 
-			this.album1.HeaderText = "Album";
-			this.album1.MinimumWidth = 25;
-			this.album1.Name = "album1";
-			this.album1.ToolTipText = "Album";
-			// 
-			// date1
-			// 
-			this.date1.HeaderText = "Date";
-			this.date1.MinimumWidth = 25;
-			this.date1.Name = "date1";
-			this.date1.ToolTipText = "Date";
-			// 
-			// genre1
-			// 
-			this.genre1.HeaderText = "Genre";
-			this.genre1.MinimumWidth = 25;
-			this.genre1.Name = "genre1";
-			this.genre1.ToolTipText = "Genre";
-			// 
-			// disccount1
-			// 
-			this.disccount1.HeaderText = "Disc Count";
-			this.disccount1.MinimumWidth = 25;
-			this.disccount1.Name = "disccount1";
-			this.disccount1.ToolTipText = "Disc Count";
-			this.disccount1.Width = 30;
-			// 
-			// discnumber1
-			// 
-			this.discnumber1.HeaderText = "Disc Number";
-			this.discnumber1.MinimumWidth = 25;
-			this.discnumber1.Name = "discnumber1";
-			this.discnumber1.ToolTipText = "Disc Number";
-			this.discnumber1.Width = 30;
-			// 
-			// trackcount1
-			// 
-			this.trackcount1.HeaderText = "Track Count";
-			this.trackcount1.MinimumWidth = 25;
-			this.trackcount1.Name = "trackcount1";
-			this.trackcount1.ToolTipText = "Track Count";
-			this.trackcount1.Width = 30;
-			// 
-			// tracknumber1
-			// 
-			this.tracknumber1.HeaderText = "Track Number";
-			this.tracknumber1.MinimumWidth = 25;
-			this.tracknumber1.Name = "tracknumber1";
-			this.tracknumber1.ToolTipText = "Track Number";
-			this.tracknumber1.Width = 30;
-			// 
-			// lyrics1
-			// 
-			dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.lyrics1.DefaultCellStyle = dataGridViewCellStyle3;
-			this.lyrics1.HeaderText = "Unsynced Lyrics";
-			this.lyrics1.MinimumWidth = 25;
-			this.lyrics1.Name = "lyrics1";
-			this.lyrics1.ToolTipText = "Unsynced Lyrics";
-			this.lyrics1.Width = 200;
-			// 
-			// cover1
-			// 
-			this.cover1.ActiveLinkColor = System.Drawing.Color.Black;
-			this.cover1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.cover1.HeaderText = "Cover";
-			this.cover1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-			this.cover1.LinkColor = System.Drawing.Color.Black;
-			this.cover1.MinimumWidth = 25;
-			this.cover1.Name = "cover1";
-			this.cover1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.cover1.ToolTipText = "Cover";
-			this.cover1.VisitedLinkColor = System.Drawing.Color.Black;
-			// 
 			// tabPage5
 			// 
 			this.tabPage5.Controls.Add(this.dataGridView2);
@@ -560,8 +424,8 @@ namespace GlobalNamespace
 			dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
 			this.dataGridView2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
 			this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.dataGridView2.BackgroundColor = System.Drawing.SystemColors.Window;
 			this.dataGridView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.dataGridView2.CausesValidation = false;
@@ -578,22 +442,23 @@ namespace GlobalNamespace
 			this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
 			this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-			this.number2,
-			this.filepath2,
-			this.service2,
-			this.duration2,
-			this.albumhits,
-			this.artist2,
-			this.title2,
-			this.album2,
-			this.date2,
-			this.genre2,
-			this.disccount2,
-			this.discnumber2,
-			this.trackcount2,
-			this.tracknumber2,
-			this.lyrics2,
-			this.cover2});
+            this.number2,
+            this.filepath2,
+            this.service2,
+            this.artist2,
+            this.title2,
+            this.album2,
+            this.date2,
+            this.genre2,
+            this.disccount2,
+            this.discnumber2,
+            this.trackcount2,
+            this.tracknumber2,
+            this.lyrics2,
+            this.cover2,
+            this.duration2,
+            this.durationTotal2,
+            this.albumhits});
 			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
@@ -650,24 +515,6 @@ namespace GlobalNamespace
 			this.service2.ReadOnly = true;
 			this.service2.ToolTipText = "Service";
 			this.service2.Width = 70;
-			// 
-			// duration2
-			// 
-			this.duration2.HeaderText = "Duration";
-			this.duration2.MinimumWidth = 25;
-			this.duration2.Name = "duration2";
-			this.duration2.ReadOnly = true;
-			this.duration2.ToolTipText = "Duration";
-			this.duration2.Width = 30;
-			// 
-			// albumhits
-			// 
-			this.albumhits.HeaderText = "Album Hits";
-			this.albumhits.MinimumWidth = 25;
-			this.albumhits.Name = "albumhits";
-			this.albumhits.ReadOnly = true;
-			this.albumhits.ToolTipText = "Album Hits";
-			this.albumhits.Width = 30;
 			// 
 			// artist2
 			// 
@@ -760,27 +607,54 @@ namespace GlobalNamespace
 			this.cover2.ToolTipText = "Cover";
 			this.cover2.VisitedLinkColor = System.Drawing.Color.Black;
 			// 
-			// progressBar1
+			// duration2
 			// 
-			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
-			this.progressBar1.Location = new System.Drawing.Point(213, 672);
-			this.progressBar1.Margin = new System.Windows.Forms.Padding(0);
-			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(1258, 10);
-			this.progressBar1.Step = 1;
-			this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-			this.progressBar1.TabIndex = 8;
-			this.progressBar1.Visible = false;
-			this.progressBar1.VisibleChanged += new System.EventHandler(this.ProgressBar1_VisibleChanged);
+			this.duration2.HeaderText = "Duration";
+			this.duration2.MinimumWidth = 25;
+			this.duration2.Name = "duration2";
+			this.duration2.ReadOnly = true;
+			this.duration2.ToolTipText = "Duration";
+			this.duration2.Width = 30;
+			// 
+			// durationTotal2
+			// 
+			this.durationTotal2.HeaderText = "Duration total";
+			this.durationTotal2.MinimumWidth = 25;
+			this.durationTotal2.Name = "durationTotal2";
+			this.durationTotal2.ReadOnly = true;
+			this.durationTotal2.ToolTipText = "Duration total";
+			this.durationTotal2.Width = 30;
+			// 
+			// albumhits
+			// 
+			this.albumhits.HeaderText = "Album Hits";
+			this.albumhits.MinimumWidth = 25;
+			this.albumhits.Name = "albumhits";
+			this.albumhits.ReadOnly = true;
+			this.albumhits.ToolTipText = "Album Hits";
+			this.albumhits.Width = 30;
+			// 
+			// fastProgressBar
+			// 
+			this.fastProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.fastProgressBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
+			this.fastProgressBar.Location = new System.Drawing.Point(213, 672);
+			this.fastProgressBar.Margin = new System.Windows.Forms.Padding(0);
+			this.fastProgressBar.Name = "fastProgressBar";
+			this.fastProgressBar.Size = new System.Drawing.Size(1258, 10);
+			this.fastProgressBar.Step = 1;
+			this.fastProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			this.fastProgressBar.TabIndex = 8;
+			this.fastProgressBar.Visible = false;
+			this.fastProgressBar.VisibleChanged += new System.EventHandler(this.ProgressBar1_VisibleChanged);
 			// 
 			// menuStrip1
 			// 
 			this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripMenuItem1,
-			this.optionsToolStripMenuItem});
+            this.toolStripMenuItem1,
+            this.optionsToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(1656, 24);
@@ -790,8 +664,8 @@ namespace GlobalNamespace
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.openFolderToolStripMenuItem,
-			this.clearResultsToolStripMenuItem});
+            this.openFolderToolStripMenuItem,
+            this.clearResultsToolStripMenuItem});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
 			this.toolStripMenuItem1.Text = "File";
@@ -813,8 +687,8 @@ namespace GlobalNamespace
 			// optionsToolStripMenuItem
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.openSettingsToolStripMenuItem,
-			this.exportCSVToolStripMenuItem});
+            this.openSettingsToolStripMenuItem,
+            this.exportCSVToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
 			this.optionsToolStripMenuItem.Text = "Tools";
@@ -849,19 +723,141 @@ namespace GlobalNamespace
 			this.btnCancel.Visible = false;
 			this.btnCancel.Click += new System.EventHandler(this.Button_CancelClick);
 			// 
-			// progressBar2
+			// slowProgressBar
 			// 
-			this.progressBar2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
-			this.progressBar2.Location = new System.Drawing.Point(213, 681);
-			this.progressBar2.Margin = new System.Windows.Forms.Padding(0);
-			this.progressBar2.Name = "progressBar2";
-			this.progressBar2.Size = new System.Drawing.Size(1258, 10);
-			this.progressBar2.Step = 1;
-			this.progressBar2.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-			this.progressBar2.TabIndex = 11;
-			this.progressBar2.Visible = false;
+			this.slowProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.slowProgressBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
+			this.slowProgressBar.Location = new System.Drawing.Point(213, 681);
+			this.slowProgressBar.Margin = new System.Windows.Forms.Padding(0);
+			this.slowProgressBar.Name = "slowProgressBar";
+			this.slowProgressBar.Size = new System.Drawing.Size(1258, 10);
+			this.slowProgressBar.Step = 1;
+			this.slowProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			this.slowProgressBar.TabIndex = 11;
+			this.slowProgressBar.Visible = false;
+			// 
+			// Column1
+			// 
+			this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+			this.Column1.HeaderText = "#";
+			this.Column1.MinimumWidth = 25;
+			this.Column1.Name = "Column1";
+			this.Column1.ReadOnly = true;
+			this.Column1.ToolTipText = "Number";
+			this.Column1.Width = 25;
+			// 
+			// filepath1
+			// 
+			this.filepath1.HeaderText = "Filepath";
+			this.filepath1.MinimumWidth = 25;
+			this.filepath1.Name = "filepath1";
+			this.filepath1.ToolTipText = "Filepath";
+			this.filepath1.Width = 370;
+			// 
+			// artist1
+			// 
+			this.artist1.HeaderText = "Artist";
+			this.artist1.MinimumWidth = 25;
+			this.artist1.Name = "artist1";
+			this.artist1.ToolTipText = "Artist";
+			// 
+			// title1
+			// 
+			this.title1.HeaderText = "Title";
+			this.title1.MinimumWidth = 25;
+			this.title1.Name = "title1";
+			this.title1.ToolTipText = "Title";
+			// 
+			// album1
+			// 
+			this.album1.HeaderText = "Album";
+			this.album1.MinimumWidth = 25;
+			this.album1.Name = "album1";
+			this.album1.ToolTipText = "Album";
+			// 
+			// date1
+			// 
+			this.date1.HeaderText = "Date";
+			this.date1.MinimumWidth = 25;
+			this.date1.Name = "date1";
+			this.date1.ToolTipText = "Date";
+			// 
+			// genre1
+			// 
+			this.genre1.HeaderText = "Genre";
+			this.genre1.MinimumWidth = 25;
+			this.genre1.Name = "genre1";
+			this.genre1.ToolTipText = "Genre";
+			// 
+			// disccount1
+			// 
+			this.disccount1.HeaderText = "Disc Count";
+			this.disccount1.MinimumWidth = 25;
+			this.disccount1.Name = "disccount1";
+			this.disccount1.ToolTipText = "Disc Count";
+			this.disccount1.Width = 30;
+			// 
+			// discnumber1
+			// 
+			this.discnumber1.HeaderText = "Disc Number";
+			this.discnumber1.MinimumWidth = 25;
+			this.discnumber1.Name = "discnumber1";
+			this.discnumber1.ToolTipText = "Disc Number";
+			this.discnumber1.Width = 30;
+			// 
+			// trackcount1
+			// 
+			this.trackcount1.HeaderText = "Track Count";
+			this.trackcount1.MinimumWidth = 25;
+			this.trackcount1.Name = "trackcount1";
+			this.trackcount1.ToolTipText = "Track Count";
+			this.trackcount1.Width = 30;
+			// 
+			// tracknumber1
+			// 
+			this.tracknumber1.HeaderText = "Track Number";
+			this.tracknumber1.MinimumWidth = 25;
+			this.tracknumber1.Name = "tracknumber1";
+			this.tracknumber1.ToolTipText = "Track Number";
+			this.tracknumber1.Width = 30;
+			// 
+			// lyrics1
+			// 
+			dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.lyrics1.DefaultCellStyle = dataGridViewCellStyle3;
+			this.lyrics1.HeaderText = "Unsynced Lyrics";
+			this.lyrics1.MinimumWidth = 25;
+			this.lyrics1.Name = "lyrics1";
+			this.lyrics1.ToolTipText = "Unsynced Lyrics";
+			this.lyrics1.Width = 200;
+			// 
+			// cover1
+			// 
+			this.cover1.ActiveLinkColor = System.Drawing.Color.Black;
+			this.cover1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.cover1.HeaderText = "Cover";
+			this.cover1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+			this.cover1.LinkColor = System.Drawing.Color.Black;
+			this.cover1.MinimumWidth = 25;
+			this.cover1.Name = "cover1";
+			this.cover1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.cover1.ToolTipText = "Cover";
+			this.cover1.VisitedLinkColor = System.Drawing.Color.Black;
+			// 
+			// isVirtualFile
+			// 
+			this.isVirtualFile.FalseValue = "false";
+			this.isVirtualFile.HeaderText = "isVirtualFile";
+			this.isVirtualFile.Name = "isVirtualFile";
+			this.isVirtualFile.ReadOnly = true;
+			this.isVirtualFile.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.isVirtualFile.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.isVirtualFile.ToolTipText = "isVirtualFile";
+			this.isVirtualFile.TrueValue = "true";
+			this.isVirtualFile.Visible = false;
+			this.isVirtualFile.Width = 25;
 			// 
 			// Form1
 			// 
@@ -869,8 +865,8 @@ namespace GlobalNamespace
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(1656, 838);
-			this.Controls.Add(this.progressBar2);
-			this.Controls.Add(this.progressBar1);
+			this.Controls.Add(this.slowProgressBar);
+			this.Controls.Add(this.fastProgressBar);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnAddFiles);
 			this.Controls.Add(this.btnWrite);
@@ -881,6 +877,7 @@ namespace GlobalNamespace
 			this.DoubleBuffered = true;
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.Icon = global::Shiny_ID3_Tagger.resources.icon_resources.icon_main;
+			this.KeyPreview = true;
 			this.MainMenuStrip = this.menuStrip1;
 			this.MinimumSize = new System.Drawing.Size(500, 500);
 			this.Name = "Form1";
@@ -904,5 +901,36 @@ namespace GlobalNamespace
 			this.PerformLayout();
 
 		}
+		private System.Windows.Forms.DataGridViewTextBoxColumn number2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn filepath2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn service2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn artist2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn title2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn album2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn date2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn genre2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn disccount2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn discnumber2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn trackcount2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn tracknumber2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics2;
+		private System.Windows.Forms.DataGridViewLinkColumn cover2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn duration2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn durationTotal2;
+		private System.Windows.Forms.DataGridViewTextBoxColumn albumhits;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn filepath1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn artist1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn title1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn album1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn date1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn genre1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn disccount1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn discnumber1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn trackcount1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn tracknumber1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics1;
+		private System.Windows.Forms.DataGridViewLinkColumn cover1;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn isVirtualFile;
 	}
 }
