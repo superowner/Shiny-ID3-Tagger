@@ -32,11 +32,13 @@ namespace GlobalNamespace
 				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => WellFormedCsvValue(cell.Value)).ToArray()));
 			}
 
+			// Set dialog properties like filename and start folder
 			SaveFileDialog dialog = new SaveFileDialog();
 			dialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-			dialog.FileName = "Shiny ID3 Tagger Export " + DateTime.Now.ToString("yy-MM-dd HH-mm-ss", cultEng);
+			dialog.FileName = DateTime.Now.ToString("yyMMdd", cultEng) + " - Shiny ID3 Tagger Export - " + tabControl1.SelectedTab.Text;
 			dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
+			// Open Save as dialog and save a textfile (only the extension is CSV) as UTF8 with BOM encoding
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				string filePath = dialog.FileName;

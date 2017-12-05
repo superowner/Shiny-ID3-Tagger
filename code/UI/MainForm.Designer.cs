@@ -18,7 +18,7 @@ namespace GlobalNamespace
 		private System.Windows.Forms.RichTextBox rtbSearchLog;
 		private System.Windows.Forms.Button btnAddFiles;
 		private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.TabPage tabPage4;		
+		private System.Windows.Forms.TabPage tabPage4;
 		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.ProgressBar fastProgressBar;
 		private GlobalNamespace.DataGridViewDoubleBuffered dataGridView1;
@@ -28,14 +28,14 @@ namespace GlobalNamespace
 		private System.Windows.Forms.ToolStripMenuItem openFolderToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem openSettingsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem exportCSVToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem exportTableToolStripMenuItem;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.ToolStripMenuItem clearResultsToolStripMenuItem;
 		private System.Windows.Forms.ProgressBar slowProgressBar;
 		private System.Windows.Forms.ContextMenuStrip PopupMenu;
 		private System.Windows.Forms.ToolStripMenuItem removeLines;
 		private System.Windows.Forms.ToolStripMenuItem showInExplorerToolStripMenuItem;
-				
+
 		/// <summary>
 		/// Disposes resources used by the form.
 		/// </summary>
@@ -49,7 +49,7 @@ namespace GlobalNamespace
 			}
 			base.Dispose(disposing);
 		}
-		
+
 		/// <summary>
 		/// This method is required for Windows Forms designer support.
 		/// Do not change the method contents inside the source code editor. The Forms designer might
@@ -124,7 +124,8 @@ namespace GlobalNamespace
 			this.clearResultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.importTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.slowProgressBar = new System.Windows.Forms.ProgressBar();
 			this.tabControl2.SuspendLayout();
@@ -794,14 +795,14 @@ namespace GlobalNamespace
 			// openFolderToolStripMenuItem
 			// 
 			this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-			this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
 			this.openFolderToolStripMenuItem.Text = "Add Directory";
 			this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_AddFolder);
 			// 
 			// clearResultsToolStripMenuItem
 			// 
 			this.clearResultsToolStripMenuItem.Name = "clearResultsToolStripMenuItem";
-			this.clearResultsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.clearResultsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
 			this.clearResultsToolStripMenuItem.Text = "Clear Tables";
 			this.clearResultsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ClearTables);
 			// 
@@ -809,7 +810,8 @@ namespace GlobalNamespace
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openSettingsToolStripMenuItem,
-            this.exportCSVToolStripMenuItem});
+            this.exportTableToolStripMenuItem,
+            this.importTableToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
 			this.optionsToolStripMenuItem.Text = "Tools";
@@ -821,12 +823,19 @@ namespace GlobalNamespace
 			this.openSettingsToolStripMenuItem.Text = "User Settings";
 			this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_OpenSettings);
 			// 
-			// exportCSVToolStripMenuItem
+			// exportTableToolStripMenuItem
 			// 
-			this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
-			this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.exportCSVToolStripMenuItem.Text = "Export Table";
-			this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ExportTable);
+			this.exportTableToolStripMenuItem.Name = "exportTableToolStripMenuItem";
+			this.exportTableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.exportTableToolStripMenuItem.Text = "Export Table";
+			this.exportTableToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ExportTable);
+			// 
+			// importTableToolStripMenuItem
+			// 
+			this.importTableToolStripMenuItem.Name = "importTableToolStripMenuItem";
+			this.importTableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.importTableToolStripMenuItem.Text = "Import Table";
+			this.importTableToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ImportTable);
 			// 
 			// btnCancel
 			// 
@@ -932,5 +941,6 @@ namespace GlobalNamespace
 		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics1;
 		private System.Windows.Forms.DataGridViewLinkColumn cover1;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn isVirtualFile;
+		private System.Windows.Forms.ToolStripMenuItem importTableToolStripMenuItem;
 	}
 }
