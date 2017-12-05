@@ -12,5 +12,5 @@
 	"UserAgent" 		: "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",	
 	"UserFrames"		: "SKIP,PERFORMER,added_timestamp,last_played_timestamp,play_count,first_played_timestamp,replaygain_track_gain,replaygain_track_peak,replaygain_album_gain,replaygain_album_peak",
 	"DefaultFrames" 	: "APIC,TPE1,TIT2,TALB,TYER,TDRC,TCON,TCOM,TPE2,TRCK,TPOS,COMM,TXXX,USLT",
-	"thresholdRedValue"	: 30
+	"ThresholdRedValue"	: 30
 }

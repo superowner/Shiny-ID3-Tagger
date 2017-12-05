@@ -107,7 +107,7 @@
     <Compile Include="code\UI\events\Button_WriteClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\MenuItemClick_ClearResults.cs">
+    <Compile Include="code\UI\events\MenuItemClick_ClearTables.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="code\UI\events\DataGridView_CellContentClick.cs">
@@ -137,7 +137,7 @@
     <Compile Include="code\UI\events\Popup_ShowExplorerClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\ProgressBar1_VisibleChanged.cs">
+    <Compile Include="code\UI\events\SlowProgressBar_VisibleChanged.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="code\UI\events\Popup_RemoveClick.cs">
@@ -170,7 +170,7 @@
     <Compile Include="code\helper\GetResponse.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\MenuItemClick_ExportCSV.cs">
+    <Compile Include="code\UI\events\MenuItemClick_ExportTable.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="code\helper\IncreaseTotalDuration.cs">

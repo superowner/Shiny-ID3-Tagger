@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="MenuItemClick_ExportCSV.cs" company="Shiny Id3 Tagger">
+// <copyright file="MenuItemClick_ExportTable.cs" company="Shiny Id3 Tagger">
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -18,7 +18,7 @@ namespace GlobalNamespace
 
 	public partial class Form1 : Form
 	{
-		private void MenuItemClick_ExportCSV(object sender, EventArgs e)
+		private void MenuItemClick_ExportTable(object sender, EventArgs e)
 		{
 			StringBuilder csvContent = new StringBuilder();
 			string seperator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;

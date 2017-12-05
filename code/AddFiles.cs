@@ -62,9 +62,9 @@ namespace GlobalNamespace
 			// If any files were retrieved previously (either directly selected, via command line or from a folder)
 			if (files != null)
 			{
-				this.fastProgressBar.Maximum = files.Length;
-				this.fastProgressBar.Value = 0;
-				this.fastProgressBar.Visible = true;
+				this.slowProgressBar.Maximum = files.Length;
+				this.slowProgressBar.Value = 0;
+				this.slowProgressBar.Visible = true;
 
 				// Loop through each file and add it to the first datagridview
 				foreach (string filepath in files)
@@ -90,12 +90,12 @@ namespace GlobalNamespace
 						}
 					});
 
-					this.fastProgressBar.PerformStep();
+					this.slowProgressBar.PerformStep();
 				}
 			}
 
 			// Work finished, re-enable all buttons and hide progress bar
-			this.fastProgressBar.Visible = false;
+			this.slowProgressBar.Visible = false;
 			this.btnSearch.Enabled = true;
 			this.btnWrite.Enabled = true;
 			this.btnAddFiles.Enabled = true;

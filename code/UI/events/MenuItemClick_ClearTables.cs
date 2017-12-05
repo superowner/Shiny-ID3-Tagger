@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="MenuItemClick_ClearResults.cs" company="Shiny Id3 Tagger">
+// <copyright file="MenuItemClick_ClearTables.cs" company="Shiny Id3 Tagger">
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -14,7 +14,7 @@ namespace GlobalNamespace
 
 	public partial class Form1 : Form
 	{
-		private void MenuItemClick_ClearResults(object sender, EventArgs e)
+		private void MenuItemClick_ClearTables(object sender, EventArgs e)
 		{
 			TokenSource.Cancel();
 			albumHits.Clear();

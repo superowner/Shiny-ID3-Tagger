@@ -1,9 +1,9 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ProgressBar1_VisibleChanged.cs" company="Shiny Id3 Tagger">
+// <copyright file="SlowProgressBar_VisibleChanged.cs" company="Shiny Id3 Tagger">
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Shows the cancel button as long as a progress bar is also visible. Auto hide the cancel button afterwards</summary>
+// <summary>Shows the cancel button as long as the slow progress bar is also visible. Hide the cancel button if no visible</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -14,9 +14,9 @@ namespace GlobalNamespace
 
 	public partial class Form1 : Form
 	{
-		private void ProgressBar1_VisibleChanged(object sender, EventArgs e)
+		private void slowProgressBar_VisibleChanged(object sender, EventArgs e)
 		{
-			if (this.fastProgressBar.Visible)
+			if (this.slowProgressBar.Visible)
 			{
 				this.btnCancel.Visible = true;
 			}
