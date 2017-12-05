@@ -13,16 +13,16 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private static string IncreaseAlbumCounter(string service, string webserviceAlbum, string majorityAlbum)
+		private static string IncreaseAlbumCounter(string service, string apiAlbum, string majorityAlbum)
 		{
 			if (!albumHits.ContainsKey(service.ToString()))
 			{
 				albumHits.Add(service.ToString(), 0);
 			}
 
-			if (webserviceAlbum != null && majorityAlbum != null)
+			if (apiAlbum != null && majorityAlbum != null)
 			{
-				if (Strip(webserviceAlbum.ToString().ToLower(cultEng)) == Strip(majorityAlbum.ToLower(cultEng)))
+				if (Strip(apiAlbum.ToString().ToLower(cultEng)) == Strip(majorityAlbum.ToLower(cultEng)))
 				{
 					albumHits[service.ToString()] += 1;
 				}

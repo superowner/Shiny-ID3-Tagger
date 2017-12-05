@@ -232,7 +232,7 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private TagLib.Id3v2.Tag WriteTags(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag id3v2)
 		{
-			// Overwrite tag values with results from webservice API
+			// Overwrite tag values with results from APIs
 			string oldArtist = tagFile.Tag.FirstPerformer;
 			string newArtist = (string)row.Cells[this.artist1.Index].Value;
 			if (oldArtist != newArtist && !string.IsNullOrWhiteSpace(newArtist))

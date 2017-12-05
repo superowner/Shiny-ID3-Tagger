@@ -108,7 +108,6 @@ namespace GlobalNamespace
 					{
 						List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + Timeout + " seconds to respond! Retrying..." };
 						errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
-						errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
 
 						this.PrintLogMessage("error", errorMsg.ToArray());
 					}

@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Code fired when "Search tags" button is clicked. Calls all webservice APIs</summary>
+// <summary>Code fired when "Search tags" button is clicked. Calls all APIs and presents their results</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -65,22 +65,22 @@ namespace GlobalNamespace
 					tagNew.Service = "RESULT";
 					tagNew.Filepath = tagOld.Filepath;
 
-					Task<DataTable> webservicesTask = this.StartId3Search(client, tagOld, cancelToken);
+					Task<DataTable> apiTask = this.StartId3Search(client, tagOld, cancelToken);
 					Task<KeyValuePair<string, string>> lyricSearchTask = this.StartLyricsSearch(client, tagOld, cancelToken);
 
-					await Task.WhenAll(webservicesTask, lyricSearchTask);
+					await Task.WhenAll(apiTask, lyricSearchTask);
 
-					DataTable webserviceResults = webservicesTask.Result;
+					DataTable apiResults = apiTask.Result;
 					KeyValuePair<string, string> lyricsNew = lyricSearchTask.Result;
 
-					string artistNew = (from row1 in webserviceResults.AsEnumerable()
+					string artistNew = (from row1 in apiResults.AsEnumerable()
 								where !string.IsNullOrWhiteSpace(row1.Field<string>("artist"))
 								group row1 by Capitalize(Strip(row1.Field<string>("artist"))) into grp
 								where grp.Count() >= 3
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
-					string titleNew = (from row1 in webserviceResults.AsEnumerable()
+					string titleNew = (from row1 in apiResults.AsEnumerable()
 								where !string.IsNullOrWhiteSpace(row1.Field<string>("title"))
 								group row1 by Capitalize(Strip(row1.Field<string>("title"))) into grp
 								where grp.Count() >= 3
@@ -101,17 +101,17 @@ namespace GlobalNamespace
 						tagNew.Artist = artistNew;
 						tagNew.Title = titleNew;
 
-						webservicesTask = this.StartId3Search(client, tagNew, cancelToken);
+						apiTask = this.StartId3Search(client, tagNew, cancelToken);
 						lyricSearchTask = this.StartLyricsSearch(client, tagNew, cancelToken);
 
-						await Task.WhenAll(webservicesTask, lyricSearchTask);
+						await Task.WhenAll(apiTask, lyricSearchTask);
 
-						webserviceResults = webservicesTask.Result;
+						apiResults = apiTask.Result;
 						lyricsNew = lyricSearchTask.Result;
 					}
 
 					// Aggregate all API results and select the most frequent values
-					tagNew = this.CalculateResults(webserviceResults, tagNew);
+					tagNew = this.CalculateResults(apiResults, tagNew);
 
 					if (tagNew.Album != null && lyricsNew.Value != null)
 					{
@@ -124,7 +124,7 @@ namespace GlobalNamespace
 						break;
 					}
 
-					foreach (DataRow r in webserviceResults.Rows)
+					foreach (DataRow r in apiResults.Rows)
 					{
 						string albumhit = IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
 						string durationTotal = IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
@@ -197,7 +197,7 @@ namespace GlobalNamespace
 					this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor = Color.Yellow;
 					this.dataGridView2.FirstDisplayedScrollingRowIndex = this.dataGridView2.RowCount - 1;
 					this.dataGridView2.ClearSelection();
-					webserviceResults.Dispose();
+					apiResults.Dispose();
 				}
 
 				this.slowProgressBar.PerformStep();
@@ -254,7 +254,7 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private async Task<DataTable> StartId3Search(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
 		{
-			DataTable webserviceResults = Id3.CreateId3Table();
+			DataTable apiResults = Id3.CreateId3Table();
 
 			string artistToSearch = Strip(tagOld.Artist);
 			string titleToSearch = Strip(tagOld.Title);
@@ -295,8 +295,8 @@ namespace GlobalNamespace
 				taskList = tpl.Item1;
 				Id3 r = tpl.Item2;
 
-				webserviceResults.Rows.Add(
-					webserviceResults.Rows.Count + 1,
+				apiResults.Rows.Add(
+					apiResults.Rows.Count + 1,
 					tagOld.Filepath,
 					r.Service,
 					r.Duration,
@@ -315,7 +315,7 @@ namespace GlobalNamespace
 				this.fastProgressBar.PerformStep();
 			}
 
-			return webserviceResults;
+			return apiResults;
 		}
 
 		private async Task<Tuple<List<Task<Id3>>, Id3>> CollectTaskResults(List<Task<Id3>> taskList)
@@ -334,9 +334,9 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		private Id3 CalculateResults(DataTable webserviceResults, Id3 tagNew)
+		private Id3 CalculateResults(DataTable apiResults, Id3 tagNew)
 		{
-			var majorityAlbumRows = (from row in webserviceResults.AsEnumerable()
+			var majorityAlbumRows = (from row in apiResults.AsEnumerable()
 							where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
 							orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
 							group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
