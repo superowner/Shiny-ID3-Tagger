@@ -219,11 +219,13 @@ namespace GlobalNamespace
 		{
 			var lyricResults = new Dictionary<string, string>();
 
-			List<Task<Id3>> taskList = new List<Task<Id3>>();
-			taskList.Add(this.GetLyrics_Netease(client, tagNew, cancelToken));
-			taskList.Add(this.GetLyrics_Chartlyrics(client, tagNew, cancelToken));
-			taskList.Add(this.GetLyrics_Lololyrics(client, tagNew, cancelToken));
-			taskList.Add(this.GetLyrics_Xiami(client, tagNew, cancelToken));
+			List<Task<Id3>> taskList = new List<Task<Id3>>
+			{
+				this.GetLyrics_Netease(client, tagNew, cancelToken),
+				this.GetLyrics_Chartlyrics(client, tagNew, cancelToken),
+				this.GetLyrics_Lololyrics(client, tagNew, cancelToken),
+				this.GetLyrics_Xiami(client, tagNew, cancelToken)
+			};
 
 			while (taskList.Count > 0)
 			{
@@ -267,26 +269,28 @@ namespace GlobalNamespace
 								"file: \"" + tagOld.Filepath + "\"");
 			this.PrintLogMessage("search", new[] { message });
 
-			List<Task<Id3>> taskList = new List<Task<Id3>>();
-			taskList.Add(this.GetTags_7digital(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Amazon(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Decibel(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Deezer(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Discogs(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Genius(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Gracenote(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Itunes(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_LastFm(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_MusicBrainz(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_MusixMatch(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Napster(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Netease(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Qobuz(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_QQ(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken));
-			taskList.Add(this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken));
+			List<Task<Id3>> taskList = new List<Task<Id3>>
+			{
+				this.GetTags_7digital(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Amazon(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Decibel(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Deezer(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Discogs(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Genius(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Gracenote(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Itunes(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_LastFm(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_MusicBrainz(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_MusixMatch(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Napster(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Netease(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Qobuz(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_QQ(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken)
+			};
 
 			this.fastProgressBar.Maximum = taskList.Count;
 			this.fastProgressBar.Value = 0;
@@ -322,7 +326,6 @@ namespace GlobalNamespace
 
 		private async Task<Tuple<List<Task<Id3>>, Id3>> CollectTaskResults(List<Task<Id3>> taskList)
 		{
-
 			// ConfigureAwait(false) is used to remove sluggishness in GUI	/ https://www.thomaslevesque.com/2015/11/11/explicitly-switch-to-the-ui-thread-in-an-async-method/
 			Task<Id3> finishedTask = await Task.WhenAny(taskList).ConfigureAwait(false);
 			Id3 r = await finishedTask;
