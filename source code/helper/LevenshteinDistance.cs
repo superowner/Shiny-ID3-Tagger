@@ -8,11 +8,12 @@
 
 namespace GlobalNamespace
 {
+	using System;
 	using System.Linq;
 
-	internal partial class Helper
+	public partial class Form1
 	{
-		internal static int LevenshteinDistance(string s, string t)
+		private static int LevenshteinDistance(string s, string t)
 		{
 			if (s == t)
 			{

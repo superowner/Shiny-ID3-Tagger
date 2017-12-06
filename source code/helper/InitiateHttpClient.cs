@@ -10,14 +10,15 @@
 namespace GlobalNamespace
 {
 	using System;
+	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 
-	internal partial class Helper
+	public partial class Form1
 	{
-		internal static HttpClient InitiateHttpClient()
+		private static HttpClient InitiateHttpClient()
 		{
-			// Default settings for all connections
+			// DEFAULT SETTINGS FOR ALL CONNECTIONS
 			HttpClientHandler handler = new HttpClientHandler();
 			handler.UseCookies = false;										// this setting is needed for netease
 			handler.AutomaticDecompression = DecompressionMethods.GZip

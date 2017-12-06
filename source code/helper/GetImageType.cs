@@ -10,13 +10,14 @@
 
 namespace GlobalNamespace
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Drawing.Imaging;
 	using System.Linq;
 
-	internal partial class Helper
+	public partial class Form1
 	{
-		internal static bool GetImageType(byte[] imageBytes)
+		private bool GetImageType(byte[] imageBytes)
 		{
 			bool isImage = false;
 			foreach (var imageType in imageFormatDecoders)
@@ -29,7 +30,7 @@ namespace GlobalNamespace
 			return isImage;
 		}
 
-		private static Dictionary<byte[], ImageFormat> imageFormatDecoders = new Dictionary<byte[], ImageFormat>()
+		private Dictionary<byte[], ImageFormat> imageFormatDecoders = new Dictionary<byte[], ImageFormat>()
 		{
 			{ new byte[]{ 0x42, 0x4D }, ImageFormat.Bmp},
 			{ new byte[]{ 0x47, 0x49, 0x46, 0x38, 0x37, 0x61 }, ImageFormat.Gif },

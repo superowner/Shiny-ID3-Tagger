@@ -9,11 +9,13 @@
 
 namespace GlobalNamespace
 {
+	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Text;
 	using System.Text.RegularExpressions;
 
-	internal partial class Helper
+	public partial class Form1
 	{
 		public static string CheckMalformedUtf8(string data)
 		{

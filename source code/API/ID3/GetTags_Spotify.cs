@@ -84,7 +84,7 @@ namespace GlobalNamespace
 						// ###########################################################################
 						string albumUrl = (string)searchData.SelectToken("tracks.items[0].album.href");
 
-						if (Helper.IsValidUrl(albumUrl))
+						if (IsValidUrl(albumUrl))
 						{
 							using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 							{
@@ -110,7 +110,7 @@ namespace GlobalNamespace
 						// Only artist lookups provide sometimes a genre. But they aren't sorted or weighted. Therefore these artist genres produces bad results
 						string artistUrl = (string)searchData.SelectToken("tracks.items[0].artists[0].href");
 
-						if (Helper.IsValidUrl(artistUrl))
+						if (IsValidUrl(artistUrl))
 						{
 							using (HttpRequestMessage artistRequest = new HttpRequestMessage())
 							{

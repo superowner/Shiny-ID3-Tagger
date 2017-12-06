@@ -8,6 +8,9 @@
 
 namespace GlobalNamespace
 {
+	using System;
+	using System.Linq;
+
 	public partial class Form1
 	{
 		private static string IncreaseAlbumCounter(string service, string apiAlbum, string majorityAlbum)
@@ -19,7 +22,7 @@ namespace GlobalNamespace
 
 			if (apiAlbum != null && majorityAlbum != null)
 			{
-				if (Helper.Strip(apiAlbum.ToString().ToLowerInvariant()) == Helper.Strip(majorityAlbum.ToLowerInvariant()))
+				if (Strip(apiAlbum.ToString().ToLowerInvariant()) == Strip(majorityAlbum.ToLowerInvariant()))
 				{
 					albumHits[service.ToString()] += 1;
 				}

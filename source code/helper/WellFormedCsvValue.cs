@@ -8,9 +8,12 @@
 
 namespace GlobalNamespace
 {
-	internal partial class Helper
+	using System;
+	using System.Linq;
+
+	public partial class Form1
 	{
-		internal static string WellFormedCsvValue(object cell)
+		private static string WellFormedCsvValue(object cell)
 		{
 			string value = cell != null ? cell.ToString() : string.Empty;
 			value = value.Replace("\r\n", "\n");

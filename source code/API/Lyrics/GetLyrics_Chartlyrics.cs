@@ -54,7 +54,7 @@ namespace GlobalNamespace
 							string rawLyrics = (string)searchData.SelectToken("GetLyricResult.Lyric");
 
 							// Sanitize lyrics
-							rawLyrics = Helper.CheckMalformedUtf8(rawLyrics);                                                  // Checks and converts a string to UTF-8 if needed/possible
+							rawLyrics = CheckMalformedUtf8(rawLyrics);                                                  // Checks and converts a string to UTF-8 if needed/possible
 							rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
 							rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks and white space
 

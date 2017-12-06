@@ -86,7 +86,9 @@
     <Compile Include="source code\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="source code\helper\GetImageType.cs" />
+    <Compile Include="source code\helper\GetImageType.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="source code\UI\events\DataGridView_CellPainting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,9 +155,15 @@
     <Compile Include="source code\UI\events\TabControl_SelectedIndexChanged.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="source code\helper\Capitalize.cs" />
-    <Compile Include="source code\helper\CheckMalformedUtf8.cs" />
-    <Compile Include="source code\helper\CloneRequest.cs" />
+    <Compile Include="source code\helper\Capitalize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="source code\helper\CheckMalformedUtf8.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="source code\helper\CloneRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="source code\helper\ConvertStringToDate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -177,24 +185,36 @@
     <Compile Include="source code\helper\IncreaseAlbumCounter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="source code\helper\InitiateHttpClient.cs" />
+    <Compile Include="source code\helper\InitiateHttpClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="source code\helper\IsValidMp3.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="source code\helper\IsValidUrl.cs" />
-    <Compile Include="source code\helper\LevenshteinDistance.cs" />
+    <Compile Include="source code\helper\IsValidUrl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="source code\helper\LevenshteinDistance.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="source code\helper\PrintLogMessage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="source code\helper\BuildLogMessage.cs" />
+    <Compile Include="source code\helper\BuildLogMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="source code\helper\MarkChange.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="source code\helper\ReadAccountCredentials.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="source code\helper\Strip.cs" />
-    <Compile Include="source code\helper\WellFormedCsvValue.cs" />
+    <Compile Include="source code\helper\Strip.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="source code\helper\WellFormedCsvValue.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="source code\GlobalVariables.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -124,7 +124,7 @@ namespace GlobalNamespace
 					// Download and add the cover image
 					if (User.Settings["OverwriteImage"] || !tagFile.Tag.Pictures.Any() || tagFile.Tag.Pictures[0].Data.Count == 0)
 					{
-						using (HttpClient client = Helper.InitiateHttpClient())
+						using (HttpClient client = InitiateHttpClient())
 						using (HttpRequestMessage request = new HttpRequestMessage())
 						{
 							HttpResponseMessage response = new HttpResponseMessage();
@@ -132,7 +132,7 @@ namespace GlobalNamespace
 							try
 							{
 								string url = (string)row.Cells[this.cover1.Index].Value;
-								if (Helper.IsValidUrl(url))
+								if (IsValidUrl(url))
 								{
 									request.RequestUri = new Uri(url);
 									response = await client.SendAsync(request);
@@ -149,7 +149,7 @@ namespace GlobalNamespace
 									using (MemoryStream streamResized = new MemoryStream())
 									{
 										// Check if downloaded stream is an image. Some servers use a wrong content type for HTTP response. Therefore you need to check stream bytes for defined byte markers
-										if (Helper.GetImageType(streamOrg.ToArray()))
+										if (GetImageType(streamOrg.ToArray()))
 										{
 											using (Image image = Image.FromStream(streamOrg))
 											{

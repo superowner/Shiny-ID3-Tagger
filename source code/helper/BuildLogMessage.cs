@@ -8,13 +8,15 @@
 
 namespace GlobalNamespace
 {
+	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Net.Http;
 	using System.Text.RegularExpressions;
 
-	internal partial class Helper
+	public partial class Form1
 	{
-		internal static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response)
+		private static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response)
 		{
 			// Add parameters from request
 			List<string> errorMsg = new List<string>();

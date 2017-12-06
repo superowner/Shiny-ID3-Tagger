@@ -10,6 +10,7 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 	using System.Threading;
@@ -28,7 +29,7 @@ namespace GlobalNamespace
 
 			try
 			{
-				using (HttpRequestMessage requestBackup = Helper.CloneRequest(request))
+				using (HttpRequestMessage requestBackup = CloneRequest(request))
 				{
 					for (int i = MaxRetries; i >= 1; i--)
 					{
@@ -38,7 +39,7 @@ namespace GlobalNamespace
 						}
 
 						string requestContent = string.Empty;
-						request = Helper.CloneRequest(requestBackup);
+						request = CloneRequest(requestBackup);
 
 						var timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
 						timeoutToken.CancelAfter(TimeSpan.FromSeconds(Timeout));
@@ -54,7 +55,7 @@ namespace GlobalNamespace
 							// If debugging level is 3 (DEBUG) or higher, print out all requests, not only failed once
 							if (User.Settings["DebugLevel"] >= 3)
 							{
-								List<string> errorMsg = Helper.BuildLogMessage(request, requestContent, null);
+								List<string> errorMsg = BuildLogMessage(request, requestContent, null);
 								this.PrintLogMessage("error", errorMsg.ToArray());
 							}
 
@@ -89,7 +90,7 @@ namespace GlobalNamespace
 									{
 										List<string> errorMsg = new List<string> { "WARNING:  Response was unsuccessful! Retrying..." };
 										errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
-										errorMsg.AddRange(Helper.BuildLogMessage(request, requestContent, response));
+										errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
 										this.PrintLogMessage("error", errorMsg.ToArray());
 									}
@@ -108,7 +109,7 @@ namespace GlobalNamespace
 							if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 2)
 							{
 								List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + Timeout + " seconds to respond! Abort..." };
-								errorMsg.AddRange(Helper.BuildLogMessage(request, requestContent, null));
+								errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
 
 								this.PrintLogMessage("error", errorMsg.ToArray());
 							}
@@ -128,7 +129,7 @@ namespace GlobalNamespace
 								}
 
 								List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured! Abort..." };
-								errorMsg.AddRange(Helper.BuildLogMessage(request, requestContent, null));
+								errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
 								errorMsg.Add("Message:  " + realerror.ToString().TrimEnd('\r', '\n'));
 
 								this.PrintLogMessage("error", errorMsg.ToArray());
