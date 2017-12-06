@@ -8,8 +8,6 @@
 
 namespace GlobalNamespace
 {
-	using System;
-	using System.Linq;
 	using System.Xml;
 	using Newtonsoft.Json;
 

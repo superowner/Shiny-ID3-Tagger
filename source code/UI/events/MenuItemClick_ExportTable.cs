@@ -24,12 +24,12 @@ namespace GlobalNamespace
 			string seperator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 
 			IEnumerable<DataGridViewColumn> headers = ActiveDGV.Columns.Cast<DataGridViewColumn>();
-			csvContent.AppendLine(string.Join(seperator, headers.Select(column => WellFormedCsvValue(column.HeaderCell.Value)).ToArray()));
+			csvContent.AppendLine(string.Join(seperator, headers.Select(column => Helper.WellFormedCsvValue(column.HeaderCell.Value)).ToArray()));
 
 			foreach (DataGridViewRow row in ActiveDGV.Rows)
 			{
 				IEnumerable<DataGridViewCell> cells = row.Cells.Cast<DataGridViewCell>();
-				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => WellFormedCsvValue(cell.Value)).ToArray()));
+				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => Helper.WellFormedCsvValue(cell.Value)).ToArray()));
 			}
 
 			// Set dialog properties like filename, overwrite prompt and start folder

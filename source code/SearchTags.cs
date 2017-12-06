@@ -34,7 +34,7 @@ namespace GlobalNamespace
 			this.slowProgressBar.Visible = true;
 			this.fastProgressBar.Visible = true;
 
-			using (HttpClient client = InitiateHttpClient())
+			using (HttpClient client = Helper.InitiateHttpClient())
 			{
 				Stopwatch sw = new Stopwatch();
 
@@ -78,14 +78,14 @@ namespace GlobalNamespace
 
 						string artistNew = (from row1 in apiResults.AsEnumerable()
 											where !string.IsNullOrWhiteSpace(row1.Field<string>("artist"))
-											group row1 by Capitalize(Strip(row1.Field<string>("artist"))) into grp
+											group row1 by Helper.Capitalize(Helper.Strip(row1.Field<string>("artist"))) into grp
 											where grp.Count() >= 3
 											orderby grp.Count() descending
 											select grp.Key).FirstOrDefault();
 
 						string titleNew = (from row1 in apiResults.AsEnumerable()
 										   where !string.IsNullOrWhiteSpace(row1.Field<string>("title"))
-										   group row1 by Capitalize(Strip(row1.Field<string>("title"))) into grp
+										   group row1 by Helper.Capitalize(Helper.Strip(row1.Field<string>("title"))) into grp
 										   where grp.Count() >= 3
 										   orderby grp.Count() descending
 										   select grp.Key).FirstOrDefault();
@@ -154,7 +154,7 @@ namespace GlobalNamespace
 							// Set row background color to gray if current row album doesn't match the most frequent album
 							if (tagNew.Album == null ||
 								(tagNew.Album != null && r["album"] != null &&
-								Strip(tagNew.Album).ToLowerInvariant() != Strip(r["album"].ToString().ToLowerInvariant())))
+								Helper.Strip(tagNew.Album).ToLowerInvariant() != Helper.Strip(r["album"].ToString().ToLowerInvariant())))
 							{
 								this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.ForeColor = Color.Gray;
 							}
@@ -260,8 +260,8 @@ namespace GlobalNamespace
 		{
 			DataTable apiResults = Id3.CreateId3Table();
 
-			string artistToSearch = Strip(tagOld.Artist);
-			string titleToSearch = Strip(tagOld.Title);
+			string artistToSearch = Helper.Strip(tagOld.Artist);
+			string titleToSearch = Helper.Strip(tagOld.Title);
 
 			string message = string.Format(
 								"{0,-100}{1}",
@@ -345,7 +345,7 @@ namespace GlobalNamespace
 			var majorityAlbumRows = (from row in apiResults.AsEnumerable()
 							where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
 							orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
-							group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
+							group row by Helper.Strip(row.Field<string>("album").ToUpperInvariant()) into grp
 							where grp.Count() >= 3
 							orderby grp.Count() descending
 							select grp).FirstOrDefault();
@@ -353,19 +353,19 @@ namespace GlobalNamespace
 			if (majorityAlbumRows != null)
 			{
 				tagNew.Album = (from row in majorityAlbumRows
-								group row by Capitalize(Strip(row.Field<string>("album"))) into grp
+								group row by Helper.Capitalize(Helper.Strip(row.Field<string>("album"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
 				tagNew.Artist = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("artist"))
-								group row by Capitalize(Strip(row.Field<string>("artist"))) into grp
+								group row by Helper.Capitalize(Helper.Strip(row.Field<string>("artist"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
 				tagNew.Title = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("title"))
-								group row by Capitalize(Strip(row.Field<string>("title"))) into grp
+								group row by Helper.Capitalize(Helper.Strip(row.Field<string>("title"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
@@ -377,7 +377,7 @@ namespace GlobalNamespace
 
 				tagNew.Genre = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("genre"))
-								group row by Capitalize(Strip(row.Field<string>("genre"))) into grp
+								group row by Helper.Capitalize(Helper.Strip(row.Field<string>("genre"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 

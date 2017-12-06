@@ -51,7 +51,7 @@ namespace GlobalNamespace
 				if (searchData != null && searchData.SelectToken("results").Any())
 				{
 					string albumUrl = (string)searchData.SelectToken("results[0].resource_url");
-					if (albumUrl != null && IsValidUrl(albumUrl))
+					if (albumUrl != null && Helper.IsValidUrl(albumUrl))
 					{
 						using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 						{

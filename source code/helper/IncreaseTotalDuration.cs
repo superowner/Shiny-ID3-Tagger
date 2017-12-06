@@ -8,9 +8,6 @@
 
 namespace GlobalNamespace
 {
-	using System;
-	using System.Linq;
-
 	public partial class Form1
 	{
 		private static string IncreaseTotalDuration(string service, string duration)

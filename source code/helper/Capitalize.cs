@@ -22,11 +22,10 @@
 
 namespace GlobalNamespace
 {
-	using System;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 
-	public partial class Form1
+	internal partial class Helper
 	{
 		private static string[] lowercase =
 		{
@@ -34,7 +33,7 @@ namespace GlobalNamespace
 			"into", "of", "off", "on", "onto", "out", "over", "to", "up", "with", "as"
 		};
 
-		private static string Capitalize(string str)
+		internal static string Capitalize(string str)
 		{
 			// If string is not empty and user setting "AutoCapitalize" is set to true
 			if (User.Settings["AutoCapitalize"] && !string.IsNullOrWhiteSpace(str))

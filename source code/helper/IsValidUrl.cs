@@ -11,11 +11,10 @@
 namespace GlobalNamespace
 {
 	using System;
-	using System.Linq;
 
-	public partial class Form1
+	internal partial class Helper
 	{
-		private static bool IsValidUrl(string stringUri)
+		internal static bool IsValidUrl(string stringUri)
 		{
 			bool result = Uri.TryCreate(stringUri, UriKind.Absolute, out Uri uriResult)
 								&& (uriResult.Scheme == Uri.UriSchemeHttp

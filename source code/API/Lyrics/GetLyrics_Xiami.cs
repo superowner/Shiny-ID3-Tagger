@@ -51,7 +51,7 @@ namespace GlobalNamespace
 									   where track.SelectToken("song_name").ToString().ToLowerInvariant() == tagNew.Title.ToLowerInvariant()
 									   select track.SelectToken("artist_name")).FirstOrDefault();
 
-						if (song != null && IsValidUrl((string)song.SelectToken("lyric")))
+						if (song != null && Helper.IsValidUrl((string)song.SelectToken("lyric")))
 						{
 							HttpRequestMessage lyricRequest = new HttpRequestMessage();
 							lyricRequest.RequestUri = new Uri((string)song.SelectToken("lyric"));

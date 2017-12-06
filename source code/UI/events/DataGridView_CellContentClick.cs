@@ -21,7 +21,7 @@ namespace GlobalNamespace
 			if (dgv.Columns[e.ColumnIndex] is DataGridViewLinkColumn && e.RowIndex >= 0)
 			{
 				string url = (string)dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-				if (IsValidUrl(url))
+				if (Helper.IsValidUrl(url))
 				{
 					Process.Start(url);
 				}

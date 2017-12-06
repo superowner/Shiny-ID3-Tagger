@@ -9,7 +9,6 @@
 namespace GlobalNamespace
 {
 	using System;
-	using System.Linq;
 
 	public partial class Form1
 	{

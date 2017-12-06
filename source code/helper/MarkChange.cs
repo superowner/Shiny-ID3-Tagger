@@ -10,7 +10,6 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Drawing;
-	using System.Linq;
 
 	public partial class Form1
 	{
@@ -31,7 +30,7 @@ namespace GlobalNamespace
 						this.dataGridView1[col, row].ToolTipText = oldValue;
 
 						long allowedEdits = oldValue.Length * User.Settings["ThresholdRedValue"] / 100;
-						if (signalBigChanges && (LevenshteinDistance(oldValue, newValue) > allowedEdits))
+						if (signalBigChanges && (Helper.LevenshteinDistance(oldValue, newValue) > allowedEdits))
 						{
 							this.dataGridView1[col, row].Style.BackColor = Color.Red;
 						}

@@ -8,14 +8,12 @@
 
 namespace GlobalNamespace
 {
-	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Net.Http;
 
-	public partial class Form1
+	internal partial class Helper
 	{
-		private static HttpRequestMessage CloneRequest(HttpRequestMessage original)
+		internal static HttpRequestMessage CloneRequest(HttpRequestMessage original)
 		{
 			HttpRequestMessage backup = new HttpRequestMessage(original.Method, original.RequestUri);
 
