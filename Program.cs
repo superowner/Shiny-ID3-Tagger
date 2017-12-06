@@ -6,6 +6,14 @@
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
+// TODO: Add user setting to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
+// TODO: Add user setting to add ID3v1 additionally to ID3v2
+// TODO: user option to choose if/which tags should be removed when writing
+// TODO: Small blue border on mouse hover around row if already selected
+// TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
+// TODO: variables for TryParse and out can be in line
+// TODO: userFrames and defaultFrames should be trimmed
+// TODO: Check all == if string is compared and use "if (stringA.Contains(stringB, StringComparer.OrdinalIgnoreCase))"
 namespace GlobalNamespace
 {
 	using System;

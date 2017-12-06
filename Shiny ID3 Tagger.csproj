@@ -83,217 +83,217 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="code\AddFiles.cs">
+    <Compile Include="source code\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\DataGridView_CellPainting.cs">
+    <Compile Include="source code\UI\events\DataGridView_CellPainting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\Form_KeyDown.cs">
+    <Compile Include="source code\UI\events\Form_KeyDown.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\MenuItemClick_AddFolder.cs">
+    <Compile Include="source code\UI\events\MenuItemClick_AddFolder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\Button_AddFilesClick.cs">
+    <Compile Include="source code\UI\events\Button_AddFilesClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\Button_CancelClick.cs">
+    <Compile Include="source code\UI\events\Button_CancelClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\Button_SearchClick.cs">
+    <Compile Include="source code\UI\events\Button_SearchClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\Button_WriteClick.cs">
+    <Compile Include="source code\UI\events\Button_WriteClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\MenuItemClick_ClearTables.cs">
+    <Compile Include="source code\UI\events\MenuItemClick_ClearTables.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\DataGridView_CellContentClick.cs">
+    <Compile Include="source code\UI\events\DataGridView_CellContentClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\DataGridView_CellDoubleClick.cs">
+    <Compile Include="source code\UI\events\DataGridView_CellDoubleClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\DataGridView_CellMouseDown.cs">
+    <Compile Include="source code\UI\events\DataGridView_CellMouseDown.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\DataGridView_CellMouseEnter.cs">
+    <Compile Include="source code\UI\events\DataGridView_CellMouseEnter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\DataGridView_CellMouseLeave.cs">
+    <Compile Include="source code\UI\events\DataGridView_CellMouseLeave.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\DataGridView_KeyPress.cs">
+    <Compile Include="source code\UI\events\DataGridView_KeyPress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\MenuItemClick_ImportTable.cs">
+    <Compile Include="source code\UI\events\MenuItemClick_ImportTable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\MenuItemClick_OpenSettings.cs">
+    <Compile Include="source code\UI\events\MenuItemClick_OpenSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\DataGridView_SortCompare.cs">
+    <Compile Include="source code\UI\events\DataGridView_SortCompare.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\Popup_ShowExplorerClick.cs">
+    <Compile Include="source code\UI\events\Popup_ShowExplorerClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\SlowProgressBar_VisibleChanged.cs">
+    <Compile Include="source code\UI\events\SlowProgressBar_VisibleChanged.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\Popup_RemoveClick.cs">
+    <Compile Include="source code\UI\events\Popup_RemoveClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\RichTexBox_LinkClicked.cs">
+    <Compile Include="source code\UI\events\RichTexBox_LinkClicked.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\TabControl_SelectedIndexChanged.cs">
+    <Compile Include="source code\UI\events\TabControl_SelectedIndexChanged.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\Capitalize.cs">
+    <Compile Include="source code\helper\Capitalize.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\CheckMalformedUtf8.cs">
+    <Compile Include="source code\helper\CheckMalformedUtf8.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\CloneRequest.cs">
+    <Compile Include="source code\helper\CloneRequest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\ConvertStringToDate.cs">
+    <Compile Include="source code\helper\ConvertStringToDate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\ConvertXmlToJson.cs">
+    <Compile Include="source code\helper\ConvertXmlToJson.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\GetJsonSettings.cs">
+    <Compile Include="source code\helper\GetJsonSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\GetResponse.cs">
+    <Compile Include="source code\helper\GetResponse.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\events\MenuItemClick_ExportTable.cs">
+    <Compile Include="source code\UI\events\MenuItemClick_ExportTable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\IncreaseTotalDuration.cs">
+    <Compile Include="source code\helper\IncreaseTotalDuration.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\IncreaseAlbumCounter.cs">
+    <Compile Include="source code\helper\IncreaseAlbumCounter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\InitiateHttpClient.cs">
+    <Compile Include="source code\helper\InitiateHttpClient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\IsValidMp3.cs">
+    <Compile Include="source code\helper\IsValidMp3.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\IsValidUrl.cs">
+    <Compile Include="source code\helper\IsValidUrl.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\LevenshteinDistance.cs">
+    <Compile Include="source code\helper\LevenshteinDistance.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\PrintLogMessage.cs">
+    <Compile Include="source code\helper\PrintLogMessage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\BuildLogMessage.cs">
+    <Compile Include="source code\helper\BuildLogMessage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\MarkChange.cs">
+    <Compile Include="source code\helper\MarkChange.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\ReadAccountCredentials.cs">
+    <Compile Include="source code\helper\ReadAccountCredentials.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\Strip.cs">
+    <Compile Include="source code\helper\Strip.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\helper\WellFormedCsvValue.cs">
+    <Compile Include="source code\helper\WellFormedCsvValue.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\GlobalVariables.cs">
+    <Compile Include="source code\GlobalVariables.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\SearchTags.cs">
+    <Compile Include="source code\SearchTags.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_7digital.cs">
+    <Compile Include="source code\API\ID3\GetTags_7digital.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Amazon.cs">
+    <Compile Include="source code\API\ID3\GetTags_Amazon.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Decibel.cs">
+    <Compile Include="source code\API\ID3\GetTags_Decibel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Deezer.cs">
+    <Compile Include="source code\API\ID3\GetTags_Deezer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Discogs.cs">
+    <Compile Include="source code\API\ID3\GetTags_Discogs.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Genius.cs">
+    <Compile Include="source code\API\ID3\GetTags_Genius.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Gracenote.cs">
+    <Compile Include="source code\API\ID3\GetTags_Gracenote.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_iTunes.cs">
+    <Compile Include="source code\API\ID3\GetTags_iTunes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_LastFm.cs">
+    <Compile Include="source code\API\ID3\GetTags_LastFm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_MsGroove.cs">
+    <Compile Include="source code\API\ID3\GetTags_MsGroove.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_MusicBrainz.cs">
+    <Compile Include="source code\API\ID3\GetTags_MusicBrainz.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_MusicGraph.cs">
+    <Compile Include="source code\API\ID3\GetTags_MusicGraph.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_MusixMatch.cs">
+    <Compile Include="source code\API\ID3\GetTags_MusixMatch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Napster.cs">
+    <Compile Include="source code\API\ID3\GetTags_Napster.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Netease.cs">
+    <Compile Include="source code\API\ID3\GetTags_Netease.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Qobuz.cs">
+    <Compile Include="source code\API\ID3\GetTags_Qobuz.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_QQ.cs">
+    <Compile Include="source code\API\ID3\GetTags_QQ.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Spotify.cs">
+    <Compile Include="source code\API\ID3\GetTags_Spotify.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\ID3\GetTags_Tidal.cs">
+    <Compile Include="source code\API\ID3\GetTags_Tidal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\Lyrics\GetLyrics_Chartlyrics.cs">
+    <Compile Include="source code\API\Lyrics\GetLyrics_Chartlyrics.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\Lyrics\GetLyrics_Lololyrics.cs">
+    <Compile Include="source code\API\Lyrics\GetLyrics_Lololyrics.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\Lyrics\GetLyrics_Netease.cs">
+    <Compile Include="source code\API\Lyrics\GetLyrics_Netease.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\API\Lyrics\GetLyrics_Xiami.cs">
+    <Compile Include="source code\API\Lyrics\GetLyrics_Xiami.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\WriteTags.cs">
+    <Compile Include="source code\WriteTags.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\MainForm.cs">
+    <Compile Include="source code\UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="code\UI\MainForm.Designer.cs">
+    <Compile Include="source code\UI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -326,7 +326,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="code\UI\MainForm.resx">
+    <EmbeddedResource Include="source code\UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="resources\icon_resources.resx">
