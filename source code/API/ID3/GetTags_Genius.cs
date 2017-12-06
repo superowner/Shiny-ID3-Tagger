@@ -8,12 +8,10 @@
 // https://docs.genius.com/#search-h2
 //-----------------------------------------------------------------------
 
-// TODO: Find a way to filter initial search for albums
 namespace GlobalNamespace
 {
 	using System;
 	using System.Diagnostics;
-	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 	using System.Threading;
@@ -46,7 +44,7 @@ namespace GlobalNamespace
 				{
 					using (HttpRequestMessage trackRequest = new HttpRequestMessage())
 					{
-						trackRequest.RequestUri = new Uri("https://api.genius.com" + searchData.SelectToken("response.hits[0].result.api_path") + "?access_token=" + User.Accounts["GeAccessToken"]);
+						trackRequest.RequestUri = new Uri("https://api.genius.com" + searchData.SelectToken("response.hits[0].result.api_path") + "?access_token=" + User.Accounts["GeAccessToken"] + "&text_format=plain");
 
 						string trackContent = await this.GetResponse(client, trackRequest, cancelToken);
 						JObject trackData = JsonConvert.DeserializeObject<JObject>(trackContent, this.GetJsonSettings());
@@ -66,7 +64,7 @@ namespace GlobalNamespace
 							{
 								using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 								{
-									albumRequest.RequestUri = new Uri("https://api.genius.com" + albumPath + "?access_token=" + User.Accounts["GeAccessToken"]);
+									albumRequest.RequestUri = new Uri("https://api.genius.com" + albumPath + "?access_token=" + User.Accounts["GeAccessToken"] + "&text_format=plain");
 
 									string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
 									JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());

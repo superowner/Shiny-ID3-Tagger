@@ -8,7 +8,6 @@
 // "&limit=1" should not be used, filtering on client side is better
 //-----------------------------------------------------------------------
 
-// TODO: Examine why there are so less results for "genre"
 namespace GlobalNamespace
 {
 	using System;

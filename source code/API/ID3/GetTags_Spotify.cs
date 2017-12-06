@@ -8,7 +8,6 @@
 // https://developer.spotify.com/web-api/object-model/
 //-----------------------------------------------------------------------
 
-// TODO: Check if an additional artist request provides some genre results
 namespace GlobalNamespace
 {
 	using System;
@@ -63,6 +62,7 @@ namespace GlobalNamespace
 				}
 			}
 
+			// ###########################################################################
 			if (ApiSessionData.SpAccessToken != null)
 			{
 				using (HttpRequestMessage searchRequest = new HttpRequestMessage())
@@ -99,8 +99,30 @@ namespace GlobalNamespace
 									o.Date = (string)albumData.SelectToken("release_date");
 									o.DiscCount = (string)albumData.SelectToken("tracks.items[-1:].disc_number");
 									o.TrackCount = (string)albumData.SelectToken("tracks.total");
-									o.Genre = string.Join(", ", albumData.SelectToken("genres"));       // "genres" is always empty even for full album lookups. Seems like a general Spotify issue: https://github.com/spotify/web-api/issues/157
+									o.Genre = string.Join(", ", albumData.SelectToken("genres"));
 									o.Cover = (string)albumData.SelectToken("images").OrderBy(obj => obj["height"]).Last()["url"];
+								}
+							}
+						}
+
+						// ###########################################################################
+						// "genres" is always empty for track and album lookups. Seems like a general Spotify issue: https://github.com/spotify/web-api/issues/157
+						// Only artist lookups provide sometimes a genre. But they aren't sorted or weighted. Therefore these artist genres produces bad results
+						string artistUrl = (string)searchData.SelectToken("tracks.items[0].artists[0].href");
+
+						if (IsValidUrl(artistUrl))
+						{
+							using (HttpRequestMessage artistRequest = new HttpRequestMessage())
+							{
+								artistRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
+								artistRequest.RequestUri = new Uri(artistUrl);
+
+								string artistContent = await this.GetResponse(client, artistRequest, cancelToken);
+								JObject artistData = JsonConvert.DeserializeObject<JObject>(artistContent, this.GetJsonSettings());
+
+								if (artistData != null && artistData.SelectToken("genres") != null && artistData.SelectToken("genres").Any())
+								{
+									o.Genre = (string)artistData.SelectToken("genres[0]");
 								}
 							}
 						}
