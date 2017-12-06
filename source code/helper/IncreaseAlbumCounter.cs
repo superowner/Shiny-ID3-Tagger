@@ -28,7 +28,7 @@ namespace GlobalNamespace
 				}
 			}
 
-			string result = albumHits[service.ToString()].ToStringInvariant();
+			string result = albumHits[service.ToString()].ToString().ToLowerInvariant();
 
 			return result;
 		}

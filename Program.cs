@@ -6,12 +6,13 @@
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
-// FIXME: cover from Discogs for "Beatsteaks - Let Me In" responses with "text/html" as content type, should be "image/jpeg". Better way to detect image type
 // TODO: Add user setting to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
 // TODO: Add user setting to add ID3v1 additionally to ID3v2
 // TODO: user option to choose if/which tags should be removed when writing
 // TODO: Small blue border on mouse hover around row if already selected
+
 // TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
+// FIXME: cover from Discogs for "Beatsteaks - Let Me In" responses with "text/html" as content type, should be "image/jpeg". Better way to detect image type
 namespace GlobalNamespace
 {
 	using System;
