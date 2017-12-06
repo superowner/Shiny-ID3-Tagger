@@ -70,7 +70,7 @@ namespace GlobalNamespace
 			}
 			catch (IOException)
 			{
-				// If file has a write lock (ie. opened in another program)
+				// If file has a write lock (i.e. opened in another program)
 				if (User.Settings["DebugLevel"] >= 1)
 				{
 					string[] errorMsg =

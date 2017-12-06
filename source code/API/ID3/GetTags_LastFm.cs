@@ -69,7 +69,7 @@ namespace GlobalNamespace
 
 						if (albumData != null && albumData.SelectToken("album") != null)
 						{
-							o.Date = null;  // "releasedate" property is broken on lastfm's site. They eventually fix this in 2018 with a new API (https://getsatisfaction.com/lastfm/topics/album-getinfo-is-missing-releasedate)
+							o.Date = null;  // "releasedate" property is broken on Lastfm's site. They eventually fix this in 2018 with a new API (https://getsatisfaction.com/lastfm/topics/album-getinfo-is-missing-releasedate)
 							o.DiscCount = null;
 							o.DiscNumber = null;
 							o.TrackCount = (string)albumData.SelectToken("album.tracks.track[-1:].@attr.rank");
@@ -77,7 +77,7 @@ namespace GlobalNamespace
 
 							if (o.Cover != null)
 							{
-								o.Cover = o.Cover.Replace("/i/u/300x300/", "/i/u/600x600/");        // Largest version on lastfm image servers seems to be 600x600 px
+								o.Cover = o.Cover.Replace("/i/u/300x300/", "/i/u/600x600/");        // Largest version on lastfm image servers seems to be 600x600 pixel
 							}
 						}
 					}

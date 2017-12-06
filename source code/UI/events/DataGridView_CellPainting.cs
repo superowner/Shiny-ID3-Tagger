@@ -46,10 +46,10 @@ namespace GlobalNamespace
 						// Paint right border with grid color
 						e.Graphics.DrawLine(gridlinePen, topRightPoint, bottomRightPoint);
 
-						// Paint top border slighly darker as background color
+						// Paint top border slightly darker as background color
 						e.Graphics.DrawLine(selectedPen, topLeftPoint, topRightPoint);
 
-						// Paint bottom border slighly darker as background color
+						// Paint bottom border slightly darker as background color
 						e.Graphics.DrawLine(selectedPen, bottomleftPoint, bottomRightPoint);
 
 						// Handled painting for this cell, Stop default rendering

@@ -68,7 +68,7 @@ namespace GlobalNamespace
 
 							if (sessionData != null)
 							{
-								// 30mins is the "offlineGracePeriod" which I asume is the timespan a session is valid. I could be wrong since there is no documentation about this
+								// 30mins is the "offlineGracePeriod" which I assume is the timespan a session is valid. I could be wrong since there is no documentation about this
 								TimeSpan validDuration = TimeSpan.FromSeconds((int)sessionData.SelectToken("subscription.offlineGracePeriod") * 60);
 								ApiSessionData.TiSessionExpireDate = DateTime.Now.Add(validDuration);
 							}

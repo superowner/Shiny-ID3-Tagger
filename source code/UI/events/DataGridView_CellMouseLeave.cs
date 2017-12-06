@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Unhighlights rows after they aren't selected anymore. Opposing method to "DataGridView_CellMouseEnter"</summary>
+// <summary>De-highlights rows after they aren't selected anymore. Opposing method to "DataGridView_CellMouseEnter"</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

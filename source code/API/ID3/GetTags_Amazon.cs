@@ -80,7 +80,7 @@ namespace GlobalNamespace
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchContent), this.GetJsonSettings());
 
-				// 1 request per second is ok, after a burst you get throttled to 1 request/10s. Therefore this delay of 1second after every reqiest
+				// 1 request per second is OK, after a burst you get throttled to 1 request/10s. Therefore this delay of 1second after every request
 				// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines
 				Task wait = Task.Delay(1000);
 
@@ -115,7 +115,7 @@ namespace GlobalNamespace
 					}
 
 					// ###########################################################################
-					// Get related items from album (this shows up all tracks on the album, add 'large' as responsgroup to get cover links)
+					// Get related items from album (this shows up all tracks on the album, add 'large' as response-group to get cover links)
 					string asin = (string)item.SelectToken("RelatedItems.RelatedItem.Item.ASIN");
 					if (asin != null)
 					{

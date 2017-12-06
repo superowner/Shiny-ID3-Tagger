@@ -99,7 +99,7 @@ namespace GlobalNamespace
 									o.Date = (string)albumData.SelectToken("release_date");
 									o.DiscCount = (string)albumData.SelectToken("tracks.items[-1:].disc_number");
 									o.TrackCount = (string)albumData.SelectToken("tracks.total");
-									o.Genre = string.Join(", ", albumData.SelectToken("genres"));       // "genres" is always empty even for full album lookups. Seems like a general spotify issue: https://github.com/spotify/web-api/issues/157
+									o.Genre = string.Join(", ", albumData.SelectToken("genres"));       // "genres" is always empty even for full album lookups. Seems like a general Spotify issue: https://github.com/spotify/web-api/issues/157
 									o.Cover = (string)albumData.SelectToken("images").OrderBy(obj => obj["height"]).Last()["url"];
 								}
 							}

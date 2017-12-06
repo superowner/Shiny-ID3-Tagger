@@ -140,9 +140,9 @@ namespace GlobalNamespace
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
-			// 
+			//
 			// btnSearch
-			// 
+			//
 			this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnSearch.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.btnSearch.Font = new System.Drawing.Font("Calibri", 14.25F);
@@ -154,9 +154,9 @@ namespace GlobalNamespace
 			this.btnSearch.Text = "Search tags";
 			this.btnSearch.UseVisualStyleBackColor = true;
 			this.btnSearch.Click += new System.EventHandler(this.Button_SearchClick);
-			// 
+			//
 			// btnWrite
-			// 
+			//
 			this.btnWrite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnWrite.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.btnWrite.Font = new System.Drawing.Font("Calibri", 14.25F);
@@ -168,10 +168,10 @@ namespace GlobalNamespace
 			this.btnWrite.Text = "Write tags";
 			this.btnWrite.UseVisualStyleBackColor = true;
 			this.btnWrite.Click += new System.EventHandler(this.Button_WriteClick);
-			// 
+			//
 			// tabControl2
-			// 
-			this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl2.Controls.Add(this.tabPage1);
 			this.tabControl2.Controls.Add(this.tabPage2);
@@ -183,9 +183,9 @@ namespace GlobalNamespace
 			this.tabControl2.Size = new System.Drawing.Size(1468, 155);
 			this.tabControl2.TabIndex = 3;
 			this.tabControl2.TabStop = false;
-			// 
+			//
 			// tabPage1
-			// 
+			//
 			this.tabPage1.Controls.Add(this.rtbSearchLog);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
@@ -193,11 +193,11 @@ namespace GlobalNamespace
 			this.tabPage1.TabIndex = 2;
 			this.tabPage1.Text = "Search Log";
 			this.tabPage1.UseVisualStyleBackColor = true;
-			// 
+			//
 			// rtbSearchLog
-			// 
-			this.rtbSearchLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this.rtbSearchLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbSearchLog.BackColor = System.Drawing.SystemColors.Window;
 			this.rtbSearchLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -212,9 +212,9 @@ namespace GlobalNamespace
 			this.rtbSearchLog.TabStop = false;
 			this.rtbSearchLog.Text = "";
 			this.rtbSearchLog.WordWrap = false;
-			// 
+			//
 			// tabPage2
-			// 
+			//
 			this.tabPage2.Controls.Add(this.rtbWriteLog);
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
@@ -223,11 +223,11 @@ namespace GlobalNamespace
 			this.tabPage2.TabIndex = 0;
 			this.tabPage2.Text = "Write Log";
 			this.tabPage2.UseVisualStyleBackColor = true;
-			// 
+			//
 			// rtbWriteLog
-			// 
-			this.rtbWriteLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this.rtbWriteLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbWriteLog.BackColor = System.Drawing.SystemColors.Window;
 			this.rtbWriteLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -243,9 +243,9 @@ namespace GlobalNamespace
 			this.rtbWriteLog.Text = "";
 			this.rtbWriteLog.WordWrap = false;
 			this.rtbWriteLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.RichTexBox_LinkClicked);
-			// 
+			//
 			// tabPage3
-			// 
+			//
 			this.tabPage3.Controls.Add(this.rtbErrorLog);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
@@ -254,11 +254,11 @@ namespace GlobalNamespace
 			this.tabPage3.TabIndex = 1;
 			this.tabPage3.Text = "Error Log";
 			this.tabPage3.UseVisualStyleBackColor = true;
-			// 
+			//
 			// rtbErrorLog
-			// 
-			this.rtbErrorLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this.rtbErrorLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbErrorLog.BackColor = System.Drawing.SystemColors.Window;
 			this.rtbErrorLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -272,9 +272,9 @@ namespace GlobalNamespace
 			this.rtbErrorLog.Text = "";
 			this.rtbErrorLog.WordWrap = false;
 			this.rtbErrorLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.RichTexBox_LinkClicked);
-			// 
+			//
 			// btnAddFiles
-			// 
+			//
 			this.btnAddFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnAddFiles.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.btnAddFiles.Font = new System.Drawing.Font("Calibri", 14.25F);
@@ -286,11 +286,11 @@ namespace GlobalNamespace
 			this.btnAddFiles.Text = "Add files";
 			this.btnAddFiles.UseVisualStyleBackColor = true;
 			this.btnAddFiles.Click += new System.EventHandler(this.Button_AddFilesClick);
-			// 
+			//
 			// tabControl1
-			// 
-			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl1.ContextMenuStrip = this.PopupMenu;
 			this.tabControl1.Controls.Add(this.tabPage4);
@@ -304,33 +304,33 @@ namespace GlobalNamespace
 			this.tabControl1.TabIndex = 5;
 			this.tabControl1.TabStop = false;
 			this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
-			// 
+			//
 			// PopupMenu
-			// 
+			//
 			this.PopupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeLines,
             this.showInExplorerToolStripMenuItem});
 			this.PopupMenu.Name = "PopupMenu";
 			this.PopupMenu.Size = new System.Drawing.Size(162, 48);
-			// 
+			//
 			// removeLines
-			// 
+			//
 			this.removeLines.Name = "removeLines";
 			this.removeLines.Size = new System.Drawing.Size(161, 22);
 			this.removeLines.Text = "Remove";
 			this.removeLines.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.removeLines.ToolTipText = "Removes the selected lines";
 			this.removeLines.Click += new System.EventHandler(this.Popup_RemoveClick);
-			// 
+			//
 			// showInExplorerToolStripMenuItem
-			// 
+			//
 			this.showInExplorerToolStripMenuItem.Name = "showInExplorerToolStripMenuItem";
 			this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
 			this.showInExplorerToolStripMenuItem.Text = "Show in Explorer";
 			this.showInExplorerToolStripMenuItem.Click += new System.EventHandler(this.Popup_ShowExplorerClick);
-			// 
+			//
 			// tabPage4
-			// 
+			//
 			this.tabPage4.Controls.Add(this.dataGridView1);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Margin = new System.Windows.Forms.Padding(0);
@@ -339,15 +339,15 @@ namespace GlobalNamespace
 			this.tabPage4.TabIndex = 2;
 			this.tabPage4.Text = "Input Files";
 			this.tabPage4.UseVisualStyleBackColor = true;
-			// 
+			//
 			// dataGridView1
-			// 
+			//
 			this.dataGridView1.AllowUserToAddRows = false;
 			this.dataGridView1.AllowUserToResizeRows = false;
 			dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
 			this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-			this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
 			this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -406,9 +406,9 @@ namespace GlobalNamespace
 			this.dataGridView1.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
 			this.dataGridView1.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.DataGridView_SortCompare);
 			this.dataGridView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridView_KeyPress);
-			// 
+			//
 			// Column1
-			// 
+			//
 			this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
 			this.Column1.HeaderText = "#";
 			this.Column1.MinimumWidth = 25;
@@ -416,84 +416,84 @@ namespace GlobalNamespace
 			this.Column1.ReadOnly = true;
 			this.Column1.ToolTipText = "Number";
 			this.Column1.Width = 25;
-			// 
+			//
 			// filepath1
-			// 
+			//
 			this.filepath1.HeaderText = "Filepath";
 			this.filepath1.MinimumWidth = 25;
 			this.filepath1.Name = "filepath1";
 			this.filepath1.ToolTipText = "Filepath";
 			this.filepath1.Width = 370;
-			// 
+			//
 			// artist1
-			// 
+			//
 			this.artist1.HeaderText = "Artist";
 			this.artist1.MinimumWidth = 25;
 			this.artist1.Name = "artist1";
 			this.artist1.ToolTipText = "Artist";
-			// 
+			//
 			// title1
-			// 
+			//
 			this.title1.HeaderText = "Title";
 			this.title1.MinimumWidth = 25;
 			this.title1.Name = "title1";
 			this.title1.ToolTipText = "Title";
-			// 
+			//
 			// album1
-			// 
+			//
 			this.album1.HeaderText = "Album";
 			this.album1.MinimumWidth = 25;
 			this.album1.Name = "album1";
 			this.album1.ToolTipText = "Album";
-			// 
+			//
 			// date1
-			// 
+			//
 			this.date1.HeaderText = "Date";
 			this.date1.MinimumWidth = 25;
 			this.date1.Name = "date1";
 			this.date1.ToolTipText = "Date";
-			// 
+			//
 			// genre1
-			// 
+			//
 			this.genre1.HeaderText = "Genre";
 			this.genre1.MinimumWidth = 25;
 			this.genre1.Name = "genre1";
 			this.genre1.ToolTipText = "Genre";
-			// 
+			//
 			// disccount1
-			// 
+			//
 			this.disccount1.HeaderText = "Disc Count";
 			this.disccount1.MinimumWidth = 25;
 			this.disccount1.Name = "disccount1";
 			this.disccount1.ToolTipText = "Disc Count";
 			this.disccount1.Width = 30;
-			// 
+			//
 			// discnumber1
-			// 
+			//
 			this.discnumber1.HeaderText = "Disc Number";
 			this.discnumber1.MinimumWidth = 25;
 			this.discnumber1.Name = "discnumber1";
 			this.discnumber1.ToolTipText = "Disc Number";
 			this.discnumber1.Width = 30;
-			// 
+			//
 			// trackcount1
-			// 
+			//
 			this.trackcount1.HeaderText = "Track Count";
 			this.trackcount1.MinimumWidth = 25;
 			this.trackcount1.Name = "trackcount1";
 			this.trackcount1.ToolTipText = "Track Count";
 			this.trackcount1.Width = 30;
-			// 
+			//
 			// tracknumber1
-			// 
+			//
 			this.tracknumber1.HeaderText = "Track Number";
 			this.tracknumber1.MinimumWidth = 25;
 			this.tracknumber1.Name = "tracknumber1";
 			this.tracknumber1.ToolTipText = "Track Number";
 			this.tracknumber1.Width = 30;
-			// 
+			//
 			// lyrics1
-			// 
+			//
 			dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.lyrics1.DefaultCellStyle = dataGridViewCellStyle3;
@@ -502,9 +502,9 @@ namespace GlobalNamespace
 			this.lyrics1.Name = "lyrics1";
 			this.lyrics1.ToolTipText = "Unsynced Lyrics";
 			this.lyrics1.Width = 200;
-			// 
+			//
 			// cover1
-			// 
+			//
 			this.cover1.ActiveLinkColor = System.Drawing.Color.Black;
 			this.cover1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.cover1.HeaderText = "Cover";
@@ -515,9 +515,9 @@ namespace GlobalNamespace
 			this.cover1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.cover1.ToolTipText = "Cover";
 			this.cover1.VisitedLinkColor = System.Drawing.Color.Black;
-			// 
+			//
 			// isVirtualFile
-			// 
+			//
 			this.isVirtualFile.FalseValue = "false";
 			this.isVirtualFile.HeaderText = "isVirtualFile";
 			this.isVirtualFile.Name = "isVirtualFile";
@@ -528,9 +528,9 @@ namespace GlobalNamespace
 			this.isVirtualFile.TrueValue = "true";
 			this.isVirtualFile.Visible = false;
 			this.isVirtualFile.Width = 25;
-			// 
+			//
 			// tabPage5
-			// 
+			//
 			this.tabPage5.Controls.Add(this.dataGridView2);
 			this.tabPage5.Location = new System.Drawing.Point(4, 22);
 			this.tabPage5.Name = "tabPage5";
@@ -539,15 +539,15 @@ namespace GlobalNamespace
 			this.tabPage5.TabIndex = 0;
 			this.tabPage5.Text = "Search Details";
 			this.tabPage5.UseVisualStyleBackColor = true;
-			// 
+			//
 			// dataGridView2
-			// 
+			//
 			this.dataGridView2.AllowUserToAddRows = false;
 			this.dataGridView2.AllowUserToResizeRows = false;
 			dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
 			this.dataGridView2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
-			this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.dataGridView2.BackgroundColor = System.Drawing.SystemColors.Window;
 			this.dataGridView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -610,9 +610,9 @@ namespace GlobalNamespace
 			this.dataGridView2.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
 			this.dataGridView2.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.DataGridView_SortCompare);
 			this.dataGridView2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridView_KeyPress);
-			// 
+			//
 			// number2
-			// 
+			//
 			this.number2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
 			this.number2.HeaderText = "#";
 			this.number2.MinimumWidth = 25;
@@ -620,94 +620,94 @@ namespace GlobalNamespace
 			this.number2.ReadOnly = true;
 			this.number2.ToolTipText = "Number";
 			this.number2.Width = 25;
-			// 
+			//
 			// filepath2
-			// 
+			//
 			this.filepath2.HeaderText = "Filepath";
 			this.filepath2.MinimumWidth = 25;
 			this.filepath2.Name = "filepath2";
 			this.filepath2.ReadOnly = true;
 			this.filepath2.ToolTipText = "Filepath";
 			this.filepath2.Width = 300;
-			// 
+			//
 			// service2
-			// 
+			//
 			this.service2.HeaderText = "Service";
 			this.service2.MinimumWidth = 25;
 			this.service2.Name = "service2";
 			this.service2.ReadOnly = true;
 			this.service2.ToolTipText = "Service";
 			this.service2.Width = 70;
-			// 
+			//
 			// artist2
-			// 
+			//
 			this.artist2.HeaderText = "Artist";
 			this.artist2.MinimumWidth = 25;
 			this.artist2.Name = "artist2";
 			this.artist2.ToolTipText = "Artist";
-			// 
+			//
 			// title2
-			// 
+			//
 			this.title2.HeaderText = "Title";
 			this.title2.MinimumWidth = 25;
 			this.title2.Name = "title2";
 			this.title2.ToolTipText = "Title";
-			// 
+			//
 			// album2
-			// 
+			//
 			this.album2.HeaderText = "Album";
 			this.album2.MinimumWidth = 25;
 			this.album2.Name = "album2";
 			this.album2.ToolTipText = "Album";
-			// 
+			//
 			// date2
-			// 
+			//
 			this.date2.HeaderText = "Date";
 			this.date2.MinimumWidth = 25;
 			this.date2.Name = "date2";
 			this.date2.ToolTipText = "Date";
-			// 
+			//
 			// genre2
-			// 
+			//
 			this.genre2.HeaderText = "Genre";
 			this.genre2.MinimumWidth = 25;
 			this.genre2.Name = "genre2";
 			this.genre2.ToolTipText = "Genre";
-			// 
+			//
 			// disccount2
-			// 
+			//
 			this.disccount2.HeaderText = "Disc Count";
 			this.disccount2.MinimumWidth = 25;
 			this.disccount2.Name = "disccount2";
 			this.disccount2.ToolTipText = "Disc Count";
 			this.disccount2.Width = 30;
-			// 
+			//
 			// discnumber2
-			// 
+			//
 			this.discnumber2.HeaderText = "Disc Number";
 			this.discnumber2.MinimumWidth = 25;
 			this.discnumber2.Name = "discnumber2";
 			this.discnumber2.ToolTipText = "Disc Number";
 			this.discnumber2.Width = 30;
-			// 
+			//
 			// trackcount2
-			// 
+			//
 			this.trackcount2.HeaderText = "Track Count";
 			this.trackcount2.MinimumWidth = 25;
 			this.trackcount2.Name = "trackcount2";
 			this.trackcount2.ToolTipText = "Track Count";
 			this.trackcount2.Width = 30;
-			// 
+			//
 			// tracknumber2
-			// 
+			//
 			this.tracknumber2.HeaderText = "Track Number";
 			this.tracknumber2.MinimumWidth = 25;
 			this.tracknumber2.Name = "tracknumber2";
 			this.tracknumber2.ToolTipText = "Track Number";
 			this.tracknumber2.Width = 30;
-			// 
+			//
 			// lyrics2
-			// 
+			//
 			dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
 			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.lyrics2.DefaultCellStyle = dataGridViewCellStyle8;
@@ -716,9 +716,9 @@ namespace GlobalNamespace
 			this.lyrics2.Name = "lyrics2";
 			this.lyrics2.ToolTipText = "Unsynced Lyrics";
 			this.lyrics2.Width = 200;
-			// 
+			//
 			// cover2
-			// 
+			//
 			this.cover2.ActiveLinkColor = System.Drawing.Color.Black;
 			this.cover2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.cover2.HeaderText = "Cover";
@@ -729,37 +729,37 @@ namespace GlobalNamespace
 			this.cover2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.cover2.ToolTipText = "Cover";
 			this.cover2.VisitedLinkColor = System.Drawing.Color.Black;
-			// 
+			//
 			// duration2
-			// 
+			//
 			this.duration2.HeaderText = "Duration";
 			this.duration2.MinimumWidth = 25;
 			this.duration2.Name = "duration2";
 			this.duration2.ReadOnly = true;
 			this.duration2.ToolTipText = "Duration";
 			this.duration2.Width = 30;
-			// 
+			//
 			// durationTotal2
-			// 
+			//
 			this.durationTotal2.HeaderText = "Duration total";
 			this.durationTotal2.MinimumWidth = 25;
 			this.durationTotal2.Name = "durationTotal2";
 			this.durationTotal2.ReadOnly = true;
 			this.durationTotal2.ToolTipText = "Duration total";
 			this.durationTotal2.Width = 30;
-			// 
-			// albumhits
-			// 
+			//
+			// albumHits
+			//
 			this.albumhits.HeaderText = "Album Hits";
 			this.albumhits.MinimumWidth = 25;
 			this.albumhits.Name = "albumhits";
 			this.albumhits.ReadOnly = true;
 			this.albumhits.ToolTipText = "Album Hits";
 			this.albumhits.Width = 30;
-			// 
+			//
 			// fastProgressBar
-			// 
-			this.fastProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this.fastProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.fastProgressBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
 			this.fastProgressBar.Location = new System.Drawing.Point(213, 672);
@@ -770,9 +770,9 @@ namespace GlobalNamespace
 			this.fastProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.fastProgressBar.TabIndex = 8;
 			this.fastProgressBar.Visible = false;
-			// 
+			//
 			// menuStrip1
-			// 
+			//
 			this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
@@ -782,32 +782,32 @@ namespace GlobalNamespace
 			this.menuStrip1.Size = new System.Drawing.Size(1656, 24);
 			this.menuStrip1.TabIndex = 9;
 			this.menuStrip1.Text = "menuStrip1";
-			// 
+			//
 			// toolStripMenuItem1
-			// 
+			//
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFolderToolStripMenuItem,
             this.clearResultsToolStripMenuItem});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
 			this.toolStripMenuItem1.Text = "File";
-			// 
+			//
 			// openFolderToolStripMenuItem
-			// 
+			//
 			this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
 			this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
 			this.openFolderToolStripMenuItem.Text = "Add Directory";
 			this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_AddFolder);
-			// 
+			//
 			// clearResultsToolStripMenuItem
-			// 
+			//
 			this.clearResultsToolStripMenuItem.Name = "clearResultsToolStripMenuItem";
 			this.clearResultsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
 			this.clearResultsToolStripMenuItem.Text = "Clear Tables";
 			this.clearResultsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ClearTables);
-			// 
+			//
 			// optionsToolStripMenuItem
-			// 
+			//
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openSettingsToolStripMenuItem,
             this.exportTableToolStripMenuItem,
@@ -815,30 +815,30 @@ namespace GlobalNamespace
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
 			this.optionsToolStripMenuItem.Text = "Tools";
-			// 
+			//
 			// openSettingsToolStripMenuItem
-			// 
+			//
 			this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
 			this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.openSettingsToolStripMenuItem.Text = "User Settings";
 			this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_OpenSettings);
-			// 
+			//
 			// exportTableToolStripMenuItem
-			// 
+			//
 			this.exportTableToolStripMenuItem.Name = "exportTableToolStripMenuItem";
 			this.exportTableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.exportTableToolStripMenuItem.Text = "Export Table";
 			this.exportTableToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ExportTable);
-			// 
+			//
 			// importTableToolStripMenuItem
-			// 
+			//
 			this.importTableToolStripMenuItem.Name = "importTableToolStripMenuItem";
 			this.importTableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.importTableToolStripMenuItem.Text = "Import Table";
 			this.importTableToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ImportTable);
-			// 
+			//
 			// btnCancel
-			// 
+			//
 			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnCancel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.btnCancel.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -852,10 +852,10 @@ namespace GlobalNamespace
 			this.btnCancel.UseVisualStyleBackColor = true;
 			this.btnCancel.Visible = false;
 			this.btnCancel.Click += new System.EventHandler(this.Button_CancelClick);
-			// 
+			//
 			// slowProgressBar
-			// 
-			this.slowProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this.slowProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.slowProgressBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
 			this.slowProgressBar.Location = new System.Drawing.Point(213, 681);
@@ -867,9 +867,9 @@ namespace GlobalNamespace
 			this.slowProgressBar.TabIndex = 11;
 			this.slowProgressBar.Visible = false;
 			this.slowProgressBar.VisibleChanged += new System.EventHandler(this.slowProgressBar_VisibleChanged);
-			// 
+			//
 			// Form1
-			// 
+			//
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;

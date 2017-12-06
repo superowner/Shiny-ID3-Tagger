@@ -65,7 +65,7 @@ namespace GlobalNamespace
 					// ###########################################################################
 					using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 					{
-						// musicgraph has a database flaw where many album IDs in track responses point to non-existing album URLs resulting in a 404 "Not found" http error
+						// Musicgraph has a database flaw where many album IDs in track responses point to non-existing album URLs resulting in a 404 "Not found" HTTP error
 						albumRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/album/" + (string)track.SelectToken("track_album_id") + "?api_key=" + (string)account[0]["key"]);
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);

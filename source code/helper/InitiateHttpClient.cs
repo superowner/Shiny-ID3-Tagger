@@ -28,7 +28,7 @@ namespace GlobalNamespace
 			client.DefaultRequestHeaders.Clear();
 			client.DefaultRequestHeaders.ConnectionClose = false;			// Will attempt to keep the connection open which makes more efficient use of the client.
 			client.DefaultRequestHeaders.Connection.Add("Keep-Alive");		// Will attempt to keep the connection open which makes more efficient use of the client.
-			client.Timeout = TimeSpan.FromSeconds(15);						// Musicbrainz has 15s timeout in response header. Dont know if this setting is needed
+			client.Timeout = TimeSpan.FromSeconds(15);						// Musicbrainz has 15s timeout in response header. Don't know if this setting is needed
 			client.MaxResponseContentBufferSize = 256000000;
 			ServicePointManager.DefaultConnectionLimit = 24;				// Not sure if it's needed since this limit applies to connections per remote host (per API), not in total per client
 

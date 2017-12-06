@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Tries to convert a given string to a datetime object</summary>
+// <summary>Tries to convert a given string to a dateTime object</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -15,7 +15,7 @@ namespace GlobalNamespace
 	public partial class Form1
 	{
 		// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
-		// MSDN about standard datetime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
+		// MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
 		private static string[] dateTimeformats =
 				{
 					"yyyy",

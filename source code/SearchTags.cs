@@ -149,7 +149,7 @@ namespace GlobalNamespace
 								durationTotal ?? string.Empty,
 								albumhit ?? string.Empty);
 
-							// Set row background color to grey if current row album doesnt match the most frequent album
+							// Set row background color to gray if current row album doesn't match the most frequent album
 							if (tagNew.Album == null ||
 								(tagNew.Album != null && r["album"] != null &&
 								Strip(tagNew.Album).ToLower() != Strip(r["album"].ToString().ToLower())))

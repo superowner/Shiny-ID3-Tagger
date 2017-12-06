@@ -23,7 +23,7 @@ namespace GlobalNamespace
 		{
 			Action<Exception> errorHandler = (ex) =>
 			{
-				// settings.json or accounts.json coult not be parsed or read correctly
+				// settings.json or accounts.json could not be parsed or read correctly
 				if (User.Settings["DebugLevel"] >= 1)
 				{
 					string[] errorMsg =

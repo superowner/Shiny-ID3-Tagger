@@ -8,7 +8,7 @@
 // https://github.com/yanunon/NeteaseCloudMusic/wiki/NetEase-cloud-music-analysis-API-%5BEN%5D
 //-----------------------------------------------------------------------
 
-// TODO: Don't use chinese transaltion for "album". Compare results when using "&type=10" which filters for albums only
+// TODO: Don't use Chinese translation for "album". Compare results when using "&type=10" which filters for albums only
 namespace GlobalNamespace
 {
 	using System;
@@ -52,7 +52,7 @@ namespace GlobalNamespace
 				if (searchData != null && searchData.SelectToken("result.songs") != null)
 				{
 					List<JToken> albums = (from songs in searchData.SelectToken("result.songs")
-										   where (string)songs["album"]["type"] == "专辑"  // Chinese transation is "album", excludes EPs and compilations and stuff like that
+										   where (string)songs["album"]["type"] == "专辑"  // Chinese translation is "album", excludes EPs and compilations and stuff like that
 										   select songs).ToList();
 
 					if (albums.Count > 0)

@@ -7,7 +7,7 @@
 // http://www.qobuz.com/account/profile
 // https://github.com/Qobuz/api-documentation
 // https://github.com/Qobuz/api-documentation/blob/master/endpoints/track/search.md
-// No english genre names possible. API returns french genre names
+// No English genre names possible. API returns French genre names
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

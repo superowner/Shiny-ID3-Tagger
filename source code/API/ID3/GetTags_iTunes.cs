@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from Itunes API for current track</summary>
+// <summary>Gets ID3 data from iTunes API for current track</summary>
 // https://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html
 //-----------------------------------------------------------------------
 

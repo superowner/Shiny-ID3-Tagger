@@ -93,7 +93,7 @@ namespace GlobalNamespace
 						if (trackData != null && trackData.SelectToken("data") != null)
 						{
 							o.TrackNumber = (string)trackData.SelectToken("data[0].index_album");
-							o.DiscNumber = null;    // Maybe "data[0].index_cd" is the correct property, but Im unsure
+							o.DiscNumber = null;    // Maybe "data[0].index_cd" is the correct property, but I'm unsure
 						}
 					}
 				}

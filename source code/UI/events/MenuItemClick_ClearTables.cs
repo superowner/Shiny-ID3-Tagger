@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Clears log and results from all datagridviews</summary>
+// <summary>Clears log and results from all dataGridViews</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

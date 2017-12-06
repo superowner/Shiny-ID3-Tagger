@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Backups a HTTP request message before the reuqest is fired. Otherwise you couldn't do retries after an unsuccessful try</summary>
+// <summary>Backups a HTTP request message before the request is fired. Otherwise you couldn't do retries after an unsuccessful try</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Removes all selected rows from the active datagridview when usign the context menu "Remove lines"</summary>
+// <summary>Removes all selected rows from the active datagridview when using the context menu "Remove lines"</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

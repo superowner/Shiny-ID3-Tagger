@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Outputs a given log message to it's corresponding richtextbox</summary>
+// <summary>Outputs a given log message to it's corresponding richTextBox</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -45,7 +45,7 @@ namespace GlobalNamespace
 			}
 			catch (ObjectDisposedException)
 			{
-				// User closed window. Therefore richtextbox is alread disposed and not available for output. Nothing more to do here
+				// User closed window. Therefore richTextBox is already disposed and not available for output. Nothing more to do here
 			}
 		}
 	}

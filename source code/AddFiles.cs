@@ -69,7 +69,7 @@ namespace GlobalNamespace
 				this.slowProgressBar.Value = 0;
 				this.slowProgressBar.Visible = true;
 
-				// Loop through each file and add it to the first datagridview
+				// Loop through each file and add it to the first dataGridView
 				foreach (string filepath in files)
 				{
 					if (cancelToken.IsCancellationRequested)
@@ -192,7 +192,7 @@ namespace GlobalNamespace
 					}
 				}
 
-				// Case: When both sources don't have a valid value, use the whole filename as fallback
+				// Case: When both sources don't have a valid value, use the whole filename as fall-back
 				tagOld.Artist = tagOld.Artist ?? filename;
 				tagOld.Title = tagOld.Title ?? filename;
 
@@ -207,7 +207,7 @@ namespace GlobalNamespace
 				tagOld.Lyrics = tagFile.Tag.Lyrics;
 				tagOld.Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : null;
 
-				// Show old tags in gridview panel
+				// Show old tags in dataGridView
 				this.Invoke((MethodInvoker)delegate
 				{
 					this.dataGridView1.Rows.Add(

@@ -21,18 +21,18 @@ namespace GlobalNamespace
 			// How to check encoding?
 			//using (TextFieldParser parser = new TextFieldParser(@"c:\temp\test.csv"))
 			//{
-			//	parser.TextFieldType = FieldType.Delimited;
-			//	parser.SetDelimiters(",");
-			//	while (!parser.EndOfData)
-			//	{
-			//		//Processing row
-			//		string[] fields = parser.ReadFields();
-			//		foreach (string field in fields)
+			//parser.textfieldtype = fieldtype.delimited;
+			//parser.setdelimiters(",");
+			//while (!parser.endofdata)
+			//{
+			//	processing row
+			//	string[] fields = parser.readfields();
+			//	foreach (string field in fields)
 			//		{
 			//			//TODO: Process field
 			//		}
 			//	}
 			//}
-		}
+			}
 	}
 }

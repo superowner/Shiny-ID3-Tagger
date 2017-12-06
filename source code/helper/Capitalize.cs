@@ -39,9 +39,9 @@ namespace GlobalNamespace
 			// If string is not empty and user setting "AutoCapitalize" is set to true
 			if (User.Settings["AutoCapitalize"] && !string.IsNullOrWhiteSpace(str))
 			{
-				// Use regex to extract all words from str. Use custom word seperators
-				// Edge case "P!nk" is not split into two words since the exclamation mark is not included in seperator list
-				// Edge case "Mind the G.A.T.T" is not split into several words since the point is not included in seperator list
+				// Use RegEx to extract all words from str. Use custom word separators
+				// Edge case "P!nk" is not split into two words since the exclamation mark is not included in separator list
+				// Edge case "Mind the G.A.T.T" is not split into several words since the point is not included in separator list
 				const string Sep = @" ,&/\(\)\{\}\[\]\><";
 				MatchCollection words = Regex.Matches(str, "(?<=^|([" + Sep + "])+)[^" + Sep + "]+?(?=$|([" + Sep + "])+)");
 
