@@ -6,13 +6,12 @@
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
-// FIXME: Move cover download to new function. Don't clear background color for cover cell when false is returned
+// TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned
 // TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
 // TODO: User option to add ID3v1 additionally to ID3v2
 // TODO: User option to choose if/which tags should be removed when writing
 // TODO: Small blue border on mouse hover around row if already selected
 // TODO: Import CSV files with artist/title info to lookup. So a mp3 folder is not needed
-// TODO: Don't use partial class Form1 for every file. Separate them into different classes
 
 namespace GlobalNamespace
 {
