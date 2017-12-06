@@ -76,7 +76,7 @@ namespace GlobalNamespace
 
 							foreach (JToken recording in albumData.SelectTokens("Results[0].Recordings[*]"))
 							{
-								if (((string)recording.SelectToken("Title")).ToLower() == o.Title.ToLower())
+								if (((string)recording.SelectToken("Title")).ToLowerInvariant() == o.Title.ToLowerInvariant())
 								{
 									o.TrackNumber = (string)recording["AlbumSequence"];
 									break;

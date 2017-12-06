@@ -82,7 +82,7 @@ namespace GlobalNamespace
 					{
 						// Check if the file was already added
 						bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
-							where row.Cells[this.filepath1.Index].Value.ToString() == filepath
+							where row.Cells[this.filepath1.Index].Value.ToString().ToLowerInvariant() == filepath.ToLowerInvariant()
 							select row).Any();
 
 						// Check if the file is a valid mp3 file

@@ -66,7 +66,7 @@ namespace GlobalNamespace
 							o.Genre = (string)albumData.SelectToken("genres.data[0].name");
 
 							JToken[] tracklist = albumData.SelectTokens("tracks.data[*].title").ToArray();
-							int temp = Array.FindIndex(tracklist, t => t.ToString().Equals(o.Title, StringComparison.OrdinalIgnoreCase));
+							int temp = Array.FindIndex(tracklist, t => t.ToString().ToLowerInvariant() == o.Title.ToLowerInvariant());
 							if (temp != -1)
 							{
 								o.TrackNumber = (temp + 1).ToString();

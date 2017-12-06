@@ -17,8 +17,7 @@ namespace GlobalNamespace
 	{
 		private static bool IsValidUrl(string stringUri)
 		{
-			Uri uriResult;
-			bool result = Uri.TryCreate(stringUri, UriKind.Absolute, out uriResult)
+			bool result = Uri.TryCreate(stringUri, UriKind.Absolute, out Uri uriResult)
 								&& (uriResult.Scheme == Uri.UriSchemeHttp
 								|| uriResult.Scheme == Uri.UriSchemeHttps);
 			return result;

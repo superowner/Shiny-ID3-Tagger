@@ -17,7 +17,7 @@ namespace GlobalNamespace
 	{
 		private void DataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
 		{
-			// If both values are the same, or both values are null/DBNull
+			// If both values are the same, or both values are null/DBNull. Compare case sensitive
 			if (e.CellValue1 == e.CellValue2)
 			{
 				e.SortResult = 0;
@@ -42,10 +42,8 @@ namespace GlobalNamespace
 			}
 
 			// If both values can be converted to dateTime
-			DateTime outDate1;
-			DateTime outDate2;
-			if (DateTime.TryParseExact((string)e.CellValue1, dateTimeformats, cultEng, DateTimeStyles.None, out outDate1) &&
-			    DateTime.TryParseExact((string)e.CellValue2, dateTimeformats, cultEng, DateTimeStyles.None, out outDate2))
+			if (DateTime.TryParseExact((string)e.CellValue1, dateTimeformats, cultEng, DateTimeStyles.None, out DateTime outDate1) &&
+			    DateTime.TryParseExact((string)e.CellValue2, dateTimeformats, cultEng, DateTimeStyles.None, out DateTime outDate2))
 			{
 				e.SortResult = DateTime.Compare(outDate1, outDate2);
 				e.Handled = true;
@@ -53,9 +51,8 @@ namespace GlobalNamespace
 			}
 
 			// If both values can be converted to decimal
-			decimal outDecimal1;
-			decimal outDecimal2;
-			if (decimal.TryParse((string)e.CellValue1, out outDecimal1) && decimal.TryParse((string)e.CellValue2, out outDecimal2))
+			if (decimal.TryParse((string)e.CellValue1, out decimal outDecimal1) &&
+				decimal.TryParse((string)e.CellValue2, out decimal outDecimal2))
 			{
 				e.SortResult = decimal.Compare(outDecimal1, outDecimal2);
 				e.Handled = true;

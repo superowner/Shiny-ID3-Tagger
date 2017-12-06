@@ -21,9 +21,9 @@ namespace GlobalNamespace
 
 		private static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		private static Dictionary<string, int> albumHits = new Dictionary<string, int>();
+		private static Dictionary<string, int> albumHits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
-		private static Dictionary<string, decimal> totalDuration = new Dictionary<string, decimal>();
+		private static Dictionary<string, decimal> totalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
 
 		private static DataGridView ActiveDGV { get; set; }
 

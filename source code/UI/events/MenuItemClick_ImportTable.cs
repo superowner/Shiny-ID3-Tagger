@@ -29,7 +29,6 @@ namespace GlobalNamespace
 			//	string[] fields = parser.readfields();
 			//	foreach (string field in fields)
 			//		{
-			//			//TODO: Process field
 			//		}
 			//	}
 			//}

@@ -55,16 +55,16 @@ namespace GlobalNamespace
 					// Search special words and lowercase them
 					// "and" => stays "and"			"And" => goes "and"		"AND" => stays "AND"
 					// But ignore the first/last word. They must always be capitalized
-					if (lowercase.Contains(word.ToLower(cultEng)) && w.Index != firstIndex && w.Index != lastIndex)
+					if (lowercase.Contains(word.ToLowerInvariant()) && w.Index != firstIndex && w.Index != lastIndex)
 					{
-						string newWord = word.ToLower(cultEng);
+						string newWord = word.ToLowerInvariant();
 						str = str.Remove(w.Index, w.Length).Insert(w.Index, newWord);
 						continue;
 					}
 
 					// All remaining lowercase words are capitalized
 					// But if the whole string contains any uppercase character you can assume the API is case sensitive. Do nothing then
-					if (word == word.ToLower(cultEng) && !str.Any(char.IsUpper))
+					if (word == word.ToLowerInvariant() && !str.Any(char.IsUpper))
 					{
 						string newWord = word.First().ToString().ToUpperInvariant() + word.Substring(1);
 						str = str.Remove(w.Index, w.Length).Insert(w.Index, newWord);

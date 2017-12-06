@@ -81,8 +81,8 @@ namespace GlobalNamespace
 					id3v2.Version = 3;
 
 					// Read in user settings which tags should be preserved (all other unknown tags will be removed)
-					string[] defaultFrames = User.Settings["DefaultFrames"].Split(',');
-					string[] userFrames = User.Settings["UserFrames"].Split(',');
+					string[] defaultFrames = User.Settings["DefaultFrames"];
+					string[] userFrames = User.Settings["UserFrames"];
 
 					// Loop through backup tags, add only frames which are in defaultFrames or userFrames array as new tag
 					IEnumerable<Frame> backupFrameList = id3v2backup.GetFrames<Frame>();
@@ -91,7 +91,7 @@ namespace GlobalNamespace
 						string frameId = frm.FrameId.ToString();
 						if (defaultFrames.Contains(frameId, StringComparer.OrdinalIgnoreCase))
 						{
-							if (string.Equals(frameId, "TXXX", StringComparison.OrdinalIgnoreCase))
+							if (frameId.ToUpperInvariant() == "TXXX")
 							{
 								string frameDesc = ((UserTextInformationFrame)frm).Description;
 								if (userFrames.Contains(frameDesc, StringComparer.OrdinalIgnoreCase))

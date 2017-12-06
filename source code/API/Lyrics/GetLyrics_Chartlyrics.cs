@@ -47,8 +47,8 @@ namespace GlobalNamespace
 						string artistLrc = (string)searchData.SelectToken("GetLyricResult.LyricArtist");
 						string titleLrc = (string)searchData.SelectToken("GetLyricResult.LyricSong");
 
-						if (string.Equals(artistLrc, tagNew.Artist, StringComparison.OrdinalIgnoreCase) &&
-							string.Equals(titleLrc, tagNew.Title, StringComparison.OrdinalIgnoreCase) &&
+						if (artistLrc.ToLowerInvariant() == tagNew.Artist.ToLowerInvariant() &&
+							titleLrc.ToLowerInvariant() == tagNew.Title.ToLowerInvariant() &&
 							(string)searchData.SelectToken("GetLyricResult.Lyric") != null)
 						{
 							string rawLyrics = (string)searchData.SelectToken("GetLyricResult.Lyric");

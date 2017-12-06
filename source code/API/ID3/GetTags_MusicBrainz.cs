@@ -76,12 +76,12 @@ namespace GlobalNamespace
 						string curPrimType = (string)curRelease.SelectToken("release-group.primary-type");
 
 						if (curStatus != null && curPrimType != null &&
-							curStatus == "Official" &&
-							curPrimType == "Album")
+							curStatus.ToLowerInvariant() == "official" &&
+							curPrimType.ToLowerInvariant() == "album")
 						{
 							if (curRelease.SelectToken("release-group.secondary-types") != null)
 							{
-								if ((string)curRelease.SelectToken("release-group.secondary-types[0]") == "Compilation")
+								if (curRelease.SelectToken("release-group.secondary-types[0]").ToString().ToLowerInvariant() == "compilation")
 								{
 									continue;
 								}

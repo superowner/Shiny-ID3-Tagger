@@ -45,7 +45,7 @@ namespace GlobalNamespace
 				if (searchData != null && searchData.SelectToken("response.searchResults.searchResult[0].track") != null)
 				{
 					JToken track = (from tracks in searchData.SelectTokens("response.searchResults.searchResult[*].track")
-									where (string)tracks["release"]["type"] == "Album"
+									where tracks["release"]["type"].ToString().ToLowerInvariant() == "album"
 									select tracks).FirstOrDefault();
 
 					if (track != null)

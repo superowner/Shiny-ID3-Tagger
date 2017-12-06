@@ -12,9 +12,6 @@
 // TODO: user option to choose if/which tags should be removed when writing
 // TODO: Small blue border on mouse hover around row if already selected
 // TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
-// TODO: variables for TryParse and out can be in line
-// TODO: userFrames and defaultFrames should be trimmed
-// TODO: Check all == if string is compared and use "if (stringA.Contains(stringB, StringComparer.OrdinalIgnoreCase))"
 namespace GlobalNamespace
 {
 	using System;

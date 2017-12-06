@@ -72,7 +72,7 @@ namespace GlobalNamespace
 							o.Cover = (string)albumData.SelectToken("images[0].uri");
 
 							o.TrackCount = albumData.SelectTokens("tracklist[*]")
-								.Where(t => t.SelectToken("type_").ToString() == "track")
+								.Where(t => t.SelectToken("type_").ToString().ToLowerInvariant() == "track")
 								.ToArray().Length.ToString();
 
 							// This API is strange. You can either search for a release and don't get the album. Or you search for the album but don't get the release
@@ -81,7 +81,7 @@ namespace GlobalNamespace
 							// How can I get a response which holds the album and title at the same time?
 							// Currently I'm just checking if the album track list contains a title which equals the initial title (from filename or ID3 tag)
 							JToken[] tracklist = albumData.SelectTokens("tracklist[*].title").ToArray();
-							int temp = Array.FindIndex(tracklist, t => t.ToString().Equals(title, StringComparison.OrdinalIgnoreCase));
+							int temp = Array.FindIndex(tracklist, t => t.ToString().ToLowerInvariant() == title.ToLowerInvariant());
 							if (temp != -1)
 							{
 								o.Title = title;

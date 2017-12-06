@@ -62,9 +62,11 @@ namespace GlobalNamespace
 
 					if (rowAlreadyExists == false)
 					{
-						Id3 tagNew = new Id3();
-						tagNew.Service = "RESULT";
-						tagNew.Filepath = tagOld.Filepath;
+						Id3 tagNew = new Id3()
+						{
+							Service = "RESULT",
+							Filepath = tagOld.Filepath
+						};
 
 						Task<DataTable> apiTask = this.StartId3Search(client, tagOld, cancelToken);
 						Task<KeyValuePair<string, string>> lyricSearchTask = this.StartLyricsSearch(client, tagOld, cancelToken);
@@ -91,8 +93,8 @@ namespace GlobalNamespace
 						// If new artist or title are different from old ones, repeat all searches until new and old ones match.
 						// This happens when spelling mistakes were corrected by many APIs
 						if (artistNew != null && titleNew != null &&
-							(artistNew.ToLower() != tagOld.Artist.ToLower() ||
-							  titleNew.ToLower() != tagOld.Title.ToLower()))
+							(artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
+							  titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
 						{
 							this.PrintLogMessage("search", new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
 
@@ -152,7 +154,7 @@ namespace GlobalNamespace
 							// Set row background color to gray if current row album doesn't match the most frequent album
 							if (tagNew.Album == null ||
 								(tagNew.Album != null && r["album"] != null &&
-								Strip(tagNew.Album).ToLower() != Strip(r["album"].ToString().ToLower())))
+								Strip(tagNew.Album).ToLowerInvariant() != Strip(r["album"].ToString().ToLowerInvariant())))
 							{
 								this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.ForeColor = Color.Gray;
 							}
@@ -235,11 +237,11 @@ namespace GlobalNamespace
 			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
 			// The lyricsPriority setting in settings.json decides what lyrics should be taken if there are multiple sources available
 			KeyValuePair<string, string> lyrics = new KeyValuePair<string, string>();
-			foreach (string service in User.Settings["LyricsPriority"].Split(','))
+			foreach (string API in User.Settings["LyricsPriority"])
 			{
 				lyrics = (from kvp in lyricResults
 							where !string.IsNullOrWhiteSpace(kvp.Value)
-							where kvp.Key == service.Trim()
+							where kvp.Key.ToLowerInvariant() == API.ToLowerInvariant()
 							select kvp).FirstOrDefault();
 
 				if (lyrics.Value != null)
@@ -425,16 +427,16 @@ namespace GlobalNamespace
 				 * Despite Decibel provides a cover URL, the URL is not so easy to download because authorization via API key in a header is required
 				 * Therefore these services must be skipped as cover source. This is done by removing them from "CoverPriority" variable in settings.json
 				 */
-				foreach (string service in User.Settings["CoverPriority"].Split(','))
+				foreach (string API in User.Settings["CoverPriority"])
 				{
 					tagNew.Cover = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("cover"))
-								where row.Field<string>("service") == service.Trim()
+								where row.Field<string>("service").ToLowerInvariant() == API.ToLowerInvariant()
 								select row.Field<string>("cover")).FirstOrDefault();
 
 					if (tagNew.Cover != null)
 					{
-						this.PrintLogMessage("search", new[] { "  Cover taken from " + service });
+						this.PrintLogMessage("search", new[] { "  Cover taken from " + API });
 						break;
 					}
 				}

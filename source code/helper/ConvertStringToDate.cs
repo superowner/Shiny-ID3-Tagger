@@ -36,8 +36,8 @@ namespace GlobalNamespace
 		{
 			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
 			{
-				DateTime resultDate = new DateTime();
-				if (DateTime.TryParseExact(dateString, dateTimeformats, cultEng, DateTimeStyles.None, out resultDate))
+				//DateTime resultDate = new DateTime();
+				if (DateTime.TryParseExact(dateString, dateTimeformats, cultEng, DateTimeStyles.None, out DateTime resultDate))
 				{
 					return resultDate;
 				}

@@ -62,13 +62,13 @@ namespace GlobalNamespace
 							response = await client.SendAsync(request, timeoutToken.Token);
 
 							// These are common errors i.e. when a queried track does not exist.Suppress them and return with an empty string
-							if ((request.RequestUri.Host == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.NotFound)
-								|| (request.RequestUri.Host == "music.xboxlive.com" && response.StatusCode == HttpStatusCode.NotFound)
-								|| (request.RequestUri.Host == "api.lololyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
-								|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
-								|| (request.RequestUri.Host == "coverartarchive.org" && response.StatusCode == HttpStatusCode.NotFound)
-								|| (request.RequestUri.Host == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.InternalServerError)
-								|| (request.RequestUri.Host == "accounts.spotify.com" && response.StatusCode == HttpStatusCode.BadGateway))
+							if ((request.RequestUri.Host.ToLowerInvariant() == "api.musicgraph.com" && response.StatusCode == HttpStatusCode.NotFound)
+								|| (request.RequestUri.Host.ToLowerInvariant() == "music.xboxlive.com" && response.StatusCode == HttpStatusCode.NotFound)
+								|| (request.RequestUri.Host.ToLowerInvariant() == "api.lololyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
+								|| (request.RequestUri.Host.ToLowerInvariant() == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.NotFound)
+								|| (request.RequestUri.Host.ToLowerInvariant() == "coverartarchive.org" && response.StatusCode == HttpStatusCode.NotFound)
+								|| (request.RequestUri.Host.ToLowerInvariant() == "api.chartlyrics.com" && response.StatusCode == HttpStatusCode.InternalServerError)
+								|| (request.RequestUri.Host.ToLowerInvariant() == "accounts.spotify.com" && response.StatusCode == HttpStatusCode.BadGateway))
 							{
 								break;
 							}

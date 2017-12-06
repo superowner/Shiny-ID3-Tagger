@@ -84,7 +84,7 @@ namespace GlobalNamespace
 						if (albumtracksData != null && albumtracksData.SelectToken("message.body.track_list") != null)
 						{
 							JToken[] tracklist = albumtracksData.SelectTokens("message.body.track_list[*].track.track_name").ToArray();
-							int temp = Array.FindIndex(tracklist, t => t.ToString().Equals(o.Title, StringComparison.OrdinalIgnoreCase));
+							int temp = Array.FindIndex(tracklist, t => t.ToString().ToLowerInvariant() == o.Title.ToLoweInvariantr());
 							if (temp != -1)
 							{
 								o.TrackNumber = (temp + 1).ToString();

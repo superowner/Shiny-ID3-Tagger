@@ -22,13 +22,13 @@ namespace GlobalNamespace
 
 			if (apiAlbum != null && majorityAlbum != null)
 			{
-				if (Strip(apiAlbum.ToString().ToLower(cultEng)) == Strip(majorityAlbum.ToLower(cultEng)))
+				if (Strip(apiAlbum.ToString().ToLowerInvariant()) == Strip(majorityAlbum.ToLowerInvariant()))
 				{
 					albumHits[service.ToString()] += 1;
 				}
 			}
 
-			string result = albumHits[service.ToString()].ToString(cultEng);
+			string result = albumHits[service.ToString()].ToStringInvariant();
 
 			return result;
 		}

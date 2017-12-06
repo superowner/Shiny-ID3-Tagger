@@ -53,8 +53,8 @@ namespace GlobalNamespace
 					{
 						// Check if any returned song artist and title match search parameters
 						JToken song = (from track in searchData.SelectTokens("result.songs[*]")
-									   where string.Equals((string)track.SelectToken("artists[0].name"), tagNew.Artist, StringComparison.OrdinalIgnoreCase)
-									   where string.Equals((string)track.SelectToken("name"), tagNew.Title, StringComparison.OrdinalIgnoreCase)
+									   where track.SelectToken("artists[0].name").ToString().ToLowerInvariant() == tagNew.Artist.ToLowerInvariant()
+									   where track.SelectToken("name").ToString().ToLowerInvariant() == tagNew.Title.ToLowerInvariant()
 									   select track).FirstOrDefault();
 
 						if (song != null && song.SelectToken("id") != null)

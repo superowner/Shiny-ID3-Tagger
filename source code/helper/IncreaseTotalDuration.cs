@@ -15,8 +15,7 @@ namespace GlobalNamespace
 	{
 		private static string IncreaseTotalDuration(string service, string duration)
 		{
-			decimal durationAsDecimal = 0;
-			decimal.TryParse(duration, out durationAsDecimal);
+			decimal.TryParse(duration, out decimal durationAsDecimal);
 
 			if (!totalDuration.ContainsKey(service))
 			{
