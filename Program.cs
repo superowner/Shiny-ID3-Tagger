@@ -13,6 +13,8 @@
 
 // TODO: Add a new option to import CSV files with artist/title info to lookup. So a mp3 folder is not needed
 // FIXME: cover from Discogs for "Beatsteaks - Let Me In" responses with "text/html" as content type, should be "image/jpeg". Better way to detect image type
+// https://stackoverflow.com/questions/1245567/finding-out-the-contenttype-of-a-image-from-the-byte
+
 namespace GlobalNamespace
 {
 	using System;
