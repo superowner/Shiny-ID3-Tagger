@@ -76,6 +76,12 @@ namespace GlobalNamespace
 							o.TrackCount = (string)albumData.SelectToken("data.number_of_tracks");
 							o.DiscCount = null;
 							o.Cover = null;
+
+							string albumGenre = (string)albumData.SelectToken("data.main_genre");
+							if (string.IsNullOrWhiteSpace(o.Genre) && albumGenre != null)
+							{
+								o.Genre = albumGenre;
+							}
 						}
 					}
 				}
