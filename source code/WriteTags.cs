@@ -138,8 +138,8 @@ namespace GlobalNamespace
 									response = await client.SendAsync(request);
 								}
 
-								// Check if response is not null, check if content type is an image
-								if (response != null && response.Content != null && response.Content.Headers.ContentType.ToString().StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+								// Check if response is not null
+								if (response != null && response.Content != null)
 								{
 									string message = string.Format("{0,-100}{1}", "Picture source: " + request.RequestUri.Authority, "file: \"" + filepath + "\"");
 									this.PrintLogMessage("write", new[] { message });
@@ -147,46 +147,65 @@ namespace GlobalNamespace
 									// Download cover as stream to avoid saving to disk
 									using (MemoryStream streamOrg = (MemoryStream)await response.Content.ReadAsStreamAsync())
 									using (MemoryStream streamResized = new MemoryStream())
-									using (Image image = Image.FromStream(streamOrg))
 									{
-										// Resize image according to user setting "MaxImageSize". Always resize and re-encode
-										int longSide = (new List<int> { image.Width, image.Height }).Max();
-										float resizeFactor = (new List<float> {
-																User.Settings["MaxImageSize"] / (float)image.Width,
-																User.Settings["MaxImageSize"] / (float)image.Height
-															}).Min();
-
-										Size newSize = new Size((int)Math.Round(image.Width * resizeFactor), (int)Math.Round(image.Height * resizeFactor));
-
-										using (Bitmap bitmap = new Bitmap(newSize.Width, newSize.Height))
-										using (Graphics graph = Graphics.FromImage(bitmap))
-										using (EncoderParameters encoderParams = new EncoderParameters(1))
+										// Check if downloaded stream is an image. Some servers use a wrong content type for HTTP response. Therefore you need to check stream bytes for defined byte markers
+										if (GetImageType(streamOrg.ToArray()))
 										{
-											// Resize bitmap with best quality
-											graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
-											graph.DrawImage(image, 0, 0, newSize.Width, newSize.Height);
+											using (Image image = Image.FromStream(streamOrg))
+											{
+												// Resize image according to user setting "MaxImageSize". Always resize and re-encode
+												int longSide = (new List<int> { image.Width, image.Height }).Max();
+												float resizeFactor = (new List<float> {
+																		User.Settings["MaxImageSize"] / (float)image.Width,
+																		User.Settings["MaxImageSize"] / (float)image.Height
+																	}).Min();
 
-											// Prepare encoder object for JPEG format
-											ImageCodecInfo imageEncoder = ImageCodecInfo.GetImageEncoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
-											encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
+												Size newSize = new Size((int)Math.Round(image.Width * resizeFactor), (int)Math.Round(image.Height * resizeFactor));
 
-											// Save and encode bitmap as new stream which now holds a resized JPEG
-											bitmap.Save(streamResized, imageEncoder, encoderParams);
-											streamResized.Position = 0;
+												using (Bitmap bitmap = new Bitmap(newSize.Width, newSize.Height))
+												using (Graphics graph = Graphics.FromImage(bitmap))
+												using (EncoderParameters encoderParams = new EncoderParameters(1))
+												{
+													// Resize bitmap with best quality
+													graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+													graph.DrawImage(image, 0, 0, newSize.Width, newSize.Height);
+
+													// Prepare encoder object for JPEG format
+													ImageCodecInfo imageEncoder = ImageCodecInfo.GetImageEncoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
+													encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
+
+													// Save and encode bitmap as new stream which now holds a resized JPEG
+													bitmap.Save(streamResized, imageEncoder, encoderParams);
+													streamResized.Position = 0;
+												}
+
+												// Create ID3 cover tag, use "front cover" as type
+												AttachedPictureFrame taglibpicture = new AttachedPictureFrame()
+												{
+													Data = ByteVector.FromStream(streamResized),
+													MimeType = MediaTypeNames.Image.Jpeg,
+													Type = PictureType.FrontCover,
+													Description = url,
+													TextEncoding = StringType.Latin1
+												};
+
+												// Add cover tag to ID3 tag object, delete all other image types like back cover
+												tagFile.Tag.Pictures = new IPicture[] { taglibpicture };
+											}
 										}
-
-										// Create ID3 cover tag, use "front cover" as type
-										AttachedPictureFrame taglibpicture = new AttachedPictureFrame()
+										else
 										{
-											Data = ByteVector.FromStream(streamResized),
-											MimeType = MediaTypeNames.Image.Jpeg,
-											Type = PictureType.FrontCover,
-											Description = url,
-											TextEncoding = StringType.Latin1
-										};
-
-										// Add cover tag to ID3 tag object, delete all other image types like back cover
-										tagFile.Tag.Pictures = new IPicture[] { taglibpicture };
+											if (User.Settings["DebugLevel"] >= 1)
+											{
+												string[] errorMsg =
+												{
+													"ERROR:    Cover URL does not contain a valid image. File signature did not match any image format!",
+													"URL:      " + url,
+													"type:     " + response.Content.Headers.ContentType.ToString()
+												};
+												this.PrintLogMessage("error", errorMsg);
+											}
+										}
 									}
 								}
 								else
@@ -195,9 +214,8 @@ namespace GlobalNamespace
 									{
 										string[] errorMsg =
 										{
-											"ERROR:    Cover is not available or not a valid image format!",
-											"URL:      " + url,
-											"Format:   " + response.Content.Headers.ContentType
+											"ERROR:    Cover URL is not reachable!",
+											"URL:      " + url
 										};
 										this.PrintLogMessage("error", errorMsg);
 									}
@@ -205,7 +223,7 @@ namespace GlobalNamespace
 							}
 							finally
 							{
-								// Couldn't figure out how to use a using statement since a new value gets assigned inside the using block
+								// Can't figure out how to use a using statement since a new value gets assigned inside the using block
 								if (response != null)
 								{
 									response.Dispose();

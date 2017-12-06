@@ -86,6 +86,9 @@
     <Compile Include="source code\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="source code\helper\GetImageType.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="source code\UI\events\DataGridView_CellPainting.cs">
       <SubType>Form</SubType>
     </Compile>
