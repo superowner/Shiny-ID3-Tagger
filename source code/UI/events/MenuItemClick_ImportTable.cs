@@ -23,7 +23,6 @@ namespace GlobalNamespace
 		{
 			// Use current system separator (comma or semicolon)
 			string seperator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-			DataTable importedCSV = Id3.CreateId3Table();
 
 			// Set dialog properties like start folder and extension filter
 			using (OpenFileDialog dialog = new OpenFileDialog()
@@ -51,6 +50,10 @@ namespace GlobalNamespace
 								foreach (string field in fields)
 								{
 									Debug.WriteLine(field);
+
+									// Check if first line has same headers as dgv1
+									// use for loop and dgv1 header count
+									// Import "isVirtualFile" always as true
 								}
 							}
 						}
