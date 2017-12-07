@@ -107,14 +107,49 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		// Adds a single file to first datagridview with all its present ID3 tags
+		// Adds a single file to datagridview1 with all its present ID3 tags
 		private void AddFileToTable(string filepath)
 		{
 			using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", TagLib.ReadStyle.Average))
 			{
+				string filename = Path.GetFileNameWithoutExtension(filepath);
+				string[] artistChoices = new string[] { null, null, filename };
+				string[] titleChoices = new string[] { null, null, filename };
+
+				// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
+				Match match = Regex.Match(filename, @"^(?<artist>.*\w+) - (?<title>\w+.*)$");
+				if (match.Success)
+				{
+					if (User.Settings["PreferTags"])
+					{
+						artistChoices[1] = match.Groups["artist"].Value;
+						titleChoices[1] = match.Groups["title"].Value;
+					}
+					else
+					{
+						artistChoices[0] = match.Groups["artist"].Value;
+						titleChoices[0] = match.Groups["title"].Value;
+					}
+				}
+
+				// Extract artist and title from ID3 tags and store them in array at index 0 or 1 according to setting "PreferTags"
+				if (User.Settings["PreferTags"])
+				{
+					artistChoices[0] = tagFile.Tag.FirstPerformer;
+					titleChoices[0] = tagFile.Tag.Title;
+				}
+				else
+				{
+					artistChoices[1] = tagFile.Tag.FirstPerformer;
+					titleChoices[1] = tagFile.Tag.Title;
+				}
+
+				// Create ID3 instance and fill values with present tags
 				Id3 tagOld = new Id3
 				{
 					Filepath = filepath,
+					Artist = artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)),       // Select the first non-null artist choice, value order in array is important therefore
+					Title = titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)),         // Select the first non-null title choice, value order in array is important therefore
 					Album = tagFile.Tag.Album,
 					Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : null,
 					Genre = tagFile.Tag.FirstGenre,
@@ -126,92 +161,7 @@ namespace GlobalNamespace
 					Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : null
 				};
 
-				string filename = Path.GetFileNameWithoutExtension(filepath);
-
-				// #########################################################################
-				// Extract artist and title from filename and save them temporarily
-				string fileArtist = null;
-				string fileTitle = null;
-				Match match = Regex.Match(filename, @"^(?<artist>.*\w+) - (?<title>\w+.*)$");
-				if (match.Success)
-				{
-					fileArtist = match.Groups["artist"].Value;
-					fileTitle = match.Groups["title"].Value;
-				}
-
-				// Extract artist from ID3 tag and save them temporarily
-				string tagArtist = null;
-				if (!string.IsNullOrWhiteSpace(tagFile.Tag.FirstPerformer))
-				{
-					tagArtist = tagFile.Tag.FirstPerformer;
-				}
-
-				// Extract title from ID3 tag and save them temporarily
-				string tagTitle = null;
-				if (!string.IsNullOrWhiteSpace(tagFile.Tag.Title))
-				{
-					tagTitle = tagFile.Tag.Title;
-				}
-
-				// #########################################################################
-				// Set artist from filename when artist in filename found, but no ID3 tag found
-				if (fileArtist != null && tagArtist == null)
-				{
-					tagOld.Artist = fileArtist;
-				}
-
-				// Set title from filename when title in filename found, but no ID3 tag found
-				if (fileTitle != null && tagTitle == null)
-				{
-					tagOld.Title = fileTitle;
-				}
-
-				// ID3 tags were found, but no artist and title from filename (pattern didn't match)
-				if (fileArtist == null && tagArtist != null)
-				{
-					tagOld.Artist = tagArtist;
-				}
-
-				if (fileTitle == null && tagTitle != null)
-				{
-					tagOld.Title = tagTitle;
-				}
-
-				// #########################################################################
-				// Both sources (filename and ID3 tags) have a valid artist
-				// Select artist according to user setting "PreferTags"
-				if (fileArtist != null && tagArtist != null)
-				{
-					if (User.Settings["PreferTags"])
-					{
-						tagOld.Artist = tagArtist;
-					}
-					else
-					{
-						tagOld.Artist = fileArtist;
-					}
-				}
-
-				// Both sources (filename and ID3 tags) have a valid title
-				// Select title according to user setting "PreferTags"
-				if (fileTitle != null && tagTitle != null)
-				{
-					if (User.Settings["PreferTags"])
-					{
-						tagOld.Title = tagTitle;
-					}
-					else
-					{
-						tagOld.Title = fileTitle;
-					}
-				}
-
-				// #########################################################################
-				// When both sources don't have a valid value, use the whole filename as fall-back
-				tagOld.Artist = tagOld.Artist ?? filename;
-				tagOld.Title = tagOld.Title ?? filename;
-
-				// Show old tags in dataGridView
+				// Show present tags in dataGridView1
 				this.Invoke((MethodInvoker)delegate
 				{
 					this.dataGridView1.Rows.Add(
@@ -229,10 +179,6 @@ namespace GlobalNamespace
 						tagOld.Lyrics ?? string.Empty,
 						tagOld.Cover ?? string.Empty,
 						false);
-
-					int lastRow = this.dataGridView1.RowCount - 1;
-					this.MarkChange(lastRow, this.artist1.Index, tagArtist, tagOld.Artist, true);
-					this.MarkChange(lastRow, this.title1.Index, tagTitle, tagOld.Title, true);
 				});
 			}
 		}
