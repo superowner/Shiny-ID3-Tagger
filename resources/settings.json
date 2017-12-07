@@ -1,6 +1,6 @@
 {
 	"DebugLevel": 2,
-	"PreferTags": true,
+	"PreferTags": false,
 	"RemoveBrackets": true,
 	"RemoveFeaturing": true,
 	"OverwriteImage": true,

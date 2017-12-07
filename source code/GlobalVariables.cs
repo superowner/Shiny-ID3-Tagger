@@ -68,8 +68,6 @@ namespace GlobalNamespace
 
 		internal string Service { get; set; }
 
-		internal string Duration { get; set; }
-
 		internal string Artist { get; set; }
 
 		internal string Title { get; set; }
@@ -92,6 +90,8 @@ namespace GlobalNamespace
 
 		internal string Cover { get; set; }
 
+		internal string Duration { get; set; }
+
 		internal static DataTable CreateId3Table()
 		{
 			DataTable table = new DataTable();
@@ -99,7 +99,6 @@ namespace GlobalNamespace
 			table.Columns.Add("number", typeof(uint));
 			table.Columns.Add("filepath", typeof(string));
 			table.Columns.Add("service", typeof(string));
-			table.Columns.Add("duration", typeof(string));
 			table.Columns.Add("artist", typeof(string));
 			table.Columns.Add("title", typeof(string));
 			table.Columns.Add("album", typeof(string));
@@ -111,6 +110,7 @@ namespace GlobalNamespace
 			table.Columns.Add("tracknumber", typeof(string));
 			table.Columns.Add("lyrics", typeof(string));
 			table.Columns.Add("cover", typeof(string));
+			table.Columns.Add("duration", typeof(string));
 			return table;
 		}
 	}

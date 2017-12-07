@@ -110,14 +110,26 @@ namespace GlobalNamespace
 		// Adds a single file to first datagridview with all its present ID3 tags
 		private void AddFileToTable(string filepath)
 		{
-			Id3 tagOld = new Id3();
-			tagOld.Filepath = filepath;
-
 			using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", TagLib.ReadStyle.Average))
 			{
+				Id3 tagOld = new Id3
+				{
+					Filepath = filepath,
+					Album = tagFile.Tag.Album,
+					Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : null,
+					Genre = tagFile.Tag.FirstGenre,
+					DiscCount = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : null,
+					DiscNumber = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : null,
+					TrackCount = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : null,
+					TrackNumber = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : null,
+					Lyrics = tagFile.Tag.Lyrics,
+					Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : null
+				};
+
 				string filename = Path.GetFileNameWithoutExtension(filepath);
 
-				// Extract artist and title from filename
+				// #########################################################################
+				// Extract artist and title from filename and save them temporarily
 				string fileArtist = null;
 				string fileTitle = null;
 				Match match = Regex.Match(filename, @"^(?<artist>.*\w+) - (?<title>\w+.*)$");
@@ -127,34 +139,34 @@ namespace GlobalNamespace
 					fileTitle = match.Groups["title"].Value;
 				}
 
-				// Extract and set artist from ID3 tags
+				// Extract artist from ID3 tag and save them temporarily
 				string tagArtist = null;
 				if (!string.IsNullOrWhiteSpace(tagFile.Tag.FirstPerformer))
 				{
 					tagArtist = tagFile.Tag.FirstPerformer;
 				}
 
-				// Extract and set title from ID3 tags
+				// Extract title from ID3 tag and save them temporarily
 				string tagTitle = null;
 				if (!string.IsNullOrWhiteSpace(tagFile.Tag.Title))
 				{
 					tagTitle = tagFile.Tag.Title;
 				}
 
-				// Case: artist and title from filename found, but no ID3 tags found
-				// Set artist from filename
+				// #########################################################################
+				// Set artist from filename when artist in filename found, but no ID3 tag found
 				if (fileArtist != null && tagArtist == null)
 				{
 					tagOld.Artist = fileArtist;
 				}
 
-				// Set title from filename
+				// Set title from filename when title in filename found, but no ID3 tag found
 				if (fileTitle != null && tagTitle == null)
 				{
 					tagOld.Title = fileTitle;
 				}
 
-				// Case: ID3 tags found, but no artist and title from filename (pattern didn't match)
+				// ID3 tags were found, but no artist and title from filename (pattern didn't match)
 				if (fileArtist == null && tagArtist != null)
 				{
 					tagOld.Artist = tagArtist;
@@ -165,7 +177,8 @@ namespace GlobalNamespace
 					tagOld.Title = tagTitle;
 				}
 
-				// Case: Both sources (filename and ID3 tags) have a value
+				// #########################################################################
+				// Both sources (filename and ID3 tags) have a valid artist
 				// Select artist according to user setting "PreferTags"
 				if (fileArtist != null && tagArtist != null)
 				{
@@ -179,6 +192,7 @@ namespace GlobalNamespace
 					}
 				}
 
+				// Both sources (filename and ID3 tags) have a valid title
 				// Select title according to user setting "PreferTags"
 				if (fileTitle != null && tagTitle != null)
 				{
@@ -192,20 +206,10 @@ namespace GlobalNamespace
 					}
 				}
 
-				// Case: When both sources don't have a valid value, use the whole filename as fall-back
+				// #########################################################################
+				// When both sources don't have a valid value, use the whole filename as fall-back
 				tagOld.Artist = tagOld.Artist ?? filename;
 				tagOld.Title = tagOld.Title ?? filename;
-
-				// Read in existing ID3 tags from file
-				tagOld.Album = tagFile.Tag.Album;
-				tagOld.Date = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : null;
-				tagOld.Genre = tagFile.Tag.FirstGenre;
-				tagOld.DiscCount = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : null;
-				tagOld.DiscNumber = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : null;
-				tagOld.TrackCount = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : null;
-				tagOld.TrackNumber = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : null;
-				tagOld.Lyrics = tagFile.Tag.Lyrics;
-				tagOld.Cover = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : null;
 
 				// Show old tags in dataGridView
 				this.Invoke((MethodInvoker)delegate

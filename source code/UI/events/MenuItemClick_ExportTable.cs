@@ -20,8 +20,9 @@ namespace GlobalNamespace
 	{
 		private void MenuItemClick_ExportTable(object sender, EventArgs e)
 		{
-			StringBuilder csvContent = new StringBuilder();
+			// Use current system separator (comma or semicolon)
 			string seperator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+			StringBuilder csvContent = new StringBuilder();
 
 			IEnumerable<DataGridViewColumn> headers = ActiveDGV.Columns.Cast<DataGridViewColumn>();
 			csvContent.AppendLine(string.Join(seperator, headers.Select(column => WellFormedCsvValue(column.HeaderCell.Value)).ToArray()));

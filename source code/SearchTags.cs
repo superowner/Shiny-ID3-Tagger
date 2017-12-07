@@ -42,19 +42,21 @@ namespace GlobalNamespace
 				{
 					sw.Restart();
 
-					Id3 tagOld = new Id3();
-					tagOld.Filepath = row.Cells[this.filepath1.Index].Value.ToString();
-					tagOld.Artist = row.Cells[this.artist1.Index].Value.ToString();
-					tagOld.Title = row.Cells[this.title1.Index].Value.ToString();
-					tagOld.Album = row.Cells[this.album1.Index].Value.ToString();
-					tagOld.Date = row.Cells[this.date1.Index].Value.ToString();
-					tagOld.Genre = row.Cells[this.genre1.Index].Value.ToString();
-					tagOld.DiscCount = row.Cells[this.disccount1.Index].Value.ToString();
-					tagOld.DiscNumber = row.Cells[this.discnumber1.Index].Value.ToString();
-					tagOld.TrackCount = row.Cells[this.trackcount1.Index].Value.ToString();
-					tagOld.TrackNumber = row.Cells[this.tracknumber1.Index].Value.ToString();
-					tagOld.Lyrics = row.Cells[this.lyrics1.Index].Value.ToString();
-					tagOld.Cover = row.Cells[this.cover1.Index].Value.ToString();
+					Id3 tagOld = new Id3
+					{
+						Filepath = row.Cells[this.filepath1.Index].Value.ToString(),
+						Artist = row.Cells[this.artist1.Index].Value.ToString(),
+						Title = row.Cells[this.title1.Index].Value.ToString(),
+						Album = row.Cells[this.album1.Index].Value.ToString(),
+						Date = row.Cells[this.date1.Index].Value.ToString(),
+						Genre = row.Cells[this.genre1.Index].Value.ToString(),
+						DiscCount = row.Cells[this.disccount1.Index].Value.ToString(),
+						DiscNumber = row.Cells[this.discnumber1.Index].Value.ToString(),
+						TrackCount = row.Cells[this.trackcount1.Index].Value.ToString(),
+						TrackNumber = row.Cells[this.tracknumber1.Index].Value.ToString(),
+						Lyrics = row.Cells[this.lyrics1.Index].Value.ToString(),
+						Cover = row.Cells[this.cover1.Index].Value.ToString()
+					};
 
 					bool rowAlreadyExists = (from r in this.dataGridView2.Rows.Cast<DataGridViewRow>()
 											 where r.Cells[this.filepath2.Index].Value.ToString() == tagOld.Filepath
@@ -305,7 +307,6 @@ namespace GlobalNamespace
 					apiResults.Rows.Count + 1,
 					tagOld.Filepath,
 					r.Service,
-					r.Duration,
 					r.Artist,
 					r.Title,
 					r.Album,
@@ -316,7 +317,8 @@ namespace GlobalNamespace
 					r.TrackCount,
 					r.TrackNumber,
 					string.Empty,
-					r.Cover);
+					r.Cover,
+					r.Duration);
 
 				this.fastProgressBar.PerformStep();
 			}
