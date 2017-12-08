@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Checks if a given file is a real MP3 by inspecting the first 3 bytes in file header</summary>
+// <summary>Checks if a given file is a real MP3 by inspecting first 3 bytes in file header</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

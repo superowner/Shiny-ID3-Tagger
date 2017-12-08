@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Opens the settings.json file</summary>
+// <summary>Open settings.json file</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace

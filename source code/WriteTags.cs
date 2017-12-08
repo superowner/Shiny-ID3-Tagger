@@ -121,7 +121,7 @@ namespace GlobalNamespace
 					id3v2 = this.WriteTags(tagFile, row, id3v2);
 
 					// ###########################################################################
-					// Download and add the cover image
+					// Download and add cover image
 					if (User.Settings["OverwriteImage"] || !tagFile.Tag.Pictures.Any() || tagFile.Tag.Pictures[0].Data.Count == 0)
 					{
 						using (HttpClient client = InitiateHttpClient())
@@ -363,7 +363,7 @@ namespace GlobalNamespace
 			}
 
 			// Lyrics
-			// To set "eng" as language you have to remove and add the whole frame back again
+			// To set "eng" as language you have to remove and add whole frame back again
 			// Otherwise taglib sets system default language e.g "deu" or "esp" as lyrics language if USLT tag already existed
 			string oldLyrics = tagFile.Tag.Lyrics;
 			string newLyrics = (string)row.Cells[this.lyrics1.Index].Value;
@@ -403,7 +403,7 @@ namespace GlobalNamespace
 				catch (IOException)
 				{
 					successWrite = false;
-					// Do nothing. Error is handled at the end of SaveFile method
+					// Do nothing. Error is handled at end of SaveFile method
 				}
 
 				await Task.Delay(WriteDelay);
@@ -424,7 +424,7 @@ namespace GlobalNamespace
 					catch (IOException)
 					{
 						successWrite = false;
-						// Do nothing. Error is handled at the end of SaveFile method
+						// Do nothing. Error is handled at end of SaveFile method
 					}
 
 					await Task.Delay(WriteDelay);
@@ -446,7 +446,7 @@ namespace GlobalNamespace
 					catch (IOException)
 					{
 						successWrite = false;
-						// Do nothing. Error is handled at the end of SaveFile method
+						// Do nothing. Error is handled at end of SaveFile method
 					}
 
 					await Task.Delay(WriteDelay);

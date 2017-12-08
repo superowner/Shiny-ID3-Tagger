@@ -3,13 +3,12 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Starts the main routine "WriteTags" for writing all results to files</summary>
+// <summary>Starts main routine "WriteTags" for writing all results to files</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
 {
 	using System;
-	using System.Linq;
 	using System.Windows.Forms;
 
 	public partial class Form1 : Form

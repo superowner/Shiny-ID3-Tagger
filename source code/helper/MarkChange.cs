@@ -10,7 +10,6 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Drawing;
-	using System.Linq;
 
 	public partial class Form1
 	{
@@ -43,7 +42,7 @@ namespace GlobalNamespace
 				}
 				catch (ArgumentOutOfRangeException)
 				{
-					// If user cleared all or current row an ArgumentOutOfRangeException would occur. Catch the error and continue
+					// If user cleared all or current row an ArgumentOutOfRangeException would occur. Catch error and continue
 				}
 			}
 		}

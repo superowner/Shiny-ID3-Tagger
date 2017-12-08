@@ -10,7 +10,6 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Diagnostics;
-	using System.Linq;
 	using System.Windows.Forms;
 
 	public partial class Form1 : Form

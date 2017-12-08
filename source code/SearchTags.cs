@@ -115,7 +115,7 @@ namespace GlobalNamespace
 							lyricsNew = lyricSearchTask.Result;
 						}
 
-						// Aggregate all API results and select the most frequent values
+						// Aggregate all API results and select most frequent values
 						tagNew = this.CalculateResults(apiResults, tagNew);
 
 						if (tagNew.Album != null && lyricsNew.Value != null)
@@ -153,7 +153,7 @@ namespace GlobalNamespace
 								durationTotal ?? string.Empty,
 								albumhit ?? string.Empty);
 
-							// Set row background color to gray if current row album doesn't match the most frequent album
+							// Set row background color to gray if current row album doesn't match most frequent album
 							if (tagNew.Album == null ||
 								(tagNew.Album != null && r["album"] != null &&
 								Strip(tagNew.Album).ToLowerInvariant() != Strip(r["album"].ToString().ToLowerInvariant())))
@@ -239,7 +239,7 @@ namespace GlobalNamespace
 			}
 
 			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
-			// The lyricsPriority setting in settings.json decides what lyrics should be taken if there are multiple sources available
+			// "lyricsPriority" setting in settings.json decides what lyrics should be taken if there are multiple sources available
 			KeyValuePair<string, string> lyrics = new KeyValuePair<string, string>();
 			foreach (string API in User.Settings["LyricsPriority"])
 			{
@@ -334,8 +334,8 @@ namespace GlobalNamespace
 
 			taskList.Remove(finishedTask);
 
-			// Return 2 values with a tuple. First the new taskList which is one item smaller than before, because one task was finished
-			// Second value is the actual result from that finished task. We hand this value back to a thread which updates the GUI
+			// Return 2 values with a tuple. First, the new taskList which is one item smaller than before, because one task was finished
+			// Second value is the actual result from that finished task. Hand this value back to the parent thread which updates the GUI
 			return new Tuple<List<Task<Id3>>, Id3>(taskList, r);
 
 			// No need to dispose tasks https://blogs.msdn.microsoft.com/pfxteam/2012/03/25/do-i-need-to-dispose-of-tasks/
@@ -429,7 +429,7 @@ namespace GlobalNamespace
 				 * Musicgraph			no covers
 				 *
 				 * Musixmatch and Musicgraph do not provide any cover URL via API
-				 * Despite Decibel provides a cover URL, the URL is not so easy to download because authorization via API key in a header is required
+				 * Despite Decibel provides a cover URL, the resource is not easy to download since authorization via API key in a header is required
 				 * Therefore these services must be skipped as cover source. This is done by removing them from "CoverPriority" variable in settings.json
 				 */
 				foreach (string API in User.Settings["CoverPriority"])

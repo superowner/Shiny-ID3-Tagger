@@ -3,13 +3,12 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Starts the main routine "SearchTags" for querying all APIs</summary>
+// <summary>Starts main routine "SearchTags" for querying all APIs</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
 {
 	using System;
-	using System.Linq;
 	using System.Threading;
 	using System.Windows.Forms;
 

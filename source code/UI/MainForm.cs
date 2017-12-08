@@ -39,7 +39,7 @@ namespace GlobalNamespace
 				// Add new files
 				bool newFiles = await this.AddFiles(args, cancelToken);
 
-				// If the setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
+				// If user setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
 				if (User.Settings["AutoSearch"] && newFiles && !cancelToken.IsCancellationRequested)
 				{
 					this.StartSearching(cancelToken);

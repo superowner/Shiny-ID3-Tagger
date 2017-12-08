@@ -53,7 +53,7 @@ namespace GlobalNamespace
 				}
 			}
 
-			// If anything was selected in the previous dialog, check if it was a folder and get it's mp3 files
+			// If anything was selected in previous dialog, check if it was a folder and get it's mp3 files
 			if (files != null && files.Any())
 			{
 				if (Directory.Exists(files[0]))
@@ -69,7 +69,7 @@ namespace GlobalNamespace
 				this.slowProgressBar.Value = 0;
 				this.slowProgressBar.Visible = true;
 
-				// Loop through each file and add it to the first dataGridView
+				// Loop through each file and add it to first dataGridView
 				foreach (string filepath in files)
 				{
 					if (cancelToken.IsCancellationRequested)
@@ -80,12 +80,12 @@ namespace GlobalNamespace
 					// Start this in separate thread to decrease UI sluggishness
 					await Task.Run(() =>
 					{
-						// Check if the file was already added
+						// Check if file was already added
 						bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
 							where row.Cells[this.filepath1.Index].Value.ToString().ToLowerInvariant() == filepath.ToLowerInvariant()
 							select row).Any();
 
-						// Check if the file is a valid mp3 file
+						// Check if file is a valid mp3 file
 						if (this.IsValidMp3(filepath) && !rowAlreadyExists)
 						{
 							AddFileToTable(filepath);

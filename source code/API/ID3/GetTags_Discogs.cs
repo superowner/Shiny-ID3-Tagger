@@ -76,11 +76,11 @@ namespace GlobalNamespace
 									.Where(t => t.SelectToken("type_").ToString().ToLowerInvariant() == "track")
 									.ToArray().Length.ToString();
 
-								// This API is strange. You can either search for a release and don't get the album. Or you search for the album but don't get the release
-								// You can do one search with "format=album" to maybe get the album and a second search without "format=album" to maybe get the single and therefore the track title
+								// This API is strange. You can either search for a release and don't get the album. Or you search for albums but don't get releases
+								// You can do one search with "format=album" to maybe get the album and a second search without "format=album" to maybe get tracks and therefore a track title
 								// But no one will guarantee that the second search shows a title which is on your album from the first search
-								// How can I get a response which holds the album and title at the same time?
-								// Currently I'm just checking if the album track list contains a title which equals the initial title (from filename or ID3 tag)
+								// How can I get a response which holds album and title at the same time?
+								// Currently it's just checking if album track list contains a title which equals initial search title which can be wrong since it's from filename or old ID3 tags
 								JToken[] tracklist = albumData.SelectTokens("tracklist[*].title").ToArray();
 								int temp = Array.FindIndex(tracklist, t => t.ToString().ToLowerInvariant() == title.ToLowerInvariant());
 								if (temp != -1)
@@ -102,5 +102,3 @@ namespace GlobalNamespace
 		}
 	}
 }
-
-// System.IO.File.WriteAllText (@"D:\response.json", content2);

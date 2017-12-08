@@ -42,7 +42,7 @@ namespace GlobalNamespace
 				OverwritePrompt = true
 			})
 			{
-				// Open Save as dialog and save a text file (only the extension is CSV) as UTF8 with BOM encoding
+				// Open "Save As" dialog and save a text file (extension is CSV) as UTF8 with BOM encoding
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
 					string fullPath = dialog.FileName;

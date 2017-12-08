@@ -102,5 +102,3 @@ namespace GlobalNamespace
 		}
 	}
 }
-
-// System.IO.File.WriteAllText (@"D:\response.json", content2);

@@ -9,7 +9,6 @@
 namespace GlobalNamespace
 {
 	using System;
-	using System.Linq;
 	using Newtonsoft.Json;
 
 	public partial class Form1

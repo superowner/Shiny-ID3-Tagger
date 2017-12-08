@@ -3,13 +3,12 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Sums up the duration per API/per file to a total duration per API</summary>
+// <summary>Sums up duration per API/per file to total duration per API</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
 {
 	using System;
-	using System.Linq;
 
 	public partial class Form1
 	{

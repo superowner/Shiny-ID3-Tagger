@@ -10,7 +10,6 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 	using System.Threading;
@@ -46,7 +45,7 @@ namespace GlobalNamespace
 
 						try
 						{
-							// Save the request content for later reuse when an error occurs or debugging enabled is
+							// Save request content for later reuse when an error occurs or debugging enabled is
 							if (request.Content != null)
 							{
 								requestContent = request.Content.ReadAsStringAsync().Result;
@@ -95,16 +94,16 @@ namespace GlobalNamespace
 										this.PrintLogMessage("error", errorMsg.ToArray());
 									}
 
-									// Response was not successful. But it was also not a common error. And the user did not press cancel
+									// Response was not successful. But it was also not a common error. And user did not press cancel
 									// This must be an uncommon error. Continue with our retry logic
-									// But wait some seconds before you try it again to give the server time to recover
+									// But wait a bit before you try it again to give server some time to eventually recover
 									Task wait = Task.Delay(RetryDelay * 1000);
 								}
 							}
 						}
 						catch (TaskCanceledException)
 						{
-							// The request timed out. Server took too long to respond. Cancel request immediately and don't try again
+							// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
 							// If debugging is enabled in settings, print out all request properties
 							if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 2)
 							{

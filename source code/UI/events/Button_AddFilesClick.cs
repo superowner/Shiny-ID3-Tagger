@@ -3,13 +3,12 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Opens the file selection window when pressing "Add files" button</summary>
+// <summary>Opens a file selection window when pressing "Add files" button</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
 {
 	using System;
-	using System.Linq;
 	using System.Threading;
 	using System.Windows.Forms;
 
@@ -24,7 +23,7 @@ namespace GlobalNamespace
 			// Add new files
 			bool newFiles = await this.AddFiles(null, cancelToken);
 
-			// If the setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
+			// If user setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
 			if (User.Settings["AutoSearch"] && newFiles && !cancelToken.IsCancellationRequested)
 			{
 				this.StartSearching(cancelToken);

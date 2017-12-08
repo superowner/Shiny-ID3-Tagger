@@ -13,7 +13,6 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Diagnostics;
-	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 	using System.Text.RegularExpressions;
@@ -93,7 +92,7 @@ namespace GlobalNamespace
 						if (trackData != null && trackData.SelectToken("data") != null)
 						{
 							o.TrackNumber = (string)trackData.SelectToken("data[0].index_album");
-							o.DiscNumber = null;    // Maybe "data[0].index_cd" is the correct property, but I'm unsure
+							o.DiscNumber = null;    // Maybe "data[0].index_cd" is the correct property, but that's unsure
 						}
 					}
 				}
@@ -107,5 +106,3 @@ namespace GlobalNamespace
 		}
 	}
 }
-
-// System.IO.File.WriteAllText (@"D:\response.json", content2);

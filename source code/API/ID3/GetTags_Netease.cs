@@ -6,9 +6,9 @@
 // <summary>Gets ID3 data from Netease API for current track</summary>
 // https://github.com/JounQin/netease-muisc-api/tree/master/api
 // https://github.com/yanunon/NeteaseCloudMusic/wiki/NetEase-cloud-music-analysis-API-%5BEN%5D
+// parameter "type=10" instead of "type=1" filters for albums only. But produces less results. Stick to using "专辑" as post filter
 //-----------------------------------------------------------------------
 
-// TODO: Don't use Chinese translation for "album". Compare results when using "&type=10" which filters for albums only
 namespace GlobalNamespace
 {
 	using System;
@@ -60,7 +60,7 @@ namespace GlobalNamespace
 						o.Artist = (string)albums[0].SelectToken("artists[0].name");
 						o.Title = (string)albums[0].SelectToken("name");
 						o.Album = (string)albums[0].SelectToken("album.name");
-						o.Genre = null;         // Netease provides a detailed album query with a property called "tags". But the value seems always empty
+						o.Genre = null;         // Netease provides a detailed album query with a property called "tags". But value seems always empty
 						o.DiscCount = null;
 						o.DiscNumber = (string)albums[0].SelectToken("disc");
 						o.TrackCount = (string)albums[0].SelectToken("album.size");
@@ -84,5 +84,3 @@ namespace GlobalNamespace
 		}
 	}
 }
-
-// System.IO.File.WriteAllText (@"D:\response.json", content2);

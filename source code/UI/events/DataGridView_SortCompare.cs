@@ -10,14 +10,13 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Globalization;
-	using System.Linq;
 	using System.Windows.Forms;
 
 	public partial class Form1 : Form
 	{
 		private void DataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
 		{
-			// If both values are the same, or both values are null/DBNull. Compare case sensitive
+			// If both values are equal, or both values are null/DBNull. Compare case sensitive
 			if (e.CellValue1 == e.CellValue2)
 			{
 				e.SortResult = 0;

@@ -11,7 +11,6 @@
 namespace GlobalNamespace
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Data;
 	using System.Diagnostics;
 	using System.Linq;
@@ -94,5 +93,3 @@ namespace GlobalNamespace
 		}
 	}
 }
-
-// System.IO.File.WriteAllText (@"D:\response.json", content2);

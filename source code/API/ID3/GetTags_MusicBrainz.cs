@@ -57,7 +57,7 @@ namespace GlobalNamespace
 					//  1) Take only those recordings which have a rating above 90
 					//  2) Aggregate all releases for those recordings (a single recording has multiple releases i.e. one for each country)
 					//  3) Loop through these releases and sort out compilations, take only official albums
-					//  4) Loop again and take the oldest release. This is presumably the original album for our searched track
+					//  4) Loop again and take oldest release. This is presumably the original album for the searched track
 					List<JToken> rec90 = (from recording in searchData.SelectToken("recordings")
 										  where (int)recording["score"] >= 90
 										  select recording).ToList();
@@ -162,5 +162,3 @@ namespace GlobalNamespace
 		}
 	}
 }
-
-// System.IO.File.WriteAllText (@"D:\response.json", content2);

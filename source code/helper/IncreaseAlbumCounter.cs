@@ -3,13 +3,12 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Checks if the current WEB API has returned an album which is also the majority album from all other APIs</summary>
+// <summary>Checks if current WEB API has returned an album which is also the majority album from all other APIs</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
 {
 	using System;
-	using System.Linq;
 
 	public partial class Form1
 	{

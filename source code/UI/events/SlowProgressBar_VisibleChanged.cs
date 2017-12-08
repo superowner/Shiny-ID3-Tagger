@@ -3,13 +3,12 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Shows the cancel button as long as the slow progress bar is also visible. Hide the cancel button if no visible</summary>
+// <summary>Show cancel button as long as slow progress bar is visible. Hide cancel button if not</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
 {
 	using System;
-	using System.Linq;
 	using System.Windows.Forms;
 
 	public partial class Form1 : Form

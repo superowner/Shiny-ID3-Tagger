@@ -3,7 +3,7 @@
 //	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Capitalize a given string according to the rules from the link below</summary>
+// <summary>Capitalize a given string according to rules from link below</summary>
 // http://aitech.ac.jp/~ckelly/midi/help/caps.html
 // #1	The first and last words are always capitalized, and all except the words listed below are capitalized.
 // #2	These are lower-case, unless they are the first word or last word.
@@ -54,7 +54,7 @@ namespace GlobalNamespace
 
 					// Search special words and lowercase them
 					// "and" => stays "and"			"And" => goes "and"		"AND" => stays "AND"
-					// But ignore the first/last word. They must always be capitalized
+					// But ignore first/last word. They must always be capitalized
 					if (lowercase.Contains(word.ToLowerInvariant()) && w.Index != firstIndex && w.Index != lastIndex)
 					{
 						string newWord = word.ToLowerInvariant();

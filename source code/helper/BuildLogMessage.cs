@@ -10,7 +10,6 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Net.Http;
 	using System.Text.RegularExpressions;
 
@@ -38,21 +37,21 @@ namespace GlobalNamespace
 			{
 				string responseContent = response.Content.ReadAsStringAsync().Result;
 
-				// Try to extract the HTML body
+				// Try to extract HTML body
 				Match match = Regex.Match(responseContent, "(?<=<body>)(?<text>.*?)(?=</body>)", RegexOptions.Singleline);
 				if (match.Success)
 				{
 					responseContent = match.Groups["text"].Value.Trim();
 				}
 
-				// Try to extract the XML error message (Amazon API specific)
+				// Try to extract XML error message (Amazon API specific)
 				match = Regex.Match(responseContent, "(?<=<Message>)(?<text>.*?)(?=</Message>)", RegexOptions.Singleline);
 				if (match.Success)
 				{
 					responseContent = match.Groups["text"].Value.Trim();
 				}
 
-				// Show the complete response including HTML tags OR the extracted body/message if extracting was successful
+				// Show complete response including HTML tags OR extracted body/message if extracting was successful
 				errorMsg.Add("Code:     " + response.ReasonPhrase + ": " + (int)response.StatusCode);
 				errorMsg.Add("Response: " + responseContent);
 			}

@@ -13,7 +13,6 @@ namespace GlobalNamespace
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
-	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 	using System.Threading;
@@ -131,5 +130,3 @@ namespace GlobalNamespace
 		}
 	}
 }
-
-// System.IO.File.WriteAllText (@"D:\response.json", content1);
