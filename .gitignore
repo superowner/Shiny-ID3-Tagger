@@ -1,5 +1,5 @@
 .vs
-StyleCopViolations.xml
-ProfilingSessions/
-obj/
 bin/
+obj/
+ProfilingSessions/
+StyleCopViolations.xml

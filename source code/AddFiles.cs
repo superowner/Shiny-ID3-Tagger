@@ -117,7 +117,7 @@ namespace GlobalNamespace
 				string[] titleChoices = new string[] { null, null, filename };
 
 				// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
-				Match match = Regex.Match(filename, @"^(?<artist>.*\w+) - (?<title>\w+.*)$");
+				Match match = Regex.Match(filename, @"^(\d+\s)?(-\s+)?(?<artist>.*\w+)\s+-\s+(?<title>\w+.*)$");
 				if (match.Success)
 				{
 					if (User.Settings["PreferTags"])

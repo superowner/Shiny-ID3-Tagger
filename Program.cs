@@ -10,8 +10,11 @@
 // TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
 // TODO: User option to add ID3v1 additionally to ID3v2
 // TODO: User option to choose if/which tags should be removed when writing
+// TODO: User option to add custom RegEx patterns to detect artist/title from filename i.e. "^(\d+\s?)(-\s+?)(?<artist>.*\w+)\s+-\s+(?<title>\w+.*)$"
 // TODO: Small blue border on mouse hover around row if already selected
 // TODO: Import CSV files with artist/title info to lookup. So a mp3 folder is not needed
+// TODO: New lyrics importer for viewlyrics.com		https://github.com/PedroHLC/ViewLyricsOpenSearcher/blob/master/src/com/pedrohlc/viewlyricsppensearcher/ViewLyricsSearcher.java
+//		 Foobar + fiddler can help 					https://hydrogenaud.io/index.php/topic,90338.0.html
 
 namespace GlobalNamespace
 {
