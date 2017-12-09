@@ -153,12 +153,14 @@ namespace GlobalNamespace
 								durationTotal ?? string.Empty,
 								albumhit ?? string.Empty);
 
-							// Set row background color to gray if current row album doesn't match most frequent album
+							// Set row foreground color to gray if current row album doesn't match most frequent album
 							if (tagNew.Album == null ||
 								(tagNew.Album != null && r["album"] != null &&
 								Strip(tagNew.Album).ToLowerInvariant() != Strip(r["album"].ToString().ToLowerInvariant())))
 							{
 								this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.ForeColor = Color.Gray;
+								DataGridViewLinkCell c = this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.cover2.Index] as DataGridViewLinkCell;
+								c.LinkColor = Color.Gray;
 							}
 						}
 
