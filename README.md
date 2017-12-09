@@ -43,7 +43,6 @@
   - **Track number**
 - Auto downloads and embedds the **album cover**
 - Adds lyrics as ID3 tag *Unsynced lyrics*
-- Corrects casing and spelling mistakes in all tags
 
 ## How To Install
 - [Download and extract the latest release](https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest)
