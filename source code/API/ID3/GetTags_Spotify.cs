@@ -6,6 +6,10 @@
 // <summary>Gets ID3 data from Spotify API for current track</summary>
 // https://developer.spotify.com/web-api/search-item/
 // https://developer.spotify.com/web-api/object-model/
+// https://github.com/spotify/web-api/issues/140	=> overall results are worse when removing the chars ",:
+// https://github.com/spotify/web-api/issues/409
+// fuzzy search with an appended asterisk (*) is useless since it only applies to a single word. And you can only use a maximum of 2 asterisk per query
+// A search for the following album returns nothing, but returns something as soon as ":, are removed: From "The Hunger Games: Mockingjay, Part 2" Soundtrack
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -107,7 +111,7 @@ namespace GlobalNamespace
 
 						// ###########################################################################
 						// "genres" is always empty for track and album lookups. Seems like a general Spotify issue: https://github.com/spotify/web-api/issues/157
-						// Only artist lookups provide sometimes a genre. But they aren't sorted or weighted. Therefore these artist genres produces bad results
+						// Only artist lookups provide sometimes a genre. But they aren't sorted or weighted. Therefore artist genres produce bad results most of the time
 						string artistUrl = (string)searchData.SelectToken("tracks.items[0].artists[0].href");
 
 						if (IsValidUrl(artistUrl))
