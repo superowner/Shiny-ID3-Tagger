@@ -35,22 +35,24 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-			string query = "<?xml version='1.0' encoding='utf-8' standalone='yes' ?><searchV1 client=\"ViewLyricsOpenSearcher\" artist=\"" + tagNew.Artist + "\" title=\"" + tagNew.Title + "\" OnlyMatched=\"1\" />";
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
+				// Set headers and method
 				searchRequest.Headers.Add("User-Agent", "MiniLyrics");
-				searchRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
-				searchRequest.Headers.ConnectionClose = false;
 				searchRequest.Headers.ExpectContinue = true;
 				searchRequest.Method = HttpMethod.Post;
 				searchRequest.RequestUri = new Uri("http://search.crintsoft.com/searchlyrics.htm");
 
+				// Encode query and set POST body
+				string query = "<?xml version='1.0' encoding='utf-8' standalone='yes' ?><searchV1 client=\"ViewLyricsOpenSearcher\" artist=\"" + tagNew.Artist + "\" title=\"" + tagNew.Title + "\" OnlyMatched=\"1\" />";
 				byte[] queryEnc = EncodeQuery(query);
 				searchRequest.Content = new ByteArrayContent(queryEnc);
 				searchRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
+				// Retrieve response from server
+				HttpResponseMessage response = await client.SendAsync(searchRequest, cancelToken);
+				byte[] searchContent = await response.Content.ReadAsByteArrayAsync();
 
 				if (searchContent != null)
 				{
@@ -102,72 +104,69 @@ namespace GlobalNamespace
 			return o;
 		}
 
-		private static string DecodeResponse(string data)
+		private static string DecodeResponse(byte[] data)
 		{
+			// Important: You cannot use a UTF8 string as input. Thus you cannot use the default method GetResponse
+			// The position where XML string starts would vary and would not always be at byte position 23
 			string result = string.Empty;
 
-			if (!string.IsNullOrWhiteSpace(data))
+			if (data != null)
 			{
-				char magicKey = data[1];
+				// Get magic key to decode response
+				byte magicKey = data[1];
 
-				for (int i = 0; i < data.Length; i++)
+				// Remove first 22 bytes. XML string starts at byte 23
+				data = data.Skip(22).ToArray();
+
+				// Loop through encoded data and decode it with magic key
+				int queryLen = data.Length;
+				byte[] dataDecBytes = new Byte[queryLen];
+				for (int i = 0; i < queryLen; i++)
 				{
-					result += (char)(data[i] ^ magicKey);
+					int decByte = data[i] ^ magicKey;
+					dataDecBytes[i] = (byte)decByte;
 				}
 
-				// HACK: Usually you just cut off the first 22 chars (bytes?) to remove control chars and get a valid XML string. Done via "int i = 22"
-				// But viewlyrics.com returns a UTF8 response, and C# treats strings as UTF16 when reading in a response
-				// I assume that I should not use "ReadAsStringAsync" in GetResponse. I should maybe work with a byte array to avoid encoding mistakes?
-				result = Regex.Replace(result, @"^.*?\<\?xml ", "<?xml ", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+				// Covert byte array to UTF8 string
+				result = Encoding.UTF8.GetString(dataDecBytes);
 			}
 
 			return result;
 		}
 
-		private static string HexToStr(string hex)
-		{
-			string str = string.Empty;
-			for (int i = 0; i < hex.Length - 1; i += 2)
-			{
-				str = str + (char)Convert.ToInt32(string.Concat(hex[i], hex[i + 1]), 16);
-			}
-			return str;
-		}
-
 		private static byte[] EncodeQuery(string query)
 		{
-			// HACK: Remove all non-ASCII characters. Otherwise we would get a "502 bad gateway" error
-			query = Regex.Replace(query, @"[^\u0000-\u007F]+", string.Empty);
+			// Get query length. Don't use "query.Length" since it produces wrong results for strings containing non-ASCII characters
+			var queryLen = Encoding.UTF8.GetByteCount(query);
 
-			var dataLen = query.Length;
-			string md5salt = "Mlv1clt4.0";
+			// Generate MD5 hash from query and salt
+			string md5Salt = "Mlv1clt4.0";
+			byte[] saltedQueryBytes = Encoding.UTF8.GetBytes(query + md5Salt);
+			byte[] md5HashBytes = MD5CryptoServiceProvider.Create().ComputeHash(saltedQueryBytes);
 
-			byte[] asciiBytes = Encoding.ASCII.GetBytes(query + md5salt);
-			byte[] hashBytes = MD5CryptoServiceProvider.Create().ComputeHash(asciiBytes);
-			string hashHex = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-			string hashStr = HexToStr(hashHex);
-
+			// Calculate magic key
 			decimal j = 0;
-			for (int i = 0; i < dataLen; i++)
+			for (int i = 0; i < queryLen; i++)
 			{
-				j += (int)query[i];
+				byte queryByte = Encoding.UTF8.GetBytes(query)[i];
+				j += (int)queryByte;
+			}
+			char magicKey = (char)(Math.Round(j / queryLen));
+
+			// Encode query bytes with magic key to get the encoded query
+			byte[] queryBytes = Encoding.UTF8.GetBytes(query);
+			byte[] queryEncBytes = new Byte[queryLen];
+			for (int i = 0; i < queryLen; i++)
+			{
+				int encByte = queryBytes[i] ^ magicKey;
+				queryEncBytes[i] = (byte)encByte;
 			}
 
-			char magicKey = (char)(Math.Round(j / dataLen));
+			// Combine all byte arrays to one
+			byte[] finalbyteArray = Encoding.UTF8.GetBytes("\x02" + magicKey + "\x04\x00\x00\x00");
+			finalbyteArray = finalbyteArray.Concat(md5HashBytes).Concat(queryEncBytes).ToArray();
 
-			StringBuilder queryEnc = new StringBuilder(query);
-			for (int i = 0; i < dataLen; i++)
-			{
-				queryEnc[i] = (char)(query[i] ^ magicKey);
-			}
-
-			byte[] utf16byteArray = Encoding.Unicode.GetBytes("\x02" + magicKey + "\x04\x00\x00\x00" + hashStr + queryEnc);
-
-			// HACK: char stores values as UTF-16 (2 bytes). That's where the leading zeros come from. Find a better way to stay in UTF8 encoding
-			// https://stackoverflow.com/questions/10708548/encoding-used-in-cast-from-char-to-byte#10708629
-			byte[] pseudoUtf8 = utf16byteArray.Where((x, i) => i % 2 == 0).ToArray();
-
-			return pseudoUtf8;
+			return finalbyteArray;
 		}
 	}
 }
