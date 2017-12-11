@@ -221,10 +221,17 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private async Task<KeyValuePair<string, string>> StartLyricsSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
+			KeyValuePair<string, string> lyrics = new KeyValuePair<string, string>();
 			var lyricResults = new Dictionary<string, string>();
+
+			if (tagNew.Artist == null && tagNew.Title == null)
+			{
+				return lyrics;
+			}
 
 			List<Task<Id3>> taskList = new List<Task<Id3>>
 			{
+				this.GetLyrics_Viewlyrics(client, tagNew, cancelToken),
 				this.GetLyrics_Netease(client, tagNew, cancelToken),
 				this.GetLyrics_Chartlyrics(client, tagNew, cancelToken),
 				this.GetLyrics_Lololyrics(client, tagNew, cancelToken),
@@ -242,7 +249,6 @@ namespace GlobalNamespace
 
 			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
 			// "lyricsPriority" setting in settings.json decides what lyrics should be taken if there are multiple sources available
-			KeyValuePair<string, string> lyrics = new KeyValuePair<string, string>();
 			foreach (string API in User.Settings["LyricsPriority"])
 			{
 				lyrics = (from kvp in lyricResults
@@ -346,13 +352,22 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private Id3 CalculateResults(DataTable apiResults, Id3 tagNew)
 		{
+
 			var majorityAlbumRows = (from row in apiResults.AsEnumerable()
-							where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
-							orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
-							group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
-							where grp.Count() >= 3
-							orderby grp.Count() descending
-							select grp).FirstOrDefault();
+									 where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
+									 orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
+									 group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
+									 where grp.Count() >= 3
+									 orderby grp.Count() descending
+									 select grp).FirstOrDefault();
+
+			var test = from row in apiResults.AsEnumerable()
+					   where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
+					   orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
+					   group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
+					   where grp.Count() >= 3
+					   orderby grp.Count() descending
+					   select grp;
 
 			if (majorityAlbumRows != null)
 			{

@@ -104,7 +104,7 @@ namespace GlobalNamespace
 									o.DiscCount = (string)albumData.SelectToken("tracks.items[-1:].disc_number");
 									o.TrackCount = (string)albumData.SelectToken("tracks.total");
 									o.Genre = string.Join(", ", albumData.SelectToken("genres"));
-									o.Cover = (string)albumData.SelectToken("images").OrderBy(obj => obj["height"]).Last()["url"];
+									o.Cover = (string)albumData.SelectToken("images").OrderBy(obj => ParseInt((string)obj["height"])).Last()["url"];
 								}
 							}
 						}

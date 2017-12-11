@@ -47,9 +47,9 @@ namespace GlobalNamespace
 
 				if (searchData != null && searchData.SelectToken("data") != null && searchData.SelectToken("data").Any())
 				{
-					JToken track = (from t in searchData.SelectToken("data")
-									orderby t["release_year"], t["popularity"] descending
-									select t)
+					JToken track = (from item in searchData.SelectToken("data")
+									orderby ParseInt((string)item["release_year"]), ParseInt((string)item["popularity"]) descending
+									select item)
 								.ToArray()[0];
 
 					o.Artist = (string)track.SelectToken("artist_name");

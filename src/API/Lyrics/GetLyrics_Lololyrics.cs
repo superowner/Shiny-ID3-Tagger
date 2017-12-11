@@ -30,31 +30,28 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-			if (tagNew.Artist != null && tagNew.Title != null)
+			string artistEncoded = WebUtility.UrlEncode(tagNew.Artist);
+			string titleEncoded = WebUtility.UrlEncode(tagNew.Title);
+
+			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				string artistEncoded = WebUtility.UrlEncode(tagNew.Artist);
-				string titleEncoded = WebUtility.UrlEncode(tagNew.Title);
+				searchRequest.RequestUri = new Uri("http://api.lololyrics.com/0.5/getLyric?artist=" + artistEncoded + "&track=" + titleEncoded + "&rawutf8=1");
 
-				using (HttpRequestMessage searchRequest = new HttpRequestMessage())
+				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchContent), this.GetJsonSettings());
+
+				if (searchData != null && searchData.SelectToken("result.response") != null)
 				{
-					searchRequest.RequestUri = new Uri("http://api.lololyrics.com/0.5/getLyric?artist=" + artistEncoded + "&track=" + titleEncoded + "&rawutf8=1");
+					string rawLyrics = (string)searchData.SelectToken("result.response");
 
-					string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-					JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchContent), this.GetJsonSettings());
+					// Sanitize lyrics
+					rawLyrics = WebUtility.HtmlDecode(rawLyrics);                                               // URL decode lyrics
+					rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
+					rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks and white space
 
-					if (searchData != null && searchData.SelectToken("result.response") != null)
+					if (rawLyrics.Length > 1)
 					{
-						string rawLyrics = (string)searchData.SelectToken("result.response");
-
-						// Sanitize lyrics
-						rawLyrics = WebUtility.HtmlDecode(rawLyrics);                                               // URL decode lyrics
-						rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
-						rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks and white space
-
-						if (rawLyrics.Length > 1)
-						{
-							o.Lyrics = rawLyrics;
-						}
+						o.Lyrics = rawLyrics;
 					}
 				}
 			}

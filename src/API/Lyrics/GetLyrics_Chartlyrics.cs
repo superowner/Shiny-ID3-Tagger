@@ -30,38 +30,35 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-			if (tagNew.Artist != null && tagNew.Title != null)
+			string artistEncoded = WebUtility.UrlEncode(tagNew.Artist);
+			string titleEncoded = WebUtility.UrlEncode(tagNew.Title);
+
+			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				string artistEncoded = WebUtility.UrlEncode(tagNew.Artist);
-				string titleEncoded = WebUtility.UrlEncode(tagNew.Title);
+				searchRequest.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + artistEncoded + "&song=" + titleEncoded);
 
-				using (HttpRequestMessage searchRequest = new HttpRequestMessage())
+				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchContent), this.GetJsonSettings());
+
+				if (searchData != null && searchData.SelectToken("GetLyricResult.Lyric") != null)
 				{
-					searchRequest.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + artistEncoded + "&song=" + titleEncoded);
+					string artistLrc = (string)searchData.SelectToken("GetLyricResult.LyricArtist");
+					string titleLrc = (string)searchData.SelectToken("GetLyricResult.LyricSong");
 
-					string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-					JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchContent), this.GetJsonSettings());
-
-					if (searchData != null && searchData.SelectToken("GetLyricResult.Lyric") != null)
+					if (artistLrc.ToLowerInvariant() == tagNew.Artist.ToLowerInvariant() &&
+						titleLrc.ToLowerInvariant() == tagNew.Title.ToLowerInvariant() &&
+						(string)searchData.SelectToken("GetLyricResult.Lyric") != null)
 					{
-						string artistLrc = (string)searchData.SelectToken("GetLyricResult.LyricArtist");
-						string titleLrc = (string)searchData.SelectToken("GetLyricResult.LyricSong");
+						string rawLyrics = (string)searchData.SelectToken("GetLyricResult.Lyric");
 
-						if (artistLrc.ToLowerInvariant() == tagNew.Artist.ToLowerInvariant() &&
-							titleLrc.ToLowerInvariant() == tagNew.Title.ToLowerInvariant() &&
-							(string)searchData.SelectToken("GetLyricResult.Lyric") != null)
+						// Sanitize lyrics
+						rawLyrics = CheckMalformedUtf8(rawLyrics);                                                  // Checks and converts a string to UTF-8 if needed/possible
+						rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
+						rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks and white space
+
+						if (rawLyrics.Length > 1)
 						{
-							string rawLyrics = (string)searchData.SelectToken("GetLyricResult.Lyric");
-
-							// Sanitize lyrics
-							rawLyrics = CheckMalformedUtf8(rawLyrics);                                                  // Checks and converts a string to UTF-8 if needed/possible
-							rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
-							rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks and white space
-
-							if (rawLyrics.Length > 1)
-							{
-								o.Lyrics = rawLyrics;
-							}
+							o.Lyrics = rawLyrics;
 						}
 					}
 				}

@@ -12,8 +12,6 @@
 // TODO: User option to choose if unknown tags should be removed
 // TODO: User option to add custom RegEx patterns to detect artist/title from filename i.e. "^(\d+\s?)(-\s+?)(?<artist>.*\w+)\s+-\s+(?<title>\w+.*)$"
 // TODO: Small blue border on mouse hover around row if already selected
-// TODO: New lyrics importer for viewlyrics.com		https://github.com/PedroHLC/ViewLyricsOpenSearcher/blob/master/src/com/pedrohlc/viewlyricsppensearcher/ViewLyricsSearcher.java
-//		 Foobar + fiddler can help 					https://hydrogenaud.io/index.php/topic,90338.0.html
 
 namespace GlobalNamespace
 {

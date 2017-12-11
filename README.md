@@ -25,6 +25,7 @@
 - **Tidal**
 - **Chartlyrics** (only for lyrics)
 - **Lololyrics** (only for lyrics)
+- **Viewlyrics** (only for lyrics)
 - **Xiami** (only for lyrics)
 
 ## Key Features

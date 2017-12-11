@@ -31,49 +31,46 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-			if (tagNew.Artist != null && tagNew.Title != null)
+			string searchTermEnc = WebUtility.UrlEncode(tagNew.Artist + " - " + tagNew.Title);
+
+			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				string searchTermEnc = WebUtility.UrlEncode(tagNew.Artist + " - " + tagNew.Title);
+				searchRequest.RequestUri = new Uri("http://api.xiami.com/web?v=2.0&limit=30&r=search/songs&app_key=1&key=" + searchTermEnc);
+				searchRequest.Headers.Add("referer", "http://h.xiami.com/");
 
-				using (HttpRequestMessage searchRequest = new HttpRequestMessage())
+				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+
+				if (searchData != null)
 				{
-					searchRequest.RequestUri = new Uri("http://api.xiami.com/web?v=2.0&limit=30&r=search/songs&app_key=1&key=" + searchTermEnc);
-					searchRequest.Headers.Add("referer", "http://h.xiami.com/");
+					// Check if any returned song artist and title match search parameters
+					JToken song = (from track in searchData.SelectTokens("data.songs[*]")
+									where track.SelectToken("artist_name").ToString().ToLowerInvariant() == tagNew.Artist.ToLowerInvariant()
+									where track.SelectToken("song_name").ToString().ToLowerInvariant() == tagNew.Title.ToLowerInvariant()
+									select track.SelectToken("artist_name")).FirstOrDefault();
 
-					string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-					JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
-
-					if (searchData != null)
+					if (song != null && IsValidUrl((string)song.SelectToken("lyric")))
 					{
-						// Check if any returned song artist and title match search parameters
-						JToken song = (from track in searchData.SelectTokens("data.songs[*]")
-									   where track.SelectToken("artist_name").ToString().ToLowerInvariant() == tagNew.Artist.ToLowerInvariant()
-									   where track.SelectToken("song_name").ToString().ToLowerInvariant() == tagNew.Title.ToLowerInvariant()
-									   select track.SelectToken("artist_name")).FirstOrDefault();
+						HttpRequestMessage lyricRequest = new HttpRequestMessage();
+						lyricRequest.RequestUri = new Uri((string)song.SelectToken("lyric"));
 
-						if (song != null && IsValidUrl((string)song.SelectToken("lyric")))
+						string lyricsContent = await this.GetResponse(client, lyricRequest, cancelToken);
+						string rawLyrics = lyricsContent;
+
+						if (!string.IsNullOrWhiteSpace(rawLyrics))
 						{
-							HttpRequestMessage lyricRequest = new HttpRequestMessage();
-							lyricRequest.RequestUri = new Uri((string)song.SelectToken("lyric"));
+							// Sanitize
+							rawLyrics = Regex.Replace(rawLyrics, @"[\r\n]\[x-trans\].*", string.Empty);                 // Remove [x-trans] lines (Chinese translation)
+							rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);  // Remove timestamps like [01:01:123] or [01:01]
+							rawLyrics = Regex.Replace(rawLyrics, @".*?[\u4E00-\u9FFF]+.*?[\r\n]", string.Empty);        // Remove lines where Chinese characters are. Most of them are credits like [by: XYZ]
+							rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);                             // Remove square brackets [by: XYZ] credits
+							rawLyrics = Regex.Replace(rawLyrics, @"<\d+>", string.Empty);                               // Remove angle brackets <123>. No idea for what they are. Example track is "ABBA - Gimme Gimme Gimme"
+							rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
+							rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks
 
-							string lyricContent = await this.GetResponse(client, lyricRequest, cancelToken);
-							string rawLyrics = lyricContent;
-
-							if (!string.IsNullOrWhiteSpace(rawLyrics))
+							if (rawLyrics.Length > 1)
 							{
-								// Sanitize
-								rawLyrics = Regex.Replace(rawLyrics, @"[\r\n]\[x-trans\].*", string.Empty);                 // Remove [x-trans] lines (Chinese translation)
-								rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);  // Remove timestamps like [01:01:123] or [01:01]
-								rawLyrics = Regex.Replace(rawLyrics, @".*?[\u4E00-\u9FFF]+.*?[\r\n]", string.Empty);        // Remove lines where Chinese characters are. Most of time they are credits like [by: XYZ]
-								rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);                             // Remove square brackets [by: XYZ] credits
-								rawLyrics = Regex.Replace(rawLyrics, @"<\d+>", string.Empty);                               // Remove angle brackets <123>. No idea for what they are. Example track is "ABBA - Gimme Gimme Gimme"
-								rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
-								rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks
-
-								if (rawLyrics.Length > 1)
-								{
-									o.Lyrics = rawLyrics;
-								}
+								o.Lyrics = rawLyrics;
 							}
 						}
 					}

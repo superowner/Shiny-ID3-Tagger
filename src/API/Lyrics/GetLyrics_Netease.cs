@@ -32,61 +32,58 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-			if (tagNew.Artist != null && tagNew.Title != null)
+			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				using (HttpRequestMessage searchRequest = new HttpRequestMessage())
-				{
-					searchRequest.Method = HttpMethod.Post;
-					searchRequest.RequestUri = new Uri("http://music.163.com/api/search/get/");
-					searchRequest.Headers.Add("referer", "http://music.163.com");
-					searchRequest.Headers.Add("Cookie", "appver=2.0.2");
-					searchRequest.Content = new FormUrlEncodedContent(new[]
-						{
-							new KeyValuePair<string, string>("s", WebUtility.UrlEncode(tagNew.Artist + " - " + tagNew.Title)),
-							new KeyValuePair<string, string>("type", "1")
-						});
-
-					string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-					JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
-
-					if (searchData != null)
+				searchRequest.Method = HttpMethod.Post;
+				searchRequest.RequestUri = new Uri("http://music.163.com/api/search/get/");
+				searchRequest.Headers.Add("referer", "http://music.163.com");
+				searchRequest.Headers.Add("Cookie", "appver=2.0.2");
+				searchRequest.Content = new FormUrlEncodedContent(new[]
 					{
-						// Check if any returned song artist and title match search parameters
-						JToken song = (from track in searchData.SelectTokens("result.songs[*]")
-									   where track.SelectToken("artists[0].name").ToString().ToLowerInvariant() == tagNew.Artist.ToLowerInvariant()
-									   where track.SelectToken("name").ToString().ToLowerInvariant() == tagNew.Title.ToLowerInvariant()
-									   select track).FirstOrDefault();
+						new KeyValuePair<string, string>("s", WebUtility.UrlEncode(tagNew.Artist + " - " + tagNew.Title)),
+						new KeyValuePair<string, string>("type", "1")
+					});
 
-						if (song != null && song.SelectToken("id") != null)
+				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+
+				if (searchData != null)
+				{
+					// Check if any returned song artist and title match search parameters
+					JToken song = (from track in searchData.SelectTokens("result.songs[*]")
+									where track.SelectToken("artists[0].name").ToString().ToLowerInvariant() == tagNew.Artist.ToLowerInvariant()
+									where track.SelectToken("name").ToString().ToLowerInvariant() == tagNew.Title.ToLowerInvariant()
+									select track).FirstOrDefault();
+
+					if (song != null && song.SelectToken("id") != null)
+					{
+						string songid = (string)song.SelectToken("id");
+
+						using (HttpRequestMessage lyricsRequest = new HttpRequestMessage())
 						{
-							string songid = (string)song.SelectToken("id");
+							lyricsRequest.Headers.Add("referer", "http://music.163.com");
+							lyricsRequest.Headers.Add("Cookie", "appver=2.0.2");
+							lyricsRequest.RequestUri = new Uri("http://music.163.com/api/song/lyric/?id=" + songid + "&lv=-1&kv=-1&tv=-1");
 
-							using (HttpRequestMessage lyricsRequest = new HttpRequestMessage())
+							string lyricsContent = await this.GetResponse(client, lyricsRequest, cancelToken);
+							JObject lyricsData = JsonConvert.DeserializeObject<JObject>(lyricsContent, this.GetJsonSettings());
+
+							if (lyricsData != null && lyricsData.SelectToken("lrc.lyric") != null)
 							{
-								lyricsRequest.Headers.Add("referer", "http://music.163.com");
-								lyricsRequest.Headers.Add("Cookie", "appver=2.0.2");
-								lyricsRequest.RequestUri = new Uri("http://music.163.com/api/song/lyric/?id=" + songid + "&lv=-1&kv=-1&tv=-1");
+								string rawLyrics = (string)lyricsData.SelectToken("lrc.lyric");
 
-								string lyricsContent = await this.GetResponse(client, lyricsRequest, cancelToken);
-								JObject lyricsData = JsonConvert.DeserializeObject<JObject>(lyricsContent, this.GetJsonSettings());
+								// Sanitize lyrics
+								rawLyrics = Regex.Replace(rawLyrics, @"[\r\n]\[x-trans\].*", string.Empty);                 // Remove [x-trans] lines (Chinese translation)
+								rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);  // Remove timestamps like [01:01:123] or [01:01]
+								rawLyrics = Regex.Replace(rawLyrics, @".*?[\u4E00-\u9FFF]+.*?[\r\n]", string.Empty);        // Remove lines where Chinese characters are. Most of them are credits like [by: XYZ]
+								rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);                             // Remove square brackets [by: XYZ] credits
+								rawLyrics = Regex.Replace(rawLyrics, @"<\d+>", string.Empty);                               // Remove angle brackets <123>. No idea for what they are. Example track is "ABBA - Gimme Gimme Gimme"
+								rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
+								rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks and white space
 
-								if (lyricsData != null && lyricsData.SelectToken("lrc.lyric") != null)
+								if (rawLyrics.Length > 1)
 								{
-									string rawLyrics = (string)lyricsData.SelectToken("lrc.lyric");
-
-									// Sanitize lyrics
-									rawLyrics = Regex.Replace(rawLyrics, @"[\r\n]\[x-trans\].*", string.Empty);                 // Remove [x-trans] lines (Chinese translation)
-									rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);  // Remove timestamps like [01:01:123] or [01:01]
-									rawLyrics = Regex.Replace(rawLyrics, @".*?[\u4E00-\u9FFF]+.*?[\r\n]", string.Empty);        // Remove lines where Chinese characters are. Most of time they are credits like [by: XYZ]
-									rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);                             // Remove square brackets [by: XYZ] credits
-									rawLyrics = Regex.Replace(rawLyrics, @"<\d+>", string.Empty);                               // Remove angle brackets <123>. No idea for what they are. Example track is "ABBA - Gimme Gimme Gimme"
-									rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
-									rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks and white space
-
-									if (rawLyrics.Length > 1)
-									{
-										o.Lyrics = rawLyrics;
-									}
+									o.Lyrics = rawLyrics;
 								}
 							}
 						}

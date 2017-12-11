@@ -45,10 +45,11 @@ namespace GlobalNamespace
 
 						try
 						{
-							// Save request content for later reuse when an error occurs or debugging enabled is
+							// REVIEW: When Content is already disposed, an error is thrown
+							// Save request content for later reuse when an error occurs or when debugging enabled is
 							if (request.Content != null)
 							{
-								requestContent = request.Content.ReadAsStringAsync().Result;
+								requestContent = await request.Content.ReadAsStringAsync();
 							}
 
 							// If debugging level is 3 (DEBUG) or higher, print out all requests, not only failed once

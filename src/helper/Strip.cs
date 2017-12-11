@@ -19,7 +19,7 @@ namespace GlobalNamespace
 			{
 				if (User.Settings["RemoveBrackets"])
 				{
-					const string RegExPattern = @"\s[\(\[].*?(version|edition|deluxe|explicit).*?[\)\]]";
+					const string RegExPattern = @"\s[\(\[].*?(version|edition|deluxe|explicit|disc).*?[\)\]]";
 					str = Regex.Replace(str, RegExPattern, string.Empty, RegexOptions.IgnoreCase);
 				}
 
