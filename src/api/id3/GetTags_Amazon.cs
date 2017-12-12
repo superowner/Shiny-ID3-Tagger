@@ -26,8 +26,8 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private static Stopwatch LastRequestTimer = new Stopwatch();
-		private static int LastRequestTimeout = 1000;
+		private static Stopwatch lastRequestTimer = new Stopwatch();
+		private static int lastRequestTimeout = 1000;
 
 		// ###########################################################################
 		private static string CreateSignature(string server, string parameters)
@@ -80,11 +80,14 @@ namespace GlobalNamespace
 
 				// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines
 				// Check if 1 second already passed since last request
-				while (LastRequestTimer.ElapsedMilliseconds < LastRequestTimeout && LastRequestTimer.IsRunning && !cancelToken.IsCancellationRequested)
+				while (lastRequestTimer.ElapsedMilliseconds < lastRequestTimeout && lastRequestTimer.IsRunning && !cancelToken.IsCancellationRequested)
+				{
 					await Task.Delay(50);
+				}
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				LastRequestTimer.Restart();
+				lastRequestTimer.Restart();
+
 				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
 
 				if (searchData != null && searchData.SelectToken("ItemSearchResponse.Items.Item") != null)
@@ -140,11 +143,14 @@ namespace GlobalNamespace
 							albumRequest.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 							// Check if 1 second already passed since last request
-							while (LastRequestTimer.ElapsedMilliseconds < LastRequestTimeout && LastRequestTimer.IsRunning && !cancelToken.IsCancellationRequested)
+							while (lastRequestTimer.ElapsedMilliseconds < lastRequestTimeout && lastRequestTimer.IsRunning && !cancelToken.IsCancellationRequested)
+							{
 								await Task.Delay(50);
+							}
 
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							LastRequestTimer.Restart();
+							lastRequestTimer.Restart();
+
 							JObject albumData = this.DeserializeJson(this.ConvertXmlToJson(albumContent));
 
 							if (albumData != null)

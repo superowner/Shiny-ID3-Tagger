@@ -84,7 +84,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\release\Shiny ID3 Tagger.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <OutputPath>bin\release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
@@ -346,7 +347,7 @@
     <Compile Include="src\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="program.cs" />
+    <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="resources\icon_resources.Designer.cs">
       <DependentUpon>icon_resources.resx</DependentUpon>

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="program.cs" company="Shiny ID3 Tagger">
+// <copyright file="Program.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -7,13 +7,14 @@
 //-----------------------------------------------------------------------
 
 // TODO: Automatic GitHub releases https://marketplace.visualstudio.com/items?itemName=jakobehn.jakobehn-vsts-github-tasks
-// TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned
+// TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned (download failed)
+// TODO: Small blue border on mouse hover around row if already selected
+
 // TODO: User option to en/disable single APIs (sometimes they are down)
 // TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
 // TODO: User option to write ID3v1 tags additionally to ID3v2
 // TODO: User option to choose if unknown tags should be removed
 // TODO: User option to add custom RegEx patterns to detect artist/title from filename
-// TODO: Small blue border on mouse hover around row if already selected
 namespace GlobalNamespace
 {
 	using System;
