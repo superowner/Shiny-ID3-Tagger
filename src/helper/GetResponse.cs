@@ -90,7 +90,7 @@ namespace GlobalNamespace
 						// Check if user pressed cancel button. If no, print the error
 						if (!cancelToken.IsCancellationRequested)
 						{
-							// If debugging is enabled in settings, print out all request properties
+							// If debugging is enabled in settings, print out all request and response properties
 							if (User.Settings["DebugLevel"] >= 2)
 							{
 								List<string> errorMsg = new List<string> { "WARNING:  Response was unsuccessful! Retrying..." };
@@ -103,14 +103,14 @@ namespace GlobalNamespace
 							// Response was not successful. But it was also not a common error. And user did not press cancel
 							// This must be an uncommon error. Continue with our retry logic
 							// But wait a bit before you try it again to give server some time to eventually recover
-							Task wait = Task.Delay(RetryDelay * 1000);
+							await Task.Delay(RetryDelay * 1000);
 						}
 					}
 				}
 				catch (TaskCanceledException)
 				{
 					// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
-					// If debugging is enabled in settings, print out all request properties
+					// If debugging is enabled in settings, print out all request properties (response could be disposed)
 					if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 2)
 					{
 						List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + Timeout + " seconds to respond! Abort..." };
@@ -124,7 +124,7 @@ namespace GlobalNamespace
 				catch (Exception error)
 				{
 					// An unknown application error occurred. Cancel request immediately and don't try again
-					// If debugging is enabled in settings, print out all request properties
+					// If debugging is enabled in settings, print out all request properties (response could be disposed)
 					if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 1)
 					{
 						Exception realerror = error;

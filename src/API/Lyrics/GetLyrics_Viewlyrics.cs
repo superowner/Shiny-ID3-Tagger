@@ -35,7 +35,6 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
 				// Set headers and method

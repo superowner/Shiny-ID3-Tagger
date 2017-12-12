@@ -81,7 +81,7 @@ namespace GlobalNamespace
 
 				// 1 request per second is OK, after a burst you get throttled to 1 request/10s. Therefore this delay of 1second after every request
 				// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines
-				Task wait = Task.Delay(1000);
+				await Task.Delay(1000);
 
 				if (searchData != null && searchData.SelectToken("ItemSearchResponse.Items.Item") != null)
 				{
@@ -138,7 +138,7 @@ namespace GlobalNamespace
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
 							JObject albumData = this.DeserializeJson(this.ConvertXmlToJson(albumContent));
 
-							wait = Task.Delay(1000);
+							await Task.Delay(1000);
 
 							if (albumData != null)
 							{
