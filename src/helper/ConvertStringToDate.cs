@@ -10,6 +10,7 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Globalization;
+	using System.Text.RegularExpressions;
 
 	public partial class Form1
 	{
@@ -42,10 +43,18 @@ namespace GlobalNamespace
 				}
 				else
 				{
-					if (User.Settings["DebugLevel"] >= 2)
+					// Handle edge cases where API database' date has default value like "0000" or "0000-00-00"
+					// They cannot converted to a date but we don't wanna log an error since this is too common
+					// Regex tests if dateString contains anything which is not zero, dot or dash
+					Regex regEx = new Regex(@"[^\.\-0]+");
+
+					if (regEx.IsMatch(dateString))
 					{
-						string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
-						this.PrintLogMessage("error", errorMsg);
+						if (User.Settings["DebugLevel"] >= 2)
+						{
+							string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
+							this.PrintLogMessage("error", errorMsg);
+						}
 					}
 				}
 			}
