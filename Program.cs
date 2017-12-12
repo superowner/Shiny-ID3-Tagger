@@ -7,7 +7,6 @@
 //-----------------------------------------------------------------------
 
 // TODO: Restructure debug and release folder. Move .dlls to sub-folder "resources"
-// TODO: Set author in stylecop.json
 // TODO: Execute Amazon API requests: store time stamp from last call and wait until 1s is elapsed
 // TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned
 // TODO: User option to en/disable single APIs (sometimes they are down)
