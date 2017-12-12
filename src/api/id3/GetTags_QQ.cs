@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from qq.com API for current track</summary>
+// http://blog.51cto.com/limeixiong/1969701
 // https://github.com/LIU9293/musicAPI/blob/master/src/qq.js
 // https://github.com/metowolf/TencentMusicApi/blob/master/TencentMusicAPI.php
 // Very bad search results. Already tried it twice to improve it but without any success

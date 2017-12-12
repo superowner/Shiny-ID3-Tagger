@@ -7,6 +7,8 @@
 // https://github.com/rikels/LyricsSearch/blob/master/lyrics.py#L88
 // https://github.com/PedroHLC/ViewLyricsOpenSearcher
 // https://github.com/PedroHLC/ViewLyricsOpenSearcher/blob/master/viewlyricsopensearcher.php#L60
+// https://github.com/osdlyrics/osdlyrics/blob/master/lyricsources/viewlyrics/viewlyrics.py
+// LRC format explained: https://wiki.mobileread.com/wiki/LRC
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
