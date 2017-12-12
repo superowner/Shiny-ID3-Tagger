@@ -27,7 +27,7 @@ namespace GlobalNamespace
 				{
 					string[] errorMsg =
 						{
-						@"ERROR:    Could not read all values from 'resources\settings.json' or 'resources\accounts.json'!",
+						@"ERROR:    Could not read all values from 'config\settings.json' or 'config\accounts.json'!",
 					 	"Message:  " + ex.Message.TrimEnd('\r', '\n')
 					};
 					this.PrintLogMessage("error", errorMsg);
@@ -41,13 +41,13 @@ namespace GlobalNamespace
 				var iv = new byte[] { 221, 237, 248, 138, 53, 16, 87, 148, 28, 20, 30, 199, 195, 221, 209, 188 };
 				var decryptorTransformer = decryptor.CreateDecryptor(key, iv);
 
-				string encryptedString = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"\resources\accounts.json");
+				string encryptedString = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"\config\accounts.json");
 				byte[] encryptedBytes = Convert.FromBase64String(encryptedString);
 				var decryptedBytes = decryptorTransformer.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
 				var decryptedString = Encoding.UTF8.GetString(decryptedBytes);
 				User.Accounts = JsonConvert.DeserializeObject<Dictionary<string, string>>(decryptedString);
 
-				string plainString = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"\resources\settings.json");
+				string plainString = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"\config\settings.json");
 				User.Settings = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(plainString);
 
 				User.DbAccounts = new DataTable();

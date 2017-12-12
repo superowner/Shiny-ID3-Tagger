@@ -122,7 +122,7 @@
     <Compile Include="src\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\Lyrics\GetLyrics_Viewlyrics.cs">
+    <Compile Include="src\API\lyrics\GetLyrics_Viewlyrics.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\helper\GetImageType.cs">
@@ -263,73 +263,73 @@
     <Compile Include="src\SearchTags.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_7digital.cs">
+    <Compile Include="src\API\id3\GetTags_7digital.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Amazon.cs">
+    <Compile Include="src\API\id3\GetTags_Amazon.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Decibel.cs">
+    <Compile Include="src\API\id3\GetTags_Decibel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Deezer.cs">
+    <Compile Include="src\API\id3\GetTags_Deezer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Discogs.cs">
+    <Compile Include="src\API\id3\GetTags_Discogs.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Genius.cs">
+    <Compile Include="src\API\id3\GetTags_Genius.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Gracenote.cs">
+    <Compile Include="src\API\id3\GetTags_Gracenote.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_iTunes.cs">
+    <Compile Include="src\API\id3\GetTags_iTunes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_LastFm.cs">
+    <Compile Include="src\API\id3\GetTags_LastFm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_MsGroove.cs">
+    <Compile Include="src\API\id3\GetTags_MsGroove.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_MusicBrainz.cs">
+    <Compile Include="src\API\id3\GetTags_MusicBrainz.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_MusicGraph.cs">
+    <Compile Include="src\API\id3\GetTags_MusicGraph.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_MusixMatch.cs">
+    <Compile Include="src\API\id3\GetTags_MusixMatch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Napster.cs">
+    <Compile Include="src\API\id3\GetTags_Napster.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Netease.cs">
+    <Compile Include="src\API\id3\GetTags_Netease.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Qobuz.cs">
+    <Compile Include="src\API\id3\GetTags_Qobuz.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_QQ.cs">
+    <Compile Include="src\API\id3\GetTags_QQ.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Spotify.cs">
+    <Compile Include="src\API\id3\GetTags_Spotify.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\ID3\GetTags_Tidal.cs">
+    <Compile Include="src\API\id3\GetTags_Tidal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\Lyrics\GetLyrics_Chartlyrics.cs">
+    <Compile Include="src\API\lyrics\GetLyrics_Chartlyrics.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\Lyrics\GetLyrics_Lololyrics.cs">
+    <Compile Include="src\API\lyrics\GetLyrics_Lololyrics.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\Lyrics\GetLyrics_Netease.cs">
+    <Compile Include="src\API\lyrics\GetLyrics_Netease.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\API\Lyrics\GetLyrics_Xiami.cs">
+    <Compile Include="src\API\lyrics\GetLyrics_Xiami.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\WriteTags.cs">
@@ -350,19 +350,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Encryptor\Test\accounts_plain.json">
-      <Link>resources\accounts_plain.json</Link>
+      <Link>config\accounts_plain.json</Link>
     </None>
-    <None Include="app.config" />
+    <None Include="resources\app.config" />
     <None Include="packages.config" />
     <None Include="README.md" />
-    <None Include="resources\accounts.json">
+    <None Include="config\accounts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\settings.json">
+    <None Include="config\settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Shiny ID3 Tagger.ruleset" />
-    <AdditionalFiles Include="resources\stylecop.json" />
+    <AdditionalFiles Include="config\stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -384,5 +384,6 @@
     <Analyzer Include="packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
