@@ -1,28 +1,58 @@
-Open source				https://tldrlegal.com/licenses/tags/Open%20Source
-The MIT License			https://tldrlegal.com/license/mit-license
-Apache License v2.0		https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)
+#############################################################################
+##### 					LICENSE (for this software)						#####
+#############################################################################
+
+Copyright (c) 2017 Shiny ID3 Tagger
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 
-License for included third-party software
+#############################################################################
+##### 					THIRD PARTY LICENSES (for NuGet packages)		#####
+#############################################################################
+
 - Newtonsoft.Json		MIT License							https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md
 						=> Selling: Yes						No restrictions on what you can do with it
 						=> Public access: Yes
 
 - Ookii.Dialogs			Custom License						http://www.ookii.org/software/dialogs (download ZIP to see license)
-						=> Selling: Yes
+						=> Selling: Yes						Include original license
 						=> Public access: Yes
 
 - taglib-sharp			GNU Lesser General Public License	https://github.com/mono/taglib-sharp
 						=> Selling: Yes						Applications that use (not modify) the library don't have to be under LGPL
 						=> Public access: Yes
 
+#############################################################################
+##### 					THIRD PARTY LICENSES (for RESTful APIs)			#####
+#############################################################################
 
-//-----------------------------------------------------------------------
-License for used Web services
+- 7digital
+
 - Amazon				Custom License						https://affiliate-program.amazon.com/gp/advertising/api/detail/agreement.html
 						=> Selling: No						Under "Section 4-m" it does not allow reselling
 						=> Public access: ???
+
+- Chartlyrics			Custom license						http://www.chartlyrics.com/api.aspx
+						=> Selling: No						Under "TERMS OF USE" using the API is only for non-commercial use
+						=> Publishing: Yes
 
 - Decibel/Quantone		Custom license						https://developer.quantonemusic.com/eula
 						=> Selling: No						Under "Restrictions point (a)" selling software that uses their API is prohibited
@@ -35,6 +65,8 @@ License for used Web services
 - Discogs				Creative Commons license (CC0)		https://www.discogs.com/developers/
 						=> Selling: Yes						No restrictions on what you can do with it
 						=> Public access: Yes
+
+- Lololyrics
 
 - Genius				Custom license 						http://genius.com/static/terms
 						=> Selling: No 						Under "Commercial Use" they prohibit selling and publishing "any portion of the service"
@@ -53,7 +85,7 @@ License for used Web services
 						=> Selling: No						Under 4.3.3 "License to use the Last.fm Data" it's not allowed to sub-license Last.fm Data
 						=> Public access: Yes				Under 4.1 "License to use the Last.fm Data" publishing is allowed
 
-- Microsoft Groover		Custom license						https://msdn.microsoft.com/en-us/library/dn546691.aspx
+- Microsoft Groove		Custom license						https://msdn.microsoft.com/en-us/library/dn546691.aspx
 						=> Selling: No						Under "4. CODE OF CONDUCT / RESTRICTIONS ON US?" point (f) commercializing is not allowed
 						=> Public access: ???
 
@@ -63,7 +95,7 @@ License for used Web services
 
 - Musicgraph			Custom license						https://developer.musicgraph.com/policies
 						=> Selling: No						Under "2.LICENSE GRANT/SCOPE" point (d) Licensee shall not copy, re-sell [...] provide access to third parties
-						=> Public access: ???	
+						=> Public access: ???
 
 - Musixmatch			Custom license						https://about.musixmatch.com/apiterms/
 						=> Selling: No						Under 6.1.3 "GRANT OF RIGHTS" for non-commercial purposes only
@@ -73,14 +105,20 @@ License for used Web services
 						=> Selling: No						Under 5 "Limitations" point (m) selling is not allowed
 						=> Public access: ???
 
+- Netease
+
 - Qobuz					Custom license 						http://static.qobuz.com/apps/api/QobuzAPI-TermsofUse.pdf
 						=> Selling: No 						Under "RESTRICTIONS" point (iv) it is prohibited to charge access to the API/service/content
 						=> Public access:
+
+- QQ
 
 - Spotify				Custom license						https://developer.spotify.com/developer-terms-of-use/#section-iv-restrictions
 						=> Selling: No						Under "IV: Restrictions" point (2.b) selling of meta data is not allowed
 						=> Public access: ???
 
-- Chartlyrics			Custom license						http://www.chartlyrics.com/api.aspx
-						=> Selling: No						Under "TERMS OF USE" using the API is only for non-commercial use
-						=> Publishing: Yes
+- Tidal
+
+- Viewlyrics
+
+- Xiami

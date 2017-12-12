@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Program.cs" company="Shiny ID3 Tagger">
+// <copyright file="program.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
