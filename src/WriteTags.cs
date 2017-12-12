@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="WriteTags.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Main method for ID3 tag saving. Loops through all result rows and writes their values as tags it's corresponding file</summary>
@@ -149,16 +149,17 @@ namespace GlobalNamespace
 									using (MemoryStream streamResized = new MemoryStream())
 									{
 										// Check if downloaded stream is an image. Some servers use a wrong content type for HTTP response. Therefore you need to check stream bytes for defined byte markers
-										if (GetImageType(streamOrg.ToArray()))
+										if (this.GetImageType(streamOrg.ToArray()))
 										{
 											using (Image image = Image.FromStream(streamOrg))
 											{
 												// Resize image according to user setting "MaxImageSize". Always resize and re-encode
-												int longSide = (new List<int> { image.Width, image.Height }).Max();
-												float resizeFactor = (new List<float> {
-																		User.Settings["MaxImageSize"] / (float)image.Width,
-																		User.Settings["MaxImageSize"] / (float)image.Height
-																	}).Min();
+												int longSide = new List<int> { image.Width, image.Height }.Max();
+												float resizeFactor = new List<float>
+												{
+													User.Settings["MaxImageSize"] / (float)image.Width,
+													User.Settings["MaxImageSize"] / (float)image.Height
+												}.Min();
 
 												Size newSize = new Size((int)Math.Round(image.Width * resizeFactor), (int)Math.Round(image.Height * resizeFactor));
 
@@ -308,14 +309,13 @@ namespace GlobalNamespace
 				this.PrintLogMessage("write", new[] { message });
 			}
 
-
 			// Disc number + disc count
 			string oldDiscnumber = tagFile.Tag.Disc.ToString(cultEng);
 			string oldDisccount = tagFile.Tag.DiscCount.ToString(cultEng);
 			string newDiscnumber = (string)row.Cells[this.discnumber1.Index].Value;
 			string newDisccount = (string)row.Cells[this.disccount1.Index].Value;
 			if ((oldDiscnumber != newDiscnumber && !string.IsNullOrWhiteSpace(newDiscnumber)) ||
-				(oldDisccount  != newDisccount  && !string.IsNullOrWhiteSpace(newDisccount)))
+				(oldDisccount != newDisccount && !string.IsNullOrWhiteSpace(newDisccount)))
 			{
 				newDiscnumber = string.IsNullOrWhiteSpace(newDiscnumber) ? oldDiscnumber : newDiscnumber;
 				newDisccount = string.IsNullOrWhiteSpace(newDisccount) ? oldDisccount : newDisccount;
@@ -332,7 +332,7 @@ namespace GlobalNamespace
 			string newTracknumber = (string)row.Cells[this.tracknumber1.Index].Value;
 			string newTrackcount = (string)row.Cells[this.trackcount1.Index].Value;
 			if ((oldTracknumber != newTracknumber && !string.IsNullOrWhiteSpace(newTracknumber)) ||
-				(oldTrackcount  != newTrackcount  && !string.IsNullOrWhiteSpace(newTrackcount)))
+				(oldTrackcount != newTrackcount && !string.IsNullOrWhiteSpace(newTrackcount)))
 			{
 				newTracknumber = string.IsNullOrWhiteSpace(newTracknumber) ? oldTracknumber : newTracknumber;
 				newTrackcount = string.IsNullOrWhiteSpace(newTrackcount) ? oldTrackcount : newTrackcount;
@@ -402,8 +402,8 @@ namespace GlobalNamespace
 				}
 				catch (IOException)
 				{
-					successWrite = false;
 					// Do nothing. Error is handled at end of SaveFile method
+					successWrite = false;
 				}
 
 				await Task.Delay(WriteDelay);
@@ -423,8 +423,8 @@ namespace GlobalNamespace
 					}
 					catch (IOException)
 					{
-						successWrite = false;
 						// Do nothing. Error is handled at end of SaveFile method
+						successWrite = false;
 					}
 
 					await Task.Delay(WriteDelay);
@@ -445,8 +445,8 @@ namespace GlobalNamespace
 					}
 					catch (IOException)
 					{
-						successWrite = false;
 						// Do nothing. Error is handled at end of SaveFile method
+						successWrite = false;
 					}
 
 					await Task.Delay(WriteDelay);

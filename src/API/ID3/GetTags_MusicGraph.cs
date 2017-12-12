@@ -1,11 +1,11 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GetTags_MusicGraph.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from MusicGraph API for current track</summary>
 // https://developer.musicgraph.com/api-docs/v2/tracks
-// "&limit=1" should not be used, filtering on client side is better
+// "limit=1" should not be used, filtering on client side is better
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -18,7 +18,6 @@ namespace GlobalNamespace
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 
 	public partial class Form1

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="LevenshteinDistance.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Calculates how similar two strings are and outputs how many edits are needed to get from one string to another</summary>

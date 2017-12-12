@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="DataGridView_CellMouseLeave.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>De-highlights rows after they aren't selected anymore. Opposing method to "DataGridView_CellMouseEnter"</summary>

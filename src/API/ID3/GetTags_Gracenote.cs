@@ -1,12 +1,11 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GetTags_Gracenote.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Gracenote API for current track</summary>
 // https://developer.gracenote.com/web-api
 // https://developer.gracenote.com/sites/default/files/web/webapi/index.html#music-web-api/Registering%20a%20Device.html#scroll-bookmark-25
-
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -17,7 +16,6 @@ namespace GlobalNamespace
 	using System.Text.RegularExpressions;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 
 	public partial class Form1

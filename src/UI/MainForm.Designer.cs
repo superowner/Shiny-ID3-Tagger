@@ -598,7 +598,7 @@ namespace GlobalNamespace
 			this.slowProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.slowProgressBar.TabIndex = 11;
 			this.slowProgressBar.Visible = false;
-			this.slowProgressBar.VisibleChanged += new System.EventHandler(this.slowProgressBar_VisibleChanged);
+			this.slowProgressBar.VisibleChanged += new System.EventHandler(this.SlowProgressBar_VisibleChanged);
 			// 
 			// number2
 			// 

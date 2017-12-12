@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GetLyrics_Lololyrics.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Retrieves track lyrics from lololyrics.com</summary>
@@ -16,7 +16,6 @@ namespace GlobalNamespace
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 
 	public partial class Form1

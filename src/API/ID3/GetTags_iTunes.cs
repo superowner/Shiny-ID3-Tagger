@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_Itunes.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// <copyright file="GetTags_iTunes.cs" company="Shiny Id3 Tagger">
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from iTunes API for current track</summary>
@@ -15,12 +15,11 @@ namespace GlobalNamespace
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 
 	public partial class Form1
 	{
-		private async Task<Id3> GetTags_Itunes(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		private async Task<Id3> GetTags_iTunes(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3();
 			o.Service = "iTunes";

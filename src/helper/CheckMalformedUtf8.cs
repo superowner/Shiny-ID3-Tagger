@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="CheckMalformedUtf8.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Checks if a given string needs to be converted to UTF-8</summary>
@@ -16,7 +16,7 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		public static string CheckMalformedUtf8(string data)
+		private static string CheckMalformedUtf8(string data)
 		{
 			Match match = CreateRegex().Match(data);
 			if (match.Success)
@@ -29,7 +29,7 @@ namespace GlobalNamespace
 			}
 		}
 
-		public static Regex CreateRegex()
+		private static Regex CreateRegex()
 		{
 			const string Specials = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö";
 

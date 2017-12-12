@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GetLyrics_Viewlyrics.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Retrieves track lyrics from viewlyrics.com</summary>
@@ -21,7 +21,6 @@ namespace GlobalNamespace
 	using System.Text.RegularExpressions;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 
 	public partial class Form1
@@ -62,8 +61,8 @@ namespace GlobalNamespace
 									orderby ParseInt((string)item.SelectToken("@downloads")) descending
 									select (string)item.SelectToken("@link")).FirstOrDefault();
 
-					if (lyricsLink != null) {
-
+					if (lyricsLink != null)
+					{
 						using (HttpRequestMessage lyricsRequest = new HttpRequestMessage())
 						{
 							lyricsRequest.RequestUri = new Uri("http://www.viewlyrics.com/" + lyricsLink);
@@ -100,7 +99,7 @@ namespace GlobalNamespace
 		{
 			string result = null;
 
-			if ( data != null)
+			if (data != null)
 			{
 				// Get magic key to decode response
 				byte magicKey = data[1];
@@ -110,7 +109,7 @@ namespace GlobalNamespace
 
 				// Loop through encoded data and decode it with magic key
 				int queryLen = data.Length;
-				byte[] dataDecBytes = new Byte[queryLen];
+				byte[] dataDecBytes = new byte[queryLen];
 				for (int i = 0; i < queryLen; i++)
 				{
 					int decByte = data[i] ^ magicKey;
@@ -141,11 +140,12 @@ namespace GlobalNamespace
 				byte queryByte = Encoding.UTF8.GetBytes(query)[i];
 				j += (int)queryByte;
 			}
-			char magicKey = (char)(Math.Round(j / queryLen));
+
+			char magicKey = (char)Math.Round(j / queryLen);
 
 			// Encode query bytes with magic key to get the encoded query
 			byte[] queryBytes = Encoding.UTF8.GetBytes(query);
-			byte[] queryEncBytes = new Byte[queryLen];
+			byte[] queryEncBytes = new byte[queryLen];
 			for (int i = 0; i < queryLen; i++)
 			{
 				int encByte = queryBytes[i] ^ magicKey;

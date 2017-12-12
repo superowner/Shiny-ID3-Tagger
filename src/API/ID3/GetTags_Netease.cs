@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GetTags_Netease.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Netease API for current track</summary>
@@ -19,7 +19,6 @@ namespace GlobalNamespace
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 
 	public partial class Form1
@@ -51,8 +50,9 @@ namespace GlobalNamespace
 
 				if (searchData != null && searchData.SelectToken("result.songs") != null)
 				{
+					// Chinese translation is "album", excludes EPs and compilations and stuff like that
 					List<JToken> albums = (from songs in searchData.SelectToken("result.songs")
-										   where (string)songs["album"]["type"] == "专辑"  // Chinese translation is "album", excludes EPs and compilations and stuff like that
+										   where (string)songs["album"]["type"] == "专辑"
 										   select songs).ToList();
 
 					if (albums.Count > 0)
@@ -60,7 +60,7 @@ namespace GlobalNamespace
 						o.Artist = (string)albums[0].SelectToken("artists[0].name");
 						o.Title = (string)albums[0].SelectToken("name");
 						o.Album = (string)albums[0].SelectToken("album.name");
-						o.Genre = null;         // Netease provides a detailed album query with a property called "tags". But value seems always empty
+						o.Genre = null;					// Netease provides a detailed album query with a property called "tags". But value seems always empty
 						o.DiscCount = null;
 						o.DiscNumber = (string)albums[0].SelectToken("disc");
 						o.TrackCount = (string)albums[0].SelectToken("album.size");

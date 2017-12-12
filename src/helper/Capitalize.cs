@@ -1,24 +1,24 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Capitalize.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Capitalize a given string according to rules from link below</summary>
 // http://aitech.ac.jp/~ckelly/midi/help/caps.html
-// #1	The first and last words are always capitalized, and all except the words listed below are capitalized.
-// #2	These are lower-case, unless they are the first word or last word.
-//		- articles: a, an, the
-//		- conjunctions: and, but, or, nor
-//		- prepositions that are less than five letters long: at, by, for, from, in, into, of, off, on, onto, out, over, to, up, with
-//		- as (only if it is followed by a noun)
-// #3	Prepositions are sometimes capitalized.
-//		- Prepositions are capitalized when they are the first or last word.
-//		- Prepositions that are part of two-word "phrasal verbs" (Come On, Hold On, etc....) are capitalized.
-//		- Prepositions that are over four letters long. (across, after, among, beyond, ...)
-// #4	These short words are capitalized.
-//		- also, be, if, than, that, thus, when
-//		- as (if it is followed by a verb)
-//-----------------------------------------------------------------------
+/* #1	The first and last words are always capitalized, and all except the words listed below are capitalized.
+ * #2	These are lower-case, unless they are the first word or last word.
+ *		- articles: a, an, the
+ *		- conjunctions: and, but, or, nor
+ *		- prepositions that are less than five letters long: at, by, for, from, in, into, of, off, on, onto, out, over, to, up, with
+ *		- as (only if it is followed by a noun)
+ * #3	Prepositions are sometimes capitalized.
+ *		- Prepositions are capitalized when they are the first or last word.
+ *		- Prepositions that are part of two-word "phrasal verbs" (Come On, Hold On, etc....) are capitalized.
+ *		- Prepositions that are over four letters long. (across, after, among, beyond, ...)
+ * #4	These short words are capitalized.
+ *		- also, be, if, than, that, thus, when
+ *		- as (if it is followed by a verb)
+//-----------------------------------------------------------------------*/
 
 namespace GlobalNamespace
 {

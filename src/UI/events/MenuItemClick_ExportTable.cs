@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="MenuItemClick_ExportTable.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Exports a CSV file</summary>
@@ -37,7 +37,7 @@ namespace GlobalNamespace
 			using (SaveFileDialog dialog = new SaveFileDialog()
 			{
 				Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
-				FileName = DateTime.Now.ToString("yyMMdd", cultEng) + " - Shiny ID3 Tagger Export - " + tabControl1.SelectedTab.Text,
+				FileName = DateTime.Now.ToString("yyMMdd", cultEng) + " - Shiny ID3 Tagger Export - " + this.tabControl1.SelectedTab.Text,
 				InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
 				OverwritePrompt = true
 			})

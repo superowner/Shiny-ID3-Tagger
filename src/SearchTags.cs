@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="SearchTags.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Code fired when "Search tags" button is clicked. Calls all APIs and presents their results</summary>
@@ -102,7 +102,7 @@ namespace GlobalNamespace
 
 							sw.Restart();
 
-							lyricsNew = new KeyValuePair<string, string>();
+							lyricsNew = default(KeyValuePair<string, string>);
 							tagNew.Artist = artistNew;
 							tagNew.Title = titleNew;
 
@@ -221,7 +221,7 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private async Task<KeyValuePair<string, string>> StartLyricsSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			KeyValuePair<string, string> lyrics = new KeyValuePair<string, string>();
+			KeyValuePair<string, string> lyrics = default(KeyValuePair<string, string>);
 			var lyricResults = new Dictionary<string, string>();
 
 			if (tagNew.Artist == null && tagNew.Title == null)
@@ -249,11 +249,11 @@ namespace GlobalNamespace
 
 			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
 			// "lyricsPriority" setting in settings.json decides what lyrics should be taken if there are multiple sources available
-			foreach (string API in User.Settings["LyricsPriority"])
+			foreach (string api in User.Settings["LyricsPriority"])
 			{
 				lyrics = (from kvp in lyricResults
 							where !string.IsNullOrWhiteSpace(kvp.Value)
-							where kvp.Key.ToLowerInvariant() == API.ToLowerInvariant()
+							where kvp.Key.ToLowerInvariant() == api.ToLowerInvariant()
 							select kvp).FirstOrDefault();
 
 				if (lyrics.Value != null)
@@ -275,7 +275,7 @@ namespace GlobalNamespace
 
 			string message = string.Format(
 								"{0,-100}{1}",
-								"Search for: \""  + artistToSearch + " - " + titleToSearch + "\"",
+								"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",
 								"file: \"" + tagOld.Filepath + "\"");
 			this.PrintLogMessage("search", new[] { message });
 
@@ -288,7 +288,7 @@ namespace GlobalNamespace
 				this.GetTags_Discogs(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Genius(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Gracenote(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Itunes(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_iTunes(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_LastFm(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_MusicBrainz(client, artistToSearch, titleToSearch, cancelToken),
@@ -352,7 +352,6 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private Id3 CalculateResults(DataTable apiResults, Id3 tagNew)
 		{
-
 			var majorityAlbumRows = (from row in apiResults.AsEnumerable()
 									 where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
 									 orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
@@ -449,16 +448,16 @@ namespace GlobalNamespace
 				 * Despite Decibel provides a cover URL, the resource is not easy to download since authorization via API key in a header is required
 				 * Therefore these services must be skipped as cover source. This is done by removing them from "CoverPriority" variable in settings.json
 				 */
-				foreach (string API in User.Settings["CoverPriority"])
+				foreach (string api in User.Settings["CoverPriority"])
 				{
 					tagNew.Cover = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("cover"))
-								where row.Field<string>("service").ToLowerInvariant() == API.ToLowerInvariant()
+								where row.Field<string>("service").ToLowerInvariant() == api.ToLowerInvariant()
 								select row.Field<string>("cover")).FirstOrDefault();
 
 					if (tagNew.Cover != null)
 					{
-						this.PrintLogMessage("search", new[] { "  Cover taken from " + API });
+						this.PrintLogMessage("search", new[] { "  Cover taken from " + api });
 						break;
 					}
 				}

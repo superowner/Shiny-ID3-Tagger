@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Program.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
@@ -13,7 +13,6 @@
 // TODO: User option to choose if unknown tags should be removed
 // TODO: User option to add custom RegEx patterns to detect artist/title from filename i.e. "^(\d+\s?)(-\s+?)(?<artist>.*\w+)\s+-\s+(?<title>\w+.*)$"
 // TODO: Small blue border on mouse hover around row if already selected
-
 namespace GlobalNamespace
 {
 	using System;
@@ -37,7 +36,7 @@ namespace GlobalNamespace
 
 	internal class SingleInstanceController : WindowsFormsApplicationBase
 	{
-		public SingleInstanceController()
+		internal SingleInstanceController()
 		{
 			this.IsSingleInstance = true;
 			this.StartupNextInstance += this.This_StartupNextInstance;
@@ -50,7 +49,7 @@ namespace GlobalNamespace
 
 		private void This_StartupNextInstance(object sender, StartupNextInstanceEventArgs e)
 		{
-			Form1 form = MainForm as Form1;
+			Form1 form = this.MainForm as Form1;
 			string[] args = new List<string>(e.CommandLine).Skip(1).ToArray();
 			form.Form1Shown(args);
 		}

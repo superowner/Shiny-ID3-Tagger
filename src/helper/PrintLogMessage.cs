@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="PrintLogMessage.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Outputs a given log message to it's corresponding richTextBox</summary>
@@ -14,9 +14,9 @@ namespace GlobalNamespace
 	{
 		private void PrintLogMessage(string logtype, string[] values)
 		{
-			if (InvokeRequired)
+			if (this.InvokeRequired)
 			{
-				Invoke(new Action<string, string[]>(this.PrintLogMessage), new object[] { logtype, values });
+				this.Invoke(new Action<string, string[]>(this.PrintLogMessage), new object[] { logtype, values });
 				return;
 			}
 

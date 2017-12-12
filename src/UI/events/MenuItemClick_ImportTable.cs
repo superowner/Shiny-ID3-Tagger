@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="MenuItemClick_ImportTable.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Imports a CSV file</summary>
@@ -9,12 +9,12 @@
 
 namespace GlobalNamespace
 {
-	using Microsoft.VisualBasic.FileIO;
 	using System;
 	using System.Data;
 	using System.Globalization;
 	using System.Linq;
 	using System.Windows.Forms;
+	using Microsoft.VisualBasic.FileIO;
 
 	public partial class Form1 : Form
 	{
@@ -46,7 +46,7 @@ namespace GlobalNamespace
 						{
 							// Check if first line in CSV has same headers as dataGridView1 (column order is important)
 							string[] csvHeaderFields = parser.ReadFields();
-							string[] dgvHeaderFields = dataGridView1.Columns.Cast<DataGridViewColumn>().Select(column => column.HeaderText).ToArray<string>();
+							string[] dgvHeaderFields = this.dataGridView1.Columns.Cast<DataGridViewColumn>().Select(column => column.HeaderText).ToArray<string>();
 
 							if (csvHeaderFields.SequenceEqual(dgvHeaderFields))
 							{
@@ -86,7 +86,6 @@ namespace GlobalNamespace
 									this.PrintLogMessage("error", errorMsg);
 								}
 							}
-
 						}
 						catch (MalformedLineException ex)
 						{

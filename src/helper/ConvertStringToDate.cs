@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ConvertStringToDate.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Tries to convert a given string to a dateTime object</summary>
@@ -36,7 +36,6 @@ namespace GlobalNamespace
 		{
 			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
 			{
-				//DateTime resultDate = new DateTime();
 				if (DateTime.TryParseExact(dateString, dateTimeformats, cultEng, DateTimeStyles.None, out DateTime resultDate))
 				{
 					return resultDate;
@@ -45,7 +44,7 @@ namespace GlobalNamespace
 				{
 					// Handle edge cases where API database' date has default value like "0000" or "0000-00-00"
 					// They cannot converted to a date but we don't wanna log an error since this is too common
-					// Regex tests if dateString contains anything which is not zero, dot or dash
+					// RegEx tests if dateString contains anything which is not zero, dot or dash
 					Regex regEx = new Regex(@"[^\.\-0]+");
 
 					if (regEx.IsMatch(dateString))

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="DataGridView_CellPainting.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Draw light blue borders around active row</summary>
@@ -22,8 +22,10 @@ namespace GlobalNamespace
 			{
 				// Pen with color for selected row borders
 				using (Pen selectedPen = new Pen(Color.FromArgb(255, 153, 209, 255), 1))
+
 				// Pen with grid line colors
 				using (Pen gridlinePen = new Pen(Color.FromArgb(255, 227, 227, 227), 1))
+
 				// Pen with background color
 				using (Pen backGroundPen = new Pen(Color.FromArgb(255, 205, 232, 255), 1))
 				{

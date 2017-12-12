@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="MainForm.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Executed when program starts. Shows main window</summary>
@@ -16,6 +16,10 @@ namespace GlobalNamespace
 
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Form1"/> class.
+		/// The main form which will be shown immediately after program start
+		/// </summary>
 		public Form1()
 		{
 			this.InitializeComponent();
@@ -53,13 +57,15 @@ namespace GlobalNamespace
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Question,
 					MessageBoxDefaultButton.Button1,
-					new MessageBoxOptions());
+					default(MessageBoxOptions));
 
 				Application.Exit();
 			}
 		}
 
 		// ###########################################################################
+
+		/// <inheritdoc/>
 		protected override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);

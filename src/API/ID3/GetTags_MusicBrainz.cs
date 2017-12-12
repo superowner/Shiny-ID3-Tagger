@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GetTags_MusicBrainz.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Musicbrainz API for current track</summary>
@@ -23,7 +23,6 @@ namespace GlobalNamespace
 	using System.Text.RegularExpressions;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 
 	public partial class Form1
@@ -37,7 +36,6 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-
 			const string InvalidChars = @"[#!(){}/;:\[\]\^\\\\&""]";
 
 			string artistClean = Regex.Replace(artist, InvalidChars, string.Empty);
@@ -129,8 +127,7 @@ namespace GlobalNamespace
 							{
 								JToken objGenre = (from tag in releasegroupData.SelectToken("tags")
 													orderby (int)tag["count"] descending
-													select tag
-												).ToArray()[0];
+													select tag).ToArray()[0];
 
 								o.Genre = (string)objGenre["name"];             // Not many results for genres because musicbrainz does not support them (https://wiki.musicbrainz.org/Genre)
 							}
@@ -154,6 +151,7 @@ namespace GlobalNamespace
 					}
 				}
 			}
+
 			// ###########################################################################
 			sw.Stop();
 			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="AddFiles.cs" company="Shiny Id3 Tagger">
-//	 Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// Copyright (c) Shiny Id3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Code fired when "Add files" button is clicked</summary>
@@ -88,7 +88,7 @@ namespace GlobalNamespace
 						// Check if file is a valid mp3 file
 						if (this.IsValidMp3(filepath) && !rowAlreadyExists)
 						{
-							AddFileToTable(filepath);
+							this.AddFileToTable(filepath);
 							newFiles = true;
 						}
 					});
@@ -162,24 +162,25 @@ namespace GlobalNamespace
 				};
 
 				// Show present tags in dataGridView1
-				this.Invoke((MethodInvoker)delegate
-				{
-					this.dataGridView1.Rows.Add(
-						(this.dataGridView1.Rows.Count + 1).ToString(cultEng),
-						tagOld.Filepath ?? string.Empty,
-						tagOld.Artist ?? string.Empty,
-						tagOld.Title ?? string.Empty,
-						tagOld.Album ?? string.Empty,
-						tagOld.Date ?? string.Empty,
-						tagOld.Genre ?? string.Empty,
-						tagOld.DiscCount ?? string.Empty,
-						tagOld.DiscNumber ?? string.Empty,
-						tagOld.TrackCount ?? string.Empty,
-						tagOld.TrackNumber ?? string.Empty,
-						tagOld.Lyrics ?? string.Empty,
-						tagOld.Cover ?? string.Empty,
-						false);
-				});
+				this.Invoke(new Action(
+					() =>
+					{
+						this.dataGridView1.Rows.Add(
+							(this.dataGridView1.Rows.Count + 1).ToString(cultEng),
+							tagOld.Filepath ?? string.Empty,
+							tagOld.Artist ?? string.Empty,
+							tagOld.Title ?? string.Empty,
+							tagOld.Album ?? string.Empty,
+							tagOld.Date ?? string.Empty,
+							tagOld.Genre ?? string.Empty,
+							tagOld.DiscCount ?? string.Empty,
+							tagOld.DiscNumber ?? string.Empty,
+							tagOld.TrackCount ?? string.Empty,
+							tagOld.TrackNumber ?? string.Empty,
+							tagOld.Lyrics ?? string.Empty,
+							tagOld.Cover ?? string.Empty,
+							false);
+					}));
 			}
 		}
 	}
