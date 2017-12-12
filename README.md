@@ -47,6 +47,5 @@
 
 ## How To Install
 - [Download and extract the latest release](https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest)
-- Open the extracted folder and run "Shiny Id3 Tagger.exe". That's it. No further installation needed
-- The GUI is pretty simple and self explanatory
+- Run "Shiny ID3 Tagger.exe" (no installation needed)
 

@@ -33,7 +33,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 						=> Public access: Yes
 
 - Ookii.Dialogs			Custom License						http://www.ookii.org/software/dialogs (download ZIP to see license)
-						=> Selling: Yes						Include original license
+						=> Selling: Yes
 						=> Public access: Yes
 
 - taglib-sharp			GNU Lesser General Public License	https://github.com/mono/taglib-sharp
@@ -44,7 +44,9 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 ##### 					THIRD PARTY LICENSES (for RESTful APIs)			#####
 #############################################################################
 
-- 7digital
+- 7digital				Custom license						http://developer.7digital.com/content/api-terms-conditions
+						=> Selling: No
+						=> Public access: ???
 
 - Amazon				Custom License						https://affiliate-program.amazon.com/gp/advertising/api/detail/agreement.html
 						=> Selling: No						Under "Section 4-m" it does not allow reselling
@@ -66,16 +68,17 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 						=> Selling: Yes						No restrictions on what you can do with it
 						=> Public access: Yes
 
-- Lololyrics
+- Lololyrics			Custom license 						http://www.lololyrics.com/faq#license
+						=> Selling: ???
+						=> Public access: ???
 
 - Genius				Custom license 						http://genius.com/static/terms
 						=> Selling: No 						Under "Commercial Use" they prohibit selling and publishing "any portion of the service"
 						=> Public access: No
 
 - Gracenote				Custom license						https://developer.gracenote.com/terms-use
-						=> Selling: ???						Under "CLIENT ID AND DEVELOPER ACCOUNTS" it is prohibited to sell API keys.
+						=> Selling: No						Under "CLIENT ID AND DEVELOPER ACCOUNTS" it is prohibited to sell API keys.
 						=> Public access: ???				For non-commercial use only. No publishing as open source.
-						Question: What about self created software distributed without any API keys?
 
 - iTunes 				Custom license						https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/#legal
 						=> Selling: ???
@@ -105,20 +108,30 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 						=> Selling: No						Under 5 "Limitations" point (m) selling is not allowed
 						=> Public access: ???
 
-- Netease
+- Netease				Custom license						No official API homepage available (at least not in English)
+						=> Selling: ???
+						=> Public access: ???
 
 - Qobuz					Custom license 						http://static.qobuz.com/apps/api/QobuzAPI-TermsofUse.pdf
 						=> Selling: No 						Under "RESTRICTIONS" point (iv) it is prohibited to charge access to the API/service/content
 						=> Public access:
 
-- QQ
+- QQ					Custom license
+						=> Selling: ???
+						=> Public access: ???
 
 - Spotify				Custom license						https://developer.spotify.com/developer-terms-of-use/#section-iv-restrictions
 						=> Selling: No						Under "IV: Restrictions" point (2.b) selling of meta data is not allowed
 						=> Public access: ???
 
-- Tidal
+- Tidal					Custom license
+						=> Selling: ???
+						=> Public access: ???
 
-- Viewlyrics
+- Viewlyrics			Custom license
+						=> Selling: ???
+						=> Public access: ???
 
-- Xiami
+- Xiami					Custom license
+						=> Selling: ???
+						=> Public access: ???
