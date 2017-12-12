@@ -6,6 +6,7 @@
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
+// TODO: Restructure debug and release folder. Move .dlls to sub-folder "resources"
 // TODO: Set author in stylecop.json
 // TODO: Execute Amazon API requests: store time stamp from last call and wait until 1s is elapsed
 // TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned
@@ -13,7 +14,7 @@
 // TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
 // TODO: User option to write ID3v1 tags additionally to ID3v2
 // TODO: User option to choose if unknown tags should be removed
-// TODO: User option to add custom RegEx patterns to detect artist/title from filename i.e. "^(\d+\s?)(-\s+?)(?<artist>.*\w+)\s+-\s+(?<title>\w+.*)$"
+// TODO: User option to add custom RegEx patterns to detect artist/title from filename
 // TODO: Small blue border on mouse hover around row if already selected
 namespace GlobalNamespace
 {
