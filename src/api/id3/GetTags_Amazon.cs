@@ -26,6 +26,9 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
+		private static Stopwatch LastRequestTimer = new Stopwatch();
+		private static int LastRequestTimeout = 1000;
+
 		// ###########################################################################
 		private static string CreateSignature(string server, string parameters)
 		{
@@ -75,12 +78,14 @@ namespace GlobalNamespace
 				searchRequest.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 				searchRequest.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
-
-				// 1 request per second is OK, after a burst you get throttled to 1 request/10s. Therefore this delay of 1second after every request
 				// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines
-				await Task.Delay(1000);
+				// Check if 1 second already passed since last request
+				while (LastRequestTimer.ElapsedMilliseconds < LastRequestTimeout && LastRequestTimer.IsRunning && !cancelToken.IsCancellationRequested)
+					await Task.Delay(50);
+
+				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
+				LastRequestTimer.Restart();
+				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
 
 				if (searchData != null && searchData.SelectToken("ItemSearchResponse.Items.Item") != null)
 				{
@@ -134,10 +139,13 @@ namespace GlobalNamespace
 							albumRequest.Headers.Add("User-Agent", User.Settings["UserAgent"]);
 							albumRequest.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
-							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = this.DeserializeJson(this.ConvertXmlToJson(albumContent));
+							// Check if 1 second already passed since last request
+							while (LastRequestTimer.ElapsedMilliseconds < LastRequestTimeout && LastRequestTimer.IsRunning && !cancelToken.IsCancellationRequested)
+								await Task.Delay(50);
 
-							await Task.Delay(1000);
+							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
+							LastRequestTimer.Restart();
+							JObject albumData = this.DeserializeJson(this.ConvertXmlToJson(albumContent));
 
 							if (albumData != null)
 							{

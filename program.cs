@@ -6,8 +6,7 @@
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
-// TODO: Restructure debug and release folder. Move .dlls to sub-folder "resources"
-// TODO: Execute Amazon API requests: store time stamp from last call and wait until 1s is elapsed
+// TODO: Automatic GitHub releases https://marketplace.visualstudio.com/items?itemName=jakobehn.jakobehn-vsts-github-tasks
 // TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned
 // TODO: User option to en/disable single APIs (sometimes they are down)
 // TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
