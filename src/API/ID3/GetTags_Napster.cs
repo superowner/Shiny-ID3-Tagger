@@ -36,7 +36,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/search?q=" + searchTermEnc + "&include=genres&type=track&limit=1&apikey=" + User.Accounts["NaApiKey"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null)
 				{
@@ -58,7 +58,7 @@ namespace GlobalNamespace
 							albumRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/albums/" + albumId + "?apikey=" + User.Accounts["NaApiKey"]);
 
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+							JObject albumData = this.DeserializeJson(albumContent);
 
 							if (albumData != null)
 							{

@@ -40,7 +40,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://api.deezer.com/search?q=artist:\"" + artistEncoded + "\"+track:\"" + titleEncoded + "\"&limit=1&order=RANKING");
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("data") != null)
 				{
@@ -53,7 +53,7 @@ namespace GlobalNamespace
 						albumRequest.RequestUri = new Uri("http://api.deezer.com/album/" + searchData.SelectToken("data[0].album.id"));
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+						JObject albumData = this.DeserializeJson(albumContent);
 
 						if (albumData != null)
 						{

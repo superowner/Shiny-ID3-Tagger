@@ -48,7 +48,7 @@ namespace GlobalNamespace
 						});
 
 					string loginContent = await this.GetResponse(client, loginRequest, cancelToken);
-					JObject loginData = JsonConvert.DeserializeObject<JObject>(loginContent, this.GetJsonSettings());
+					JObject loginData = this.DeserializeJson(loginContent);
 
 					if (loginData != null && loginData.SelectToken("sessionId") != null)
 					{
@@ -63,7 +63,7 @@ namespace GlobalNamespace
 							sessionRequest.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
 
 							string sessionContent = await this.GetResponse(client, sessionRequest, cancelToken);
-							JObject sessionData = JsonConvert.DeserializeObject<JObject>(sessionContent, this.GetJsonSettings());
+							JObject sessionData = this.DeserializeJson(sessionContent);
 
 							if (sessionData != null)
 							{
@@ -85,7 +85,7 @@ namespace GlobalNamespace
 					searchRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/search?types=TRACKS&countryCode=" + ApiSessionData.TiCountryCode + "&query=" + searchTermEnc);
 
 					string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-					JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+					JObject searchData = this.DeserializeJson(searchContent);
 
 					if (searchData != null && searchData.SelectToken("tracks.items[0]") != null)
 					{
@@ -103,7 +103,7 @@ namespace GlobalNamespace
 							albumRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/albums/" + (string)searchData.SelectToken("tracks.items[0].album.id") + "?countryCode=" + ApiSessionData.TiCountryCode);
 
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+							JObject albumData = this.DeserializeJson(albumContent);
 
 							if (albumData != null)
 							{

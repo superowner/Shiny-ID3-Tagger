@@ -36,7 +36,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://itunes.apple.com/search?term=" + searchTermEnc + "&media=music&limit=1");
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("results") != null)
 				{

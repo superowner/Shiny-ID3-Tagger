@@ -46,7 +46,7 @@ namespace GlobalNamespace
 				searchRequest.Headers.Add("DecibelAppKey", (string)account[0]["key"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("Results") != null && searchData.SelectToken("Results").ToString() != "[]")
 				{
@@ -65,7 +65,7 @@ namespace GlobalNamespace
 						albumRequest.Headers.Add("DecibelAppKey", (string)account[0]["key"]);
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+						JObject albumData = this.DeserializeJson(albumContent);
 
 						if (albumData != null && albumData.SelectToken("Results") != null && albumData.SelectToken("Results").ToString() != "[]")
 						{

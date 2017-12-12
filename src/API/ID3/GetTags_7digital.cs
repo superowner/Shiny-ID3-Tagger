@@ -40,7 +40,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://api.7digital.com/1.2/track/search?q=" + artistEncoded + "+" + titleEncoded + "&pagesize=10&imageSize=800&usageTypes=download&oauth_consumer_key=" + User.Accounts["7dKey"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchContent), this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
 
 				if (searchData != null && searchData.SelectToken("response.searchResults.searchResult[0].track") != null)
 				{
@@ -66,7 +66,7 @@ namespace GlobalNamespace
 							releaseRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/details?releaseid=" + releaseId + "&usageTypes=download&oauth_consumer_key=" + User.Accounts["7dKey"]);
 
 							string releaseContent = await this.GetResponse(client, releaseRequest, cancelToken);
-							JObject releaseData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(releaseContent), this.GetJsonSettings());
+							JObject releaseData = this.DeserializeJson(this.ConvertXmlToJson(releaseContent));
 
 							if (releaseData != null && releaseData.SelectToken("response.release") != null)
 							{
@@ -80,7 +80,7 @@ namespace GlobalNamespace
 							tagsRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/tags?releaseid=" + releaseId + "&country=US&oauth_consumer_key=" + User.Accounts["7dKey"]);
 
 							string tagsContent = await this.GetResponse(client, tagsRequest, cancelToken);
-							JObject tagsData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(tagsContent), this.GetJsonSettings());
+							JObject tagsData = this.DeserializeJson(this.ConvertXmlToJson(tagsContent));
 
 							if (tagsData != null && tagsData.SelectToken("response.tags.tag") != null)
 							{

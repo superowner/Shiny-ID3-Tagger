@@ -49,7 +49,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://beta.musicbrainz.org/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null && (string)searchData.SelectToken("count") != "0")
 				{
@@ -118,7 +118,7 @@ namespace GlobalNamespace
 						releasegroupRequest.RequestUri = new Uri("http://beta.musicbrainz.org/ws/2/release-group/" + releasegroupid + "?inc=tags+ratings+artists&fmt=json");
 
 						string releasegroupContent = await this.GetResponse(client, releasegroupRequest, cancelToken);
-						JObject releasegroupData = JsonConvert.DeserializeObject<JObject>(releasegroupContent, this.GetJsonSettings());
+						JObject releasegroupData = this.DeserializeJson(releasegroupContent);
 
 						if (releasegroupData != null)
 						{
@@ -145,7 +145,7 @@ namespace GlobalNamespace
 						coverRequest.RequestUri = new Uri("http://coverartarchive.org/release-group/" + releasegroupid);
 
 						string coverContent = await this.GetResponse(client, coverRequest, cancelToken);
-						JObject coverData = JsonConvert.DeserializeObject<JObject>(coverContent, this.GetJsonSettings());
+						JObject coverData = this.DeserializeJson(coverContent);
 
 						if (coverData != null)
 						{

@@ -49,7 +49,7 @@ namespace GlobalNamespace
 					});
 
 					string loginContent = await this.GetResponse(client, loginRequest, cancelToken);
-					JObject loginData = JsonConvert.DeserializeObject<JObject>(loginContent, this.GetJsonSettings());
+					JObject loginData = this.DeserializeJson(loginContent);
 
 					if (loginData != null && loginData.SelectToken("access_token") != null)
 					{
@@ -71,7 +71,7 @@ namespace GlobalNamespace
 
 					// ###########################################################################
 					string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-					JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+					JObject searchData = this.DeserializeJson(searchContent);
 
 					if (searchData != null && searchData.SelectToken("Tracks.Items") != null)
 					{
@@ -92,7 +92,7 @@ namespace GlobalNamespace
 							albumRequest.RequestUri = new Uri("https://music.xboxlive.com/1/content/" + (string)searchData.SelectToken("Tracks.Items[0].Album.Id") + "/lookup?contentType=JSON");
 
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+							JObject albumData = this.DeserializeJson(albumContent);
 
 							if (albumData != null && albumData.SelectToken("Albums.Items") != null)
 							{

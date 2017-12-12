@@ -55,7 +55,7 @@ namespace GlobalNamespace
 					loginRequest.Headers.Add("Authorization", "Basic " + creditsBase64);
 
 					string loginContent = await this.GetResponse(client, loginRequest, cancelToken);
-					JObject loginData = JsonConvert.DeserializeObject<JObject>(loginContent, this.GetJsonSettings());
+					JObject loginData = this.DeserializeJson(loginContent);
 
 					if (loginData != null && loginData.SelectToken("access_token") != null)
 					{
@@ -75,7 +75,7 @@ namespace GlobalNamespace
 					searchRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 
 					string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-					JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+					JObject searchData = this.DeserializeJson(searchContent);
 
 					if (searchData != null && searchData.SelectToken("tracks.items") != null && searchData.SelectToken("tracks.items").Any())
 					{
@@ -96,7 +96,7 @@ namespace GlobalNamespace
 								albumRequest.RequestUri = new Uri(albumUrl);
 
 								string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-								JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+								JObject albumData = this.DeserializeJson(albumContent);
 
 								if (albumData != null)
 								{
@@ -122,7 +122,7 @@ namespace GlobalNamespace
 								artistRequest.RequestUri = new Uri(artistUrl);
 
 								string artistContent = await this.GetResponse(client, artistRequest, cancelToken);
-								JObject artistData = JsonConvert.DeserializeObject<JObject>(artistContent, this.GetJsonSettings());
+								JObject artistData = this.DeserializeJson(artistContent);
 
 								if (artistData != null && artistData.SelectToken("genres") != null && artistData.SelectToken("genres").Any())
 								{

@@ -44,7 +44,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&page_size=1&apikey=" + (string)account[0]["key"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("message.body.track_list[0].track") != null)
 				{
@@ -61,7 +61,7 @@ namespace GlobalNamespace
 						albumRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account[0]["key"]);
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+						JObject albumData = this.DeserializeJson(albumContent);
 
 						if (albumData != null && albumData.SelectToken("message.body.album") != null)
 						{
@@ -79,7 +79,7 @@ namespace GlobalNamespace
 						albumtracksRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account[0]["key"]);
 
 						string albumtracksContent = await this.GetResponse(client, albumtracksRequest, cancelToken);
-						JObject albumtracksData = JsonConvert.DeserializeObject<JObject>(albumtracksContent, this.GetJsonSettings());
+						JObject albumtracksData = this.DeserializeJson(albumtracksContent);
 
 						if (albumtracksData != null && albumtracksData.SelectToken("message.body.track_list") != null)
 						{

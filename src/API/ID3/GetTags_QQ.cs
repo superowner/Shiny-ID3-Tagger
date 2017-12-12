@@ -39,7 +39,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://c.y.qq.com/soso/fcgi-bin/search_cp?w=" + searchTermEnc + "&format=json&p=0&n=100&aggr=1&lossless=1&cr=1");
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("data.song.list[0]") != null)
 				{
@@ -61,7 +61,7 @@ namespace GlobalNamespace
 						albumRequest.RequestUri = new Uri("http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?format=json&albumid=" + firstSong["albumid"]);
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+						JObject albumData = this.DeserializeJson(albumContent);
 
 						if (albumData != null && albumData.SelectToken("data") != null)
 						{
@@ -87,7 +87,7 @@ namespace GlobalNamespace
 						trackRequest.RequestUri = new Uri("http://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?format=json&songid=" + firstSong["songid"]);
 
 						string trackContent = await this.GetResponse(client, trackRequest, cancelToken);
-						JObject trackData = JsonConvert.DeserializeObject<JObject>(trackContent, this.GetJsonSettings());
+						JObject trackData = this.DeserializeJson(trackContent);
 
 						if (trackData != null && trackData.SelectToken("data") != null)
 						{

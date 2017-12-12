@@ -43,7 +43,7 @@ namespace GlobalNamespace
 					"&api_key=" + User.Accounts["LaApiKey"] + "&format=json&autocorrect=1");
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("track") != null)
 				{
@@ -64,7 +64,7 @@ namespace GlobalNamespace
 						albumRequest.Content = new StringContent("method=album.getInfo&mbid="  + albumid + "&api_key=" + User.Accounts["LaApiKey"] + "&format=json");
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+						JObject albumData = this.DeserializeJson(albumContent);
 
 						if (albumData != null && albumData.SelectToken("album") != null)
 						{

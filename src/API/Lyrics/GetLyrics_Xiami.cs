@@ -39,7 +39,7 @@ namespace GlobalNamespace
 				searchRequest.Headers.Add("referer", "http://h.xiami.com/");
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null)
 				{

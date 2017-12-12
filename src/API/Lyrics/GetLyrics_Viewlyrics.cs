@@ -46,54 +46,47 @@ namespace GlobalNamespace
 
 				// Encode query and set POST body
 				string query = "<?xml version='1.0' encoding='utf-8' standalone='yes' ?><searchV1 client=\"ViewLyricsOpenSearcher\" artist=\"" + tagNew.Artist + "\" title=\"" + tagNew.Title + "\" OnlyMatched=\"1\" />";
-				byte[] queryEnc = EncodeQuery(query);
+				byte[] queryEnc = this.EncodeQuery(query);
 				searchRequest.Content = new ByteArrayContent(queryEnc);
 				searchRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-				// Retrieve response from server
-				HttpResponseMessage response = await client.SendAsync(searchRequest, cancelToken);
-				byte[] searchContent = await response.Content.ReadAsByteArrayAsync();
+				// Retrieve response from server, 4th argument tells GetResponse() to return a byte array rather than a string
+				byte[] response = await this.GetResponse(client, searchRequest, cancelToken, true);
+				string searchContent = this.DecodeResponse(response);
+				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
 
-				if (searchContent != null)
+				if (searchData != null && searchData.SelectToken("return.fileinfo") != null && searchData.SelectToken("return.fileinfo").Any())
 				{
-					string searchXml = DecodeResponse(searchContent);
-					JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchXml), this.GetJsonSettings());
+					IJEnumerable<JToken> linkList = searchData.SelectToken("return.fileinfo");
 
-					if (searchData != null && searchData.SelectToken("return.fileinfo") != null && searchData.SelectToken("return.fileinfo").Any())
-					{
-						IJEnumerable<JToken> linkList = searchData.SelectToken("return.fileinfo");
+					string lyricsLink = (from item in linkList
+									orderby ParseInt((string)item.SelectToken("@downloads")) descending
+									select (string)item.SelectToken("@link")).FirstOrDefault();
 
-						string lyricsLink = (from item in linkList
-										orderby ParseInt((string)item.SelectToken("@downloads")) descending
-										select (string)item.SelectToken("@link")).FirstOrDefault();
+					if (lyricsLink != null) {
 
-						if (lyricsLink != null) {
+						using (HttpRequestMessage lyricsRequest = new HttpRequestMessage())
+						{
+							lyricsRequest.RequestUri = new Uri("http://www.viewlyrics.com/" + lyricsLink);
 
-							using (HttpRequestMessage lyricsRequest = new HttpRequestMessage())
+							string lyricsContent = await this.GetResponse(client, lyricsRequest, cancelToken);
+							string rawLyrics = lyricsContent;
+
+							if (!string.IsNullOrWhiteSpace(rawLyrics))
 							{
-								lyricsRequest.RequestUri = new Uri("http://www.viewlyrics.com/" + lyricsLink);
+								// Sanitize
+								rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);  // Remove timestamps like [01:01:123] or [01:01]
+								rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);                             // Remove square brackets [by: XYZ] credits
+								rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
+								rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks
 
-								string lyricsContent = await this.GetResponse(client, lyricsRequest, cancelToken);
-								string rawLyrics = lyricsContent;
-
-								if (!string.IsNullOrWhiteSpace(rawLyrics))
+								if (rawLyrics.Length > 1)
 								{
-									// Sanitize
-									rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);  // Remove timestamps like [01:01:123] or [01:01]
-									rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);                             // Remove square brackets [by: XYZ] credits
-									rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
-									rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks
-
-									if (rawLyrics.Length > 1)
-									{
-										o.Lyrics = rawLyrics;
-									}
+									o.Lyrics = rawLyrics;
 								}
 							}
 						}
-
 					}
-
 				}
 			}
 
@@ -104,13 +97,11 @@ namespace GlobalNamespace
 			return o;
 		}
 
-		private static string DecodeResponse(byte[] data)
+		private string DecodeResponse(byte[] data)
 		{
-			// Important: You cannot use a UTF8 string as input. Thus you cannot use the default method GetResponse
-			// The position where XML string starts would vary and would not always be at byte position 23
-			string result = string.Empty;
+			string result = null;
 
-			if (data != null)
+			if ( data != null)
 			{
 				// Get magic key to decode response
 				byte magicKey = data[1];
@@ -134,7 +125,7 @@ namespace GlobalNamespace
 			return result;
 		}
 
-		private static byte[] EncodeQuery(string query)
+		private byte[] EncodeQuery(string query)
 		{
 			// Get query length. Don't use "query.Length" since it produces wrong results for strings containing non-ASCII characters
 			var queryLen = Encoding.UTF8.GetByteCount(query);
@@ -163,10 +154,10 @@ namespace GlobalNamespace
 			}
 
 			// Combine all byte arrays to one
-			byte[] finalbyteArray = Encoding.UTF8.GetBytes("\x02" + magicKey + "\x04\x00\x00\x00");
-			finalbyteArray = finalbyteArray.Concat(md5HashBytes).Concat(queryEncBytes).ToArray();
+			byte[] result = Encoding.UTF8.GetBytes("\x02" + magicKey + "\x04\x00\x00\x00");
+			result = result.Concat(md5HashBytes).Concat(queryEncBytes).ToArray();
 
-			return finalbyteArray;
+			return result;
 		}
 	}
 }

@@ -38,7 +38,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" + artistEncoded + "&song=" + titleEncoded);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchContent), this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
 
 				if (searchData != null && searchData.SelectToken("GetLyricResult.Lyric") != null)
 				{

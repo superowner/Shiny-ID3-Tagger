@@ -38,7 +38,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://api.lololyrics.com/0.5/getLyric?artist=" + artistEncoded + "&track=" + titleEncoded + "&rawutf8=1");
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchContent), this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
 
 				if (searchData != null && searchData.SelectToken("result.response") != null)
 				{

@@ -45,7 +45,7 @@ namespace GlobalNamespace
 					});
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null)
 				{
@@ -66,7 +66,7 @@ namespace GlobalNamespace
 							lyricsRequest.RequestUri = new Uri("http://music.163.com/api/song/lyric/?id=" + songid + "&lv=-1&kv=-1&tv=-1");
 
 							string lyricsContent = await this.GetResponse(client, lyricsRequest, cancelToken);
-							JObject lyricsData = JsonConvert.DeserializeObject<JObject>(lyricsContent, this.GetJsonSettings());
+							JObject lyricsData = this.DeserializeJson(lyricsContent);
 
 							if (lyricsData != null && lyricsData.SelectToken("lrc.lyric") != null)
 							{

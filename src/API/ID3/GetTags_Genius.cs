@@ -38,7 +38,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("https://api.genius.com/search?q=" + searchTermEnc + "&access_token=" + User.Accounts["GeAccessToken"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("response.hits[0].result.api_path") != null)
 				{
@@ -47,7 +47,7 @@ namespace GlobalNamespace
 						trackRequest.RequestUri = new Uri("https://api.genius.com" + searchData.SelectToken("response.hits[0].result.api_path") + "?access_token=" + User.Accounts["GeAccessToken"] + "&text_format=plain");
 
 						string trackContent = await this.GetResponse(client, trackRequest, cancelToken);
-						JObject trackData = JsonConvert.DeserializeObject<JObject>(trackContent, this.GetJsonSettings());
+						JObject trackData = this.DeserializeJson(trackContent);
 
 						if (trackData != null)
 						{
@@ -67,7 +67,7 @@ namespace GlobalNamespace
 									albumRequest.RequestUri = new Uri("https://api.genius.com" + albumPath + "?access_token=" + User.Accounts["GeAccessToken"] + "&text_format=plain");
 
 									string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-									JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+									JObject albumData = this.DeserializeJson(albumContent);
 
 									if (albumData != null)
 									{

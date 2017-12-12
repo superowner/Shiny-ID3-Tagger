@@ -77,7 +77,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(searchContent), this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
 
 				// 1 request per second is OK, after a burst you get throttled to 1 request/10s. Therefore this delay of 1second after every request
 				// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines
@@ -136,7 +136,7 @@ namespace GlobalNamespace
 							albumRequest.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = JsonConvert.DeserializeObject<JObject>(this.ConvertXmlToJson(albumContent), this.GetJsonSettings());
+							JObject albumData = this.DeserializeJson(this.ConvertXmlToJson(albumContent));
 
 							wait = Task.Delay(1000);
 

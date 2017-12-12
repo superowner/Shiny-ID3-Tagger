@@ -46,7 +46,7 @@ namespace GlobalNamespace
 					"&secret=" + User.Accounts["DcSecret"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = JsonConvert.DeserializeObject<JObject>(searchContent, this.GetJsonSettings());
+				JObject searchData = this.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("results").Any())
 				{
@@ -59,7 +59,7 @@ namespace GlobalNamespace
 							albumRequest.RequestUri = new Uri(albumUrl + "?key=" + User.Accounts["DcKey"] + "&secret=" + User.Accounts["DcSecret"]);
 
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = JsonConvert.DeserializeObject<JObject>(albumContent, this.GetJsonSettings());
+							JObject albumData = this.DeserializeJson(albumContent);
 
 							if (albumData != null)
 							{
