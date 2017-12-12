@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="WriteTags.cs" company="Shiny Id3 Tagger">
-// Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// <copyright file="WriteTags.cs" company="Shiny ID3 Tagger">
+// Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Main method for ID3 tag saving. Loops through all result rows and writes their values as tags it's corresponding file</summary>

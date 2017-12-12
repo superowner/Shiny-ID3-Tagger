@@ -1,11 +1,13 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Program.cs" company="Shiny Id3 Tagger">
-// Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// <copyright file="Program.cs" company="Shiny ID3 Tagger">
+// Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
+// TODO: Set author in stylecop.json
+// TODO: Execute Amazon API requests: store time stamp from last call and wait until 1s is elapsed
 // TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned
 // TODO: User option to en/disable single APIs (sometimes they are down)
 // TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetLyrics_Xiami.cs" company="Shiny Id3 Tagger">
-// Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// <copyright file="GetLyrics_Xiami.cs" company="Shiny ID3 Tagger">
+// Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Retrieves track lyrics from xiami.com</summary>

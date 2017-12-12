@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DataGridView_CellPainting.cs" company="Shiny Id3 Tagger">
-// Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// <copyright file="DataGridView_CellPainting.cs" company="Shiny ID3 Tagger">
+// Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Draw light blue borders around active row</summary>

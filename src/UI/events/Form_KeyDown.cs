@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Form_KeyDown.cs" company="Shiny Id3 Tagger">
-// Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// <copyright file="Form_KeyDown.cs" company="Shiny ID3 Tagger">
+// Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Cancels all running tasks when pressing ESC key</summary>

@@ -354,6 +354,7 @@
     </None>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="README.md" />
     <None Include="resources\accounts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

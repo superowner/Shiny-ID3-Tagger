@@ -1,9 +1,9 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="AddFiles.cs" company="Shiny Id3 Tagger">
-// Copyright (c) Shiny Id3 Tagger. All rights reserved.
+// <copyright file="AddFiles.cs" company="Shiny ID3 Tagger">
+// Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Code fired when "Add files" button is clicked</summary>
+// <summary>Method to run when "Add files" button is clicked</summary>
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -16,6 +16,9 @@ namespace GlobalNamespace
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
 
+	/// <summary>
+	/// Method selects and reads in existing tags and shows them in a dataGridView
+	/// </summary>
 	public partial class Form1
 	{
 		// ###########################################################################
