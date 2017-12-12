@@ -24,6 +24,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>False</RunCodeAnalysis>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -36,7 +37,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -352,8 +352,8 @@
     <None Include="..\Encryptor\Test\accounts_plain.json">
       <Link>config\accounts_plain.json</Link>
     </None>
-    <None Include="resources\app.config" />
-    <None Include="packages.config" />
+    <None Include="config\app.config" />
+    <None Include="config\packages.config" />
     <None Include="README.md" />
     <None Include="config\accounts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
