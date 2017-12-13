@@ -41,10 +41,12 @@ namespace GlobalNamespace
 			if (successReadingVariables)
 			{
 				// Add new files
-				bool newFiles = await this.AddFiles(args, cancelToken);
+				bool hasNewFiles = await this.AddFiles(args, cancelToken);
 
-				// If user setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
-				if (User.Settings["AutoSearch"] && newFiles && !cancelToken.IsCancellationRequested)
+				// Continue with searching
+				// if user setting allows it
+				// if new files were added (new row count != old row count)
+				if (User.Settings["AutoSearch"] && hasNewFiles && !cancelToken.IsCancellationRequested)
 				{
 					this.StartSearching(cancelToken);
 				}

@@ -11,6 +11,7 @@ namespace GlobalNamespace
 	using System;
 	using System.IO;
 	using System.Linq;
+	using System.Threading.Tasks;
 
 	public partial class Form1
 	{
@@ -22,9 +23,10 @@ namespace GlobalNamespace
 
 			try
 			{
-				using (BinaryReader reader = new BinaryReader(new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+				// Read in first 3 bytes of file
+				using (BinaryReader binaryReader = new BinaryReader(new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 100, true)))
 				{
-					reader.Read(fileHeader, 0, 3);
+					binaryReader.Read(fileHeader, 0, 3);
 				}
 
 				// Check for valid mp3 header bytes (ID3 tags present)
@@ -46,6 +48,21 @@ namespace GlobalNamespace
 					string[] errorMsg =
 					{
 						"ERROR:    Not a valid MP3 file!",
+						"file:     " + filepath
+					};
+					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+				}
+
+				return false;
+			}
+			catch (ArgumentException)
+			{
+				// If path points to a URL
+				if (User.Settings["DebugLevel"] >= 1)
+				{
+					string[] errorMsg =
+					{
+						"ERROR:    Invalid filepath!",
 						"file:     " + filepath
 					};
 					this.PrintLogMessage(this.rtbErrorLog, errorMsg);

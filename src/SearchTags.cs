@@ -40,8 +40,6 @@ namespace GlobalNamespace
 
 				foreach (DataGridViewRow row in this.dataGridView1.Rows)
 				{
-					sw.Restart();
-
 					Id3 tagOld = new Id3
 					{
 						Filepath = row.Cells[this.filepath1.Index].Value.ToString(),
@@ -62,8 +60,11 @@ namespace GlobalNamespace
 											 where r.Cells[this.filepath2.Index].Value.ToString() == tagOld.Filepath
 											 select r).Any();
 
-					if (rowAlreadyExists == false)
+					// Check if row doesn't exist already in datagridview and if user didn't press cancel
+					if (!rowAlreadyExists && !cancelToken.IsCancellationRequested)
 					{
+						sw.Restart();
+
 						Id3 tagNew = new Id3()
 						{
 							Service = "RESULT",
@@ -442,8 +443,8 @@ namespace GlobalNamespace
 				 * QQ (Tencent)			no CDN, persistent cover URLs, slow server						500 px, always squared
 				 * Microsoft Groove)	no CDN, persistent cover URLs, API shut down soon				different sizes, 1200 to 3000 px, can be non-squared
 				 * Decibel				needs authentication
-				 * Musixmatch			no covers
-				 * Musicgraph			no covers
+				 * Musixmatch			no covers provided
+				 * Musicgraph			no covers provided
 				 *
 				 * Musixmatch and Musicgraph do not provide any cover URL via API
 				 * Despite Decibel provides a cover URL, the resource is not easy to download since authorization via API key in a header is required

@@ -21,10 +21,10 @@ namespace GlobalNamespace
 			CancellationToken cancelToken = TokenSource.Token;
 
 			// Add new files
-			bool newFiles = await this.AddFiles(null, cancelToken);
+			bool hasNewFiles = await this.AddFiles(null, cancelToken);
 
-			// If user setting allows it and new files were added (dialog not canceled or files were already added), continue straight with searching
-			if (User.Settings["AutoSearch"] && newFiles && !cancelToken.IsCancellationRequested)
+			// Continue with searching if user setting allows it and if new files were added
+			if (User.Settings["AutoSearch"] && hasNewFiles && !cancelToken.IsCancellationRequested)
 			{
 				this.StartSearching(cancelToken);
 			}
