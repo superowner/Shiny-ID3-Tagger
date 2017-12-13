@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Method to run when "Add files" button is clicked</summary>
+// Tips on how to speed up dataGridView rendering https://10tec.com/articles/why-datagridview-slow.aspx
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
