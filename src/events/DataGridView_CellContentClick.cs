@@ -30,7 +30,7 @@ namespace GlobalNamespace
 					{
 						"ERROR:    Invalid URL found: " + url
 					};
-					this.PrintLogMessage("error", errorMsg);
+					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 				}
 			}
 		}

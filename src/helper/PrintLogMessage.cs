@@ -9,40 +9,41 @@
 namespace GlobalNamespace
 {
 	using System;
+	using System.Linq;
+	using System.Drawing;
+	using System.Windows.Forms;
 
 	public partial class Form1
 	{
-		private void PrintLogMessage(string logtype, string[] values)
+		private void PrintLogMessage(RichTextBox richTextBox, string[] values)
 		{
+			// When called from a different thread then Form1, switch back to thread which owns Form1
 			if (this.InvokeRequired)
 			{
-				this.Invoke(new Action<string, string[]>(this.PrintLogMessage), new object[] { logtype, values });
+				this.Invoke(new Action<RichTextBox, string[]>(this.PrintLogMessage), new object[] { richTextBox, values });
 				return;
 			}
 
+			// If one value is a multi line string (i.e. HTML body), then split and rejoin each line with enough whitespace to align them
+			values = values.Select(x => string.Join(Environment.NewLine + "               ", x.Split('\n'))).ToArray();
+
+			// Join all lines into one string, add newline and whitespace to align them
+			string message = string.Join(Environment.NewLine + "               ", values);
+
 			try
 			{
-				string message = DateTime.Now.ToString("HH:mm:ss.fff   ", cultEng) + string.Join(Environment.NewLine + "               ", values);
+				richTextBox.SuspendLayout();
 
-				switch (logtype)
-				{
-					case "search":
-						this.rtbSearchLog.AppendText(message + Environment.NewLine);
-						this.rtbSearchLog.ScrollToCaret();
-						break;
-					case "write":
-						this.rtbWriteLog.AppendText(message + Environment.NewLine);
-						this.rtbWriteLog.ScrollToCaret();
-						this.tabControl2.SelectTab(1);
-						break;
-					case "error":
-						this.rtbErrorLog.AppendText(message + Environment.NewLine);
-						this.rtbErrorLog.ScrollToCaret();
-						this.tabControl2.SelectTab(2);
-						break;
-				}
+				richTextBox.SelectionColor = Color.Gray;
+				richTextBox.AppendText(DateTime.Now.ToString("HH:mm:ss.fff   ", cultEng));
+
+				richTextBox.SelectionColor = Color.Black;
+				richTextBox.AppendText(message + Environment.NewLine);
+
+				richTextBox.ScrollToCaret();
+				richTextBox.ResumeLayout();
 			}
-			catch (ObjectDisposedException)
+				catch (ObjectDisposedException)
 			{
 				// User closed window. Therefore richTextBox is already disposed and not available for output. Nothing more to do here
 			}

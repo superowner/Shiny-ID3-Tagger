@@ -102,6 +102,7 @@ namespace GlobalNamespace
 
 			// Work finished, re-enable all buttons and hide progress bar
 			this.slowProgressBar.Visible = false;
+
 			this.btnSearch.Enabled = true;
 			this.btnWrite.Enabled = true;
 			this.btnAddFiles.Enabled = true;

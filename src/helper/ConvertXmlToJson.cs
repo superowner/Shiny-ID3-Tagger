@@ -34,7 +34,7 @@ namespace GlobalNamespace
 							"String:   " + xmlstring.TrimEnd('\r', '\n'),
 							"Message:  " + error.Message.Trim()
 						};
-						this.PrintLogMessage("error", errorMsg);
+						this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 					}
 				}
 			}

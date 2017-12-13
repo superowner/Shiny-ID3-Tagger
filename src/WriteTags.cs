@@ -101,7 +101,7 @@ namespace GlobalNamespace
 								else
 								{
 									string message = string.Format("{0,-100}{1}", "Tag removed: " + frameDesc, "file: \"" + filepath + "\"");
-									this.PrintLogMessage("write", new[] { message });
+									this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 								}
 							}
 							else
@@ -112,7 +112,7 @@ namespace GlobalNamespace
 						else
 						{
 							string message = string.Format("{0,-100}{1}", "Tag removed: " + frameId, "file: \"" + filepath + "\"");
-							this.PrintLogMessage("write", new[] { message });
+							this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 						}
 					}
 
@@ -142,7 +142,7 @@ namespace GlobalNamespace
 								if (response != null && response.Content != null)
 								{
 									string message = string.Format("{0,-100}{1}", "Picture source: " + request.RequestUri.Authority, "file: \"" + filepath + "\"");
-									this.PrintLogMessage("write", new[] { message });
+									this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 
 									// Download cover as stream to avoid saving to disk
 									using (MemoryStream streamOrg = (MemoryStream)await response.Content.ReadAsStreamAsync())
@@ -204,7 +204,7 @@ namespace GlobalNamespace
 													"URL:      " + url,
 													"type:     " + response.Content.Headers.ContentType.ToString()
 												};
-												this.PrintLogMessage("error", errorMsg);
+												this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 											}
 										}
 									}
@@ -218,7 +218,7 @@ namespace GlobalNamespace
 											"ERROR:    Cover URL is not reachable!",
 											"URL:      " + url
 										};
-										this.PrintLogMessage("error", errorMsg);
+										this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 									}
 								}
 							}
@@ -250,6 +250,7 @@ namespace GlobalNamespace
 				}
 			}
 
+			// Work finished, re-enable all buttons and hide progress bar
 			this.slowProgressBar.Visible = false;
 
 			this.btnAddFiles.Enabled = true;
@@ -270,7 +271,7 @@ namespace GlobalNamespace
 				id3v2.SetTextFrame("TPE1", newArtist);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Artist: " + newArtist, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage("write", new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 
 			// Title
@@ -282,7 +283,7 @@ namespace GlobalNamespace
 				id3v2.SetTextFrame("TIT2", newTitle);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Title: " + newTitle, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage("write", new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 
 			// Album
@@ -294,7 +295,7 @@ namespace GlobalNamespace
 				id3v2.SetTextFrame("TALB", newAlbum);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Album: " + newAlbum, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage("write", new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 
 			// Genre
@@ -306,7 +307,7 @@ namespace GlobalNamespace
 				id3v2.SetTextFrame("TCON", newGenre);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Genre: " + newGenre, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage("write", new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 
 			// Disc number + disc count
@@ -323,7 +324,7 @@ namespace GlobalNamespace
 				id3v2.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Disc: " + newDiscnumber + "/" + newDisccount, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage("write", new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 
 			// Track number + track count
@@ -340,7 +341,7 @@ namespace GlobalNamespace
 				id3v2.SetTextFrame("TRCK", newTracknumber + "/" + newTrackcount);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Track: " + newTracknumber + "/" + newTrackcount, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage("write", new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 
 			// Date
@@ -359,7 +360,7 @@ namespace GlobalNamespace
 				id3v2.SetNumberFrame("TYER", (uint)this.ConvertStringToDate(newDate).Year, 0);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Date: " + newDate, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage("write", new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 
 			// Lyrics
@@ -377,7 +378,7 @@ namespace GlobalNamespace
 				id3v2.AddFrame(frmUSLT);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Lyrics: " + cleanPreview, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage("write", new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 
 			return id3v2;
@@ -460,7 +461,7 @@ namespace GlobalNamespace
 						@"ERROR:    Could not read/write file!",
 						"File:     " + tagFile.Name
 					};
-				this.PrintLogMessage("error", errorMsg);
+				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 			}
 
 			return successWrite;

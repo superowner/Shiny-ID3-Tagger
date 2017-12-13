@@ -30,7 +30,7 @@ namespace GlobalNamespace
 						@"ERROR:    Could not read all values from 'config\settings.json' or 'config\accounts.json'!",
 					 	"Message:  " + ex.Message.TrimEnd('\r', '\n')
 					};
-					this.PrintLogMessage("error", errorMsg);
+					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 				}
 			};
 

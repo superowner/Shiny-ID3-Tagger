@@ -33,7 +33,7 @@ namespace GlobalNamespace
 							"WARNING:  Could not convert response to JSON!",
 							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
 						};
-						this.PrintLogMessage("error", errorMsg);
+						this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 					};
 				}
 

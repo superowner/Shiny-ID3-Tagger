@@ -19,7 +19,10 @@ namespace GlobalNamespace
 		{
 			// Add parameters from request
 			List<string> errorMsg = new List<string>();
+
 			errorMsg.Add("Request:  " + request.Method + " " + request.RequestUri.OriginalString);
+
+			errorMsg.Add("Status:   " + response.ReasonPhrase + ": " + (int)response.StatusCode);
 
 			foreach (var element in request.Headers)
 			{
@@ -32,27 +35,10 @@ namespace GlobalNamespace
 				requestContent = string.Empty;
 			}
 
-			// Add parameters from response
-			if (response != null)
+			// Add response content
+			if (response.Content != null)
 			{
 				string responseContent = response.Content.ReadAsStringAsync().Result;
-
-				// Try to extract HTML body
-				Match match = Regex.Match(responseContent, "(?<=<body>)(?<text>.*?)(?=</body>)", RegexOptions.Singleline);
-				if (match.Success)
-				{
-					responseContent = match.Groups["text"].Value.Trim();
-				}
-
-				// Try to extract XML error message (Amazon API specific)
-				match = Regex.Match(responseContent, "(?<=<Message>)(?<text>.*?)(?=</Message>)", RegexOptions.Singleline);
-				if (match.Success)
-				{
-					responseContent = match.Groups["text"].Value.Trim();
-				}
-
-				// Show complete response including HTML tags OR extracted body/message if extracting was successful
-				errorMsg.Add("Code:     " + response.ReasonPhrase + ": " + (int)response.StatusCode);
 				errorMsg.Add("Response: " + responseContent);
 			}
 

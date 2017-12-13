@@ -53,7 +53,7 @@ namespace GlobalNamespace
 					if (User.Settings["DebugLevel"] >= 3)
 					{
 						List<string> errorMsg = BuildLogMessage(request, requestContent, null);
-						this.PrintLogMessage("error", errorMsg.ToArray());
+						this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
 					}
 
 					response = await client.SendAsync(request, timeoutToken.Token);
@@ -94,11 +94,10 @@ namespace GlobalNamespace
 							// If debugging is enabled in settings, print out all request and response properties
 							if (User.Settings["DebugLevel"] >= 2)
 							{
-								List<string> errorMsg = new List<string> { "WARNING:  Response was unsuccessful! Retrying..." };
-								errorMsg.Add("Retry:    " + i + "/" + MaxRetries);
+								List<string> errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
 								errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
-								this.PrintLogMessage("error", errorMsg.ToArray());
+								this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
 							}
 
 							// Response was not successful. But it was also not a common error. And user did not press cancel
@@ -111,13 +110,13 @@ namespace GlobalNamespace
 				catch (TaskCanceledException)
 				{
 					// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
-					// If debugging is enabled in settings, print out all request properties (response could be disposed)
+					// If debugging is enabled in settings, print out all request properties
 					if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 2)
 					{
 						List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + Timeout + " seconds to respond! Abort..." };
-						errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
+						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
-						this.PrintLogMessage("error", errorMsg.ToArray());
+						this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
 					}
 
 					break;
@@ -125,7 +124,7 @@ namespace GlobalNamespace
 				catch (Exception error)
 				{
 					// An unknown application error occurred. Cancel request immediately and don't try again
-					// If debugging is enabled in settings, print out all request properties (response could be disposed)
+					// If debugging is enabled in settings, print out all request properties
 					if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 1)
 					{
 						Exception realerror = error;
@@ -135,10 +134,10 @@ namespace GlobalNamespace
 						}
 
 						List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured! Abort..." };
-						errorMsg.AddRange(BuildLogMessage(request, requestContent, null));
+						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 						errorMsg.Add("Message:  " + realerror.ToString().TrimEnd('\r', '\n'));
 
-						this.PrintLogMessage("error", errorMsg.ToArray());
+						this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
 					}
 
 					break;

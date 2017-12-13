@@ -83,7 +83,7 @@ namespace GlobalNamespace
 										"CSV:      " + string.Join(seperator, csvHeaderFields),
 										"Required: " + string.Join(seperator, dgvHeaderFields)
 									};
-									this.PrintLogMessage("error", errorMsg);
+									this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 								}
 							}
 						}
@@ -97,7 +97,7 @@ namespace GlobalNamespace
 										"ERROR:    Could not parse CSV \"" + fullPath + "\"",
 										"Message:  " + ex.Message.TrimEnd('\r', '\n')
 									};
-								this.PrintLogMessage("error", errorMsg);
+								this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 							}
 						}
 					}

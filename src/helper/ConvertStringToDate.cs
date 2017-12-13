@@ -52,7 +52,7 @@ namespace GlobalNamespace
 						if (User.Settings["DebugLevel"] >= 2)
 						{
 							string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
-							this.PrintLogMessage("error", errorMsg);
+							this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 						}
 					}
 				}

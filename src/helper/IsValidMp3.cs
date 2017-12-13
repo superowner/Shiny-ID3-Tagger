@@ -48,7 +48,7 @@ namespace GlobalNamespace
 						"ERROR:    Not a valid MP3 file!",
 						"file:     " + filepath
 					};
-					this.PrintLogMessage("error", errorMsg);
+					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 				}
 
 				return false;
@@ -63,7 +63,7 @@ namespace GlobalNamespace
 						"ERROR:    File not found!",
 						"file:     " + filepath
 					};
-					this.PrintLogMessage("error", errorMsg);
+					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 				}
 
 				return false;
@@ -78,7 +78,7 @@ namespace GlobalNamespace
 						"ERROR:    Cannot access file. Already in use!",
 						"file:     " + filepath
 					};
-					this.PrintLogMessage("error", errorMsg);
+					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 				}
 
 				return false;

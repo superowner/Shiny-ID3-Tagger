@@ -98,7 +98,7 @@ namespace GlobalNamespace
 							(artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
 							  titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
 						{
-							this.PrintLogMessage("search", new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
+							this.PrintLogMessage(this.rtbSearchLog, new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
 
 							sw.Restart();
 
@@ -121,7 +121,7 @@ namespace GlobalNamespace
 						if (tagNew.Album != null && lyricsNew.Value != null)
 						{
 							tagNew.Lyrics = lyricsNew.Value;
-							this.PrintLogMessage("search", new[] { "  Lyrics taken from " + lyricsNew.Key });
+							this.PrintLogMessage(this.rtbSearchLog, new[] { "  Lyrics taken from " + lyricsNew.Key });
 						}
 
 						if (cancelToken.IsCancellationRequested)
@@ -210,6 +210,7 @@ namespace GlobalNamespace
 				}
 			}
 
+			// Work finished, re-enable all buttons and hide progress bars
 			this.slowProgressBar.Visible = false;
 			this.fastProgressBar.Visible = false;
 
@@ -277,7 +278,7 @@ namespace GlobalNamespace
 								"{0,-100}{1}",
 								"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",
 								"file: \"" + tagOld.Filepath + "\"");
-			this.PrintLogMessage("search", new[] { message });
+			this.PrintLogMessage(this.rtbSearchLog, new[] { message });
 
 			List<Task<Id3>> taskList = new List<Task<Id3>>
 			{
@@ -457,7 +458,7 @@ namespace GlobalNamespace
 
 					if (tagNew.Cover != null)
 					{
-						this.PrintLogMessage("search", new[] { "  Cover taken from " + api });
+						this.PrintLogMessage(this.rtbSearchLog, new[] { "  Cover taken from " + api });
 						break;
 					}
 				}
