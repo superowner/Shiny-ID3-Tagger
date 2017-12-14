@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ReadAccountCredentials.cs" company="Shiny ID3 Tagger">
+// <copyright file="ReadConfig.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -18,7 +18,7 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private bool ReadAccountCredentials()
+		private bool ReadConfig()
 		{
 			Action<Exception> errorHandler = (ex) =>
 			{
@@ -36,6 +36,7 @@ namespace GlobalNamespace
 
 			try
 			{
+				// Read accounts.json and decrypt it
 				var decryptor = Aes.Create();
 				var key = new byte[] { 90, 181, 178, 196, 110, 221, 12, 79, 98, 48, 40, 239, 237, 175, 23, 69, 42, 201, 36, 157, 170, 67, 161, 9, 69, 114, 232, 179, 195, 158, 151, 124 };
 				var iv = new byte[] { 221, 237, 248, 138, 53, 16, 87, 148, 28, 20, 30, 199, 195, 221, 209, 188 };
@@ -46,9 +47,6 @@ namespace GlobalNamespace
 				var decryptedBytes = decryptorTransformer.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
 				var decryptedString = Encoding.UTF8.GetString(decryptedBytes);
 				User.Accounts = JsonConvert.DeserializeObject<Dictionary<string, string>>(decryptedString);
-
-				string plainString = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"\config\settings.json");
-				User.Settings = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(plainString);
 
 				User.DbAccounts = new DataTable();
 				User.DbAccounts.Locale = cultEng;
@@ -76,6 +74,10 @@ namespace GlobalNamespace
 				User.MmAccounts.Rows.Add(1, User.Accounts["MmApiKey1"]);
 				User.MmAccounts.Rows.Add(2, User.Accounts["MmApiKey2"]);
 				User.MmAccounts.Rows.Add(3, User.Accounts["MmApiKey3"]);
+
+				// Read settings.json
+				string plainString = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"\config\settings.json");
+				User.Settings = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(plainString);
 
 				return true;
 			}

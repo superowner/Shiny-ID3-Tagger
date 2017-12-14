@@ -16,7 +16,7 @@ namespace GlobalNamespace
 	{
 		private void MenuItemClick_OpenSettings(object sender, EventArgs e)
 		{
-			string file = AppDomain.CurrentDomain.BaseDirectory + @"\resources\settings.json";
+			string file = AppDomain.CurrentDomain.BaseDirectory + @"\config\settings.json";
 			Process.Start(file);
 		}
 	}
