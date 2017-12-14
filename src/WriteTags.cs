@@ -117,7 +117,7 @@ namespace GlobalNamespace
 					}
 
 					// ###########################################################################
-					// Add search result tags (artist, title, album, genre, date, disc, track, lyrics) to new ID3 tag object
+					// Write search result tags to ID3 object (not to file)
 					id3v2 = this.WriteTags(tagFile, row, id3v2);
 
 					// ###########################################################################
