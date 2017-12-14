@@ -44,7 +44,7 @@ namespace GlobalNamespace
 
 				for (int j = 0; j < t.Length; j++)
 				{
-					var cost = (s[i].ToString().ToUpperInvariant() == t[j].ToString().ToUpperInvariant()) ? 0 : 1;
+					int cost = (s[i].ToString().ToUpperInvariant() == t[j].ToString().ToUpperInvariant()) ? 0 : 1;
 					v1[j + 1] = new[] { v1[j] + 1, v0[j + 1] + 1, v0[j] + cost }.Min();
 				}
 

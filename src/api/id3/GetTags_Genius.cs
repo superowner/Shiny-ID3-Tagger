@@ -58,7 +58,7 @@ namespace GlobalNamespace
 							o.TrackNumber = null;       // Not provided in API response
 							o.Cover = (string)trackData.SelectToken("response.song.album.cover_art_url");
 
-							var albumPath = trackData.SelectToken("response.song.album.api_path");
+							string albumPath = (string)trackData.SelectToken("response.song.album.api_path");
 							if (albumPath != null)
 							{
 								using (HttpRequestMessage albumRequest = new HttpRequestMessage())

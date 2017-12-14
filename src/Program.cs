@@ -7,7 +7,7 @@
 //-----------------------------------------------------------------------
 
 // TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned (download failed)
-// TODO: Implement JSON schema to check if settings.json and accounts.json are still valid JSON (user can edit them)
+// TODO: New methods for lock and unlock UI (button enable false / true, menu bar)
 // TODO: User option to en/disable single APIs (sometimes they are down)
 // TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
 // TODO: User option to write ID3v1 tags additionally to ID3v2

@@ -37,7 +37,7 @@ namespace GlobalNamespace
 				string requestContent = string.Empty;
 				request = CloneRequest(requestBackup);
 
-				var timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
+				CancellationTokenSource timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
 				timeoutToken.CancelAfter(TimeSpan.FromSeconds(Timeout));
 
 				try

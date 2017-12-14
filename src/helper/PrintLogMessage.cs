@@ -32,16 +32,19 @@ namespace GlobalNamespace
 
 			try
 			{
-				richTextBox.SuspendLayout();
-
 				richTextBox.SelectionColor = Color.Gray;
 				richTextBox.AppendText(DateTime.Now.ToString("HH:mm:ss.fff   ", cultEng));
 
 				richTextBox.SelectionColor = Color.Black;
 				richTextBox.AppendText(message + Environment.NewLine);
 
+				// Switch to error tab if it's an error message
+				if (richTextBox.Name == "rtbErrorLog")
+				{
+					this.tabControl2.SelectedIndex = 2;
+				}
+
 				richTextBox.ScrollToCaret();
-				richTextBox.ResumeLayout();
 			}
 				catch (ObjectDisposedException)
 			{

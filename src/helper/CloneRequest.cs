@@ -21,12 +21,12 @@ namespace GlobalNamespace
 			backup.Content = original.Content;
 			backup.Version = original.Version;
 
-			foreach (KeyValuePair<string, object> property in original.Properties)
+			foreach (var property in original.Properties)
 			{
 				backup.Properties.Add(property);
 			}
 
-			foreach (KeyValuePair<string, IEnumerable<string>> header in original.Headers)
+			foreach (var header in original.Headers)
 			{
 				backup.Headers.TryAddWithoutValidation(header.Key, header.Value);
 			}

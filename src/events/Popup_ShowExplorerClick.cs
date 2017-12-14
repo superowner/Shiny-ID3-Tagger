@@ -18,12 +18,15 @@ namespace GlobalNamespace
 	{
 		private void Popup_ShowExplorerClick(object sender, EventArgs e)
 		{
-			string filePath = ActiveDGV.CurrentRow.Cells[this.filepath1.Index].Value.ToString();
-
-			if (File.Exists(filePath))
+			if (ActiveDGV.CurrentRow != null)
 			{
-				string argument = "/select, \"" + filePath + "\"";
-				Process.Start("explorer.exe", argument);
+				string filePath = ActiveDGV.CurrentRow.Cells[this.filepath1.Index].Value.ToString();
+
+				if (File.Exists(filePath))
+				{
+					string argument = "/select, \"" + filePath + "\"";
+					Process.Start("explorer.exe", argument);
+				}
 			}
 		}
 	}

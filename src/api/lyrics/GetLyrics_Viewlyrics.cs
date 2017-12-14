@@ -128,7 +128,7 @@ namespace GlobalNamespace
 		private byte[] EncodeQuery(string query)
 		{
 			// Get query length. Don't use "query.Length" since it produces wrong results for strings containing non-ASCII characters
-			var queryLen = Encoding.UTF8.GetByteCount(query);
+			int queryLen = Encoding.UTF8.GetByteCount(query);
 
 			// Generate MD5 hash from query and salt
 			string md5Salt = "Mlv1clt4.0";

@@ -228,7 +228,7 @@ namespace GlobalNamespace
 		private async Task<KeyValuePair<string, string>> StartLyricsSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
 			KeyValuePair<string, string> lyrics = default(KeyValuePair<string, string>);
-			var lyricResults = new Dictionary<string, string>();
+			Dictionary<string, string> lyricResults = new Dictionary<string, string>();
 
 			if (tagNew.Artist == null && tagNew.Title == null)
 			{

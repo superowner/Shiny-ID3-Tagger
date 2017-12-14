@@ -37,15 +37,13 @@ namespace GlobalNamespace
 			Version version = new Version(Application.ProductVersion);
 			this.Text = Application.ProductName + " v" + version.Major + "." + version.Minor;
 
-			bool successReadConfig = this.ReadConfig();
-			if (successReadConfig)
+			bool isSuccess = this.ReadConfig();
+			if (isSuccess)
 			{
 				// Add new files
 				bool hasNewFiles = await this.AddFiles(args, cancelToken);
 
-				// Continue with searching
-				// if user setting allows it
-				// if new files were added (new row count != old row count)
+				// Continue with searching if user setting allows it and if new files were added
 				if (User.Settings["AutoSearch"] && hasNewFiles)
 				{
 					this.StartSearching(cancelToken);
@@ -53,15 +51,11 @@ namespace GlobalNamespace
 			}
 			else
 			{
-				MessageBox.Show(
-					"Could not read all user settings. Program closing",
-					"Could not read all user settings",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Question,
-					MessageBoxDefaultButton.Button1,
-					default(MessageBoxOptions));
-
-				Application.Exit();
+				TokenSource.Cancel();
+				this.btnAddFiles.Enabled = false;
+				this.btnSearch.Enabled = false;
+				this.btnWrite.Enabled = false;
+				this.menuStrip1.Enabled = false;
 			}
 		}
 

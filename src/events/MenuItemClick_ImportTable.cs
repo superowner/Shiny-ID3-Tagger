@@ -54,7 +54,7 @@ namespace GlobalNamespace
 								while (!parser.EndOfData)
 								{
 									// Convert current line as array
-									var fields = parser.ReadFields().ToArray();
+									string[] fields = parser.ReadFields().ToArray();
 
 									// Update "number" with new line number
 									fields[0] = (this.dataGridView1.Rows.Count + 1).ToString(cultEng);

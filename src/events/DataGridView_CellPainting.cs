@@ -30,10 +30,10 @@ namespace GlobalNamespace
 				using (Pen backGroundPen = new Pen(Color.FromArgb(255, 205, 232, 255), 1))
 				{
 					// Cell coordinates
-					var topLeftPoint = new Point(e.CellBounds.Left, e.CellBounds.Top);
-					var topRightPoint = new Point(e.CellBounds.Right - 1, e.CellBounds.Top);
-					var bottomRightPoint = new Point(e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
-					var bottomleftPoint = new Point(e.CellBounds.Left, e.CellBounds.Bottom - 1);
+					Point topLeftPoint = new Point(e.CellBounds.Left, e.CellBounds.Top);
+					Point topRightPoint = new Point(e.CellBounds.Right - 1, e.CellBounds.Top);
+					Point bottomRightPoint = new Point(e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
+					Point bottomleftPoint = new Point(e.CellBounds.Left, e.CellBounds.Bottom - 1);
 
 					// Draw active row
 					if (e.RowIndex == ActiveDGV.CurrentRow.Index)
