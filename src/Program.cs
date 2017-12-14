@@ -8,8 +8,7 @@
 
 // TODO: Automatic GitHub releases https://marketplace.visualstudio.com/items?itemName=jakobehn.jakobehn-vsts-github-tasks
 // TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned (download failed)
-// TODO: Small blue border on mouse hover around row if already selected
-
+// TODO: taglib has a downgradeFrames method. What does it do? http://taglib.org/api/classTagLib_1_1ID3v2_1_1Tag.html#a8d2a42a20fade71c9acb68229445dee8
 // TODO: User option to en/disable single APIs (sometimes they are down)
 // TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
 // TODO: User option to write ID3v1 tags additionally to ID3v2

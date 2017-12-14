@@ -34,181 +34,185 @@ namespace GlobalNamespace
 			this.slowProgressBar.Visible = true;
 			this.fastProgressBar.Visible = true;
 
-			using (HttpClient client = InitiateHttpClient())
+			Stopwatch sw = new Stopwatch();
+
+			try
 			{
-				Stopwatch sw = new Stopwatch();
-
-				foreach (DataGridViewRow row in this.dataGridView1.Rows)
+				using (HttpClient client = InitiateHttpClient())
 				{
-					Id3 tagOld = new Id3
+					foreach (DataGridViewRow row in this.dataGridView1.Rows)
 					{
-						Filepath = row.Cells[this.filepath1.Index].Value.ToString(),
-						Artist = row.Cells[this.artist1.Index].Value.ToString(),
-						Title = row.Cells[this.title1.Index].Value.ToString(),
-						Album = row.Cells[this.album1.Index].Value.ToString(),
-						Date = row.Cells[this.date1.Index].Value.ToString(),
-						Genre = row.Cells[this.genre1.Index].Value.ToString(),
-						DiscCount = row.Cells[this.disccount1.Index].Value.ToString(),
-						DiscNumber = row.Cells[this.discnumber1.Index].Value.ToString(),
-						TrackCount = row.Cells[this.trackcount1.Index].Value.ToString(),
-						TrackNumber = row.Cells[this.tracknumber1.Index].Value.ToString(),
-						Lyrics = row.Cells[this.lyrics1.Index].Value.ToString(),
-						Cover = row.Cells[this.cover1.Index].Value.ToString()
-					};
+						cancelToken.ThrowIfCancellationRequested();
 
-					bool rowAlreadyExists = (from r in this.dataGridView2.Rows.Cast<DataGridViewRow>()
-											 where r.Cells[this.filepath2.Index].Value.ToString() == tagOld.Filepath
-											 select r).Any();
-
-					// Check if row doesn't exist already in datagridview and if user didn't press cancel
-					if (!rowAlreadyExists && !cancelToken.IsCancellationRequested)
-					{
-						sw.Restart();
-
-						Id3 tagNew = new Id3()
+						Id3 tagOld = new Id3
 						{
-							Service = "RESULT",
-							Filepath = tagOld.Filepath
+							Filepath = row.Cells[this.filepath1.Index].Value.ToString(),
+							Artist = row.Cells[this.artist1.Index].Value.ToString(),
+							Title = row.Cells[this.title1.Index].Value.ToString(),
+							Album = row.Cells[this.album1.Index].Value.ToString(),
+							Date = row.Cells[this.date1.Index].Value.ToString(),
+							Genre = row.Cells[this.genre1.Index].Value.ToString(),
+							DiscCount = row.Cells[this.disccount1.Index].Value.ToString(),
+							DiscNumber = row.Cells[this.discnumber1.Index].Value.ToString(),
+							TrackCount = row.Cells[this.trackcount1.Index].Value.ToString(),
+							TrackNumber = row.Cells[this.tracknumber1.Index].Value.ToString(),
+							Lyrics = row.Cells[this.lyrics1.Index].Value.ToString(),
+							Cover = row.Cells[this.cover1.Index].Value.ToString()
 						};
 
-						Task<DataTable> apiTask = this.StartId3Search(client, tagOld, cancelToken);
-						Task<KeyValuePair<string, string>> lyricSearchTask = this.StartLyricsSearch(client, tagOld, cancelToken);
+						bool rowAlreadyExists = (from r in this.dataGridView2.Rows.Cast<DataGridViewRow>()
+												 where r.Cells[this.filepath2.Index].Value.ToString() == tagOld.Filepath
+												 select r).Any();
 
-						await Task.WhenAll(apiTask, lyricSearchTask);
-
-						DataTable apiResults = apiTask.Result;
-						KeyValuePair<string, string> lyricsNew = lyricSearchTask.Result;
-
-						string artistNew = (from row1 in apiResults.AsEnumerable()
-											where !string.IsNullOrWhiteSpace(row1.Field<string>("artist"))
-											group row1 by Capitalize(Strip(row1.Field<string>("artist"))) into grp
-											where grp.Count() >= 3
-											orderby grp.Count() descending
-											select grp.Key).FirstOrDefault();
-
-						string titleNew = (from row1 in apiResults.AsEnumerable()
-										   where !string.IsNullOrWhiteSpace(row1.Field<string>("title"))
-										   group row1 by Capitalize(Strip(row1.Field<string>("title"))) into grp
-										   where grp.Count() >= 3
-										   orderby grp.Count() descending
-										   select grp.Key).FirstOrDefault();
-
-						// If new artist or title are different from old ones, repeat all searches until new and old ones match.
-						// This happens when spelling mistakes were corrected by many APIs
-						if (artistNew != null && titleNew != null &&
-							(artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
-							  titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
+						// Check if row doesn't exist already in datagridview and if user didn't press cancel
+						if (!rowAlreadyExists)
 						{
-							this.PrintLogMessage(this.rtbSearchLog, new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
-
 							sw.Restart();
 
-							lyricsNew = default(KeyValuePair<string, string>);
-							tagNew.Artist = artistNew;
-							tagNew.Title = titleNew;
+							Id3 tagNew = new Id3()
+							{
+								Service = "RESULT",
+								Filepath = tagOld.Filepath
+							};
 
-							apiTask = this.StartId3Search(client, tagNew, cancelToken);
-							lyricSearchTask = this.StartLyricsSearch(client, tagNew, cancelToken);
+							Task<DataTable> apiTask = this.StartId3Search(client, tagOld, cancelToken);
+							Task<KeyValuePair<string, string>> lyricSearchTask = this.StartLyricsSearch(client, tagOld, cancelToken);
 
 							await Task.WhenAll(apiTask, lyricSearchTask);
 
-							apiResults = apiTask.Result;
-							lyricsNew = lyricSearchTask.Result;
-						}
+							DataTable apiResults = apiTask.Result;
+							KeyValuePair<string, string> lyricsNew = lyricSearchTask.Result;
 
-						// Aggregate all API results and select most frequent values
-						tagNew = this.CalculateResults(apiResults, tagNew);
+							string artistNew = (from row1 in apiResults.AsEnumerable()
+												where !string.IsNullOrWhiteSpace(row1.Field<string>("artist"))
+												group row1 by Capitalize(Strip(row1.Field<string>("artist"))) into grp
+												where grp.Count() >= 3
+												orderby grp.Count() descending
+												select grp.Key).FirstOrDefault();
 
-						if (tagNew.Album != null && lyricsNew.Value != null)
-						{
-							tagNew.Lyrics = lyricsNew.Value;
-							this.PrintLogMessage(this.rtbSearchLog, new[] { "  Lyrics taken from " + lyricsNew.Key });
-						}
+							string titleNew = (from row1 in apiResults.AsEnumerable()
+											   where !string.IsNullOrWhiteSpace(row1.Field<string>("title"))
+											   group row1 by Capitalize(Strip(row1.Field<string>("title"))) into grp
+											   where grp.Count() >= 3
+											   orderby grp.Count() descending
+											   select grp.Key).FirstOrDefault();
 
-						if (cancelToken.IsCancellationRequested)
-						{
-							break;
-						}
+							// If new artist or title are different from old ones, repeat all searches until new and old ones match.
+							// This happens when spelling mistakes were corrected by many APIs
+							if (artistNew != null && titleNew != null &&
+								(artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
+									titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
+							{
+								this.PrintLogMessage(this.rtbSearchLog, new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
 
-						foreach (DataRow r in apiResults.Rows)
-						{
-							string albumhit = IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
-							string durationTotal = IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
+								sw.Restart();
+
+								lyricsNew = default(KeyValuePair<string, string>);
+								tagNew.Artist = artistNew;
+								tagNew.Title = titleNew;
+
+								apiTask = this.StartId3Search(client, tagNew, cancelToken);
+								lyricSearchTask = this.StartLyricsSearch(client, tagNew, cancelToken);
+
+								await Task.WhenAll(apiTask, lyricSearchTask);
+
+								apiResults = apiTask.Result;
+								lyricsNew = lyricSearchTask.Result;
+							}
+
+							// Aggregate all API results and select most frequent values
+							tagNew = this.CalculateResults(apiResults, tagNew);
+
+							if (tagNew.Album != null && lyricsNew.Value != null)
+							{
+								tagNew.Lyrics = lyricsNew.Value;
+								this.PrintLogMessage(this.rtbSearchLog, new[] { "  Lyrics taken from " + lyricsNew.Key });
+							}
+
+							foreach (DataRow r in apiResults.Rows)
+							{
+								string albumhit = IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
+								string durationTotal = IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
+
+								this.dataGridView2.Rows.Add(
+									(this.dataGridView2.Rows.Count + 1).ToString(),
+									tagNew.Filepath ?? string.Empty,
+									r["service"] ?? string.Empty,
+									r["artist"] ?? string.Empty,
+									r["title"] ?? string.Empty,
+									r["album"] ?? string.Empty,
+									r["date"] ?? string.Empty,
+									r["genre"] ?? string.Empty,
+									r["disccount"] ?? string.Empty,
+									r["discnumber"] ?? string.Empty,
+									r["trackcount"] ?? string.Empty,
+									r["tracknumber"] ?? string.Empty,
+									r["lyrics"] ?? string.Empty,
+									r["cover"] ?? string.Empty,
+									r["duration"] ?? string.Empty,
+									durationTotal ?? string.Empty,
+									albumhit ?? string.Empty);
+
+								// Set row foreground color to gray if current row album doesn't match most frequent album
+								if (tagNew.Album == null ||
+									(tagNew.Album != null && r["album"] != null &&
+									Strip(tagNew.Album).ToLowerInvariant() != Strip(r["album"].ToString().ToLowerInvariant())))
+								{
+									this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.ForeColor = Color.Gray;
+									DataGridViewLinkCell c = this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.cover2.Index] as DataGridViewLinkCell;
+									c.LinkColor = Color.Gray;
+								}
+							}
+
+							// Color cells green, yellow or red according to Levenshtein and allowedEditPercent setting
+							this.MarkChange(row.Index, this.artist1.Index, tagOld.Artist, tagNew.Artist, true);
+							this.MarkChange(row.Index, this.title1.Index, tagOld.Title, tagNew.Title, true);
+							this.MarkChange(row.Index, this.album1.Index, tagOld.Album, tagNew.Album, true);
+							this.MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date, false);
+							this.MarkChange(row.Index, this.genre1.Index, tagOld.Genre, tagNew.Genre, true);
+							this.MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount, false);
+							this.MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber, false);
+							this.MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount, false);
+							this.MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber, false);
+							this.MarkChange(row.Index, this.lyrics1.Index, tagOld.Lyrics, tagNew.Lyrics, false);
+							this.MarkChange(row.Index, this.cover1.Index, tagOld.Cover, tagNew.Cover, false);
+
+							sw.Stop();
+							tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+							string allApiDurationTotal = IncreaseTotalDuration(tagNew.Service, tagNew.Duration);
 
 							this.dataGridView2.Rows.Add(
 								(this.dataGridView2.Rows.Count + 1).ToString(),
 								tagNew.Filepath ?? string.Empty,
-								r["service"] ?? string.Empty,
-								r["artist"] ?? string.Empty,
-								r["title"] ?? string.Empty,
-								r["album"] ?? string.Empty,
-								r["date"] ?? string.Empty,
-								r["genre"] ?? string.Empty,
-								r["disccount"] ?? string.Empty,
-								r["discnumber"] ?? string.Empty,
-								r["trackcount"] ?? string.Empty,
-								r["tracknumber"] ?? string.Empty,
-								r["lyrics"] ?? string.Empty,
-								r["cover"] ?? string.Empty,
-								r["duration"] ?? string.Empty,
-								durationTotal ?? string.Empty,
-								albumhit ?? string.Empty);
+								tagNew.Service ?? string.Empty,
+								tagNew.Artist ?? string.Empty,
+								tagNew.Title ?? string.Empty,
+								tagNew.Album ?? string.Empty,
+								tagNew.Date ?? string.Empty,
+								tagNew.Genre ?? string.Empty,
+								tagNew.DiscCount ?? string.Empty,
+								tagNew.DiscNumber ?? string.Empty,
+								tagNew.TrackCount ?? string.Empty,
+								tagNew.TrackNumber ?? string.Empty,
+								tagNew.Lyrics ?? string.Empty,
+								tagNew.Cover ?? string.Empty,
+								tagNew.Duration ?? string.Empty,
+								allApiDurationTotal ?? string.Empty,
+								string.Empty);
 
-							// Set row foreground color to gray if current row album doesn't match most frequent album
-							if (tagNew.Album == null ||
-								(tagNew.Album != null && r["album"] != null &&
-								Strip(tagNew.Album).ToLowerInvariant() != Strip(r["album"].ToString().ToLowerInvariant())))
-							{
-								this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.ForeColor = Color.Gray;
-								DataGridViewLinkCell c = this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.cover2.Index] as DataGridViewLinkCell;
-								c.LinkColor = Color.Gray;
-							}
+							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index].ToolTipText = tagNew.Lyrics;
+							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor = Color.Yellow;
+							this.dataGridView2.FirstDisplayedScrollingRowIndex = this.dataGridView2.RowCount - 1;
+							this.dataGridView2.ClearSelection();
 						}
 
-						// Color cells green, yellow or red according to Levenshtein and allowedEditPercent setting
-						this.MarkChange(row.Index, this.artist1.Index, tagOld.Artist, tagNew.Artist, true);
-						this.MarkChange(row.Index, this.title1.Index, tagOld.Title, tagNew.Title, true);
-						this.MarkChange(row.Index, this.album1.Index, tagOld.Album, tagNew.Album, true);
-						this.MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date, false);
-						this.MarkChange(row.Index, this.genre1.Index, tagOld.Genre, tagNew.Genre, true);
-						this.MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount, false);
-						this.MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber, false);
-						this.MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount, false);
-						this.MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber, false);
-						this.MarkChange(row.Index, this.lyrics1.Index, tagOld.Lyrics, tagNew.Lyrics, false);
-						this.MarkChange(row.Index, this.cover1.Index, tagOld.Cover, tagNew.Cover, false);
-
-						sw.Stop();
-						tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
-						string allApiDurationTotal = IncreaseTotalDuration(tagNew.Service, tagNew.Duration);
-
-						this.dataGridView2.Rows.Add(
-							(this.dataGridView2.Rows.Count + 1).ToString(),
-							tagNew.Filepath ?? string.Empty,
-							tagNew.Service ?? string.Empty,
-							tagNew.Artist ?? string.Empty,
-							tagNew.Title ?? string.Empty,
-							tagNew.Album ?? string.Empty,
-							tagNew.Date ?? string.Empty,
-							tagNew.Genre ?? string.Empty,
-							tagNew.DiscCount ?? string.Empty,
-							tagNew.DiscNumber ?? string.Empty,
-							tagNew.TrackCount ?? string.Empty,
-							tagNew.TrackNumber ?? string.Empty,
-							tagNew.Lyrics ?? string.Empty,
-							tagNew.Cover ?? string.Empty,
-							tagNew.Duration ?? string.Empty,
-							allApiDurationTotal ?? string.Empty,
-							string.Empty);
-
-						this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index].ToolTipText = tagNew.Lyrics;
-						this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor = Color.Yellow;
-						this.dataGridView2.FirstDisplayedScrollingRowIndex = this.dataGridView2.RowCount - 1;
-						this.dataGridView2.ClearSelection();
+						this.slowProgressBar.PerformStep();
 					}
-
-					this.slowProgressBar.PerformStep();
 				}
+			}
+			catch
+			{
+				// User pressed Cancel button. Nothing further to do
 			}
 
 			// Work finished, re-enable all buttons and hide progress bars
@@ -240,13 +244,22 @@ namespace GlobalNamespace
 				this.GetLyrics_Xiami(client, tagNew, cancelToken)
 			};
 
-			while (taskList.Count > 0)
+			try
 			{
-				Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
-				taskList = tpl.Item1;
-				Id3 r = tpl.Item2;
+				while (taskList.Count > 0)
+				{
+					cancelToken.ThrowIfCancellationRequested();
 
-				lyricResults.Add(r.Service, r.Lyrics);
+					Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
+					taskList = tpl.Item1;
+					Id3 r = tpl.Item2;
+
+					lyricResults.Add(r.Service, r.Lyrics);
+				}
+			}
+			catch (OperationCanceledException)
+			{
+				// User pressed Cancel button. Nothing further to do
 			}
 
 			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
@@ -307,30 +320,39 @@ namespace GlobalNamespace
 			this.fastProgressBar.Maximum = taskList.Count;
 			this.fastProgressBar.Value = 0;
 
-			while (taskList.Count > 0)
+			try
 			{
-				Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
-				taskList = tpl.Item1;
-				Id3 r = tpl.Item2;
+				while (taskList.Count > 0)
+				{
+					cancelToken.ThrowIfCancellationRequested();
 
-				apiResults.Rows.Add(
-					apiResults.Rows.Count + 1,
-					tagOld.Filepath,
-					r.Service,
-					r.Artist,
-					r.Title,
-					r.Album,
-					r.Date,
-					r.Genre,
-					r.DiscCount,
-					r.DiscNumber,
-					r.TrackCount,
-					r.TrackNumber,
-					string.Empty,
-					r.Cover,
-					r.Duration);
+					Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
+					taskList = tpl.Item1;
+					Id3 r = tpl.Item2;
 
-				this.fastProgressBar.PerformStep();
+					apiResults.Rows.Add(
+						apiResults.Rows.Count + 1,
+						tagOld.Filepath,
+						r.Service,
+						r.Artist,
+						r.Title,
+						r.Album,
+						r.Date,
+						r.Genre,
+						r.DiscCount,
+						r.DiscNumber,
+						r.TrackCount,
+						r.TrackNumber,
+						string.Empty,
+						r.Cover,
+						r.Duration);
+
+					this.fastProgressBar.PerformStep();
+				}
+			}
+			catch (OperationCanceledException)
+			{
+				// User pressed Cancel button. Nothing further to do
 			}
 
 			return apiResults;

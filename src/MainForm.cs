@@ -46,7 +46,7 @@ namespace GlobalNamespace
 				// Continue with searching
 				// if user setting allows it
 				// if new files were added (new row count != old row count)
-				if (User.Settings["AutoSearch"] && hasNewFiles && !cancelToken.IsCancellationRequested)
+				if (User.Settings["AutoSearch"] && hasNewFiles)
 				{
 					this.StartSearching(cancelToken);
 				}

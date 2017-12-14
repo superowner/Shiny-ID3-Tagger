@@ -66,8 +66,8 @@ namespace GlobalNamespace
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.btnSearch = new System.Windows.Forms.Button();
 			this.btnWrite = new System.Windows.Forms.Button();
 			this.tabControl2 = new System.Windows.Forms.TabControl();
@@ -86,6 +86,23 @@ namespace GlobalNamespace
 			this.dataGridView1 = new GlobalNamespace.DataGridViewDoubleBuffered();
 			this.tabPage5 = new System.Windows.Forms.TabPage();
 			this.dataGridView2 = new GlobalNamespace.DataGridViewDoubleBuffered();
+			this.number2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.filepath2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.service2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.artist2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.title2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.album2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.date2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.genre2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.disccount2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.discnumber2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.trackcount2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.tracknumber2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.lyrics2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cover2 = new System.Windows.Forms.DataGridViewLinkColumn();
+			this.duration2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.durationTotal2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.albumhits = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.fastProgressBar = new System.Windows.Forms.ProgressBar();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -111,23 +128,6 @@ namespace GlobalNamespace
 			this.lyrics1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.cover1 = new System.Windows.Forms.DataGridViewLinkColumn();
 			this.isVirtualFile = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.number2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.filepath2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.service2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.artist2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.title2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.album2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.date2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.genre2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.disccount2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.discnumber2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.trackcount2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.tracknumber2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.lyrics2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cover2 = new System.Windows.Forms.DataGridViewLinkColumn();
-			this.duration2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.durationTotal2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.albumhits = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tabControl2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -489,6 +489,162 @@ namespace GlobalNamespace
 			this.dataGridView2.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.DataGridView_SortCompare);
 			this.dataGridView2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridView_KeyPress);
 			// 
+			// number2
+			// 
+			this.number2.HeaderText = "#";
+			this.number2.MinimumWidth = 25;
+			this.number2.Name = "number2";
+			this.number2.ReadOnly = true;
+			this.number2.ToolTipText = "Number";
+			this.number2.Width = 25;
+			// 
+			// filepath2
+			// 
+			this.filepath2.HeaderText = "Filepath";
+			this.filepath2.MinimumWidth = 25;
+			this.filepath2.Name = "filepath2";
+			this.filepath2.ReadOnly = true;
+			this.filepath2.ToolTipText = "Filepath";
+			this.filepath2.Width = 300;
+			// 
+			// service2
+			// 
+			this.service2.HeaderText = "Service";
+			this.service2.MinimumWidth = 25;
+			this.service2.Name = "service2";
+			this.service2.ReadOnly = true;
+			this.service2.ToolTipText = "Service";
+			this.service2.Width = 70;
+			// 
+			// artist2
+			// 
+			this.artist2.HeaderText = "Artist";
+			this.artist2.MinimumWidth = 25;
+			this.artist2.Name = "artist2";
+			this.artist2.ReadOnly = true;
+			this.artist2.ToolTipText = "Artist";
+			// 
+			// title2
+			// 
+			this.title2.HeaderText = "Title";
+			this.title2.MinimumWidth = 25;
+			this.title2.Name = "title2";
+			this.title2.ReadOnly = true;
+			this.title2.ToolTipText = "Title";
+			// 
+			// album2
+			// 
+			this.album2.HeaderText = "Album";
+			this.album2.MinimumWidth = 25;
+			this.album2.Name = "album2";
+			this.album2.ReadOnly = true;
+			this.album2.ToolTipText = "Album";
+			// 
+			// date2
+			// 
+			this.date2.HeaderText = "Date";
+			this.date2.MinimumWidth = 25;
+			this.date2.Name = "date2";
+			this.date2.ReadOnly = true;
+			this.date2.ToolTipText = "Date";
+			// 
+			// genre2
+			// 
+			this.genre2.HeaderText = "Genre";
+			this.genre2.MinimumWidth = 25;
+			this.genre2.Name = "genre2";
+			this.genre2.ReadOnly = true;
+			this.genre2.ToolTipText = "Genre";
+			// 
+			// disccount2
+			// 
+			this.disccount2.HeaderText = "Disc Count";
+			this.disccount2.MinimumWidth = 25;
+			this.disccount2.Name = "disccount2";
+			this.disccount2.ReadOnly = true;
+			this.disccount2.ToolTipText = "Disc Count";
+			this.disccount2.Width = 30;
+			// 
+			// discnumber2
+			// 
+			this.discnumber2.HeaderText = "Disc Number";
+			this.discnumber2.MinimumWidth = 25;
+			this.discnumber2.Name = "discnumber2";
+			this.discnumber2.ReadOnly = true;
+			this.discnumber2.ToolTipText = "Disc Number";
+			this.discnumber2.Width = 30;
+			// 
+			// trackcount2
+			// 
+			this.trackcount2.HeaderText = "Track Count";
+			this.trackcount2.MinimumWidth = 25;
+			this.trackcount2.Name = "trackcount2";
+			this.trackcount2.ReadOnly = true;
+			this.trackcount2.ToolTipText = "Track Count";
+			this.trackcount2.Width = 30;
+			// 
+			// tracknumber2
+			// 
+			this.tracknumber2.HeaderText = "Track Number";
+			this.tracknumber2.MinimumWidth = 25;
+			this.tracknumber2.Name = "tracknumber2";
+			this.tracknumber2.ReadOnly = true;
+			this.tracknumber2.ToolTipText = "Track Number";
+			this.tracknumber2.Width = 30;
+			// 
+			// lyrics2
+			// 
+			dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.lyrics2.DefaultCellStyle = dataGridViewCellStyle8;
+			this.lyrics2.HeaderText = "Unsynced Lyrics";
+			this.lyrics2.MinimumWidth = 25;
+			this.lyrics2.Name = "lyrics2";
+			this.lyrics2.ReadOnly = true;
+			this.lyrics2.ToolTipText = "Unsynced Lyrics";
+			this.lyrics2.Width = 200;
+			// 
+			// cover2
+			// 
+			this.cover2.ActiveLinkColor = System.Drawing.Color.Black;
+			this.cover2.HeaderText = "Cover";
+			this.cover2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+			this.cover2.LinkColor = System.Drawing.Color.Black;
+			this.cover2.MinimumWidth = 25;
+			this.cover2.Name = "cover2";
+			this.cover2.ReadOnly = true;
+			this.cover2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.cover2.ToolTipText = "Cover";
+			this.cover2.VisitedLinkColor = System.Drawing.Color.Black;
+			this.cover2.Width = 334;
+			// 
+			// duration2
+			// 
+			this.duration2.HeaderText = "Duration";
+			this.duration2.MinimumWidth = 25;
+			this.duration2.Name = "duration2";
+			this.duration2.ReadOnly = true;
+			this.duration2.ToolTipText = "Duration";
+			this.duration2.Width = 30;
+			// 
+			// durationTotal2
+			// 
+			this.durationTotal2.HeaderText = "Duration total";
+			this.durationTotal2.MinimumWidth = 25;
+			this.durationTotal2.Name = "durationTotal2";
+			this.durationTotal2.ReadOnly = true;
+			this.durationTotal2.ToolTipText = "Duration total";
+			this.durationTotal2.Width = 30;
+			// 
+			// albumhits
+			// 
+			this.albumhits.HeaderText = "Album Hits";
+			this.albumhits.MinimumWidth = 25;
+			this.albumhits.Name = "albumhits";
+			this.albumhits.ReadOnly = true;
+			this.albumhits.ToolTipText = "Album Hits";
+			this.albumhits.Width = 30;
+			// 
 			// fastProgressBar
 			// 
 			this.fastProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -733,162 +889,6 @@ namespace GlobalNamespace
 			this.isVirtualFile.Visible = false;
 			this.isVirtualFile.Width = 25;
 			// 
-			// number2
-			// 
-			this.number2.HeaderText = "#";
-			this.number2.MinimumWidth = 25;
-			this.number2.Name = "number2";
-			this.number2.ReadOnly = true;
-			this.number2.ToolTipText = "Number";
-			this.number2.Width = 25;
-			// 
-			// filepath2
-			// 
-			this.filepath2.HeaderText = "Filepath";
-			this.filepath2.MinimumWidth = 25;
-			this.filepath2.Name = "filepath2";
-			this.filepath2.ReadOnly = true;
-			this.filepath2.ToolTipText = "Filepath";
-			this.filepath2.Width = 300;
-			// 
-			// service2
-			// 
-			this.service2.HeaderText = "Service";
-			this.service2.MinimumWidth = 25;
-			this.service2.Name = "service2";
-			this.service2.ReadOnly = true;
-			this.service2.ToolTipText = "Service";
-			this.service2.Width = 70;
-			// 
-			// artist2
-			// 
-			this.artist2.HeaderText = "Artist";
-			this.artist2.MinimumWidth = 25;
-			this.artist2.Name = "artist2";
-			this.artist2.ReadOnly = true;
-			this.artist2.ToolTipText = "Artist";
-			// 
-			// title2
-			// 
-			this.title2.HeaderText = "Title";
-			this.title2.MinimumWidth = 25;
-			this.title2.Name = "title2";
-			this.title2.ReadOnly = true;
-			this.title2.ToolTipText = "Title";
-			// 
-			// album2
-			// 
-			this.album2.HeaderText = "Album";
-			this.album2.MinimumWidth = 25;
-			this.album2.Name = "album2";
-			this.album2.ReadOnly = true;
-			this.album2.ToolTipText = "Album";
-			// 
-			// date2
-			// 
-			this.date2.HeaderText = "Date";
-			this.date2.MinimumWidth = 25;
-			this.date2.Name = "date2";
-			this.date2.ReadOnly = true;
-			this.date2.ToolTipText = "Date";
-			// 
-			// genre2
-			// 
-			this.genre2.HeaderText = "Genre";
-			this.genre2.MinimumWidth = 25;
-			this.genre2.Name = "genre2";
-			this.genre2.ReadOnly = true;
-			this.genre2.ToolTipText = "Genre";
-			// 
-			// disccount2
-			// 
-			this.disccount2.HeaderText = "Disc Count";
-			this.disccount2.MinimumWidth = 25;
-			this.disccount2.Name = "disccount2";
-			this.disccount2.ReadOnly = true;
-			this.disccount2.ToolTipText = "Disc Count";
-			this.disccount2.Width = 30;
-			// 
-			// discnumber2
-			// 
-			this.discnumber2.HeaderText = "Disc Number";
-			this.discnumber2.MinimumWidth = 25;
-			this.discnumber2.Name = "discnumber2";
-			this.discnumber2.ReadOnly = true;
-			this.discnumber2.ToolTipText = "Disc Number";
-			this.discnumber2.Width = 30;
-			// 
-			// trackcount2
-			// 
-			this.trackcount2.HeaderText = "Track Count";
-			this.trackcount2.MinimumWidth = 25;
-			this.trackcount2.Name = "trackcount2";
-			this.trackcount2.ReadOnly = true;
-			this.trackcount2.ToolTipText = "Track Count";
-			this.trackcount2.Width = 30;
-			// 
-			// tracknumber2
-			// 
-			this.tracknumber2.HeaderText = "Track Number";
-			this.tracknumber2.MinimumWidth = 25;
-			this.tracknumber2.Name = "tracknumber2";
-			this.tracknumber2.ReadOnly = true;
-			this.tracknumber2.ToolTipText = "Track Number";
-			this.tracknumber2.Width = 30;
-			// 
-			// lyrics2
-			// 
-			dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.lyrics2.DefaultCellStyle = dataGridViewCellStyle8;
-			this.lyrics2.HeaderText = "Unsynced Lyrics";
-			this.lyrics2.MinimumWidth = 25;
-			this.lyrics2.Name = "lyrics2";
-			this.lyrics2.ReadOnly = true;
-			this.lyrics2.ToolTipText = "Unsynced Lyrics";
-			this.lyrics2.Width = 200;
-			// 
-			// cover2
-			// 
-			this.cover2.ActiveLinkColor = System.Drawing.Color.Black;
-			this.cover2.HeaderText = "Cover";
-			this.cover2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-			this.cover2.LinkColor = System.Drawing.Color.Black;
-			this.cover2.MinimumWidth = 25;
-			this.cover2.Name = "cover2";
-			this.cover2.ReadOnly = true;
-			this.cover2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.cover2.ToolTipText = "Cover";
-			this.cover2.VisitedLinkColor = System.Drawing.Color.Black;
-			this.cover2.Width = 334;
-			// 
-			// duration2
-			// 
-			this.duration2.HeaderText = "Duration";
-			this.duration2.MinimumWidth = 25;
-			this.duration2.Name = "duration2";
-			this.duration2.ReadOnly = true;
-			this.duration2.ToolTipText = "Duration";
-			this.duration2.Width = 30;
-			// 
-			// durationTotal2
-			// 
-			this.durationTotal2.HeaderText = "Duration total";
-			this.durationTotal2.MinimumWidth = 25;
-			this.durationTotal2.Name = "durationTotal2";
-			this.durationTotal2.ReadOnly = true;
-			this.durationTotal2.ToolTipText = "Duration total";
-			this.durationTotal2.Width = 30;
-			// 
-			// albumhits
-			// 
-			this.albumhits.HeaderText = "Album Hits";
-			this.albumhits.MinimumWidth = 25;
-			this.albumhits.Name = "albumhits";
-			this.albumhits.ReadOnly = true;
-			this.albumhits.ToolTipText = "Album Hits";
-			this.albumhits.Width = 30;
-			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -932,20 +932,6 @@ namespace GlobalNamespace
 
 		}
 		private System.Windows.Forms.ToolStripMenuItem importTableToolStripMenuItem;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn filepath1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn artist1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn title1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn album1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn date1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn genre1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn disccount1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn discnumber1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn trackcount1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn tracknumber1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics1;
-		private System.Windows.Forms.DataGridViewLinkColumn cover1;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn isVirtualFile;
 		private System.Windows.Forms.DataGridViewTextBoxColumn number2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn filepath2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn service2;
@@ -963,5 +949,19 @@ namespace GlobalNamespace
 		private System.Windows.Forms.DataGridViewTextBoxColumn duration2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn durationTotal2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn albumhits;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn filepath1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn artist1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn title1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn album1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn date1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn genre1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn disccount1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn discnumber1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn trackcount1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn tracknumber1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics1;
+		private System.Windows.Forms.DataGridViewLinkColumn cover1;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn isVirtualFile;
 	}
 }

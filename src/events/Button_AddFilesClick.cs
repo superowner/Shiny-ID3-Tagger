@@ -24,7 +24,7 @@ namespace GlobalNamespace
 			bool hasNewFiles = await this.AddFiles(null, cancelToken);
 
 			// Continue with searching if user setting allows it and if new files were added
-			if (User.Settings["AutoSearch"] && hasNewFiles && !cancelToken.IsCancellationRequested)
+			if (User.Settings["AutoSearch"] && hasNewFiles)
 			{
 				this.StartSearching(cancelToken);
 			}

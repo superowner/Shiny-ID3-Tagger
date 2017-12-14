@@ -79,8 +79,8 @@ namespace GlobalNamespace
 				this.slowProgressBar.Value = 0;
 
 				// Gather all existing file paths from first dataGridView for later check if new filePath was already added. (this avoids access to UI in worker)
-				string[] existingFilePaths = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
-									 select row.Cells[this.filepath1.Index].Value.ToString()).ToArray();
+				HashSet<string> existingFilePaths = new HashSet<string>(from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
+																		select row.Cells[this.filepath1.Index].Value.ToString());
 
 				// Prepare an empty dataGridViewRow as template from first dataGridView. (this avoids access to UI thread in worker thread)
 				DataGridViewRow emptyRow = new DataGridViewRow();
@@ -98,10 +98,6 @@ namespace GlobalNamespace
 				// using try/catch and cancellation token is the proper way to cancel a task
 				try
 				{
-					Stopwatch sw = new Stopwatch();
-					sw.Restart();
-					Debug.WriteLine(sw.ElapsedMilliseconds);
-
 					// Start task to collect all file tags
 					fileTable = await Task.Run(() =>
 					{
@@ -109,12 +105,8 @@ namespace GlobalNamespace
 						return this.AddFilesToTable(newFiles, existingFilePaths, emptyRow, progress, cancelToken);
 					});
 
-					Debug.WriteLine(sw.ElapsedMilliseconds);
-
 					// Add the list of dataGridViewRows to first dataGridView (update UI thread)
 					this.dataGridView1.Rows.AddRange(fileTable.ToArray());
-
-					Debug.WriteLine(sw.ElapsedMilliseconds);
 				}
 				catch (OperationCanceledException)
 				{
@@ -148,7 +140,7 @@ namespace GlobalNamespace
 
 		// ###########################################################################
 		// Adds a single file to dataTable with all its present ID3 tags
-		private List<DataGridViewRow> AddFilesToTable(string[] newFiles, string[] existingFilePaths, DataGridViewRow emptyRow, IProgress<int> progress, CancellationToken cancelToken)
+		private List<DataGridViewRow> AddFilesToTable(string[] newFiles, HashSet<string> existingFilePaths, DataGridViewRow emptyRow, IProgress<int> progress, CancellationToken cancelToken)
 		{
 			int counter = 0;
 			List<DataGridViewRow> fileList = new List<DataGridViewRow>();
@@ -156,71 +148,76 @@ namespace GlobalNamespace
 			// Loop through each file and add it to first dataGridView
 			foreach (string filepath in newFiles)
 			{
-				bool isAlreadyAdded = existingFilePaths.Any(filepath.Contains);
-				bool isValidMp3 = this.IsValidMp3(filepath); // takes 300ms for whole music folder (2590 files) if already in RAM
-
-				// Check if file is a valid mp3 file and if file wasn't already added earlier and if user didn't press cancel
-				if (!isAlreadyAdded && isValidMp3 && !cancelToken.IsCancellationRequested)
+				//// Check if user pressed cancel or ESC
+				if (!cancelToken.IsCancellationRequested)
 				{
-					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", TagLib.ReadStyle.Average))
+					// Check if file wasn't already added earlier
+					if (!existingFilePaths.Contains(filepath))
 					{
-						string filename = Path.GetFileNameWithoutExtension(filepath);
-						string[] artistChoices = new string[] { null, null, filename };
-						string[] titleChoices = new string[] { null, null, filename };
-
-						// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
-						Match match = Regex.Match(filename, @"^(\d+\s)?(-\s+)?(?<artist>.*\w+)\s+-\s+(?<title>\w+.*)$");
-						if (match.Success)
+						// Check if file is a valid mp3 file
+						if (this.IsValidMp3(filepath))
 						{
-							if (User.Settings["PreferTags"])
+							using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mp3", TagLib.ReadStyle.None))
 							{
-								artistChoices[1] = match.Groups["artist"].Value;
-								titleChoices[1] = match.Groups["title"].Value;
+								string filename = Path.GetFileNameWithoutExtension(filepath);
+								Match match = Regex.Match(filename, @"^(\d+\s)?(-\s+)?(?<artist>.*\w+)\s+-\s+(?<title>\w+.*)$");
+								string[] artistChoices = new string[] { null, null, filename };
+								string[] titleChoices = new string[] { null, null, filename };
+
+								// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
+								if (match.Success)
+								{
+									if (User.Settings["PreferTags"])
+									{
+										artistChoices[1] = match.Groups["artist"].Value;
+										titleChoices[1] = match.Groups["title"].Value;
+									}
+									else
+									{
+										artistChoices[0] = match.Groups["artist"].Value;
+										titleChoices[0] = match.Groups["title"].Value;
+									}
+								}
+
+								// Extract artist and title from ID3 tags and store them in array at index 0 or 1 according to setting "PreferTags"
+								if (User.Settings["PreferTags"])
+								{
+									artistChoices[0] = tagFile.Tag.FirstPerformer;
+									titleChoices[0] = tagFile.Tag.Title;
+								}
+								else
+								{
+									artistChoices[1] = tagFile.Tag.FirstPerformer;
+									titleChoices[1] = tagFile.Tag.Title;
+								}
+
+								// used to report progress and to calculate current row index
+								counter++;
+								progress.Report(counter);
+
+								// Add values to a new (cloned) DataGridViewRow
+								// Use empty string values as fall back when NULL is encountered
+								DataGridViewRow row = (DataGridViewRow)emptyRow.Clone();
+								row.SetValues(
+									(existingFilePaths.Count + counter).ToString(),
+									filepath ?? string.Empty,
+									artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,            // Select the first non-null artist choice, value order in array is important therefore
+									titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,             // Select the first non-null title choice, value order in array is important therefore
+									tagFile.Tag.Album ?? string.Empty,
+									(tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : string.Empty,
+									tagFile.Tag.FirstGenre ?? string.Empty,
+									(tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : string.Empty,
+									(tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : string.Empty,
+									(tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : string.Empty,
+									(tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : string.Empty,
+									tagFile.Tag.Lyrics ?? string.Empty,
+									tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty,
+									false);
+
+								// Add new DataGridViewRow to a fileList which is returned later
+								fileList.Add(row);
 							}
-							else
-							{
-								artistChoices[0] = match.Groups["artist"].Value;
-								titleChoices[0] = match.Groups["title"].Value;
-							}
 						}
-
-						// Extract artist and title from ID3 tags and store them in array at index 0 or 1 according to setting "PreferTags"
-						if (User.Settings["PreferTags"])
-						{
-							artistChoices[0] = tagFile.Tag.FirstPerformer;
-							titleChoices[0] = tagFile.Tag.Title;
-						}
-						else
-						{
-							artistChoices[1] = tagFile.Tag.FirstPerformer;
-							titleChoices[1] = tagFile.Tag.Title;
-						}
-
-						// used to report progress and to calculate current row index
-						counter++;
-						progress.Report(counter);
-
-						// Add values to a new (cloned) DataGridViewRow
-						// Use empty string values as fall back when NULL is encountered
-						DataGridViewRow row = (DataGridViewRow)emptyRow.Clone();
-						row.SetValues(
-							(existingFilePaths.Length + counter).ToString(),
-							filepath ?? string.Empty,
-							artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,            // Select the first non-null artist choice, value order in array is important therefore
-							titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,             // Select the first non-null title choice, value order in array is important therefore
-							tagFile.Tag.Album ?? string.Empty,
-							(tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : string.Empty,
-							tagFile.Tag.FirstGenre ?? string.Empty,
-							(tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : string.Empty,
-							(tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : string.Empty,
-							(tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : string.Empty,
-							(tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : string.Empty,
-							tagFile.Tag.Lyrics ?? string.Empty,
-							tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty,
-							false);
-
-						// Add new DataGridViewRow to a fileList which is returned later
-						fileList.Add(row);
 					}
 				}
 			}

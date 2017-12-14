@@ -11,7 +11,6 @@ namespace GlobalNamespace
 	using System;
 	using System.IO;
 	using System.Linq;
-	using System.Threading.Tasks;
 
 	public partial class Form1
 	{

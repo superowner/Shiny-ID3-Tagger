@@ -80,7 +80,7 @@ namespace GlobalNamespace
 
 				// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines
 				// Check if 1 second already passed since last request
-				while (lastRequestTimer.ElapsedMilliseconds < lastRequestTimeout && lastRequestTimer.IsRunning && !cancelToken.IsCancellationRequested)
+				while (lastRequestTimer.ElapsedMilliseconds < lastRequestTimeout && lastRequestTimer.IsRunning)
 				{
 					await Task.Delay(50);
 				}
@@ -143,7 +143,7 @@ namespace GlobalNamespace
 							albumRequest.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 							// Check if 1 second already passed since last request
-							while (lastRequestTimer.ElapsedMilliseconds < lastRequestTimeout && lastRequestTimer.IsRunning && !cancelToken.IsCancellationRequested)
+							while (lastRequestTimer.ElapsedMilliseconds < lastRequestTimeout && lastRequestTimer.IsRunning)
 							{
 								await Task.Delay(50);
 							}
