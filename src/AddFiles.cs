@@ -13,7 +13,6 @@ namespace GlobalNamespace
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
-	using System.Diagnostics;
 	using System.IO;
 	using System.Linq;
 	using System.Text.RegularExpressions;
@@ -160,22 +159,30 @@ namespace GlobalNamespace
 							using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mp3", TagLib.ReadStyle.None))
 							{
 								string filename = Path.GetFileNameWithoutExtension(filepath);
-								Match match = Regex.Match(filename, @"^(\d+\s)?(-\s+)?(?<artist>.*\w+)\s+-\s+(?<title>\w+.*)$");
 								string[] artistChoices = new string[] { null, null, filename };
 								string[] titleChoices = new string[] { null, null, filename };
 
-								// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
-								if (match.Success)
+								foreach (string pattern in User.Settings["FilenamePatterns"])
 								{
-									if (User.Settings["PreferTags"])
+									// test each pattern against current filename
+									Match match = Regex.Match(filename, pattern);
+
+									// Stop at first successful match
+									if (match.Success)
 									{
-										artistChoices[1] = match.Groups["artist"].Value;
-										titleChoices[1] = match.Groups["title"].Value;
-									}
-									else
-									{
-										artistChoices[0] = match.Groups["artist"].Value;
-										titleChoices[0] = match.Groups["title"].Value;
+										// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
+										if (User.Settings["PreferTags"])
+										{
+											artistChoices[1] = match.Groups["artist"].Value;
+											titleChoices[1] = match.Groups["title"].Value;
+										}
+										else
+										{
+											artistChoices[0] = match.Groups["artist"].Value;
+											titleChoices[0] = match.Groups["title"].Value;
+										}
+
+										break;
 									}
 								}
 

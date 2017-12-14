@@ -6,6 +6,13 @@
 	"OverwriteImage": true,
 	"AutoSearch": true,
 	"AutoCapitalize": true,
+	"ThresholdRedValue": 30,
+	"MaxImageSize": 500,
+	"UserAgent": "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",
+	"FilenamePatterns": [
+		"^(\\d+\\s)?(-\\s+)?(?<artist>.*?\\w+)\\s+-\\s+(?<title>\\w+.*)$",
+		"^(\\d+_)?(?<artist>.*?\\w+)_(?<title>\\w+.*)$"
+	],
 	"CoverPriority": [
 		"Napster (Rhapsody)",
 		"Discogs",
@@ -31,8 +38,6 @@
 		"Netease",
 		"Xiami"
 	],
-	"MaxImageSize": 500,
-	"UserAgent": "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",
 	"UserFrames": [
 		"skip",
 		"performer",
@@ -60,6 +65,5 @@
 		"COMM",
 		"TXXX",
 		"USLT"
-	],
-	"ThresholdRedValue": 30
+	]
 }

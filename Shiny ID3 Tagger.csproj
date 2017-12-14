@@ -254,7 +254,7 @@
     <Compile Include="src\helper\MarkChange.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\ReadAccountCredentials.cs">
+    <Compile Include="src\helper\ReadConfig.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\helper\Strip.cs">
