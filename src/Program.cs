@@ -9,11 +9,11 @@
 // TODO: Automatic GitHub releases https://marketplace.visualstudio.com/items?itemName=jakobehn.jakobehn-vsts-github-tasks
 // TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned (download failed)
 // TODO: taglib has a downgradeFrames method. What does it do? http://taglib.org/api/classTagLib_1_1ID3v2_1_1Tag.html#a8d2a42a20fade71c9acb68229445dee8
+// TODO: Implement JSON schema to check if settings.json and accounts.json are still valid JSON (user can edit them)
 // TODO: User option to en/disable single APIs (sometimes they are down)
 // TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
 // TODO: User option to write ID3v1 tags additionally to ID3v2
 // TODO: User option to choose if unknown tags should be removed
-// TODO: User option to add custom RegEx patterns to detect artist/title from filename
 namespace GlobalNamespace
 {
 	using System;

@@ -37,8 +37,8 @@ namespace GlobalNamespace
 			Version version = new Version(Application.ProductVersion);
 			this.Text = Application.ProductName + " v" + version.Major + "." + version.Minor;
 
-			bool successReadingVariables = this.ReadAccountCredentials();
-			if (successReadingVariables)
+			bool successReadConfig = this.ReadConfig();
+			if (successReadConfig)
 			{
 				// Add new files
 				bool hasNewFiles = await this.AddFiles(args, cancelToken);
