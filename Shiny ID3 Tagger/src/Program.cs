@@ -6,6 +6,7 @@
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
+// TODO: Implement auto update from GitHub
 // TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned (download failed)
 // TODO: New methods for lock and unlock UI (button enable false / true, menu bar)
 // TODO: User option to en/disable single APIs (sometimes they are down)
