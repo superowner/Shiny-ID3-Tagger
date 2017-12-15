@@ -1,5 +1,3 @@
 .vs
-bin/
-obj/
-ProfilingSessions/
-StyleCopViolations.xml
+Shiny ID3 Tagger/bin/
+Shiny ID3 Tagger/obj/
