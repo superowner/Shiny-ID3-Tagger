@@ -136,6 +136,9 @@
     <Compile Include="src\api\lyrics\GetLyrics_Viewlyrics.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\helper\EnableUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="src\helper\GetImageType.cs">
       <SubType>Form</SubType>
     </Compile>

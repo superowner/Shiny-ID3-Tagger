@@ -52,10 +52,7 @@ namespace GlobalNamespace
 			else
 			{
 				TokenSource.Cancel();
-				this.btnAddFiles.Enabled = false;
-				this.btnSearch.Enabled = false;
-				this.btnWrite.Enabled = false;
-				this.menuStrip1.Enabled = false;
+				this.EnableUI(false);
 			}
 		}
 

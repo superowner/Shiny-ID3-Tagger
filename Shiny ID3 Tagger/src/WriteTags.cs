@@ -30,9 +30,7 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private async void StartWriting()
 		{
-			this.btnAddFiles.Enabled = false;
-			this.btnSearch.Enabled = false;
-			this.btnWrite.Enabled = false;
+			this.EnableUI(false);
 
 			this.slowProgressBar.Maximum = this.dataGridView1.Rows.Count;
 			this.slowProgressBar.Value = 0;
@@ -44,6 +42,7 @@ namespace GlobalNamespace
 				foreach (DataGridViewRow row in this.dataGridView1.Rows)
 				{
 					this.slowProgressBar.PerformStep();
+					string filepath = (string)row.Cells[this.filepath1.Index].Value;
 
 					// If file is a virtual file (CSV Import), cancel remaining work for this file and continue with next file
 					if ((bool)row.Cells[this.isVirtualFile.Index].Value)
@@ -52,8 +51,13 @@ namespace GlobalNamespace
 						continue;
 					}
 
+					string tagType = "ID3v2.3";
+
+					// Log message to signal begin of writing
+					string message = string.Format(cultEng, "{0,-100}{1}", "Begin writing of " + tagType + " tags", "filepath: \"" + filepath + "\"");
+					this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+
 					// Get all existing frames from current file
-					string filepath = (string)row.Cells[this.filepath1.Index].Value;
 					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
 					{
 						// Remove ID3v1 tags. ID3v1 use rarely used nowadays and obsolete
@@ -111,10 +115,18 @@ namespace GlobalNamespace
 						// Clear background color of current row if all tags could be saved to file successfully
 						if (successWrite)
 						{
+							// Log message to signal end of writing
+							this.PrintLogMessage(this.rtbWriteLog, new[] { "DONE!" });
+
 							foreach (DataGridViewCell cell in row.Cells)
 							{
 								cell.Style.BackColor = Color.Empty;
 							}
+						}
+						else
+						{
+							// Log message to signal end of writing
+							this.PrintLogMessage(this.rtbWriteLog, new[] { "FAILED!" });
 						}
 					}
 				}
@@ -123,9 +135,7 @@ namespace GlobalNamespace
 			// Work finished, re-enable all buttons and hide progress bar
 			this.slowProgressBar.Visible = false;
 
-			this.btnAddFiles.Enabled = true;
-			this.btnSearch.Enabled = true;
-			this.btnWrite.Enabled = true;
+			this.EnableUI(true);
 		}
 
 		// ###########################################################################
@@ -140,8 +150,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TPE1");
 				tagContainer.SetTextFrame("TPE1", newArtist);
 
-				string message = string.Format(cultEng, "{0,-100}{1}", "Artist: " + newArtist, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Artist:   " + newArtist });
 			}
 
 			// Title
@@ -152,8 +161,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TIT2");
 				tagContainer.SetTextFrame("TIT2", newTitle);
 
-				string message = string.Format(cultEng, "{0,-100}{1}", "Title: " + newTitle, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Title:    " + newTitle });
 			}
 
 			// Album
@@ -164,8 +172,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TALB");
 				tagContainer.SetTextFrame("TALB", newAlbum);
 
-				string message = string.Format(cultEng, "{0,-100}{1}", "Album: " + newAlbum, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Album:    " + newAlbum });
 			}
 
 			// Genre
@@ -176,8 +183,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TCON");
 				tagContainer.SetTextFrame("TCON", newGenre);
 
-				string message = string.Format(cultEng, "{0,-100}{1}", "Genre: " + newGenre, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Genre:    " + newGenre });
 			}
 
 			// Disc number + disc count
@@ -193,8 +199,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TPOS");
 				tagContainer.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 
-				string message = string.Format(cultEng, "{0,-100}{1}", "Disc: " + newDiscnumber + "/" + newDisccount, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Disc:     " + newDiscnumber + "/" + newDisccount });
 			}
 
 			// Track number + track count
@@ -210,8 +215,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TRCK");
 				tagContainer.SetTextFrame("TRCK", newTracknumber + "/" + newTrackcount);
 
-				string message = string.Format(cultEng, "{0,-100}{1}", "Track: " + newTracknumber + "/" + newTrackcount, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Track:    " + newTracknumber + "/" + newTrackcount });
 			}
 
 			// Date
@@ -229,8 +233,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TIME");
 				tagContainer.SetNumberFrame("TYER", (uint)this.ConvertStringToDate(newDate).Year, 0);
 
-				string message = string.Format(cultEng, "{0,-100}{1}", "Date: " + newDate, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Date:     " + newDate });
 			}
 
 			// Lyrics
@@ -240,15 +243,14 @@ namespace GlobalNamespace
 			string newLyrics = (string)row.Cells[this.lyrics1.Index].Value;
 			if (oldLyrics != newLyrics && !string.IsNullOrWhiteSpace(newLyrics))
 			{
-				string lyricPreview = string.Join(string.Empty, newLyrics.Take(50));
-				string cleanPreview = Regex.Replace(lyricPreview, @"\r\n?|\n", " ");
+				string lyricsSnippet = string.Join(string.Empty, newLyrics.Take(80));
+				lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
 				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
 				frmUSLT.Text = newLyrics;
 				tagContainer.RemoveFrames("USLT");
 				tagContainer.AddFrame(frmUSLT);
 
-				string message = string.Format(cultEng, "{0,-100}{1}", "Lyrics: " + cleanPreview, "file: \"" + tagFile.Name + "\"");
-				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Lyrics:   " + lyricsSnippet + "..." });
 			}
 
 			return tagContainer;
@@ -259,6 +261,7 @@ namespace GlobalNamespace
 		private async Task<TagLib.Id3v2.Tag> AddCoverToTagContainer(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag tagContainer, HttpClient client)
 		{
 			string[] errorMsg = null;
+			string url = (string)row.Cells[this.cover1.Index].Value;
 
 			// Check if any valid cover already exists
 			foreach (IPicture picture in tagFile.Tag.Pictures)
@@ -268,6 +271,12 @@ namespace GlobalNamespace
 					// A valid cover already exists AND user don't want to overwrite it => return unmodified tag container
 					return tagContainer;
 				}
+
+				// Check if picture in file was previously downloaded from same URL as new cover URL which we are about to download
+				if (picture.Description == url)
+				{
+					return tagContainer;
+				}
 			}
 
 			HttpResponseMessage response = new HttpResponseMessage();
@@ -275,7 +284,6 @@ namespace GlobalNamespace
 			request.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);  // Mandatory for downloads from Discogs
 
 			// Check if cover URL from search results is a valid URL. If yes, download cover
-			string url = (string)row.Cells[this.cover1.Index].Value;
 			if (IsValidUrl(url))
 			{
 				request.RequestUri = new Uri(url);
@@ -366,7 +374,7 @@ namespace GlobalNamespace
 
 			if (errorMsg == null)
 			{
-				string message = string.Format("Picture source: " + request.RequestUri.Authority);
+				string message = string.Format("Picture:  " + request.RequestUri);
 				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 			else
@@ -386,6 +394,7 @@ namespace GlobalNamespace
 			const int WriteDelay = 50;
 			const int MaxRetries = 3;
 			DateTime lastWriteTime = default(DateTime);
+			string exMessage = null;
 
 			// Read and backup LastWriteTime
 			bool successWrite = false;
@@ -397,9 +406,9 @@ namespace GlobalNamespace
 					successWrite = true;
 					break;
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
-					// Do nothing. Error is handled at end of SaveFile method
+					exMessage = ex.Message;
 					successWrite = false;
 				}
 
@@ -418,9 +427,9 @@ namespace GlobalNamespace
 						successWrite = true;
 						break;
 					}
-					catch (Exception)
+					catch (Exception ex)
 					{
-						// Do nothing. Error is handled at end of SaveFile method
+						exMessage = ex.Message;
 						successWrite = false;
 					}
 
@@ -440,9 +449,9 @@ namespace GlobalNamespace
 						successWrite = true;
 						break;
 					}
-					catch (Exception)
+					catch (Exception ex)
 					{
-						// Do nothing. Error is handled at end of SaveFile method
+						exMessage = ex.Message;
 						successWrite = false;
 					}
 
@@ -454,8 +463,9 @@ namespace GlobalNamespace
 			{
 				string[] errorMsg =
 					{
-						@"ERROR:    Could not read/write file!",
-						"File:     " + tagFile.Name
+						@"ERROR:    Could not write ID3 tags to file!",
+						"File:     " + tagFile.Name,
+						"Message:  " + exMessage
 					};
 				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 			}

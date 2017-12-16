@@ -8,8 +8,6 @@
 
 // TODO: Implement update check from GitHub (open website)
 // TODO: Write extension method to get JToken from parsed JSON case insensitive, do this for all User.accounts and User.settings variables and API results
-// TODO: Check if cover URL is already in cover comment. if yes, compare size and corner point RGB values. Skip if identical
-// TODO: New methods for lock and unlock UI (button enable false / true, menu bar)
 // TODO: User option to en/disable single APIs (sometimes they are down)
 // TODO: User option to choose ID3v2.3 (UTF16, Windows 7) or ID3v2.4 (UTF8, Mac)
 // TODO: User option to write ID3v1 tags additionally to ID3v2

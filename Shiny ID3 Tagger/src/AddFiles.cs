@@ -29,9 +29,7 @@ namespace GlobalNamespace
 		private async Task<bool> AddFiles(string[] newFiles, CancellationToken cancelToken)
 		{
 			// Work starts, disable all buttons to prevent side effects when user clicks them despite an already running task
-			this.btnSearch.Enabled = false;
-			this.btnWrite.Enabled = false;
-			this.btnAddFiles.Enabled = false;
+			this.EnableUI(false);
 
 			// If no files were passed through command line, open a new file dialog. files can be an empty array, so use any() to check this
 			if (newFiles == null || !newFiles.Any())
@@ -129,9 +127,7 @@ namespace GlobalNamespace
 			// Work finished, re-enable all buttons and hide progress bar
 			this.slowProgressBar.Visible = false;
 
-			this.btnSearch.Enabled = true;
-			this.btnWrite.Enabled = true;
-			this.btnAddFiles.Enabled = true;
+			this.EnableUI(true);
 
 			// Report to parent method if any new files were added
 			return fileTable.Any();

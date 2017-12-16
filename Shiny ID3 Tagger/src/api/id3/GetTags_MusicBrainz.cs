@@ -9,7 +9,7 @@
 // https://musicbrainz.org/doc/MusicBrainz_Database
 // limit=1 cannot be used, client side filter is used to sort by release date
 // List of mirror servers: http://www.tranquilbase.org/category/musicbrainz/
-// 1) https://musicbrainz.org		2) http://musicbrainz-mirror.eu:5000	3) http://musicbrainz.fin-alice.de:5000
+// 1) https://musicbrainz.org		2) http://musicbrainz-mirror.eu:5000	3) http://musicbrainz.fin-alice.de:5000		// 1) https://beta.musicbrainz.org
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -44,7 +44,7 @@ namespace GlobalNamespace
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
 				searchRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
-				searchRequest.RequestUri = new Uri("http://beta.musicbrainz.org/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
+				searchRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = this.DeserializeJson(searchContent);
@@ -113,7 +113,7 @@ namespace GlobalNamespace
 					using (HttpRequestMessage releasegroupRequest = new HttpRequestMessage())
 					{
 						releasegroupRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
-						releasegroupRequest.RequestUri = new Uri("http://beta.musicbrainz.org/ws/2/release-group/" + releasegroupid + "?inc=tags+ratings+artists&fmt=json");
+						releasegroupRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/release-group/" + releasegroupid + "?inc=tags+ratings+artists&fmt=json");
 
 						string releasegroupContent = await this.GetResponse(client, releasegroupRequest, cancelToken);
 						JObject releasegroupData = this.DeserializeJson(releasegroupContent);

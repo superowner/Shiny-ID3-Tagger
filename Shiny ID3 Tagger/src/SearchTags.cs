@@ -25,9 +25,7 @@ namespace GlobalNamespace
 		private async void StartSearching(CancellationToken cancelToken)
 		{
 			// Prepare visual stuff like disable buttons during work, show two progress bars
-			this.btnAddFiles.Enabled = false;
-			this.btnWrite.Enabled = false;
-			this.btnSearch.Enabled = false;
+			this.EnableUI(false);
 
 			this.slowProgressBar.Maximum = this.dataGridView1.Rows.Count;
 			this.slowProgressBar.Value = 0;
@@ -219,9 +217,7 @@ namespace GlobalNamespace
 			this.slowProgressBar.Visible = false;
 			this.fastProgressBar.Visible = false;
 
-			this.btnAddFiles.Enabled = true;
-			this.btnWrite.Enabled = true;
-			this.btnSearch.Enabled = true;
+			this.EnableUI(true);
 		}
 
 		// ###########################################################################
