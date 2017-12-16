@@ -364,7 +364,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Encryptor\Test\accounts_plain.json">
+    <None Include="..\..\Encryptor\Test\accounts_plain.json">
       <Link>config\accounts_plain.json</Link>
     </None>
     <None Include="..\README.md">

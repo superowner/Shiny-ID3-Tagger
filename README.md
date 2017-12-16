@@ -29,10 +29,7 @@
 - **Xiami** (only for lyrics)
 
 ## Key Features
-- Queries 19 online databases at the same time and selects/adds the most common results.
-  This means, if for example 10 webservices respond with "Beyoncé" as artist name and only 5 webservices say it's "Beyonce" (note the difference) than the
-  program assumes that the majority is right and selects the first variant. This is the way it works for all tags
-- Supports the following ID3v2.3 tags
+- Queries 19 online databases and selects/adds the most frequent results for
   - **Artist name**
   - **Track title**
   - **Album name**
@@ -42,10 +39,13 @@
   - **Disc number**
   - **Track count**
   - **Track number**
-- Auto downloads and embedds the **album cover**
-- Adds lyrics as ID3 tag *Unsynced lyrics*
+- Finds and embeds an **album cover**
+- Finds and embeds lyrics
+- All tags are written as ID3v2.3
+- Fixes encoding errors in tags. All tags will be resaved as UTF16 strings
 
-## How To Install
-- [Download and extract the latest release](https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest)
-- Run "Shiny ID3 Tagger.exe" (no installation needed)
+## How To Use
+- [Download and extract latest release](https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest)
+- Run "Shiny ID3 Tagger.exe" 
+- Program is portable and stealth (nothing get's written to registry or AppData)
 
