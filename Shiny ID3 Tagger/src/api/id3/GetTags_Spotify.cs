@@ -48,7 +48,7 @@ namespace GlobalNamespace
 					loginRequest.Content = new FormUrlEncodedContent(
 						new Dictionary<string, string> { { "grant_type", "client_credentials" } });
 
-					string credidsPlain = User.Accounts["SpClientId"] + ":" + User.Accounts["SpClientSecret"];
+					string credidsPlain = User.Accounts["Spotify"]["ClientId"] + ":" + User.Accounts["Spotify"]["ClientSecret"];
 					byte[] credidsBytes = Encoding.UTF8.GetBytes(credidsPlain);
 					string creditsBase64 = Convert.ToBase64String(credidsBytes);
 					loginRequest.Headers.Add("Authorization", "Basic " + creditsBase64);

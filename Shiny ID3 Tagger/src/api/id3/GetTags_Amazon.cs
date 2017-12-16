@@ -35,7 +35,7 @@ namespace GlobalNamespace
 			string stringToSign = "GET" + "\n" + server + "\n" + "/onca/xml" + "\n" + parameters;
 			byte[] bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
 			HMACSHA256 hmacSha = new HMACSHA256();
-			hmacSha.Key = Encoding.UTF8.GetBytes(User.Accounts["AmSecretKey"]);
+			hmacSha.Key = Encoding.UTF8.GetBytes((string)User.Accounts["Amazon"]["SecretKey"]);
 			byte[] sigBytes = hmacSha.ComputeHash(bytesToSign);
 			string sigBase64 = Convert.ToBase64String(sigBytes);
 			string sigEncoded = Uri.EscapeDataString(sigBase64);
@@ -61,8 +61,8 @@ namespace GlobalNamespace
 			string titleEncoded = Uri.EscapeDataString(title).Replace(@"!", "%21").Replace(@"'", "%27").Replace(@"(", "%28").Replace(@")", "%29").Replace(@"*", "%2A");
 
 			// Initial search
-			string parameters = "AWSAccessKeyId=" + User.Accounts["AmAccessKey"] +
-								"&AssociateTag=" + User.Accounts["AmAssociateTag"] +
+			string parameters = "AWSAccessKeyId=" + User.Accounts["Amazon"]["AccessKey"] +
+								"&AssociateTag=" + User.Accounts["Amazon"]["AssociateTag"] +
 								"&Keywords=" + artistEncoded +
 								"&Operation=ItemSearch" +
 								"&RelationshipType=Tracks" +
@@ -75,7 +75,7 @@ namespace GlobalNamespace
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.Headers.Add("User-Agent", User.Settings["UserAgent"]);
+				searchRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 				searchRequest.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 				// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines
@@ -125,8 +125,8 @@ namespace GlobalNamespace
 					string asin = (string)item.SelectToken("RelatedItems.RelatedItem.Item.ASIN");
 					if (asin != null)
 					{
-						parameters = "AWSAccessKeyId=" + User.Accounts["AmAccessKey"] +
-									"&AssociateTag=" + User.Accounts["AmAssociateTag"] +
+						parameters = "AWSAccessKeyId=" + User.Accounts["Amazon"]["AccessKey"] +
+									"&AssociateTag=" + User.Accounts["Amazon"]["AssociateTag"] +
 									"&Condition=All" +
 									"&IdType=ASIN" +
 									"&ItemId=" + asin +
@@ -139,7 +139,7 @@ namespace GlobalNamespace
 
 						using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 						{
-							albumRequest.Headers.Add("User-Agent", User.Settings["UserAgent"]);
+							albumRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 							albumRequest.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 							// Check if 1 second already passed since last request

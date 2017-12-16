@@ -31,15 +31,17 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-			DataRow[] account = User.MgAccounts.Select("lastused = MIN(lastused)");
-			User.MgAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;
+			var account = (from item in User.Accounts["MusicGraph"]
+						   orderby item["lastused"] ascending
+						   select item).FirstOrDefault();
+			account["lastUsed"] = DateTime.Now.Ticks;
 
 			string artistEncoded = WebUtility.UrlEncode(artist);
 			string titleEncoded = WebUtility.UrlEncode(title);
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account[0]["key"] + "&artist_name=" + artistEncoded + "&title=" + titleEncoded + "&limit=5");
+				searchRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account["AppKey"] + "&artist_name=" + artistEncoded + "&title=" + titleEncoded + "&limit=5");
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = this.DeserializeJson(searchContent);
@@ -63,7 +65,7 @@ namespace GlobalNamespace
 					using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 					{
 						// Musicgraph has a database flaw where many album IDs in track responses point to non-existing album URLs resulting in a 404 "Not found" HTTP error
-						albumRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/album/" + (string)track.SelectToken("track_album_id") + "?api_key=" + (string)account[0]["key"]);
+						albumRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/album/" + (string)track.SelectToken("track_album_id") + "?api_key=" + (string)account["AppKey"]);
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
 						JObject albumData = this.DeserializeJson(albumContent);

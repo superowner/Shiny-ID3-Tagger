@@ -26,7 +26,7 @@ namespace GlobalNamespace
 				}
 				catch (XmlException error)
 				{
-					if (User.Settings["DebugLevel"] >= 2)
+					if ((int)User.Settings["DebugLevel"] >= 2)
 					{
 						string[] errorMsg =
 						{

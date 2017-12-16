@@ -24,7 +24,7 @@ namespace GlobalNamespace
 				JsonSerializerSettings jsonSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
 
 				// Build a useful error message if JSON parsing fails
-				if (User.Settings["DebugLevel"] >= 2)
+				if ((int)User.Settings["DebugLevel"] >= 2)
 				{
 					jsonSettings.Error += (obj, errorArgs) =>
 					{

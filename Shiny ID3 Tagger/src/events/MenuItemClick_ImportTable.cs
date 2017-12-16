@@ -74,7 +74,7 @@ namespace GlobalNamespace
 							else
 							{
 								// CSV header row doesn't match datagridView1 headers
-								if (User.Settings["DebugLevel"] >= 2)
+								if ((int)User.Settings["DebugLevel"] >= 2)
 								{
 									string[] errorMsg =
 									{
@@ -90,7 +90,7 @@ namespace GlobalNamespace
 						catch (MalformedLineException ex)
 						{
 							// Malformed CSV values somewhere which couldn't be parsed
-							if (User.Settings["DebugLevel"] >= 2)
+							if ((int)User.Settings["DebugLevel"] >= 2)
 							{
 								string[] errorMsg =
 								{

@@ -36,13 +36,13 @@ namespace GlobalNamespace
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.Headers.Add("User-Agent", User.Settings["UserAgent"]);
+				searchRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 				searchRequest.RequestUri = new Uri("https://api.discogs.com/database/search?q=" + searchTermEnc +
 					"&format=album" +
 					"&type=master" +
 					"&per_page=1" +
-					"&key=" + User.Accounts["DcKey"] +
-					"&secret=" + User.Accounts["DcSecret"]);
+					"&key=" + User.Accounts["Discogs"]["Key"] +
+					"&secret=" + User.Accounts["Discogs"]["Secret"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = this.DeserializeJson(searchContent);
@@ -54,8 +54,8 @@ namespace GlobalNamespace
 					{
 						using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 						{
-							albumRequest.Headers.Add("User-Agent", User.Settings["UserAgent"]);
-							albumRequest.RequestUri = new Uri(albumUrl + "?key=" + User.Accounts["DcKey"] + "&secret=" + User.Accounts["DcSecret"]);
+							albumRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
+							albumRequest.RequestUri = new Uri(albumUrl + "?key=" + User.Accounts["DcKey"] + "&secret=" + User.Accounts["Discogs"]["Secret"]);
 
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
 							JObject albumData = this.DeserializeJson(albumContent);

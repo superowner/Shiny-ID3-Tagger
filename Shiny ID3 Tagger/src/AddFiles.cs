@@ -114,7 +114,7 @@ namespace GlobalNamespace
 				catch (Exception error)
 				{
 					// Error handling when any error occurs during file reading
-					if (User.Settings["DebugLevel"] >= 2)
+					if ((int)User.Settings["DebugLevel"] >= 2)
 					{
 						string[] errorMsg =
 						{
@@ -171,7 +171,7 @@ namespace GlobalNamespace
 									if (match.Success)
 									{
 										// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
-										if (User.Settings["PreferTags"])
+										if ((bool)User.Settings["PreferTags"])
 										{
 											artistChoices[1] = match.Groups["artist"].Value;
 											titleChoices[1] = match.Groups["title"].Value;
@@ -187,7 +187,7 @@ namespace GlobalNamespace
 								}
 
 								// Extract artist and title from ID3 tags and store them in array at index 0 or 1 according to setting "PreferTags"
-								if (User.Settings["PreferTags"])
+								if ((bool)User.Settings["PreferTags"])
 								{
 									artistChoices[0] = tagFile.Tag.FirstPerformer;
 									titleChoices[0] = tagFile.Tag.Title;

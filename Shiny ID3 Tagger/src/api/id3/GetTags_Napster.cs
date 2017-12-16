@@ -32,7 +32,7 @@ namespace GlobalNamespace
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/search?q=" + searchTermEnc + "&include=genres&type=track&limit=1&apikey=" + User.Accounts["NaApiKey"]);
+				searchRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/search?q=" + searchTermEnc + "&include=genres&type=track&limit=1&apikey=" + User.Accounts["Napster"]["ApiKey"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = this.DeserializeJson(searchContent);
@@ -54,7 +54,7 @@ namespace GlobalNamespace
 
 						using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 						{
-							albumRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/albums/" + albumId + "?apikey=" + User.Accounts["NaApiKey"]);
+							albumRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/albums/" + albumId + "?apikey=" + User.Accounts["Napster"]["ApiKey"]);
 
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
 							JObject albumData = this.DeserializeJson(albumContent);

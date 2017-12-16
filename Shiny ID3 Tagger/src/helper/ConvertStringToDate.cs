@@ -49,7 +49,7 @@ namespace GlobalNamespace
 
 					if (regEx.IsMatch(dateString))
 					{
-						if (User.Settings["DebugLevel"] >= 2)
+						if ((int)User.Settings["DebugLevel"] >= 2)
 						{
 							string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
 							this.PrintLogMessage(this.rtbErrorLog, errorMsg);

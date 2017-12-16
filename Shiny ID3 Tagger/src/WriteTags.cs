@@ -241,7 +241,7 @@ namespace GlobalNamespace
 			if (oldLyrics != newLyrics && !string.IsNullOrWhiteSpace(newLyrics))
 			{
 				string lyricPreview = string.Join(string.Empty, newLyrics.Take(50));
-				string cleanPreview = Regex.Replace(lyricPreview, @"\r\n?|\n", string.Empty);
+				string cleanPreview = Regex.Replace(lyricPreview, @"\r\n?|\n", " ");
 				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
 				frmUSLT.Text = newLyrics;
 				tagContainer.RemoveFrames("USLT");
@@ -263,7 +263,7 @@ namespace GlobalNamespace
 			// Check if any valid cover already exists
 			foreach (IPicture picture in tagFile.Tag.Pictures)
 			{
-				if (picture.Data.Count > 0 && User.Settings["OverwriteImage"] == false)
+				if (picture.Data.Count > 0 && (bool)User.Settings["OverwriteImage"] == false)
 				{
 					// A valid cover already exists AND user don't want to overwrite it => return unmodified tag container
 					return tagContainer;
@@ -272,7 +272,7 @@ namespace GlobalNamespace
 
 			HttpResponseMessage response = new HttpResponseMessage();
 			HttpRequestMessage request = new HttpRequestMessage();
-			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);  // Mandatory for downloads from Discogs
+			request.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);  // Mandatory for downloads from Discogs
 
 			// Check if cover URL from search results is a valid URL. If yes, download cover
 			string url = (string)row.Cells[this.cover1.Index].Value;
@@ -297,8 +297,8 @@ namespace GlobalNamespace
 								int longSide = new List<int> { image.Width, image.Height }.Max();
 								float resizeFactor = new List<float>
 								{
-									User.Settings["MaxImageSize"] / (float)image.Width,
-									User.Settings["MaxImageSize"] / (float)image.Height
+									(float)User.Settings["MaxImageSize"] / (float)image.Width,
+									(float)User.Settings["MaxImageSize"] / (float)image.Height
 								}.Min();
 
 								Size newSize = new Size((int)Math.Round(image.Width * resizeFactor), (int)Math.Round(image.Height * resizeFactor));
@@ -327,7 +327,7 @@ namespace GlobalNamespace
 									MimeType = MediaTypeNames.Image.Jpeg,
 									Type = PictureType.FrontCover,
 									Description = url,
-									TextEncoding = StringType.Latin1    // Strangely, Unicode is not supported for this field
+									TextEncoding = StringType.Latin1	// Strangely, Unicode is not supported for this field
 								};
 
 								// Add cover tag to tag container, this deletes all other existing covers like "BackCover" or "BandLogo"
@@ -371,7 +371,7 @@ namespace GlobalNamespace
 			}
 			else
 			{
-				if (User.Settings["DebugLevel"] >= 1)
+				if ((int)User.Settings["DebugLevel"] >= 1)
 				{
 					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 				}
