@@ -11,8 +11,8 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <TargetFrameworkProfile />
-    <ApplicationIcon>resources\icon_main.ico</ApplicationIcon>
-    <NoWin32Manifest>False</NoWin32Manifest>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>resources\keyfile.snk</AssemblyOriginatorKeyFile>
     <DelaySign>False</DelaySign>
@@ -94,15 +94,18 @@
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>resources\packages\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json.Schema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.Schema.3.0.4\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>resources\packages\Newtonsoft.Json.Schema.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>resources\Ookii.Dialogs.dll</HintPath>
+      <HintPath>resources\packages\Ookii.Dialogs.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -122,7 +125,7 @@
     </Reference>
     <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>resources\taglib-sharp.dll</HintPath>
+      <HintPath>resources\packages\taglib-sharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -399,13 +402,24 @@
     <Content Include="..\LICENSE.txt">
       <Link>LICENSE.txt</Link>
     </Content>
-    <Content Include="resources\Newtonsoft.Json.dll">
+    <None Include="resources\icon_add.ico" />
+    <None Include="resources\icons\icon_add.ico" />
+    <None Include="resources\icons\icon_clear.ico" />
+    <None Include="resources\icons\icon_export.ico" />
+    <None Include="resources\icons\icon_search.ico" />
+    <None Include="resources\icons\icon_settings.ico" />
+    <None Include="resources\icons\icon_write.ico" />
+    <None Include="resources\icons\icon_import.ico" />
+    <Content Include="resources\packages\Newtonsoft.Json.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Ookii.Dialogs.dll">
+    <Content Include="resources\packages\Newtonsoft.Json.Schema.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\taglib-sharp.dll">
+    <Content Include="resources\packages\Ookii.Dialogs.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\packages\taglib-sharp.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -413,5 +427,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

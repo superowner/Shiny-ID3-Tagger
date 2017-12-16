@@ -13,6 +13,7 @@ namespace GlobalNamespace
 	using System;
 	using System.Collections.Generic;
 	using System.Drawing.Imaging;
+	using System.IO;
 	using System.Linq;
 
 	public partial class Form1
@@ -26,9 +27,11 @@ namespace GlobalNamespace
 			{ new byte[] { 0xff, 0xd8 }, ImageFormat.Jpeg }
 		};
 
-		private bool GetImageType(byte[] imageBytes)
+		private bool IsValidImage(MemoryStream stream)
 		{
+			byte[] imageBytes = stream.ToArray();
 			bool isImage = false;
+
 			foreach (var imageType in this.imageFormatDecoders)
 			{
 				if (imageType.Key.SequenceEqual(imageBytes.Take(imageType.Key.Length)))

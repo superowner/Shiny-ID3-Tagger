@@ -1,6 +1,6 @@
 {
 	"DebugLevel": 2,
-	"PreferTags": false,
+	"PreferTags": true,
 	"RemoveBrackets": true,
 	"RemoveFeaturing": true,
 	"OverwriteImage": true,
@@ -37,33 +37,5 @@
 		"Chartlyrics",
 		"Netease",
 		"Xiami"
-	],
-	"UserFrames": [
-		"skip",
-		"performer",
-		"added_timestamp",
-		"last_played_timestamp",
-		"play_count",
-		"first_played_timestamp",
-		"replaygain_track_gain",
-		"replaygain_track_peak",
-		"replaygain_album_gain",
-		"replaygain_album_peak"
-	],
-	"DefaultFrames": [
-		"APIC",
-		"TPE1",
-		"TIT2",
-		"TALB",
-		"TYER",
-		"TDRC",
-		"TCON",
-		"TCOM",
-		"TPE2",
-		"TRCK",
-		"TPOS",
-		"COMM",
-		"TXXX",
-		"USLT"
 	]
 }

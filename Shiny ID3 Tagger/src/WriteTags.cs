@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Main method for ID3 tag saving. Loops through all result rows and writes their values as tags it's corresponding file</summary>
+// https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs
 //-----------------------------------------------------------------------
 
 namespace GlobalNamespace
@@ -37,216 +38,85 @@ namespace GlobalNamespace
 			this.slowProgressBar.Value = 0;
 			this.slowProgressBar.Visible = true;
 
-			// Begin looping through all files in first dataGridView
-			foreach (DataGridViewRow row in this.dataGridView1.Rows)
+			using (HttpClient client = InitiateHttpClient())
 			{
-				// If file is a virtual file (CSV Import), cancel remaining work for this file and continue with next file
-				if ((bool)row.Cells[this.isVirtualFile.Index].Value)
+				// Begin looping through all files in first dataGridView
+				foreach (DataGridViewRow row in this.dataGridView1.Rows)
 				{
 					this.slowProgressBar.PerformStep();
-					continue;
-				}
 
-				bool successWrite;
-				string filepath = (string)row.Cells[this.filepath1.Index].Value;
-
-				// ###########################################################################
-				// Taglib does not convert ID3v2.4 (UTF-8, iTunes compatible) encoded frames to ID3v2.3 encoded frames (UTF-16, Windows Explorer compatible)
-				// Even with "ForceDefaultEncoding = true". The workaround is to clear and rebuild all tags from scratch
-				TagLib.Id3v2.Tag id3v2backup = null;
-				using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
-				{
-					id3v2backup = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
-
-					// Clear all tags and save mp3 file without any tags. Save is necessary to wipe all tags
-					tagFile.RemoveTags(TagTypes.AllTags);
-
-					successWrite = await this.SaveFile(tagFile);
-				}
-
-				// If save failed, cancel remaining work for this file and continue with next file
-				if (!successWrite)
-				{
-					this.slowProgressBar.PerformStep();
-					continue;
-				}
-
-				// Write all old frames from backup variable back as ID3v2.3 frames
-				using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
-				{
-					TagLib.Id3v2.Tag id3v2 = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
-
-					// Remove ID3v1 tags, use ID3v2.3 for new tags (not ID3v2.4)
-					tagFile.RemoveTags(TagTypes.Id3v1);
-					id3v2.Version = 3;
-
-					// Read in user settings which tags should be preserved (all other unknown tags will be removed)
-					string[] defaultFrames = User.Settings["DefaultFrames"].ToObject<string[]>();
-					string[] userFrames = User.Settings["UserFrames"].ToObject<string[]>();
-
-					// Loop through backup tags, add only frames which are in defaultFrames or userFrames array as new tag
-					IEnumerable<Frame> backupFrameList = id3v2backup.GetFrames<Frame>();
-					foreach (Frame frm in backupFrameList)
+					// If file is a virtual file (CSV Import), cancel remaining work for this file and continue with next file
+					if ((bool)row.Cells[this.isVirtualFile.Index].Value)
 					{
-						string frameId = frm.FrameId.ToString();
-						if (defaultFrames.Contains(frameId, StringComparer.OrdinalIgnoreCase))
-						{
-							if (frameId.ToUpperInvariant() == "TXXX")
-							{
-								string frameDesc = ((UserTextInformationFrame)frm).Description;
-								if (userFrames.Contains(frameDesc, StringComparer.OrdinalIgnoreCase))
-								{
-									id3v2.AddFrame(frm);
-								}
-								else
-								{
-									string message = string.Format("{0,-100}{1}", "Tag removed: " + frameDesc, "file: \"" + filepath + "\"");
-									this.PrintLogMessage(this.rtbWriteLog, new[] { message });
-								}
-							}
-							else
-							{
-								id3v2.AddFrame(frm);
-							}
-						}
-						else
-						{
-							string message = string.Format("{0,-100}{1}", "Tag removed: " + frameId, "file: \"" + filepath + "\"");
-							this.PrintLogMessage(this.rtbWriteLog, new[] { message });
-						}
+						this.slowProgressBar.PerformStep();
+						continue;
 					}
 
-					// ###########################################################################
-					// Write search result tags to ID3 object (not to file)
-					id3v2 = this.WriteTags(tagFile, row, id3v2);
-
-					// ###########################################################################
-					// Download and add cover image
-					if (User.Settings["OverwriteImage"] || !tagFile.Tag.Pictures.Any() || tagFile.Tag.Pictures[0].Data.Count == 0)
+					// Get all existing frames from current file
+					string filepath = (string)row.Cells[this.filepath1.Index].Value;
+					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
 					{
-						using (HttpClient client = InitiateHttpClient())
-						using (HttpRequestMessage request = new HttpRequestMessage())
+						// Remove ID3v1 tags. ID3v1 use rarely used nowadays and obsolete
+						tagFile.RemoveTags(TagTypes.Id3v1);
+
+						// Store all existing frames in a container which can be altered freely without actually touching the file
+						TagLib.Id3v2.Tag tagContainer = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
+
+						// TODO: Cancel if no existing ID3 tag AND no results from search were found
+						// TagLib.Id3v2.Tag id3v2 = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, false);
+						// if (id3v2 != null)
+
+						// Set ID3 version to ID3v2.3 which means we have to use UTF16 for all strings (a "4" would mean ID3v2.4 where UTF8 must be used)
+						tagContainer.Version = 3;
+
+						// List of all taglib-sharp "frame classes" which have a "TextEncoding" property. Not all frame classes support it
+						// https://github.com/mono/taglib-sharp/tree/master/src/TagLib/Id3v2/Frames
+						HashSet<string> useEncodingClasses = new HashSet<string>()
 						{
-							HttpResponseMessage response = new HttpResponseMessage();
+							"TextInformationFrame",
+							"AttachedPictureFrame",
+							"CommentsFrame",
+							"UnsynchronisedLyricsFrame",
+							"SynchronisedLyricsFrame",
+							"GeneralEncapsulatedObjectFrame",
+							"TermsOfUseFrame",
+							"UrlLinkFrame"
+						};
 
-							try
+						// Change encoding for all frames/tags to UTF16
+						IEnumerable<Frame> frameList = tagContainer.GetFrames<Frame>();
+						foreach (dynamic frame in frameList)
+						{
+							string typeName = frame.GetType().Name;
+							if (useEncodingClasses.Contains(typeName))
 							{
-								string url = (string)row.Cells[this.cover1.Index].Value;
-								if (IsValidUrl(url))
-								{
-									request.RequestUri = new Uri(url);
-									response = await client.SendAsync(request);
-								}
-
-								// Check if response is not null
-								if (response != null && response.Content != null)
-								{
-									string message = string.Format("{0,-100}{1}", "Picture source: " + request.RequestUri.Authority, "file: \"" + filepath + "\"");
-									this.PrintLogMessage(this.rtbWriteLog, new[] { message });
-
-									// Download cover as stream to avoid saving to disk
-									using (MemoryStream streamOrg = (MemoryStream)await response.Content.ReadAsStreamAsync())
-									using (MemoryStream streamResized = new MemoryStream())
-									{
-										// Check if downloaded stream is an image. Some servers use a wrong content type for HTTP response. Therefore you need to check stream bytes for defined byte markers
-										if (this.GetImageType(streamOrg.ToArray()))
-										{
-											using (Image image = Image.FromStream(streamOrg))
-											{
-												// Resize image according to user setting "MaxImageSize". Always resize and re-encode
-												int longSide = new List<int> { image.Width, image.Height }.Max();
-												float resizeFactor = new List<float>
-												{
-													User.Settings["MaxImageSize"] / (float)image.Width,
-													User.Settings["MaxImageSize"] / (float)image.Height
-												}.Min();
-
-												Size newSize = new Size((int)Math.Round(image.Width * resizeFactor), (int)Math.Round(image.Height * resizeFactor));
-
-												using (Bitmap bitmap = new Bitmap(newSize.Width, newSize.Height))
-												using (Graphics graph = Graphics.FromImage(bitmap))
-												using (EncoderParameters encoderParams = new EncoderParameters(1))
-												{
-													// Resize bitmap with best quality
-													graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
-													graph.DrawImage(image, 0, 0, newSize.Width, newSize.Height);
-
-													// Prepare encoder object for JPEG format
-													ImageCodecInfo imageEncoder = ImageCodecInfo.GetImageEncoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
-													encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
-
-													// Save and encode bitmap as new stream which now holds a resized JPEG
-													bitmap.Save(streamResized, imageEncoder, encoderParams);
-													streamResized.Position = 0;
-												}
-
-												// Create ID3 cover tag, use "front cover" as type
-												AttachedPictureFrame taglibpicture = new AttachedPictureFrame()
-												{
-													Data = ByteVector.FromStream(streamResized),
-													MimeType = MediaTypeNames.Image.Jpeg,
-													Type = PictureType.FrontCover,
-													Description = url,
-													TextEncoding = StringType.Latin1
-												};
-
-												// Add cover tag to ID3 tag object, delete all other image types like back cover
-												tagFile.Tag.Pictures = new IPicture[] { taglibpicture };
-											}
-										}
-										else
-										{
-											if (User.Settings["DebugLevel"] >= 1)
-											{
-												string[] errorMsg =
-												{
-													"ERROR:    Cover URL does not contain a valid image. File signature did not match any image format!",
-													"URL:      " + url,
-													"type:     " + response.Content.Headers.ContentType.ToString()
-												};
-												this.PrintLogMessage(this.rtbErrorLog, errorMsg);
-											}
-										}
-									}
-								}
-								else
-								{
-									if (User.Settings["DebugLevel"] >= 1)
-									{
-										string[] errorMsg =
-										{
-											"ERROR:    Cover URL is not reachable!",
-											"URL:      " + url
-										};
-										this.PrintLogMessage(this.rtbErrorLog, errorMsg);
-									}
-								}
+								frame.TextEncoding = StringType.UTF16;
 							}
-							finally
+
+							frame.Render(3);
+						}
+
+						// Update tag container (frames and header) to reflect encoding changes
+						tagContainer.Render();
+
+						// Add (or replace) text values from dataGridView1 to tag container
+						tagContainer = this.AddResultsToTagContainer(tagFile, row, tagContainer);
+
+						// Download and add (or replace) cover image from dataGridView1 to tag container
+						tagContainer = await this.AddCoverToTagContainer(tagFile, row, tagContainer, client);
+
+						// Save tag container to file
+						bool successWrite = await this.SaveFile(tagFile);
+
+						// Clear background color of current row if all tags could be saved to file successfully
+						if (successWrite)
+						{
+							foreach (DataGridViewCell cell in row.Cells)
 							{
-								// Can't figure out how to use a using statement since a new value gets assigned inside the using block
-								if (response != null)
-								{
-									response.Dispose();
-								}
+								cell.Style.BackColor = Color.Empty;
 							}
 						}
 					}
-
-					// ###########################################################################
-					// Finally save all new tags to file
-					successWrite = await this.SaveFile(tagFile);
-
-					// Clear background color if file was processed successfully
-					if (successWrite)
-					{
-						foreach (DataGridViewCell cell in row.Cells)
-						{
-							cell.Style.BackColor = Color.Empty;
-						}
-					}
-
-					this.slowProgressBar.PerformStep();
 				}
 			}
 
@@ -259,16 +129,16 @@ namespace GlobalNamespace
 		}
 
 		// ###########################################################################
-		// Overwrite tag values with results from APIs
-		private TagLib.Id3v2.Tag WriteTags(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag id3v2)
+		// Overwrite tag values with results from API search
+		private TagLib.Id3v2.Tag AddResultsToTagContainer(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag tagContainer)
 		{
 			// Artist
 			string oldArtist = tagFile.Tag.FirstPerformer;
 			string newArtist = (string)row.Cells[this.artist1.Index].Value;
 			if (oldArtist != newArtist && !string.IsNullOrWhiteSpace(newArtist))
 			{
-				id3v2.RemoveFrames("TPE1");
-				id3v2.SetTextFrame("TPE1", newArtist);
+				tagContainer.RemoveFrames("TPE1");
+				tagContainer.SetTextFrame("TPE1", newArtist);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Artist: " + newArtist, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
@@ -279,8 +149,8 @@ namespace GlobalNamespace
 			string newTitle = (string)row.Cells[this.title1.Index].Value;
 			if (oldTitle != newTitle && !string.IsNullOrWhiteSpace(newTitle))
 			{
-				id3v2.RemoveFrames("TIT2");
-				id3v2.SetTextFrame("TIT2", newTitle);
+				tagContainer.RemoveFrames("TIT2");
+				tagContainer.SetTextFrame("TIT2", newTitle);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Title: " + newTitle, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
@@ -291,8 +161,8 @@ namespace GlobalNamespace
 			string newAlbum = (string)row.Cells[this.album1.Index].Value;
 			if (oldAlbum != newAlbum && !string.IsNullOrWhiteSpace(newAlbum))
 			{
-				id3v2.RemoveFrames("TALB");
-				id3v2.SetTextFrame("TALB", newAlbum);
+				tagContainer.RemoveFrames("TALB");
+				tagContainer.SetTextFrame("TALB", newAlbum);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Album: " + newAlbum, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
@@ -303,8 +173,8 @@ namespace GlobalNamespace
 			string newGenre = (string)row.Cells[this.genre1.Index].Value;
 			if (oldGenre != newGenre && !string.IsNullOrWhiteSpace(newGenre))
 			{
-				id3v2.RemoveFrames("TCON");
-				id3v2.SetTextFrame("TCON", newGenre);
+				tagContainer.RemoveFrames("TCON");
+				tagContainer.SetTextFrame("TCON", newGenre);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Genre: " + newGenre, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
@@ -320,8 +190,8 @@ namespace GlobalNamespace
 			{
 				newDiscnumber = string.IsNullOrWhiteSpace(newDiscnumber) ? oldDiscnumber : newDiscnumber;
 				newDisccount = string.IsNullOrWhiteSpace(newDisccount) ? oldDisccount : newDisccount;
-				id3v2.RemoveFrames("TPOS");
-				id3v2.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
+				tagContainer.RemoveFrames("TPOS");
+				tagContainer.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Disc: " + newDiscnumber + "/" + newDisccount, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
@@ -337,8 +207,8 @@ namespace GlobalNamespace
 			{
 				newTracknumber = string.IsNullOrWhiteSpace(newTracknumber) ? oldTracknumber : newTracknumber;
 				newTrackcount = string.IsNullOrWhiteSpace(newTrackcount) ? oldTrackcount : newTrackcount;
-				id3v2.RemoveFrames("TRCK");
-				id3v2.SetTextFrame("TRCK", newTracknumber + "/" + newTrackcount);
+				tagContainer.RemoveFrames("TRCK");
+				tagContainer.SetTextFrame("TRCK", newTracknumber + "/" + newTrackcount);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Track: " + newTracknumber + "/" + newTrackcount, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
@@ -347,17 +217,17 @@ namespace GlobalNamespace
 			// Date
 			// Value is stored in TYER frame which represents only the year
 			// TDRC (date of recording) stores full date+time info and consolidates TYER (YYYY), TDAT (DDMM) and TIME (HHMM)
-			// But TDRC is only available in ID3v2.4 - and this program uses ID3v2.3 for Windows Explorer compatibility
+			// But TDRC is only available in ID3v2.4 - and this program uses ID3v2.3 for Windows XP/Vista/7 Explorer compatibility. Windows 10 (Creators Update) finally supports ID3v2.4
 			// Surprisingly you have to remove TDRC to also remove TYER frames. Probably because taglib operates with 2.4 frame names internally
 			string oldDate = tagFile.Tag.Year.ToString(cultEng);
 			string newDate = (string)row.Cells[this.date1.Index].Value;
 			if (oldDate != newDate && !string.IsNullOrWhiteSpace(newDate))
 			{
-				id3v2.RemoveFrames("TDRC");
-				id3v2.RemoveFrames("TYER");
-				id3v2.RemoveFrames("TDAT");
-				id3v2.RemoveFrames("TIME");
-				id3v2.SetNumberFrame("TYER", (uint)this.ConvertStringToDate(newDate).Year, 0);
+				tagContainer.RemoveFrames("TDRC");
+				tagContainer.RemoveFrames("TYER");
+				tagContainer.RemoveFrames("TDAT");
+				tagContainer.RemoveFrames("TIME");
+				tagContainer.SetNumberFrame("TYER", (uint)this.ConvertStringToDate(newDate).Year, 0);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Date: " + newDate, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
@@ -374,14 +244,140 @@ namespace GlobalNamespace
 				string cleanPreview = Regex.Replace(lyricPreview, @"\r\n?|\n", string.Empty);
 				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
 				frmUSLT.Text = newLyrics;
-				id3v2.RemoveFrames("USLT");
-				id3v2.AddFrame(frmUSLT);
+				tagContainer.RemoveFrames("USLT");
+				tagContainer.AddFrame(frmUSLT);
 
 				string message = string.Format(cultEng, "{0,-100}{1}", "Lyrics: " + cleanPreview, "file: \"" + tagFile.Name + "\"");
 				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 
-			return id3v2;
+			return tagContainer;
+		}
+
+		// ###########################################################################
+		// Download and add cover image
+		private async Task<TagLib.Id3v2.Tag> AddCoverToTagContainer(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag tagContainer, HttpClient client)
+		{
+			string[] errorMsg = null;
+
+			// Check if any valid cover already exists
+			foreach (IPicture picture in tagFile.Tag.Pictures)
+			{
+				if (picture.Data.Count > 0 && User.Settings["OverwriteImage"] == false)
+				{
+					// A valid cover already exists AND user don't want to overwrite it => return unmodified tag container
+					return tagContainer;
+				}
+			}
+
+			HttpResponseMessage response = new HttpResponseMessage();
+			HttpRequestMessage request = new HttpRequestMessage();
+			request.Headers.Add("User-Agent", User.Settings["UserAgent"]);  // Mandatory for downloads from Discogs
+
+			// Check if cover URL from search results is a valid URL. If yes, download cover
+			string url = (string)row.Cells[this.cover1.Index].Value;
+			if (IsValidUrl(url))
+			{
+				request.RequestUri = new Uri(url);
+				response = await client.SendAsync(request);
+
+				// Check if any content was returned
+				if (response.IsSuccessStatusCode && response.Content != null)
+				{
+					// Read cover as stream (avoids saving a new file to disk)
+					using (MemoryStream streamOrg = (MemoryStream)await response.Content.ReadAsStreamAsync())
+					using (MemoryStream streamResized = new MemoryStream())
+					{
+						// Check if downloaded stream is an image. Some servers use a wrong content type for HTTP response. Therefore you need to check byte markers
+						if (this.IsValidImage(streamOrg))
+						{
+							using (Image image = Image.FromStream(streamOrg))
+							{
+								// Resize image according to user setting "MaxImageSize". Always resize and re-encode
+								int longSide = new List<int> { image.Width, image.Height }.Max();
+								float resizeFactor = new List<float>
+								{
+									User.Settings["MaxImageSize"] / (float)image.Width,
+									User.Settings["MaxImageSize"] / (float)image.Height
+								}.Min();
+
+								Size newSize = new Size((int)Math.Round(image.Width * resizeFactor), (int)Math.Round(image.Height * resizeFactor));
+
+								using (Bitmap bitmap = new Bitmap(newSize.Width, newSize.Height))
+								using (Graphics graph = Graphics.FromImage(bitmap))
+								using (EncoderParameters encoderParams = new EncoderParameters(1))
+								{
+									// Resize bitmap with best quality
+									graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+									graph.DrawImage(image, 0, 0, newSize.Width, newSize.Height);
+
+									// Prepare encoder object for JPEG format
+									ImageCodecInfo imageEncoder = ImageCodecInfo.GetImageEncoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
+									encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
+
+									// Save and encode bitmap as new stream which now holds a resized JPEG
+									bitmap.Save(streamResized, imageEncoder, encoderParams);
+									streamResized.Position = 0;
+								}
+
+								// Create ID3 cover tag, use "FrontCover" as type
+								AttachedPictureFrame taglibpicture = new AttachedPictureFrame()
+								{
+									Data = ByteVector.FromStream(streamResized),
+									MimeType = MediaTypeNames.Image.Jpeg,
+									Type = PictureType.FrontCover,
+									Description = url,
+									TextEncoding = StringType.Latin1    // Strangely, Unicode is not supported for this field
+								};
+
+								// Add cover tag to tag container, this deletes all other existing covers like "BackCover" or "BandLogo"
+								tagContainer.Pictures = new IPicture[] { taglibpicture };
+							}
+						}
+						else
+						{
+							errorMsg = new[]
+							{
+								"ERROR:    Cover URL does not point to a valid image. File signature did not match any image format!",
+								"URL:      " + url,
+								"type:     " + response.Content.Headers.ContentType.ToString()
+							};
+						}
+					}
+				}
+				else
+				{
+					errorMsg = new[]
+					{
+						"ERROR:    Cover URL is not reachable!",
+						"URL:      " + url,
+						"Status:   " + response.ReasonPhrase + ": " + (int)response.StatusCode
+					};
+				}
+			}
+			else
+			{
+				errorMsg = new[]
+				{
+					"ERROR:    Cover URL is not valid URL format!",
+					"URL:      " + url
+				};
+			}
+
+			if (errorMsg == null)
+			{
+				string message = string.Format("Picture source: " + request.RequestUri.Authority);
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+			}
+			else
+			{
+				if (User.Settings["DebugLevel"] >= 1)
+				{
+					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+				}
+			}
+
+			return tagContainer;
 		}
 
 		// ###########################################################################
@@ -401,7 +397,7 @@ namespace GlobalNamespace
 					successWrite = true;
 					break;
 				}
-				catch (IOException)
+				catch (Exception)
 				{
 					// Do nothing. Error is handled at end of SaveFile method
 					successWrite = false;
@@ -422,7 +418,7 @@ namespace GlobalNamespace
 						successWrite = true;
 						break;
 					}
-					catch (IOException)
+					catch (Exception)
 					{
 						// Do nothing. Error is handled at end of SaveFile method
 						successWrite = false;
@@ -444,7 +440,7 @@ namespace GlobalNamespace
 						successWrite = true;
 						break;
 					}
-					catch (IOException)
+					catch (Exception)
 					{
 						// Do nothing. Error is handled at end of SaveFile method
 						successWrite = false;

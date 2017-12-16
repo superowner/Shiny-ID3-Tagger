@@ -6,11 +6,11 @@
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
-// TODO: Implement auto update from GitHub
-// TODO: Move cover download to new function. Don't clear background color for cover cell when false is returned (download failed)
+// TODO: Implement update check from GitHub (open website)
+// TODO: Don't clear background color for cover cell when download failed
 // TODO: New methods for lock and unlock UI (button enable false / true, menu bar)
 // TODO: User option to en/disable single APIs (sometimes they are down)
-// TODO: User option to choose ID3v2.3 (UTF16, Windows) or ID3v2.4 (UTF8, Mac)
+// TODO: User option to choose ID3v2.3 (UTF16, Windows 7) or ID3v2.4 (UTF8, Mac)
 // TODO: User option to write ID3v1 tags additionally to ID3v2
 // TODO: User option to choose if unknown tags should be removed
 namespace GlobalNamespace

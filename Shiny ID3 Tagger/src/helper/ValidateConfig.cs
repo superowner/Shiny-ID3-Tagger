@@ -285,24 +285,6 @@ namespace GlobalNamespace
 					""$id"": ""/properties/LyricsPriority/items"",
 					""type"": ""string""
 				  }
-				},
-				""UserFrames"": {
-				  ""$id"": ""/properties/UserFrames"",
-				  ""type"": ""array"",
-				  ""uniqueItems"": true,
-				  ""items"": {
-					""$id"": ""/properties/UserFrames/items"",
-					""type"": ""string""
-				  }
-				},
-				""DefaultFrames"": {
-				  ""$id"": ""/properties/DefaultFrames"",
-				  ""type"": ""array"",
-				  ""uniqueItems"": true,
-				  ""items"": {
-					""$id"": ""/properties/DefaultFrames/items"",
-					""type"": ""string""
-				  }
 				}
 			  },
 			  ""additionalProperties"": false,
@@ -319,9 +301,7 @@ namespace GlobalNamespace
 				""UserAgent"",
 				""FilenamePatterns"",
 				""CoverPriority"",
-				""LyricsPriority"",
-				""UserFrames"",
-				""DefaultFrames""
+				""LyricsPriority""
 			  ]
 		}";
 		#endregion
