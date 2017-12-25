@@ -22,7 +22,6 @@
 - **Qobuz**
 - **QQ**
 - **Spotify**
-- **Tidal**
 - **Chartlyrics** (only for lyrics)
 - **Lololyrics** (only for lyrics)
 - **Viewlyrics** (only for lyrics)
