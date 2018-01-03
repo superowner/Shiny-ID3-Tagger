@@ -13,7 +13,6 @@
 - **Gracenote**
 - **iTunes**
 - **Last.fm**
-- **Microsoft Groove**
 - **Musicbrainz**
 - **Musicgraph**
 - **Musixmatch**
@@ -28,7 +27,7 @@
 - **Xiami** (only for lyrics)
 
 ## Key Features
-- Queries 19 online databases and selects/adds the most frequent results for
+- Queries 17 databases and selects/adds the most frequent results for
   - **Artist name**
   - **Track title**
   - **Album name**
