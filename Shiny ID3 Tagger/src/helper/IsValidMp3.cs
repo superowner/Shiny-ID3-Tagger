@@ -42,7 +42,7 @@ namespace GlobalNamespace
 				}
 
 				// If mp3 file does not contain valid mp3 header bytes, print error message
-				if (User.Settings["DebugLevel"] >= 1)
+				if ((int)User.Settings["DebugLevel"] >= 1)
 				{
 					string[] errorMsg =
 					{
@@ -57,7 +57,7 @@ namespace GlobalNamespace
 			catch (ArgumentException)
 			{
 				// If path points to a URL
-				if (User.Settings["DebugLevel"] >= 1)
+				if ((int)User.Settings["DebugLevel"] >= 1)
 				{
 					string[] errorMsg =
 					{
@@ -72,7 +72,7 @@ namespace GlobalNamespace
 			catch (FileNotFoundException)
 			{
 				// If file is not found
-				if (User.Settings["DebugLevel"] >= 1)
+				if ((int)User.Settings["DebugLevel"] >= 1)
 				{
 					string[] errorMsg =
 					{
@@ -87,7 +87,7 @@ namespace GlobalNamespace
 			catch (IOException)
 			{
 				// If file has a write lock (i.e. opened in another program)
-				if (User.Settings["DebugLevel"] >= 1)
+				if ((int)User.Settings["DebugLevel"] >= 1)
 				{
 					string[] errorMsg =
 					{

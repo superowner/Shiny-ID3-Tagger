@@ -42,8 +42,8 @@ namespace GlobalNamespace
 					loginRequest.Content = new FormUrlEncodedContent(new[]
 					{
 						new KeyValuePair<string, string>("grant_type", "client_credentials"),
-						new KeyValuePair<string, string>("client_id", User.Accounts["MsClientId"]),
-						new KeyValuePair<string, string>("client_secret", User.Accounts["MsClientSecret"]),
+						new KeyValuePair<string, string>("client_id", (string)User.Accounts["MsGroove"]["ClientId"]),
+						new KeyValuePair<string, string>("client_secret", (string)User.Accounts["MsGroove"]["ClientSecret"]),
 						new KeyValuePair<string, string>("scope", "app.music.xboxlive.com")
 					});
 

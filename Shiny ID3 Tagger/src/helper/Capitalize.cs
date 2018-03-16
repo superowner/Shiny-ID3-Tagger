@@ -37,7 +37,7 @@ namespace GlobalNamespace
 		private static string Capitalize(string str)
 		{
 			// If string is not empty and user setting "AutoCapitalize" is set to true
-			if (User.Settings["AutoCapitalize"] && !string.IsNullOrWhiteSpace(str))
+			if ((bool)User.Settings["AutoCapitalize"] && !string.IsNullOrWhiteSpace(str))
 			{
 				// Use RegEx to extract all words from str. Use custom word separators
 				// Edge case "P!nk" is not split into two words since the exclamation mark is not included in separator list

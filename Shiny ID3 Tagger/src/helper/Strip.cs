@@ -17,13 +17,13 @@ namespace GlobalNamespace
 		{
 			if (str != null)
 			{
-				if (User.Settings["RemoveBrackets"])
+				if ((bool)User.Settings["RemoveBrackets"])
 				{
 					const string RegExPattern = @"\s[\(\[].*?(version|edition|deluxe|explicit|disc).*?[\)\]]";
 					str = Regex.Replace(str, RegExPattern, string.Empty, RegexOptions.IgnoreCase);
 				}
 
-				if (User.Settings["RemoveFeaturing"])
+				if ((bool)User.Settings["RemoveFeaturing"])
 				{
 					const string RegExPattern = @"\s([\(\[])?\s(feat(\.)?|ft(\.)?|featuring)(.*?[\)\]]|.*)";
 					str = Regex.Replace(str, RegExPattern, string.Empty, RegexOptions.IgnoreCase);

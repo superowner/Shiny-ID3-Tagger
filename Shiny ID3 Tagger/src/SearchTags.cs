@@ -25,9 +25,7 @@ namespace GlobalNamespace
 		private async void StartSearching(CancellationToken cancelToken)
 		{
 			// Prepare visual stuff like disable buttons during work, show two progress bars
-			this.btnAddFiles.Enabled = false;
-			this.btnWrite.Enabled = false;
-			this.btnSearch.Enabled = false;
+			this.EnableUI(false);
 
 			this.slowProgressBar.Maximum = this.dataGridView1.Rows.Count;
 			this.slowProgressBar.Value = 0;
@@ -219,9 +217,7 @@ namespace GlobalNamespace
 			this.slowProgressBar.Visible = false;
 			this.fastProgressBar.Visible = false;
 
-			this.btnAddFiles.Enabled = true;
-			this.btnWrite.Enabled = true;
-			this.btnSearch.Enabled = true;
+			this.EnableUI(true);
 		}
 
 		// ###########################################################################
@@ -305,9 +301,7 @@ namespace GlobalNamespace
 				this.GetTags_Gracenote(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_iTunes(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_LastFm(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_MusicBrainz(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_MusixMatch(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Napster(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Netease(client, artistToSearch, titleToSearch, cancelToken),
@@ -315,6 +309,9 @@ namespace GlobalNamespace
 				this.GetTags_QQ(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken)
+
+				// this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken),	API disabled ???
+				// this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken),	API disabled
 			};
 
 			this.fastProgressBar.Maximum = taskList.Count;

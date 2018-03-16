@@ -29,9 +29,7 @@ namespace GlobalNamespace
 		private async Task<bool> AddFiles(string[] newFiles, CancellationToken cancelToken)
 		{
 			// Work starts, disable all buttons to prevent side effects when user clicks them despite an already running task
-			this.btnSearch.Enabled = false;
-			this.btnWrite.Enabled = false;
-			this.btnAddFiles.Enabled = false;
+			this.EnableUI(false);
 
 			// If no files were passed through command line, open a new file dialog. files can be an empty array, so use any() to check this
 			if (newFiles == null || !newFiles.Any())
@@ -114,7 +112,7 @@ namespace GlobalNamespace
 				catch (Exception error)
 				{
 					// Error handling when any error occurs during file reading
-					if (User.Settings["DebugLevel"] >= 2)
+					if ((int)User.Settings["DebugLevel"] >= 2)
 					{
 						string[] errorMsg =
 						{
@@ -129,9 +127,7 @@ namespace GlobalNamespace
 			// Work finished, re-enable all buttons and hide progress bar
 			this.slowProgressBar.Visible = false;
 
-			this.btnSearch.Enabled = true;
-			this.btnWrite.Enabled = true;
-			this.btnAddFiles.Enabled = true;
+			this.EnableUI(true);
 
 			// Report to parent method if any new files were added
 			return fileTable.Any();
@@ -171,7 +167,7 @@ namespace GlobalNamespace
 									if (match.Success)
 									{
 										// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
-										if (User.Settings["PreferTags"])
+										if ((bool)User.Settings["PreferTags"])
 										{
 											artistChoices[1] = match.Groups["artist"].Value;
 											titleChoices[1] = match.Groups["title"].Value;
@@ -187,7 +183,7 @@ namespace GlobalNamespace
 								}
 
 								// Extract artist and title from ID3 tags and store them in array at index 0 or 1 according to setting "PreferTags"
-								if (User.Settings["PreferTags"])
+								if ((bool)User.Settings["PreferTags"])
 								{
 									artistChoices[0] = tagFile.Tag.FirstPerformer;
 									titleChoices[0] = tagFile.Tag.Title;

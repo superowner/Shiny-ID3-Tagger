@@ -25,189 +25,265 @@ namespace GlobalNamespace
 		  ""$id"": ""http://example.com/example.json"",
 		  ""type"": ""object"",
 		  ""properties"": {
-				""7dKey"": {
-				  ""$id"": ""/properties/7dKey"",
-				  ""type"": ""string""
-				},
-				""AmAssociateTag"": {
-				  ""$id"": ""/properties/AmAssociateTag"",
-				  ""type"": ""string""
-				},
-				""AmAccessKey"": {
-				  ""$id"": ""/properties/AmAccessKey"",
-				  ""type"": ""string""
-				},
-				""AmSecretKey"": {
-				  ""$id"": ""/properties/AmSecretKey"",
-				  ""type"": ""string""
-				},
-				""BaApiKey"": {
-				  ""$id"": ""/properties/BaApiKey"",
-				  ""type"": ""string""
-				},
-				""DbAppId1"": {
-				  ""$id"": ""/properties/DbAppId1"",
-				  ""type"": ""string""
-				},
-				""DbAppKey1"": {
-				  ""$id"": ""/properties/DbAppKey1"",
-				  ""type"": ""string""
-				},
-				""DbAppId2"": {
-				  ""$id"": ""/properties/DbAppId2"",
-				  ""type"": ""string""
-				},
-				""DbAppKey2"": {
-				  ""$id"": ""/properties/DbAppKey2"",
-				  ""type"": ""string""
-				},
-				""DbAppId3"": {
-				  ""$id"": ""/properties/DbAppId3"",
-				  ""type"": ""string""
-				},
-				""DbAppKey3"": {
-				  ""$id"": ""/properties/DbAppKey3"",
-				  ""type"": ""string""
-				},
-				""DbAppId4"": {
-				  ""$id"": ""/properties/DbAppId4"",
-				  ""type"": ""string""
-				},
-				""DbAppKey4"": {
-				  ""$id"": ""/properties/DbAppKey4"",
-				  ""type"": ""string""
-				},
-				""DbAppId5"": {
-				  ""$id"": ""/properties/DbAppId5"",
-				  ""type"": ""string""
-				},
-				""DbAppKey5"": {
-				  ""$id"": ""/properties/DbAppKey5"",
-				  ""type"": ""string""
-				},
-				""DcKey"": {
-				  ""$id"": ""/properties/DcKey"",
-				  ""type"": ""string""
-				},
-				""DcSecret"": {
-				  ""$id"": ""/properties/DcSecret"",
-				  ""type"": ""string""
-				},
-				""GeAccessToken"": {
-				  ""$id"": ""/properties/GeAccessToken"",
-				  ""type"": ""string""
-				},
-				""GnClientId"": {
-				  ""$id"": ""/properties/GnClientId"",
-				  ""type"": ""string""
-				},
-				""GnUserId"": {
-				  ""$id"": ""/properties/GnUserId"",
-				  ""type"": ""string""
-				},
-				""LaApiKey"": {
-				  ""$id"": ""/properties/LaApiKey"",
-				  ""type"": ""string""
-				},
-				""MgAppKey1"": {
-				  ""$id"": ""/properties/MgAppKey1"",
-				  ""type"": ""string""
-				},
-				""MgAppKey2"": {
-				  ""$id"": ""/properties/MgAppKey2"",
-				  ""type"": ""string""
-				},
-				""MgAppKey3"": {
-				  ""$id"": ""/properties/MgAppKey3"",
-				  ""type"": ""string""
-				},
-				""MmApiKey1"": {
-				  ""$id"": ""/properties/MmApiKey1"",
-				  ""type"": ""string""
-				},
-				""MmApiKey2"": {
-				  ""$id"": ""/properties/MmApiKey2"",
-				  ""type"": ""string""
-				},
-				""MmApiKey3"": {
-				  ""$id"": ""/properties/MmApiKey3"",
-				  ""type"": ""string""
-				},
-				""MsClientId"": {
-				  ""$id"": ""/properties/MsClientId"",
-				  ""type"": ""string""
-				},
-				""MsClientSecret"": {
-				  ""$id"": ""/properties/MsClientSecret"",
-				  ""type"": ""string""
-				},
-				""NaApiKey"": {
-				  ""$id"": ""/properties/NaApiKey"",
-				  ""type"": ""string""
-				},
-				""QoAppId"": {
-				  ""$id"": ""/properties/QoAppId"",
-				  ""type"": ""string""
-				},
-				""SpClientId"": {
-				  ""$id"": ""/properties/SpClientId"",
-				  ""type"": ""string""
-				},
-				""SpClientSecret"": {
-				  ""$id"": ""/properties/SpClientSecret"",
-				  ""type"": ""string""
-				},
-				""TiUsername"": {
-				  ""$id"": ""/properties/TiUsername"",
-				  ""type"": ""string""
-				},
-				""TiPassword"": {
-				  ""$id"": ""/properties/TiPassword"",
-				  ""type"": ""string""
-				},
-				""TiToken"": {
-				  ""$id"": ""/properties/TiToken"",
+			""7digital"": {
+			  ""$id"": ""/properties/7digital"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""key"": {
+				  ""$id"": ""/properties/7digital/properties/key"",
 				  ""type"": ""string""
 				}
 			  },
 			  ""required"": [
-				""7dKey"",
-				""AmAssociateTag"",
-				""AmAccessKey"",
-				""AmSecretKey"",
-				""BaApiKey"",
-				""DbAppId1"",
-				""DbAppKey1"",
-				""DbAppId2"",
-				""DbAppKey2"",
-				""DbAppId3"",
-				""DbAppKey3"",
-				""DbAppId4"",
-				""DbAppKey4"",
-				""DbAppId5"",
-				""DbAppKey5"",
-				""DcKey"",
-				""DcSecret"",
-				""GeAccessToken"",
-				""GnClientId"",
-				""GnUserId"",
-				""LaApiKey"",
-				""MgAppKey1"",
-				""MgAppKey2"",
-				""MgAppKey3"",
-				""MmApiKey1"",
-				""MmApiKey2"",
-				""MmApiKey3"",
-				""MsClientId"",
-				""MsClientSecret"",
-				""NaApiKey"",
-				""QoAppId"",
-				""SpClientId"",
-				""SpClientSecret"",
-				""TiUsername"",
-				""TiPassword"",
-				""TiToken""
+				""key""
 			  ]
+			},
+			""Amazon"": {
+			  ""$id"": ""/properties/Amazon"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""AssociateTag"": {
+				  ""$id"": ""/properties/Amazon/properties/AssociateTag"",
+				  ""type"": ""string""
+				},
+				""AccessKey"": {
+				  ""$id"": ""/properties/Amazon/properties/AccessKey"",
+				  ""type"": ""string""
+				},
+				""SecretKey"": {
+				  ""$id"": ""/properties/Amazon/properties/SecretKey"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""AssociateTag"",
+				""AccessKey"",
+				""SecretKey""
+			  ]
+			},
+			""Decibel"": {
+			  ""$id"": ""/properties/Decibel"",
+			  ""type"": ""array"",
+			  ""uniqueItems"": true,
+			  ""items"": {
+				""$id"": ""/properties/Decibel/items"",
+				""type"": ""object"",
+				""properties"": {
+				  ""AppId"": {
+					""$id"": ""/properties/Decibel/items/properties/AppId"",
+					""type"": ""string""
+				  },
+				  ""AppKey"": {
+					""$id"": ""/properties/Decibel/items/properties/AppKey"",
+					""type"": ""string""
+				  }
+				},
+				""required"": [
+				  ""AppId"",
+				  ""AppKey""
+				]
+			  }
+			},
+			""Discogs"": {
+			  ""$id"": ""/properties/Discogs"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""Key"": {
+				  ""$id"": ""/properties/Discogs/properties/Key"",
+				  ""type"": ""string""
+				},
+				""Secret"": {
+				  ""$id"": ""/properties/Discogs/properties/Secret"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""Key"",
+				""Secret""
+			  ]
+			},
+			""Genius"": {
+			  ""$id"": ""/properties/Genius"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""AccessToken"": {
+				  ""$id"": ""/properties/Genius/properties/AccessToken"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""AccessToken""
+			  ]
+			},
+			""Gracenote"": {
+			  ""$id"": ""/properties/Gracenote"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""ClientId"": {
+				  ""$id"": ""/properties/Gracenote/properties/ClientId"",
+				  ""type"": ""string""
+				},
+				""UserId"": {
+				  ""$id"": ""/properties/Gracenote/properties/UserId"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""ClientId"",
+				""UserId""
+			  ]
+			},
+			""Lastfm"": {
+			  ""$id"": ""/properties/Lastfm"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""ApiKey"": {
+				  ""$id"": ""/properties/Lastfm/properties/ApiKey"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""ApiKey""
+			  ]
+			},
+			""MusicGraph"": {
+			  ""$id"": ""/properties/MusicGraph"",
+			  ""type"": ""array"",
+			  ""uniqueItems"": true,
+			  ""items"": {
+				""$id"": ""/properties/MusicGraph/items"",
+				""type"": ""object"",
+				""properties"": {
+				  ""AppKey"": {
+					""$id"": ""/properties/MusicGraph/items/properties/AppKey"",
+					""type"": ""string""
+				  }
+				},
+				""required"": [
+				  ""AppKey""
+				]
+			  }
+			},
+			""Musixmatch"": {
+			  ""$id"": ""/properties/Musixmatch"",
+			  ""type"": ""array"",
+			  ""uniqueItems"": true,
+			  ""items"": {
+				""$id"": ""/properties/Musixmatch/items"",
+				""type"": ""object"",
+				""properties"": {
+				  ""ApiKey"": {
+					""$id"": ""/properties/Musixmatch/items/properties/ApiKey"",
+					""type"": ""string""
+				  }
+				},
+				""required"": [
+				  ""ApiKey""
+				]
+			  }
+			},
+			""MsGroove"": {
+			  ""$id"": ""/properties/MsGroove"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""ClientId"": {
+				  ""$id"": ""/properties/MsGroove/properties/ClientId"",
+				  ""type"": ""string""
+				},
+				""ClientSecret"": {
+				  ""$id"": ""/properties/MsGroove/properties/ClientSecret"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""ClientId"",
+				""ClientSecret""
+			  ]
+			},
+			""Napster"": {
+			  ""$id"": ""/properties/Napster"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""ApiKey"": {
+				  ""$id"": ""/properties/Napster/properties/ApiKey"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""ApiKey""
+			  ]
+			},
+			""Qobuz"": {
+			  ""$id"": ""/properties/Qobuz"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""AppId"": {
+				  ""$id"": ""/properties/Qobuz/properties/AppId"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""AppId""
+			  ]
+			},
+			""Spotify"": {
+			  ""$id"": ""/properties/Spotify"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""ClientId"": {
+				  ""$id"": ""/properties/Spotify/properties/ClientId"",
+				  ""type"": ""string""
+				},
+				""ClientSecret"": {
+				  ""$id"": ""/properties/Spotify/properties/ClientSecret"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""ClientId"",
+				""ClientSecret""
+			  ]
+			},
+			""Tidal"": {
+			  ""$id"": ""/properties/Tidal"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""Username"": {
+				  ""$id"": ""/properties/Tidal/properties/Username"",
+				  ""type"": ""string""
+				},
+				""Password"": {
+				  ""$id"": ""/properties/Tidal/properties/Password"",
+				  ""type"": ""string""
+				},
+				""Token"": {
+				  ""$id"": ""/properties/Tidal/properties/Token"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""Username"",
+				""Password"",
+				""Token""
+			  ]
+			}
+		  },
+		  ""required"": [
+			""7digital"",
+			""Amazon"",
+			""Decibel"",
+			""Discogs"",
+			""Genius"",
+			""Gracenote"",
+			""Lastfm"",
+			""MusicGraph"",
+			""Musixmatch"",
+			""MsGroove"",
+			""Napster"",
+			""Qobuz"",
+			""Spotify"",
+			""Tidal""
+		  ]
 		}";
 		#endregion
 
@@ -285,24 +361,6 @@ namespace GlobalNamespace
 					""$id"": ""/properties/LyricsPriority/items"",
 					""type"": ""string""
 				  }
-				},
-				""UserFrames"": {
-				  ""$id"": ""/properties/UserFrames"",
-				  ""type"": ""array"",
-				  ""uniqueItems"": true,
-				  ""items"": {
-					""$id"": ""/properties/UserFrames/items"",
-					""type"": ""string""
-				  }
-				},
-				""DefaultFrames"": {
-				  ""$id"": ""/properties/DefaultFrames"",
-				  ""type"": ""array"",
-				  ""uniqueItems"": true,
-				  ""items"": {
-					""$id"": ""/properties/DefaultFrames/items"",
-					""type"": ""string""
-				  }
 				}
 			  },
 			  ""additionalProperties"": false,
@@ -319,9 +377,7 @@ namespace GlobalNamespace
 				""UserAgent"",
 				""FilenamePatterns"",
 				""CoverPriority"",
-				""LyricsPriority"",
-				""UserFrames"",
-				""DefaultFrames""
+				""LyricsPriority""
 			  ]
 		}";
 		#endregion

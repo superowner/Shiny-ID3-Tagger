@@ -39,7 +39,7 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://ws.audioscrobbler.com/2.0/");
 				searchRequest.Headers.ExpectContinue = false;
 				searchRequest.Content = new StringContent("method=track.getInfo&artist=" + artistEncoded + "&track=" + titleEncoded +
-					"&api_key=" + User.Accounts["LaApiKey"] + "&format=json&autocorrect=1");
+					"&api_key=" + User.Accounts["Lastfm"]["ApiKey"] + "&format=json&autocorrect=1");
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = this.DeserializeJson(searchContent);
@@ -60,7 +60,7 @@ namespace GlobalNamespace
 						albumRequest.Method = HttpMethod.Post;
 						albumRequest.RequestUri = new Uri("http://ws.audioscrobbler.com/2.0/");
 						albumRequest.Headers.ExpectContinue = false;
-						albumRequest.Content = new StringContent("method=album.getInfo&mbid=" + albumid + "&api_key=" + User.Accounts["LaApiKey"] + "&format=json");
+						albumRequest.Content = new StringContent("method=album.getInfo&mbid=" + albumid + "&api_key=" + User.Accounts["Lastfm"]["ApiKey"] + "&format=json");
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
 						JObject albumData = this.DeserializeJson(albumContent);

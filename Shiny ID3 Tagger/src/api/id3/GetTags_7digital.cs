@@ -36,7 +36,8 @@ namespace GlobalNamespace
 			// But strangely 7digital results are then different and worse than the XML ones
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.RequestUri = new Uri("http://api.7digital.com/1.2/track/search?q=" + artistEncoded + "+" + titleEncoded + "&pagesize=10&imageSize=800&usageTypes=download&oauth_consumer_key=" + User.Accounts["7dKey"]);
+				searchRequest.RequestUri = new Uri("http://api.7digital.com/1.2/track/search?q=" + artistEncoded + "+"
+					+ titleEncoded + "&pagesize=10&imageSize=800&usageTypes=download&oauth_consumer_key=" + User.Accounts["7digital"]["key"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
@@ -62,7 +63,7 @@ namespace GlobalNamespace
 						// ###########################################################################
 						using (HttpRequestMessage releaseRequest = new HttpRequestMessage())
 						{
-							releaseRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/details?releaseid=" + releaseId + "&usageTypes=download&oauth_consumer_key=" + User.Accounts["7dKey"]);
+							releaseRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/details?releaseid=" + releaseId + "&usageTypes=download&oauth_consumer_key=" + User.Accounts["7digital"]["key"]);
 
 							string releaseContent = await this.GetResponse(client, releaseRequest, cancelToken);
 							JObject releaseData = this.DeserializeJson(this.ConvertXmlToJson(releaseContent));
@@ -76,7 +77,7 @@ namespace GlobalNamespace
 						// ###########################################################################
 						using (HttpRequestMessage tagsRequest = new HttpRequestMessage())
 						{
-							tagsRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/tags?releaseid=" + releaseId + "&country=US&oauth_consumer_key=" + User.Accounts["7dKey"]);
+							tagsRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/tags?releaseid=" + releaseId + "&country=US&oauth_consumer_key=" + User.Accounts["7digital"]["key"]);
 
 							string tagsContent = await this.GetResponse(client, tagsRequest, cancelToken);
 							JObject tagsData = this.DeserializeJson(this.ConvertXmlToJson(tagsContent));

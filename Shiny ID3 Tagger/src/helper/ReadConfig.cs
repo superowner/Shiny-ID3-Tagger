@@ -15,6 +15,7 @@ namespace GlobalNamespace
 	using System.Security.Cryptography;
 	using System.Text;
 	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
 
 	public partial class Form1
 	{
@@ -38,8 +39,8 @@ namespace GlobalNamespace
 				byte[] decryptedBytes = decryptorTransformer.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
 				string accountsJsonStr = Encoding.UTF8.GetString(decryptedBytes);
 
-				// Save settings to dictionary for later access throughout the program
-				User.Accounts = JsonConvert.DeserializeObject<Dictionary<string, string>>(accountsJsonStr);
+				// Save accounts to JObject for later access throughout the program
+				User.Accounts = JObject.Parse(accountsJsonStr);
 
 				// Validate settings config, store errors
 				IList<string> errorMessages = this.ValidateConfig(accountsJsonStr, this.accountsSchemaStr);
@@ -53,40 +54,21 @@ namespace GlobalNamespace
 					throw new ArgumentException(errorMsg);
 				}
 
-				// TODO: Find a better way to store these little account lists in User.Accounts variable. Maybe <string, dynamic>?
-				// Generic method to create tables, pass tuples as arguments for row initialization
-				User.DbAccounts = new DataTable();
-				User.DbAccounts.Locale = cultEng;
-				User.DbAccounts.Columns.Add("lastUsed", typeof(double));
-				User.DbAccounts.Columns.Add("id", typeof(string));
-				User.DbAccounts.Columns.Add("key", typeof(string));
-				User.DbAccounts.Rows.Add(1, User.Accounts["DbAppId1"], User.Accounts["DbAppKey1"]);
-				User.DbAccounts.Rows.Add(2, User.Accounts["DbAppId2"], User.Accounts["DbAppKey2"]);
-				User.DbAccounts.Rows.Add(3, User.Accounts["DbAppId3"], User.Accounts["DbAppKey3"]);
-				User.DbAccounts.Rows.Add(4, User.Accounts["DbAppId4"], User.Accounts["DbAppKey4"]);
-				User.DbAccounts.Rows.Add(5, User.Accounts["DbAppId5"], User.Accounts["DbAppKey5"]);
-
-				User.MgAccounts = new DataTable();
-				User.MgAccounts.Locale = cultEng;
-				User.MgAccounts.Columns.Add("lastUsed", typeof(double));
-				User.MgAccounts.Columns.Add("key", typeof(string));
-				User.MgAccounts.Rows.Add(1, User.Accounts["MgAppKey1"]);
-				User.MgAccounts.Rows.Add(2, User.Accounts["MgAppKey2"]);
-				User.MgAccounts.Rows.Add(3, User.Accounts["MgAppKey3"]);
-
-				User.MmAccounts = new DataTable();
-				User.MmAccounts.Locale = cultEng;
-				User.MmAccounts.Columns.Add("lastUsed", typeof(double));
-				User.MmAccounts.Columns.Add("key", typeof(string));
-				User.MmAccounts.Rows.Add(1, User.Accounts["MmApiKey1"]);
-				User.MmAccounts.Rows.Add(2, User.Accounts["MmApiKey2"]);
-				User.MmAccounts.Rows.Add(3, User.Accounts["MmApiKey3"]);
+				// Insert "lastUsed" variables to track which API key usage
+				foreach (string api in new string[] { "decibel", "musicgraph", "musixmatch" })
+				{
+					var account = User.Accounts.GetValue(api, StringComparison.OrdinalIgnoreCase);
+					foreach (var item in account)
+					{
+						item["lastUsed"] = 0;
+					}
+				}
 
 				// Read user configuration from settings.json
 				string settingsJsonStr = File.ReadAllText(settingsConfigFilepath);
 
-				// Save settings to dictionary for later access throughout the program
-				User.Settings = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(settingsJsonStr);
+				// Save settings to JObject for later access throughout the program
+				User.Settings = JObject.Parse(settingsJsonStr);
 
 				// Validate settings config, store errors
 				errorMessages = this.ValidateConfig(settingsJsonStr, this.settingsSchemaStr);

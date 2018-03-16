@@ -29,7 +29,7 @@ namespace GlobalNamespace
 					{
 						this.dataGridView1[col, row].ToolTipText = oldValue;
 
-						long allowedEdits = oldValue.Length * User.Settings["ThresholdRedValue"] / 100;
+						long allowedEdits = oldValue.Length * (int)User.Settings["ThresholdRedValue"] / 100;
 						if (signalBigChanges && (LevenshteinDistance(oldValue, newValue) > allowedEdits))
 						{
 							this.dataGridView1[col, row].Style.BackColor = Color.Red;

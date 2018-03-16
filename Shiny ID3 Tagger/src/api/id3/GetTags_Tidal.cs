@@ -38,11 +38,11 @@ namespace GlobalNamespace
 				{
 					loginRequest.Method = HttpMethod.Post;
 					loginRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/login/username");
-					loginRequest.Headers.Add("X-Tidal-Token", User.Accounts["TiToken"]);
+					loginRequest.Headers.Add("X-Tidal-Token", (string)User.Accounts["Tidal"]["Token"]);
 					loginRequest.Content = new FormUrlEncodedContent(new[]
 						{
-							new KeyValuePair<string, string>("username", User.Accounts["TiUsername"]),
-							new KeyValuePair<string, string>("password", User.Accounts["TiPassword"])
+							new KeyValuePair<string, string>("username", (string)User.Accounts["Tidal"]["Username"]),
+							new KeyValuePair<string, string>("password", (string)User.Accounts["Tidal"]["Password"])
 						});
 
 					string loginContent = await this.GetResponse(client, loginRequest, cancelToken);

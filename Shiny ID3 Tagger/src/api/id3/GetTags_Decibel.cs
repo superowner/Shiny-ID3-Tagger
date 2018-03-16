@@ -15,6 +15,7 @@ namespace GlobalNamespace
 	using System;
 	using System.Data;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 	using System.Threading;
@@ -32,8 +33,10 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-			DataRow[] account = User.DbAccounts.Select("lastused = MIN(lastused)");
-			User.DbAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;
+			var account = (from item in User.Accounts["Decibel"]
+						   orderby item["lastused"] ascending
+						   select item).FirstOrDefault();
+			account["lastUsed"] = DateTime.Now.Ticks;
 
 			string artistEncoded = WebUtility.UrlEncode(artist);
 			string titleEncoded = WebUtility.UrlEncode(title);
@@ -41,8 +44,8 @@ namespace GlobalNamespace
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
 				searchRequest.RequestUri = new Uri("https://data.quantonemusic.com/v3/Recordings?artists=" + artistEncoded + "&title=" + titleEncoded + "&depth=genres&PageSize=1&PageNumber=1");
-				searchRequest.Headers.Add("DecibelAppID", (string)account[0]["id"]);
-				searchRequest.Headers.Add("DecibelAppKey", (string)account[0]["key"]);
+				searchRequest.Headers.Add("DecibelAppID", (string)account["AppId"]);
+				searchRequest.Headers.Add("DecibelAppKey", (string)account["AppKey"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = this.DeserializeJson(searchContent);
@@ -60,8 +63,8 @@ namespace GlobalNamespace
 					using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 					{
 						albumRequest.RequestUri = new Uri("https://data.quantonemusic.com/v3/Albums?artists=" + artistEncoded + "&recordings=" + titleEncoded + "&depth=Genres,Recordings&PageSize=1&PageNumber=1");
-						albumRequest.Headers.Add("DecibelAppID", (string)account[0]["id"]);
-						albumRequest.Headers.Add("DecibelAppKey", (string)account[0]["key"]);
+						albumRequest.Headers.Add("DecibelAppID", (string)account["AppId"]);
+						albumRequest.Headers.Add("DecibelAppKey", (string)account["AppKey"]);
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
 						JObject albumData = this.DeserializeJson(albumContent);

@@ -39,8 +39,8 @@ namespace GlobalNamespace
 				searchRequest.Content = new StringContent(@"
 						<QUERIES>
 							<AUTH>
-								<CLIENT>" + User.Accounts["GnClientId"] + @"</CLIENT>
-								<USER>" + User.Accounts["GnUserId"] + @"</USER>
+								<CLIENT>" + User.Accounts["Gracenote"]["ClientId"] + @"</CLIENT>
+								<USER>" + User.Accounts["Gracenote"]["UserId"] + @"</USER>
 							</AUTH>
 							<LANG>eng</LANG>
 							<QUERY CMD=""ALBUM_SEARCH"">

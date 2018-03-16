@@ -14,6 +14,7 @@ namespace GlobalNamespace
 	using System.Globalization;
 	using System.Threading;
 	using System.Windows.Forms;
+	using Newtonsoft.Json.Linq;
 
 	public partial class Form1
 	{
@@ -51,15 +52,9 @@ namespace GlobalNamespace
 
 	internal static class User
 	{
-		internal static Dictionary<string, dynamic> Settings { get; set; }
+		internal static JObject Accounts { get; set; }
 
-		internal static Dictionary<string, string> Accounts { get; set; }
-
-		internal static DataTable DbAccounts { get; set; }
-
-		internal static DataTable MgAccounts { get; set; }
-
-		internal static DataTable MmAccounts { get; set; }
+		internal static JObject Settings { get; set; }
 	}
 
 	internal class Id3

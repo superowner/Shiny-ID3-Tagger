@@ -32,15 +32,17 @@ namespace GlobalNamespace
 			sw.Start();
 
 			// ###########################################################################
-			DataRow[] account = User.MmAccounts.Select("lastused = MIN(lastused)");
-			User.MmAccounts.Select("lastused = MIN(lastused)")[0]["lastused"] = DateTime.Now.Ticks;
+			var account = (from item in User.Accounts["Musixmatch"]
+						   orderby item["lastused"] ascending
+						   select item).FirstOrDefault();
+			account["lastUsed"] = DateTime.Now.Ticks;
 
 			string artistEncoded = WebUtility.UrlEncode(artist);
 			string titleEncoded = WebUtility.UrlEncode(title);
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&page_size=1&apikey=" + (string)account[0]["key"]);
+				searchRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&page_size=1&apikey=" + (string)account["ApiKey"]);
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = this.DeserializeJson(searchContent);
@@ -57,7 +59,7 @@ namespace GlobalNamespace
 					// ###########################################################################
 					using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 					{
-						albumRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account[0]["key"]);
+						albumRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account["ApiKey"]);
 
 						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
 						JObject albumData = this.DeserializeJson(albumContent);
@@ -75,7 +77,7 @@ namespace GlobalNamespace
 					// ###########################################################################
 					using (HttpRequestMessage albumtracksRequest = new HttpRequestMessage())
 					{
-						albumtracksRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account[0]["key"]);
+						albumtracksRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account["ApiKey"]);
 
 						string albumtracksContent = await this.GetResponse(client, albumtracksRequest, cancelToken);
 						JObject albumtracksData = this.DeserializeJson(albumtracksContent);

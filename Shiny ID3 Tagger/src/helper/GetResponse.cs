@@ -50,7 +50,7 @@ namespace GlobalNamespace
 					}
 
 					// If debugging level is 3 (DEBUG) or higher, print out all requests, not only failed once
-					if (User.Settings["DebugLevel"] >= 3)
+					if ((int)User.Settings["DebugLevel"] >= 3)
 					{
 						List<string> errorMsg = BuildLogMessage(request, requestContent, null);
 						this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
@@ -92,7 +92,7 @@ namespace GlobalNamespace
 						if (!cancelToken.IsCancellationRequested)
 						{
 							// If debugging is enabled in settings, print out all request and response properties
-							if (User.Settings["DebugLevel"] >= 2)
+							if ((int)User.Settings["DebugLevel"] >= 2)
 							{
 								List<string> errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
 								errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
@@ -111,7 +111,7 @@ namespace GlobalNamespace
 				{
 					// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
 					// If debugging is enabled in settings, print out all request properties
-					if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 2)
+					if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 2)
 					{
 						List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + Timeout + " seconds to respond! Abort..." };
 						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
@@ -125,7 +125,7 @@ namespace GlobalNamespace
 				{
 					// An unknown application error occurred. Cancel request immediately and don't try again
 					// If debugging is enabled in settings, print out all request properties
-					if (!cancelToken.IsCancellationRequested && User.Settings["DebugLevel"] >= 1)
+					if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 1)
 					{
 						Exception realerror = error;
 						while (realerror.InnerException != null)
@@ -135,7 +135,7 @@ namespace GlobalNamespace
 
 						List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured! Abort..." };
 						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-						errorMsg.Add("Message:  " + realerror.ToString().TrimEnd('\r', '\n'));
+						errorMsg.Add("Message:  " + realerror.Message.ToString());
 
 						this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
 					}
