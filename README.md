@@ -14,13 +14,13 @@
 - **iTunes**
 - **Last.fm**
 - **Musicbrainz**
-- **Musicgraph**
 - **Musixmatch**
 - **Napster**
 - **Netease**
 - **Qobuz**
 - **QQ**
 - **Spotify**
+- **Tidal**
 - **Chartlyrics** (only for lyrics)
 - **Lololyrics** (only for lyrics)
 - **Viewlyrics** (only for lyrics)

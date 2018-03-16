@@ -302,16 +302,16 @@ namespace GlobalNamespace
 				this.GetTags_iTunes(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_LastFm(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_MusicBrainz(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_MusixMatch(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Napster(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Netease(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Qobuz(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_QQ(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken)
+				this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken),
+				this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken)
 
+				// this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken),	API disabled ???
 				// this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken),	API disabled
-				// this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken)		No valid API key
 			};
 
 			this.fastProgressBar.Maximum = taskList.Count;
