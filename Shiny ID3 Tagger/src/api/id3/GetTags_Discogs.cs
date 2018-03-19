@@ -36,6 +36,7 @@ namespace GlobalNamespace
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
+				// Following syntax has worse results: "https://api.discogs.com/database/search?track=" + titleTemp + "&artist=" + artistTemp
 				searchRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 				searchRequest.RequestUri = new Uri("https://api.discogs.com/database/search?q=" + searchTermEnc +
 					"&format=album" +

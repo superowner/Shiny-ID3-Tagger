@@ -34,9 +34,8 @@ namespace GlobalNamespace
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
 				searchRequest.Method = HttpMethod.Post;
-				searchRequest.RequestUri = new Uri("http://music.163.com/api/search/get/");
 				searchRequest.Headers.Add("referer", "http://music.163.com");
-				searchRequest.Headers.Add("Cookie", "appver=2.0.2");
+				searchRequest.RequestUri = new Uri("http://music.163.com/api/search/get/");
 				searchRequest.Content = new FormUrlEncodedContent(new[]
 					{
 						new KeyValuePair<string, string>("s", WebUtility.UrlEncode(tagNew.Artist + " - " + tagNew.Title)),
@@ -61,7 +60,6 @@ namespace GlobalNamespace
 						using (HttpRequestMessage lyricsRequest = new HttpRequestMessage())
 						{
 							lyricsRequest.Headers.Add("referer", "http://music.163.com");
-							lyricsRequest.Headers.Add("Cookie", "appver=2.0.2");
 							lyricsRequest.RequestUri = new Uri("http://music.163.com/api/song/lyric/?id=" + songid + "&lv=-1&kv=-1&tv=-1");
 
 							string lyricsContent = await this.GetResponse(client, lyricsRequest, cancelToken);
