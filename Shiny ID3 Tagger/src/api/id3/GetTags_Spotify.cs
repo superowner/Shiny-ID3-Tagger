@@ -45,12 +45,11 @@ namespace GlobalNamespace
 				{
 					loginRequest.Method = HttpMethod.Post;
 					loginRequest.RequestUri = new Uri("https://accounts.spotify.com/api/token");
-					loginRequest.Content = new FormUrlEncodedContent(
-						new Dictionary<string, string> { { "grant_type", "client_credentials" } });
+					loginRequest.Content = new StringContent("grant_type=client_credentials", Encoding.UTF8, "application/x-www-form-urlencoded");
 
-					string credidsPlain = User.Accounts["Spotify"]["ClientId"] + ":" + User.Accounts["Spotify"]["ClientSecret"];
-					byte[] credidsBytes = Encoding.UTF8.GetBytes(credidsPlain);
-					string creditsBase64 = Convert.ToBase64String(credidsBytes);
+					string creditsPlain = User.Accounts["Spotify"]["ClientId"] + ":" + User.Accounts["Spotify"]["ClientSecret"];
+					byte[] creditsBytes = Encoding.UTF8.GetBytes(creditsPlain);
+					string creditsBase64 = Convert.ToBase64String(creditsBytes);
 					loginRequest.Headers.Add("Authorization", "Basic " + creditsBase64);
 
 					string loginContent = await this.GetResponse(client, loginRequest, cancelToken);
