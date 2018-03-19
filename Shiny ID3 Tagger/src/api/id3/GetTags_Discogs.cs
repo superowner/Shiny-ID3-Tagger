@@ -55,7 +55,9 @@ namespace GlobalNamespace
 						using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 						{
 							albumRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
-							albumRequest.RequestUri = new Uri(albumUrl + "?key=" + User.Accounts["DcKey"] + "&secret=" + User.Accounts["Discogs"]["Secret"]);
+							albumRequest.RequestUri = new Uri(albumUrl +
+								"?key=" + User.Accounts["Discogs"]["Key"] +
+								"&secret=" + User.Accounts["Discogs"]["Secret"]);
 
 							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
 							JObject albumData = this.DeserializeJson(albumContent);
