@@ -50,7 +50,7 @@ namespace GlobalNamespace
 
 				if (searchData != null && searchData.SelectToken("result.songs") != null)
 				{
-					// Chinese translation is "album", excludes EPs and compilations and stuff like that
+					// Translation for "专辑" is "album". This excludes EPs, compilations and so on
 					List<JToken> albums = (from songs in searchData.SelectToken("result.songs")
 										   where (string)songs["album"]["type"] == "专辑"
 										   select songs).ToList();

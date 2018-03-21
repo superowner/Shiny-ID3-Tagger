@@ -5,6 +5,7 @@
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Gracenote API for current track</summary>
 // https://developer.gracenote.com/web-api
+// https://developer.gracenote.com/sites/default/files/web/html/index.html#PDFs/Music-Web-API-Developers-Guide-o.pdf
 // https://developer.gracenote.com/sites/default/files/web/webapi/index.html#music-web-api/Registering%20a%20Device.html#scroll-bookmark-25
 //-----------------------------------------------------------------------
 

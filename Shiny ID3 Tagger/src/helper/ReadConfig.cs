@@ -10,11 +10,9 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
-	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 
 	public partial class Form1

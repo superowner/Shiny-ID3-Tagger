@@ -310,7 +310,7 @@ namespace GlobalNamespace
 				this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken)
 
-				// this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken),	API disabled ???
+				// this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken),	API seems down permanently
 				// this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken),	API disabled
 			};
 

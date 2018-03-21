@@ -34,7 +34,10 @@ namespace GlobalNamespace
 			// Does this access_token expire ever? Docs don't mention a expire time when requesting an access_token
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.RequestUri = new Uri("https://api.genius.com/search?q=" + searchTermEnc + "&access_token=" + User.Accounts["Genius"]["AccessToken"]);
+				searchRequest.RequestUri = new Uri("https://api.genius.com/search?q=" +
+					searchTermEnc +
+					"&access_token=" + User.Accounts["Genius"]["AccessToken"] +
+					"&text_format=plain");
 
 				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = this.DeserializeJson(searchContent);
@@ -43,7 +46,10 @@ namespace GlobalNamespace
 				{
 					using (HttpRequestMessage trackRequest = new HttpRequestMessage())
 					{
-						trackRequest.RequestUri = new Uri("https://api.genius.com" + searchData.SelectToken("response.hits[0].result.api_path") + "?access_token=" + User.Accounts["Genius"]["AccessToken"] + "&text_format=plain");
+						trackRequest.RequestUri = new Uri("https://api.genius.com" +
+							searchData.SelectToken("response.hits[0].result.api_path") +
+							"?access_token=" + User.Accounts["Genius"]["AccessToken"] +
+							"&text_format=plain");
 
 						string trackContent = await this.GetResponse(client, trackRequest, cancelToken);
 						JObject trackData = this.DeserializeJson(trackContent);
