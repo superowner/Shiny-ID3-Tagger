@@ -307,13 +307,13 @@
     <Compile Include="src\api\id3\GetTags_LastFm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\api\id3\GetTags_MsGroove.cs">
+    <Compile Include="src\api\deprecated\GetTags_MsGroove.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\api\id3\GetTags_MusicBrainz.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\api\id3\GetTags_MusicGraph.cs">
+    <Compile Include="src\api\deprecated\GetTags_MusicGraph.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\api\id3\GetTags_MusixMatch.cs">

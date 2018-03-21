@@ -66,7 +66,6 @@ namespace GlobalNamespace
 							if (albumData != null)
 							{
 								o.Artist = (string)albumData.SelectToken("artists[0].name");
-								o.Title = null;
 								o.Album = (string)albumData.SelectToken("title");
 								o.Date = (string)albumData.SelectToken("year");
 								o.Genre = (string)albumData.SelectToken("genres[0]");
@@ -82,7 +81,7 @@ namespace GlobalNamespace
 								// You can do one search with "format=album" to maybe get the album and a second search without "format=album" to maybe get tracks and therefore a track title
 								// But no one will guarantee that the second search shows a title which is on your album from the first search
 								// How can I get a response which holds album and title at the same time?
-								// Currently it's just checking if album track list contains a title which equals initial search title which can be wrong since it's from filename or old ID3 tags
+								// Currently this is just checking if album track list contains a title which equals initial search title which can be wrong since it's from filename or old ID3 tags
 								JToken[] tracklist = albumData.SelectTokens("tracklist[*].title").ToArray();
 								int temp = Array.FindIndex(tracklist, t => t.ToString().ToLowerInvariant() == title.ToLowerInvariant());
 								if (temp != -1)
