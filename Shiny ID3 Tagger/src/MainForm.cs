@@ -28,27 +28,17 @@ namespace GlobalNamespace
 		// Code is executed on all program calls (1,2,3,4....)
 		internal async void Form1Shown(string[] args)
 		{
-			// Refresh cancel token
+			// Refresh cancellation token
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
 
-			ActiveDGV = this.dataGridView1;
-
-			Version version = new Version(Application.ProductVersion);
-			this.Text = Application.ProductName + " v" + version.Major + "." + version.Minor;
-
-			// Get user settings
-			bool hasSettings = this.ReadSettings();
-
-			// Get user credentials
-			bool hasCredentials = this.ReadCredentials();
-
-			if (hasCredentials && hasSettings)
+			// Continue only if user credentials and user settings are present
+			if (User.Accounts != null && User.Settings != null)
 			{
-				// Add new files
+				// Add new files to dataGridView1
 				bool hasNewFiles = await this.AddFiles(args, cancelToken);
 
-				// Continue with searching if user setting allows it and if new files were added
+				// Continue only if user setting allows it and if new files were added
 				if ((bool)User.Settings["AutoSearch"] && hasNewFiles)
 				{
 					this.StartSearching(cancelToken);
@@ -62,9 +52,39 @@ namespace GlobalNamespace
 		}
 
 		// Code is only executed on the first program call (1)
-		protected override void OnShown(EventArgs e)
+		protected async override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);
+
+			// Get user settings
+			this.ReadSettings();
+
+			// Get user credentials
+			this.ReadCredentials();
+
+			// MAIN: Check if there are any files in "update" folder
+			// MAIN: If yes, start updater.exe and close main program
+			// MAIN: If no, continue with github check
+
+			// UPDATER: Check if main program is closed. wait 5s, close updater if thread is still alive
+			// UPDATER: Loop through all files in update folder and copy file one by one to main folder
+			// UPDATER: Delete update folder
+			// UPDATER: Start main program (this will not start another updater since no update folder is present)
+			// UPDATER: Close updater
+
+			// MAIN: Check if there are any new files on Github (use develop or master channel according to user settings)
+			// MAIN: Download all new files into new folder called "update"
+
+			bool result = await this.DownloadClientFiles();
+
+			// Initialize helper variable to track which dataGridView is currently shown
+			ActiveDGV = this.dataGridView1;
+
+			// Change form name to include version
+			Version version = new Version(Application.ProductVersion);
+			this.Text = Application.ProductName + " v" + version.Major + "." + version.Minor;
+
+			// Read in command line arguments and pass them to main program
 			string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();
 			this.Form1Shown(args);
 		}

@@ -15,7 +15,7 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private bool ReadSettings()
+		private void ReadSettings()
 		{
 			// Path for user settings file
 			string settingsConfigFilepath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.json";
@@ -48,11 +48,7 @@ namespace GlobalNamespace
 					"Message:  " + ex.Message.TrimEnd('\r', '\n')
 				};
 				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
-
-				return false;
 			}
-
-			return true;
 		}
 	}
 }

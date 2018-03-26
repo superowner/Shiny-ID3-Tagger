@@ -17,7 +17,7 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private bool ReadCredentials()
+		private void ReadCredentials()
 		{
 			// Path for user credentials file
 			string accountsConfigFilepath = AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.json";
@@ -69,11 +69,7 @@ namespace GlobalNamespace
 					"Message:  " + ex.Message.TrimEnd('\r', '\n')
 				};
 				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
-
-				return false;
 			}
-
-			return true;
 		}
 	}
 }

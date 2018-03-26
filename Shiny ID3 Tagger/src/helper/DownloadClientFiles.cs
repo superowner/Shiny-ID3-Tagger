@@ -16,8 +16,13 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		private async Task<bool> DownloadClientFiles(CancellationToken cancelToken)
+		private async Task<bool> DownloadClientFiles()
 		{
+
+			// Issue new cancellation token
+			TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = TokenSource.Token;
+
 			// Path for user credentials file
 			string accountsConfigFilepath = AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.json";
 
@@ -33,6 +38,8 @@ namespace GlobalNamespace
 					JObject fileData = this.DeserializeJson(fileContent);
 
 					string fileSha1 = (string)fileData.SelectToken("sha");
+
+					// Last - Modified: Wed, 21 Mar 2018 01:23:14 GMT
 				}
 			}
 
