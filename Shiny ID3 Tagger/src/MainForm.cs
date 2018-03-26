@@ -25,7 +25,7 @@ namespace GlobalNamespace
 			this.InitializeComponent();
 		}
 
-		// ###########################################################################
+		// Code is executed on all program calls (1,2,3,4....)
 		internal async void Form1Shown(string[] args)
 		{
 			// Refresh cancel token
@@ -37,8 +37,13 @@ namespace GlobalNamespace
 			Version version = new Version(Application.ProductVersion);
 			this.Text = Application.ProductName + " v" + version.Major + "." + version.Minor;
 
-			bool isSuccess = this.ReadConfig();
-			if (isSuccess)
+			// Get user settings
+			bool hasSettings = this.ReadSettings();
+
+			// Get user credentials
+			bool hasCredentials = this.ReadCredentials();
+
+			if (hasCredentials && hasSettings)
 			{
 				// Add new files
 				bool hasNewFiles = await this.AddFiles(args, cancelToken);
@@ -56,9 +61,7 @@ namespace GlobalNamespace
 			}
 		}
 
-		// ###########################################################################
-
-		/// <inheritdoc/>
+		// Code is only executed on the first program call (1)
 		protected override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);

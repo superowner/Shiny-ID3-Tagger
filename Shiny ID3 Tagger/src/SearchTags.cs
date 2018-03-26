@@ -309,9 +309,6 @@ namespace GlobalNamespace
 				this.GetTags_QQ(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken)
-
-				// this.GetTags_MusicGraph(client, artistToSearch, titleToSearch, cancelToken),	API seems down permanently
-				// this.GetTags_MsGroove(client, artistToSearch, titleToSearch, cancelToken),	API disabled
 			};
 
 			this.fastProgressBar.Maximum = taskList.Count;
@@ -460,12 +457,10 @@ namespace GlobalNamespace
 				 * Musicbrainz			no CDN, persistent cover URLs, redirect and slow server			different sizes, 900 to 1800 px, always squared
 				 * Netease				no CDN, persistent cover URLs, slow server						different sizes, 600 to 3000 px, can be non-squared
 				 * QQ (Tencent)			no CDN, persistent cover URLs, slow server						500 px, always squared
-				 * Microsoft Groove)	no CDN, persistent cover URLs, API shut down soon				different sizes, 1200 to 3000 px, can be non-squared
 				 * Decibel				needs authentication
 				 * Musixmatch			no covers provided
-				 * Musicgraph			no covers provided
 				 *
-				 * Musixmatch and Musicgraph do not provide any cover URL via API
+				 * Musixmatch does not provide any cover URL via API
 				 * Despite Decibel provides a cover URL, the resource is not easy to download since authorization via API key in a header is required
 				 * Therefore these services must be skipped as cover source. This is done by removing them from "CoverPriority" variable in settings.json
 				 */
