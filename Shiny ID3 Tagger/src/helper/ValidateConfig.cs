@@ -295,6 +295,11 @@ namespace GlobalNamespace
 		  ""$id"": ""https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/settingsSchema.json"",
 		  ""type"": ""object"",
 		  ""properties"": {
+				""Branch"": {
+				  ""$id"": ""/properties/Branch"",
+				  ""type"": ""string"",
+				  ""enum"": [""master"", ""develop""]
+				},
 				""DebugLevel"": {
 				  ""$id"": ""/properties/DebugLevel"",
 				  ""type"": ""integer""
@@ -365,6 +370,7 @@ namespace GlobalNamespace
 			  },
 			  ""additionalProperties"": false,
 			  ""required"": [
+				""Branch"",
 				""DebugLevel"",
 				""PreferTags"",
 				""RemoveBrackets"",

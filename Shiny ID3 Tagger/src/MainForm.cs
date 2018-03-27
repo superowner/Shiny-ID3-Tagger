@@ -56,33 +56,15 @@ namespace GlobalNamespace
 		{
 			base.OnShown(e);
 
-			// Get user settings
+			// Get user settings and credentials
 			this.ReadSettings();
-
-			// Get user credentials
 			this.ReadCredentials();
 
-			// MAIN: Check if there are any files in "update" folder
-			// MAIN: If yes, start updater.exe and close main program
-			// MAIN: If no, continue with github check
-
-			// UPDATER: Check if main program is closed. wait 5s, close updater if thread is still alive
-			// UPDATER: Loop through all files in update folder and copy file one by one to main folder
-			// UPDATER: Delete update folder
-			// UPDATER: Start main program (this will not start another updater since no update folder is present)
-			// UPDATER: Close updater
-
-			// MAIN: Check if there are any new files on Github (use develop or master channel according to user settings)
-			// MAIN: Download all new files into new folder called "update"
-
+			// Update this program via Github
 			bool result = await this.DownloadClientFiles();
 
 			// Initialize helper variable to track which dataGridView is currently shown
 			ActiveDGV = this.dataGridView1;
-
-			// Change form name to include version
-			Version version = new Version(Application.ProductVersion);
-			this.Text = Application.ProductName + " v" + version.Major + "." + version.Minor;
 
 			// Read in command line arguments and pass them to main program
 			string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();
