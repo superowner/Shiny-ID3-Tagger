@@ -25,25 +25,20 @@ namespace GlobalNamespace
 			this.InitializeComponent();
 		}
 
-		// ###########################################################################
+		// Code is executed on all program calls (1,2,3,4....)
 		internal async void Form1Shown(string[] args)
 		{
-			// Refresh cancel token
+			// Refresh cancellation token
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
 
-			ActiveDGV = this.dataGridView1;
-
-			Version version = new Version(Application.ProductVersion);
-			this.Text = Application.ProductName + " v" + version.Major + "." + version.Minor;
-
-			bool isSuccess = this.ReadConfig();
-			if (isSuccess)
+			// Continue only if user credentials and user settings are present
+			if (User.Accounts != null && User.Settings != null)
 			{
-				// Add new files
+				// Add new files to dataGridView1
 				bool hasNewFiles = await this.AddFiles(args, cancelToken);
 
-				// Continue with searching if user setting allows it and if new files were added
+				// Continue only if user setting allows it and if new files were added
 				if ((bool)User.Settings["AutoSearch"] && hasNewFiles)
 				{
 					this.StartSearching(cancelToken);
@@ -56,12 +51,22 @@ namespace GlobalNamespace
 			}
 		}
 
-		// ###########################################################################
-
-		/// <inheritdoc/>
-		protected override void OnShown(EventArgs e)
+		// Code is only executed on the first program call (1)
+		protected async override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);
+
+			// Get user settings and credentials
+			this.ReadSettings();
+			this.ReadCredentials();
+
+			// Update this program via Github
+			bool result = await this.DownloadClientFiles();
+
+			// Initialize helper variable to track which dataGridView is currently shown
+			ActiveDGV = this.dataGridView1;
+
+			// Read in command line arguments and pass them to main program
 			string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();
 			this.Form1Shown(args);
 		}
