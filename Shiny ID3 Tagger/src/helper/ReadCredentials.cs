@@ -36,16 +36,8 @@ namespace GlobalNamespace
 				byte[] decryptedBytes = decryptorTransformer.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
 				string accountsJson = Encoding.UTF8.GetString(decryptedBytes);
 
-				// Validate credentials, store errors
-				// If any validation error occurred, throw exception to go into catch clause
-				IList<string> validationErrors = this.ValidateConfig(accountsJson, this.accountsSchemaStr);
-
-				if (validationErrors.Count > 0)
-				{
-					string allValidationErrors = string.Join("\n          ", (IEnumerable<string>)validationErrors);
-
-					throw new ArgumentException(allValidationErrors);
-				}
+				// Validate credentials. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
+				this.ValidateSchema(accountsJson, this.accountsSchemaStr);
 
 				// Save credentials as JObject for later access throughout the program
 				User.Accounts = JObject.Parse(accountsJson);

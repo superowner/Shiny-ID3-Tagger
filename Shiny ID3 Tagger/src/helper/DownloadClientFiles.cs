@@ -38,6 +38,11 @@ namespace GlobalNamespace
 	{
 		private async Task<bool> DownloadClientFiles()
 		{
+			DateTime lastCommitDate;
+			DateTime remoteCommitDate;
+			string lastCommitSha = null;
+			string remoteCommitSha = null;
+
 			// ######################################################################################################################
 			// Path for lastCommit file
 			string lastCommitPath = AppDomain.CurrentDomain.BaseDirectory + @"lastCommit.json";
@@ -47,24 +52,16 @@ namespace GlobalNamespace
 				// Read content from lastCommit.json
 				string lastCommitJson = File.ReadAllText(lastCommitPath);
 
-				// Validate lastCommit.json, store errors
-				// If any validation error occurred, throw exception to go into catch clause
-				IList<string> validationErrors = this.ValidateConfig(lastCommitJson, this.lastCommitSchemaStr);
-
-				if (validationErrors.Count > 0)
-				{
-					string allValidationErrors = string.Join("\n          ", (IEnumerable<string>)validationErrors);
-
-					throw new ArgumentException(allValidationErrors);
-				}
+				// Validate lastCommit.json. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
+				this.ValidateSchema(lastCommitJson, this.lastCommitSchemaStr);
 
 				// Save last commit to JObject for later access throughout the program
 				JObject lastCommitData = JObject.Parse(lastCommitJson);
 
 				if (lastCommitData != null)
 				{
-					string lastCommitSha = (string)lastCommitData.SelectToken("commit");
-					DateTime lastCommitDate = (DateTime)lastCommitData.SelectToken("date");
+					lastCommitSha = (string)lastCommitData.SelectToken("commit");
+					lastCommitDate = (DateTime)lastCommitData.SelectToken("date");
 
 					this.Text = Application.ProductName + "     GitHub commit date: " + lastCommitDate.ToString("yyyy-MM-dd HH:mm:ss");
 				}
@@ -94,7 +91,7 @@ namespace GlobalNamespace
 				{
 					using (HttpRequestMessage remoteCommitRequest = new HttpRequestMessage())
 					{
-						remoteCommitRequest.Headers.Add("Authorization", "token 8d21a9ba4fda073cfa9952b6916cab43a21a6c6d");
+						remoteCommitRequest.Headers.Add("Authorization", "token " + User.Accounts["GitHub"]["AccessToken"]);
 						remoteCommitRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
 						remoteCommitRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 
@@ -105,8 +102,8 @@ namespace GlobalNamespace
 
 						if (remoteCommitData != null)
 						{
-							string remoteCommitSha = (string)remoteCommitData.SelectToken("commit.sha");
-							DateTime remoteCommitDate = (DateTime)remoteCommitData.SelectToken("commit.commit.author.date");
+							remoteCommitSha = (string)remoteCommitData.SelectToken("commit.sha");
+							remoteCommitDate = (DateTime)remoteCommitData.SelectToken("commit.commit.author.date");
 						}
 					}
 				}

@@ -25,16 +25,8 @@ namespace GlobalNamespace
 				// Read user settings from settings.json
 				string settingsJson = File.ReadAllText(settingsConfigPath);
 
-				// Validate settings config, store errors
-				// If any validation error occurred, throw exception to go into catch clause
-				IList<string> validationErrors = this.ValidateConfig(settingsJson, this.settingsSchemaStr);
-
-				if (validationErrors.Count > 0)
-				{
-					string allValidationErrors = string.Join("\n          ", (IEnumerable<string>)validationErrors);
-
-					throw new ArgumentException(allValidationErrors);
-				}
+				// Validate settings config. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
+				this.ValidateSchema(settingsJson, this.settingsSchemaStr);
 
 				// Save settings to JObject for later access throughout the program
 				User.Settings = JObject.Parse(settingsJson);
