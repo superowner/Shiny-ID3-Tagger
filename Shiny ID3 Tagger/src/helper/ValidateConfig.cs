@@ -388,6 +388,31 @@ namespace GlobalNamespace
 		}";
 		#endregion
 
+		#region schema for lastCommit.json
+		private string lastCommitSchemaStr = @"
+		{
+		  ""definitions"": {},
+		  ""$schema"": ""http://json-schema.org/draft-06/schema#"",
+		  ""$id"": ""https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/lastCommitSchema.json"",
+		  ""type"": ""object"",
+		  ""properties"": {
+				""commit"": {
+				  ""$id"": ""/properties/commit"",
+				  ""type"": ""string"",
+				},
+				""date"": {
+				  ""$id"": ""/properties/date"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""additionalProperties"": false,
+			  ""required"": [
+				""commit"",
+				""date""
+			  ]
+		}";
+		#endregion
+
 		private IList<string> ValidateConfig(string jsonStr, string schemaStr)
 		{
 			// Load schema
@@ -398,6 +423,15 @@ namespace GlobalNamespace
 
 			// Validate JSON against schema, save errors in errorMessages
 			json.IsValid(schema, out IList<string> errorMessages);
+
+
+
+
+
+
+
+
+
 
 			// Return all error messages why validation failed
 			return errorMessages;

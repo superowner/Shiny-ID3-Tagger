@@ -18,16 +18,16 @@ namespace GlobalNamespace
 		private void ReadSettings()
 		{
 			// Path for user settings file
-			string settingsConfigFilepath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.json";
+			string settingsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.json";
 
 			try
 			{
 				// Read user settings from settings.json
-				string settingsJsonStr = File.ReadAllText(settingsConfigFilepath);
+				string settingsJson = File.ReadAllText(settingsConfigPath);
 
 				// Validate settings config, store errors
 				// If any validation error occurred, throw exception to go into catch clause
-				IList<string> validationErrors = this.ValidateConfig(settingsJsonStr, this.settingsSchemaStr);
+				IList<string> validationErrors = this.ValidateConfig(settingsJson, this.settingsSchemaStr);
 
 				if (validationErrors.Count > 0)
 				{
@@ -37,14 +37,14 @@ namespace GlobalNamespace
 				}
 
 				// Save settings to JObject for later access throughout the program
-				User.Settings = JObject.Parse(settingsJsonStr);
+				User.Settings = JObject.Parse(settingsJson);
 			}
 			catch (Exception ex)
 			{
 				string[] errorMsg =
 					{
 					@"ERROR:    Failed to read user settings! Please close program and fix this first...",
-					"Filepath: " + settingsConfigFilepath,
+					"Filepath: " + settingsConfigPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n')
 				};
 				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
