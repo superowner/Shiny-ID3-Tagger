@@ -13,8 +13,6 @@
 // MAIN: Rest query Github => GET /repos/:owner/:repo/branches/:branch (use develop or master according to user settings)
 // MAIN: Compare date from remote with date in local file "lastCommit.log"
 // MAIN: If remote is newer, download all new files into new folder called "update"
-// https://developer.github.com/v3/repos/contents/#get-contents
-// fileRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/contents/Shiny%20ID3%20Tagger/config/accounts.json");
 // MAIN: Check if there are any files in "update" folder (maybe from last program start or this one)
 // MAIN: If yes, start updater.exe and close main program
 
@@ -26,7 +24,6 @@
 namespace GlobalNamespace
 {
 	using System;
-	using System.Collections.Generic;
 	using System.IO;
 	using System.Net.Http;
 	using System.Threading;
@@ -38,8 +35,8 @@ namespace GlobalNamespace
 	{
 		private async Task<bool> DownloadClientFiles()
 		{
-			DateTime lastCommitDate;
-			DateTime remoteCommitDate;
+			DateTime? lastCommitDate = null;
+			DateTime? remoteCommitDate = null;
 			string lastCommitSha = null;
 			string remoteCommitSha = null;
 
@@ -61,9 +58,9 @@ namespace GlobalNamespace
 				if (lastCommitData != null)
 				{
 					lastCommitSha = (string)lastCommitData.SelectToken("commit");
-					lastCommitDate = (DateTime)lastCommitData.SelectToken("date");
+					lastCommitDate = (DateTime?)lastCommitData.SelectToken("date");
 
-					this.Text = Application.ProductName + "     GitHub commit date: " + lastCommitDate.ToString("yyyy-MM-dd HH:mm:ss");
+					this.Text = Application.ProductName + "     GitHub commit date: " + lastCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
 				}
 			}
 			catch (Exception ex)
@@ -82,20 +79,18 @@ namespace GlobalNamespace
 			TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = TokenSource.Token;
 
-			// Continue only if user credentials and user settings are present
-			if (User.Accounts != null && User.Settings != null)
+			using (HttpClient client = InitiateHttpClient())
 			{
-				string branch = (string)User.Settings["Branch"];
-
-				using (HttpClient client = InitiateHttpClient())
+				// Check if user credentials and user settings are available
+				if (User.Accounts != null && User.Settings != null)
 				{
 					using (HttpRequestMessage remoteCommitRequest = new HttpRequestMessage())
 					{
-						remoteCommitRequest.Headers.Add("Authorization", "token " + User.Accounts["GitHub"]["AccessToken"]);
-						remoteCommitRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+						remoteCommitRequest.Headers.Add("Authorization", "token " + (string)User.Accounts["GitHub"]["AccessToken"]);
 						remoteCommitRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
+						remoteCommitRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
 
-						remoteCommitRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/branches/" + branch);
+						remoteCommitRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/branches/" + (string)User.Settings["Branch"]);
 
 						string remoteCommitContent = await this.GetResponse(client, remoteCommitRequest, cancelToken);
 						JObject remoteCommitData = this.DeserializeJson(remoteCommitContent);
@@ -103,7 +98,35 @@ namespace GlobalNamespace
 						if (remoteCommitData != null)
 						{
 							remoteCommitSha = (string)remoteCommitData.SelectToken("commit.sha");
-							remoteCommitDate = (DateTime)remoteCommitData.SelectToken("commit.commit.author.date");
+							remoteCommitDate = (DateTime?)remoteCommitData.SelectToken("commit.commit.author.date");
+						}
+					}
+				}
+
+				// If local/last commit date is older (last < remote) than remote commit date, then there must be an update available on GitHub
+				if (lastCommitDate.HasValue && remoteCommitDate.HasValue && lastCommitDate < remoteCommitDate)
+				{
+					DialogResult dialogResult = MessageBox.Show("Download update now?", "Update available", MessageBoxButtons.YesNo);
+					if (dialogResult == DialogResult.Yes)
+					{
+						using (HttpRequestMessage remoteTreeRequest = new HttpRequestMessage())
+						{
+							remoteTreeRequest.Headers.Add("Authorization", "token " + (string)User.Accounts["GitHub"]["AccessToken"]);
+							remoteTreeRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
+							remoteTreeRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+
+							// https://developer.github.com/v3/git/trees/#get-a-tree-recursively
+							// https://stackoverflow.com/questions/7106012/download-a-single-folder-or-directory-from-a-github-repo
+							remoteTreeRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/git/trees/" + remoteCommitSha + "?recursive=1");
+
+							string remoteTreeContent = await this.GetResponse(client, remoteTreeRequest, cancelToken);
+							JObject remoteTreeData = this.DeserializeJson(remoteTreeContent);
+
+							if (remoteTreeData != null)
+							{
+								// Use GET CONTENT to download a file
+								// https://developer.github.com/v3/repos/contents/#get-contents
+							}
 						}
 					}
 				}
