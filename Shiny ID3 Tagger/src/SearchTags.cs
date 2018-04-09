@@ -294,7 +294,6 @@ namespace GlobalNamespace
 			{
 				this.GetTags_7digital(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Amazon(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Decibel(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Deezer(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Discogs(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Genius(client, artistToSearch, titleToSearch, cancelToken),
