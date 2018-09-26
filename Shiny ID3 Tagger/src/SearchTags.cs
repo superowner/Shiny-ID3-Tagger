@@ -308,7 +308,7 @@ namespace GlobalNamespace
 				this.GetTags_Qobuz(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_QQ(client, artistToSearch, titleToSearch, cancelToken),
 				this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken)
+				this.Tidal(client, artistToSearch, titleToSearch, cancelToken)
 			};
 
 			this.fastProgressBar.Maximum = taskList.Count;

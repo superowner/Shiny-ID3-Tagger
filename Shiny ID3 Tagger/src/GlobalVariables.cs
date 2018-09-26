@@ -57,7 +57,7 @@ namespace GlobalNamespace
 		internal static JObject Settings { get; set; }
 	}
 
-	internal class Id3
+	public class Id3
 	{
 		internal string Filepath { get; set; }
 

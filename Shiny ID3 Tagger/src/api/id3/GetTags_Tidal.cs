@@ -8,123 +8,138 @@
 // https://pythonhosted.org/tidalapi/api.html#api
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+using GlobalNamespace;
+
+namespace GetTags
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json.Linq;
 
-	public partial class Form1
-	{
-		private async Task<Id3> GetTags_Tidal(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
-		{
-			Id3 o = new Id3();
-			o.Service = "Tidal";
+    public class Tidal : GetTagsService
+    {
+        public const string ServiceName = "Tidal";
 
-			Stopwatch sw = new Stopwatch();
-			sw.Start();
+        public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title,
+            CancellationToken cancelToken)
+        {
+            Id3 o = new Id3();
+            o.Service = ServiceName;
 
-			// ###########################################################################
-			string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
-			if (ApiSessionData.TiSessionID == null || ApiSessionData.TiSessionExpireDate < DateTime.Now)
-			{
-				using (HttpRequestMessage loginRequest = new HttpRequestMessage())
-				{
-					loginRequest.Method = HttpMethod.Post;
-					loginRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/login/username");
-					loginRequest.Headers.Add("X-Tidal-Token", (string)User.Accounts["Tidal"]["Token"]);
-					loginRequest.Content = new FormUrlEncodedContent(new[]
-						{
-							new KeyValuePair<string, string>("username", (string)User.Accounts["Tidal"]["Username"]),
-							new KeyValuePair<string, string>("password", (string)User.Accounts["Tidal"]["Password"])
-						});
+            // ###########################################################################
+            string searchTermEnc = WebUtility.UrlEncode(artist + " - " + title);
 
-					string loginContent = await this.GetResponse(client, loginRequest, cancelToken);
-					JObject loginData = this.DeserializeJson(loginContent);
+            if (ApiSessionData.TiSessionID == null || ApiSessionData.TiSessionExpireDate < DateTime.Now)
+            {
+                using (HttpRequestMessage loginRequest = new HttpRequestMessage())
+                {
+                    loginRequest.Method = HttpMethod.Post;
+                    loginRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/login/username");
+                    loginRequest.Headers.Add("X-Tidal-Token", (string)User.Accounts["Tidal"]["Token"]);
+                    loginRequest.Content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("username", (string)User.Accounts["Tidal"]["Username"]),
+                        new KeyValuePair<string, string>("password", (string) User.Accounts["Tidal"]["Password"])
+                    });
 
-					if (loginData != null && loginData.SelectToken("sessionId") != null)
-					{
-						ApiSessionData.TiSessionID = (string)loginData.SelectToken("sessionId");
-						ApiSessionData.TiCountryCode = (string)loginData.SelectToken("countryCode");
+                    string loginContent = await this.GetResponse(client, loginRequest, cancelToken);
+                    JObject loginData = this.DeserializeJson(loginContent);
 
-						string userID = (string)loginData.SelectToken("userId");
+                    if (loginData != null && loginData.SelectToken("sessionId") != null)
+                    {
+                        ApiSessionData.TiSessionID = (string) loginData.SelectToken("sessionId");
+                        ApiSessionData.TiCountryCode = (string) loginData.SelectToken("countryCode");
 
-						using (HttpRequestMessage sessionRequest = new HttpRequestMessage())
-						{
-							sessionRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/users/" + userID + "/subscription");
-							sessionRequest.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
+                        string userID = (string) loginData.SelectToken("userId");
 
-							string sessionContent = await this.GetResponse(client, sessionRequest, cancelToken);
-							JObject sessionData = this.DeserializeJson(sessionContent);
+                        using (HttpRequestMessage sessionRequest = new HttpRequestMessage())
+                        {
+                            sessionRequest.RequestUri =
+                                new Uri("http://api.tidalhifi.com/v1/users/" + userID + "/subscription");
+                            sessionRequest.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
 
-							if (sessionData != null)
-							{
-								// 30mins is the "offlineGracePeriod" which I assume is the timespan a session is valid. I could be wrong since there is no documentation about this
-								TimeSpan validDuration = TimeSpan.FromSeconds((int)sessionData.SelectToken("subscription.offlineGracePeriod") * 60);
-								ApiSessionData.TiSessionExpireDate = DateTime.Now.Add(validDuration);
-							}
-						}
-					}
-				}
-			}
+                            string sessionContent = await this.GetResponse(client, sessionRequest, cancelToken);
+                            JObject sessionData = this.DeserializeJson(sessionContent);
 
-			if (ApiSessionData.TiSessionID != null)
-			{
-				using (HttpRequestMessage searchRequest = new HttpRequestMessage())
-				{
-					searchRequest.Headers.Add("Origin", "http://listen.tidal.com");
-					searchRequest.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
-					searchRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/search?types=TRACKS&countryCode=" + ApiSessionData.TiCountryCode + "&query=" + searchTermEnc);
+                            if (sessionData != null)
+                            {
+                                // 30mins is the "offlineGracePeriod" which I assume is the timespan a session is valid. I could be wrong since there is no documentation about this
+                                TimeSpan validDuration =
+                                    TimeSpan.FromSeconds(
+                                        (int) sessionData.SelectToken("subscription.offlineGracePeriod") * 60);
+                                ApiSessionData.TiSessionExpireDate = DateTime.Now.Add(validDuration);
+                            }
+                        }
+                    }
+                }
+            }
 
-					string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-					JObject searchData = this.DeserializeJson(searchContent);
+            if (ApiSessionData.TiSessionID != null)
+            {
+                using (HttpRequestMessage searchRequest = new HttpRequestMessage())
+                {
+                    searchRequest.Headers.Add("Origin", "http://listen.tidal.com");
+                    searchRequest.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
+                    searchRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/search?types=TRACKS&countryCode=" +
+                                                       ApiSessionData.TiCountryCode + "&query=" + searchTermEnc);
 
-					if (searchData != null && searchData.SelectToken("tracks.items[0]") != null)
-					{
-						o.Artist = (string)searchData.SelectToken("tracks.items[0].artists[0].name");
-						o.Title = (string)searchData.SelectToken("tracks.items[0].title");
-						o.Album = (string)searchData.SelectToken("tracks.items[0].album.title");
-						o.TrackNumber = (string)searchData.SelectToken("tracks.items[0].trackNumber");
-						o.DiscNumber = (string)searchData.SelectToken("tracks.items[0].volumeNumber");
+                    string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
+                    JObject searchData = this.DeserializeJson(searchContent);
 
-						if (searchData.SelectToken("tracks.items[0].album.id") != null)
-						{
-							HttpRequestMessage albumRequest = new HttpRequestMessage();
-							albumRequest.Headers.Add("Origin", "http://listen.tidal.com");
-							albumRequest.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
-							albumRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/albums/" + (string)searchData.SelectToken("tracks.items[0].album.id") + "?countryCode=" + ApiSessionData.TiCountryCode);
+                    if (searchData?.SelectToken("tracks.items[0]") != null)
+                    {
+                        o.Artist = (string) searchData.SelectToken("tracks.items[0].artists[0].name");
+                        o.Title = (string) searchData.SelectToken("tracks.items[0].title");
+                        o.Album = (string) searchData.SelectToken("tracks.items[0].album.title");
+                        o.TrackNumber = (string) searchData.SelectToken("tracks.items[0].trackNumber");
+                        o.DiscNumber = (string) searchData.SelectToken("tracks.items[0].volumeNumber");
 
-							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = this.DeserializeJson(albumContent);
+                        if (searchData.SelectToken("tracks.items[0].album.id") != null)
+                        {
+                            HttpRequestMessage albumRequest = new HttpRequestMessage();
+                            albumRequest.Headers.Add("Origin", "http://listen.tidal.com");
+                            albumRequest.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
+                            albumRequest.RequestUri =
+                                new Uri("http://api.tidalhifi.com/v1/albums/" +
+                                        (string) searchData.SelectToken("tracks.items[0].album.id") + "?countryCode=" +
+                                        ApiSessionData.TiCountryCode);
 
-							if (albumData != null)
-							{
-								o.Genre = null;             // tidal API doesn't provide genres for specific items, only a general list of genres (https://pythonhosted.org/tidalapi/api.html#api)
-								o.Date = (string)albumData.SelectToken("releaseDate");
-								o.TrackCount = (string)albumData.SelectToken("numberOfTracks");
-								o.DiscCount = (string)albumData.SelectToken("numberOfVolumes");
+                            string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
+                            JObject albumData = this.DeserializeJson(albumContent);
 
-								if (albumData.SelectToken("cover") != null)
-								{
-									o.Cover = "http://resources.tidal.com/images/" + ((string)albumData.SelectToken("cover")).Replace("-", "/") + "/1280x1280.jpg";
-								}
-							}
-						}
-					}
-				}
-			}
+                            if (albumData != null)
+                            {
+                                o.Genre =
+                                    null; // tidal API doesn't provide genres for specific items, only a general list of genres (https://pythonhosted.org/tidalapi/api.html#api)
+                                o.Date = (string) albumData.SelectToken("releaseDate");
+                                o.TrackCount = (string) albumData.SelectToken("numberOfTracks");
+                                o.DiscCount = (string) albumData.SelectToken("numberOfVolumes");
 
-			// ###########################################################################
-			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+                                if (albumData.SelectToken("cover") != null)
+                                {
+                                    o.Cover = "http://resources.tidal.com/images/" +
+                                              ((string) albumData.SelectToken("cover")).Replace("-", "/") +
+                                              "/1280x1280.jpg";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-			return o;
-		}
-	}
+            // ###########################################################################
+            sw.Stop();
+            o.Duration = $"{sw.Elapsed:s\\,f}";
+
+            return o;
+        }
+    }
 }
