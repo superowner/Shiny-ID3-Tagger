@@ -7,16 +7,15 @@
 // Source for function: https://stackoverflow.com/questions/10484833/detecting-bad-utf-8-encoding-list-of-bad-characters-to-sniff
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Text;
 	using System.Text.RegularExpressions;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private static string CheckMalformedUtf8(string data)
+		public static string CheckMalformedUtf8(string data)
 		{
 			Match match = CreateRegex().Match(data);
 			if (match.Success)

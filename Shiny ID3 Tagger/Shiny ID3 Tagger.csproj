@@ -275,6 +275,7 @@
     <Compile Include="src\helper\Strip.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\helper\Utils.cs" />
     <Compile Include="src\helper\ValidateSchema.cs">
       <SubType>Form</SubType>
     </Compile>

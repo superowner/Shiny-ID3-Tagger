@@ -6,6 +6,8 @@
 // <summary>Code fired when "Search tags" button is clicked. Calls all APIs and presents their results</summary>
 //-----------------------------------------------------------------------
 
+using GlobalVariables;
+
 namespace GlobalNamespace
 {
 	using System;
@@ -18,6 +20,8 @@ namespace GlobalNamespace
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
+	using Utils;
+	using GlobalVariables;
 
 	public partial class Form1
 	{
@@ -36,7 +40,7 @@ namespace GlobalNamespace
 
 			try
 			{
-				using (HttpClient client = InitiateHttpClient())
+				using (HttpClient client = Utils.InitiateHttpClient())
 				{
 					foreach (DataGridViewRow row in this.dataGridView1.Rows)
 					{
@@ -83,14 +87,14 @@ namespace GlobalNamespace
 
 							string artistNew = (from row1 in apiResults.AsEnumerable()
 												where !string.IsNullOrWhiteSpace(row1.Field<string>("artist"))
-												group row1 by Capitalize(Strip(row1.Field<string>("artist"))) into grp
+												group row1 by Utils.Capitalize(Utils.Strip(row1.Field<string>("artist"))) into grp
 												where grp.Count() >= 3
 												orderby grp.Count() descending
 												select grp.Key).FirstOrDefault();
 
 							string titleNew = (from row1 in apiResults.AsEnumerable()
 											   where !string.IsNullOrWhiteSpace(row1.Field<string>("title"))
-											   group row1 by Capitalize(Strip(row1.Field<string>("title"))) into grp
+											   group row1 by Utils.Capitalize(Utils.Strip(row1.Field<string>("title"))) into grp
 											   where grp.Count() >= 3
 											   orderby grp.Count() descending
 											   select grp.Key).FirstOrDefault();
@@ -129,8 +133,8 @@ namespace GlobalNamespace
 
 							foreach (DataRow r in apiResults.Rows)
 							{
-								string albumhit = IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
-								string durationTotal = IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
+								string albumhit = Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
+								string durationTotal = Utils.IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
 
 								this.dataGridView2.Rows.Add(
 									(this.dataGridView2.Rows.Count + 1).ToString(),
@@ -154,7 +158,7 @@ namespace GlobalNamespace
 								// Set row foreground color to gray if current row album doesn't match most frequent album
 								if (tagNew.Album == null ||
 									(tagNew.Album != null && r["album"] != null &&
-									Strip(tagNew.Album).ToLowerInvariant() != Strip(r["album"].ToString().ToLowerInvariant())))
+									 Utils.Strip(tagNew.Album).ToLowerInvariant() != Utils.Strip(r["album"].ToString().ToLowerInvariant())))
 								{
 									this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.ForeColor = Color.Gray;
 									DataGridViewLinkCell c = this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.cover2.Index] as DataGridViewLinkCell;
@@ -177,7 +181,7 @@ namespace GlobalNamespace
 
 							sw.Stop();
 							tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
-							string allApiDurationTotal = IncreaseTotalDuration(tagNew.Service, tagNew.Duration);
+							string allApiDurationTotal = Utils.IncreaseTotalDuration(tagNew.Service, tagNew.Duration);
 
 							this.dataGridView2.Rows.Add(
 								(this.dataGridView2.Rows.Count + 1).ToString(),
@@ -281,8 +285,8 @@ namespace GlobalNamespace
 		{
 			DataTable apiResults = Id3.CreateId3Table();
 
-			string artistToSearch = Strip(tagOld.Artist);
-			string titleToSearch = Strip(tagOld.Title);
+			string artistToSearch = Utils.Strip(tagOld.Artist);
+			string titleToSearch = Utils.trip(tagOld.Title);
 
 			string message = string.Format(
 								"{0,-100}{1}",
@@ -372,16 +376,16 @@ namespace GlobalNamespace
 		{
 			var majorityAlbumRows = (from row in apiResults.AsEnumerable()
 									 where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
-									 orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
-									 group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
+									 orderby Utils.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", GlobalVariables.cultEng)
+									 group row by Utils.Strip(row.Field<string>("album").ToUpperInvariant()) into grp
 									 where grp.Count() >= 3
 									 orderby grp.Count() descending
 									 select grp).FirstOrDefault();
 
 			var test = from row in apiResults.AsEnumerable()
 					   where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
-					   orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
-					   group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
+					   orderby Utils.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", GlobalVariables.cultEng)
+					   group row by Utils.Strip(row.Field<string>("album").ToUpperInvariant()) into grp
 					   where grp.Count() >= 3
 					   orderby grp.Count() descending
 					   select grp;
@@ -389,31 +393,31 @@ namespace GlobalNamespace
 			if (majorityAlbumRows != null)
 			{
 				tagNew.Album = (from row in majorityAlbumRows
-								group row by Capitalize(Strip(row.Field<string>("album"))) into grp
+								group row by Utils.Capitalize(Utils.Strip(row.Field<string>("album"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
 				tagNew.Artist = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("artist"))
-								group row by Capitalize(Strip(row.Field<string>("artist"))) into grp
+								group row by Utils.Capitalize(Utils.Strip(row.Field<string>("artist"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
 				tagNew.Title = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("title"))
-								group row by Capitalize(Strip(row.Field<string>("title"))) into grp
+								group row by Utils.Capitalize(Utils.Strip(row.Field<string>("title"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
 				tagNew.Date = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("date"))
-								group row by this.ConvertStringToDate(row.Field<string>("date")).Year.ToString(cultEng) into grp
+								group row by Utils.ConvertStringToDate(row.Field<string>("date")).Year.ToString(GlobalVariables.cultEng) into grp
 								orderby grp.Count() descending, grp.Key ascending
 								select grp.Key).FirstOrDefault();
 
 				tagNew.Genre = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("genre"))
-								group row by Capitalize(Strip(row.Field<string>("genre"))) into grp
+								group row by Utils.Capitalize(Utils.Strip(row.Field<string>("genre"))) into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 

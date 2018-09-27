@@ -6,16 +6,14 @@
 // <summary>Prepares the content which should be printed out from HttpRquests when debugging is enabled</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Net.Http;
-	using System.Text.RegularExpressions;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response)
+		public static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response)
 		{
 			// Add parameters from request
 			List<string> errorMsg = new List<string>();

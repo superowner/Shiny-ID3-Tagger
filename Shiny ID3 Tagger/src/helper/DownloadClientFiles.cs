@@ -23,20 +23,23 @@
 // UPDATER: Delete update folder
 // UPDATER: Start main program
 // UPDATER: Close updater
-namespace GlobalNamespace
+
+
+namespace Utils
 {
 	using System;
-	using System.Collections.Generic;
 	using System.IO;
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
+	using GlobalNamespace;
+	using GlobalVariables;
 	using Newtonsoft.Json.Linq;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private async Task<bool> DownloadClientFiles()
+		public static async Task<bool> DownloadClientFiles()
 		{
 			DateTime lastCommitDate;
 			DateTime remoteCommitDate;
@@ -53,7 +56,7 @@ namespace GlobalNamespace
 				string lastCommitJson = File.ReadAllText(lastCommitPath);
 
 				// Validate lastCommit.json. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
-				this.ValidateSchema(lastCommitJson, this.lastCommitSchemaStr);
+				ValidateSchema(lastCommitJson, lastCommitSchemaStr);
 
 				// Save last commit to JObject for later access throughout the program
 				JObject lastCommitData = JObject.Parse(lastCommitJson);
@@ -63,7 +66,7 @@ namespace GlobalNamespace
 					lastCommitSha = (string)lastCommitData.SelectToken("commit");
 					lastCommitDate = (DateTime)lastCommitData.SelectToken("date");
 
-					this.Text = Application.ProductName + "     GitHub commit date: " + lastCommitDate.ToString("yyyy-MM-dd HH:mm:ss");
+					Form1.Instance.Text = Application.ProductName + "     GitHub commit date: " + lastCommitDate.ToString("yyyy-MM-dd HH:mm:ss");
 				}
 			}
 			catch (Exception ex)
@@ -74,13 +77,13 @@ namespace GlobalNamespace
 					"Filepath: " + lastCommitPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n')
 				};
-				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+				Form1.Instance.PrintErrorMessage(errorMsg);
 			}
 
 			// ######################################################################################################################
 			// Issue new cancellation token
-			TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = TokenSource.Token;
+			GlobalVariables.TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
 			// Continue only if user credentials and user settings are present
 			if (User.Accounts != null && User.Settings != null)
@@ -97,8 +100,8 @@ namespace GlobalNamespace
 
 						remoteCommitRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/branches/" + branch);
 
-						string remoteCommitContent = await this.GetResponse(client, remoteCommitRequest, cancelToken);
-						JObject remoteCommitData = this.DeserializeJson(remoteCommitContent);
+						string remoteCommitContent = await GetResponse(client, remoteCommitRequest, cancelToken);
+						JObject remoteCommitData = DeserializeJson(remoteCommitContent);
 
 						if (remoteCommitData != null)
 						{

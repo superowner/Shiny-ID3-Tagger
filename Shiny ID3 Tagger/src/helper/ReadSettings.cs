@@ -6,16 +6,19 @@
 // <summary>Gets custom user settings from external file</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+using GlobalNamespace;
+using GlobalVariables;
+
+namespace Utils
 {
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
 	using Newtonsoft.Json.Linq;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private void ReadSettings()
+		public static void ReadSettings()
 		{
 			// Path for user settings file
 			string settingsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.json";
@@ -26,7 +29,7 @@ namespace GlobalNamespace
 				string settingsJson = File.ReadAllText(settingsConfigPath);
 
 				// Validate settings config. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
-				this.ValidateSchema(settingsJson, this.settingsSchemaStr);
+				ValidateSchema(settingsJson, settingsSchemaStr);
 
 				// Save settings to JObject for later access throughout the program
 				User.Settings = JObject.Parse(settingsJson);
@@ -39,7 +42,7 @@ namespace GlobalNamespace
 					"Filepath: " + settingsConfigPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n')
 				};
-				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+				Form1.Instance.PrintErrorMessage(errorMsg);
 			}
 		}
 	}

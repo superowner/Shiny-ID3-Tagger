@@ -6,7 +6,7 @@
 // <summary>Static or global variables</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GlobalVariables
 {
 	using System;
 	using System.Collections.Generic;
@@ -16,78 +16,78 @@ namespace GlobalNamespace
 	using System.Windows.Forms;
 	using Newtonsoft.Json.Linq;
 
-	public partial class Form1
+	public class GlobalVariables
 	{
-		private static CultureInfo cultEng = new CultureInfo("en-US");
+		public static CultureInfo cultEng = new CultureInfo("en-US");
 
-		private static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		public static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		private static Dictionary<string, int> albumHits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+		public static Dictionary<string, int> albumHits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
-		private static Dictionary<string, decimal> totalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+		public static Dictionary<string, decimal> totalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
 
-		private static DataGridView ActiveDGV { get; set; }
+		public static DataGridView ActiveDGV { get; set; }
 
-		private static string LastUsedFolder { get; set; }
+		public static string LastUsedFolder { get; set; }
 
-		private static CancellationTokenSource TokenSource { get; set; }
+		public static CancellationTokenSource TokenSource { get; set; }
 	}
 
-	internal static class ApiSessionData
+	public static class ApiSessionData
 	{
-		internal static string MsAccessToken { get; set; }
+		public static string MsAccessToken { get; set; }
 
-		internal static DateTime MsAccessTokenExpireDate { get; set; }
+		public static DateTime MsAccessTokenExpireDate { get; set; }
 
-		internal static string SpAccessToken { get; set; }
+		public static string SpAccessToken { get; set; }
 
-		internal static DateTime SpAccessTokenExpireDate { get; set; }
+		public static DateTime SpAccessTokenExpireDate { get; set; }
 
-		internal static string TiSessionID { get; set; }
+		public static string TiSessionID { get; set; }
 
-		internal static string TiCountryCode { get; set; }
+		public static string TiCountryCode { get; set; }
 
-		internal static DateTime TiSessionExpireDate { get; set; }
+		public static DateTime TiSessionExpireDate { get; set; }
 	}
 
-	internal static class User
+	public static class User
 	{
-		internal static JObject Accounts { get; set; }
+		public static JObject Accounts { get; set; }
 
-		internal static JObject Settings { get; set; }
+		public static JObject Settings { get; set; }
 	}
 
 	public class Id3
 	{
-		internal string Filepath { get; set; }
+		public string Filepath { get; set; }
 
-		internal string Service { get; set; }
+		public string Service { get; set; }
 
-		internal string Artist { get; set; }
+		public string Artist { get; set; }
 
-		internal string Title { get; set; }
+		public string Title { get; set; }
 
-		internal string Album { get; set; }
+		public string Album { get; set; }
 
-		internal string Date { get; set; }
+		public string Date { get; set; }
 
-		internal string Genre { get; set; }
+		public string Genre { get; set; }
 
-		internal string DiscNumber { get; set; }
+		public string DiscNumber { get; set; }
 
-		internal string DiscCount { get; set; }
+		public string DiscCount { get; set; }
 
-		internal string TrackNumber { get; set; }
+		public string TrackNumber { get; set; }
 
-		internal string TrackCount { get; set; }
+		public string TrackCount { get; set; }
 
-		internal string Lyrics { get; set; }
+		public string Lyrics { get; set; }
 
-		internal string Cover { get; set; }
+		public string Cover { get; set; }
 
-		internal string Duration { get; set; }
+		public string Duration { get; set; }
 
-		internal static DataTable CreateId3Table()
+		public static DataTable CreateId3Table()
 		{
 			DataTable table = new DataTable();
 			table.Locale = new CultureInfo("en-US");
@@ -110,7 +110,7 @@ namespace GlobalNamespace
 		}
 	}
 
-	internal class DataGridViewDoubleBuffered : DataGridView
+	public class DataGridViewDoubleBuffered : DataGridView
 	{
 		public DataGridViewDoubleBuffered()
 		{

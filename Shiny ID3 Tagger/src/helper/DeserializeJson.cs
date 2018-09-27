@@ -6,15 +6,17 @@
 // <summary>Sets non-default settings for all JSON deserializations. This is helpful for debugging invalid JSON strings</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
-{
-	using System;
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Linq;
 
-	public partial class Form1
+namespace Utils
+{
+	using GlobalNamespace;
+    using GlobalVariables;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+
+	public partial class Utils
 	{
-		private JObject DeserializeJson(string content)
+		public static JObject DeserializeJson(string content)
 		{
 			JObject data = null;
 
@@ -33,7 +35,7 @@ namespace GlobalNamespace
 							"WARNING:  Could not convert response to JSON!",
 							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
 						};
-						this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+						Form1.Instance.PrintErrorMessage(errorMsg);
 					};
 				}
 

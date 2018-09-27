@@ -6,23 +6,24 @@
 // <summary>Converts a string from XML notation to JSON notation</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
-	using System.Xml;
-	using Newtonsoft.Json;
+    using System.Xml;
+    using GlobalNamespace;
+    using GlobalVariables;
+    using Newtonsoft.Json;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private string ConvertXmlToJson(string xmlstring)
+		public static string ConvertXmlToJson(string xmlString)
 		{
 			XmlDocument xml = new XmlDocument();
 
-			if (!string.IsNullOrWhiteSpace(xmlstring))
+			if (!string.IsNullOrWhiteSpace(xmlString))
 			{
 				try
 				{
-					xml.LoadXml(xmlstring);
+					xml.LoadXml(xmlString);
 				}
 				catch (XmlException error)
 				{
@@ -31,16 +32,16 @@ namespace GlobalNamespace
 						string[] errorMsg =
 						{
 							"WARNING:  Could not convert XML to JSON!",
-							"String:   " + xmlstring.TrimEnd('\r', '\n'),
+							"String:   " + xmlString.TrimEnd('\r', '\n'),
 							"Message:  " + error.Message.Trim()
 						};
-						this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+						Form1.Instance.PrintErrorMessage(errorMsg);
 					}
 				}
 			}
 
-			string jsonstring = JsonConvert.SerializeXmlNode(xml);
-			return jsonstring;
+			string jsonStr = JsonConvert.SerializeXmlNode(xml);
+			return jsonStr;
 		}
 	}
 }

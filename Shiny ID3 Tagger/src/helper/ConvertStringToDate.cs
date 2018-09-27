@@ -6,13 +6,16 @@
 // <summary>Tries to convert a given string to a dateTime object</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+
+namespace Utils
 {
 	using System;
 	using System.Globalization;
 	using System.Text.RegularExpressions;
+	using GlobalNamespace;
+	using GlobalVariables;
 
-	public partial class Form1
+	public partial class Utils
 	{
 		// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
 		// MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
@@ -32,11 +35,11 @@ namespace GlobalNamespace
 					"dd.MM.yyyy HH:mm:ss"
 				};
 
-		private DateTime ConvertStringToDate(string dateString)
+		public static DateTime ConvertStringToDate(string dateString)
 		{
 			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
 			{
-				if (DateTime.TryParseExact(dateString, dateTimeformats, cultEng, DateTimeStyles.None, out DateTime resultDate))
+				if (DateTime.TryParseExact(dateString, dateTimeformats, GlobalVariables.cultEng, DateTimeStyles.None, out DateTime resultDate))
 				{
 					return resultDate;
 				}
@@ -52,7 +55,7 @@ namespace GlobalNamespace
 						if ((int)User.Settings["DebugLevel"] >= 2)
 						{
 							string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
-							this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+							Form1.Instance.PrintErrorMessage(errorMsg);
 						}
 					}
 				}

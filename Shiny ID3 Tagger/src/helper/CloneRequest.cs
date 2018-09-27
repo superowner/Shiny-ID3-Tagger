@@ -6,15 +6,13 @@
 // <summary>Backup a HTTP request message before request is fired. Otherwise you couldn't do retries after an unsuccessful try</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
-	using System.Collections.Generic;
 	using System.Net.Http;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private static HttpRequestMessage CloneRequest(HttpRequestMessage original)
+		public static HttpRequestMessage CloneRequest(HttpRequestMessage original)
 		{
 			HttpRequestMessage backup = new HttpRequestMessage(original.Method, original.RequestUri);
 

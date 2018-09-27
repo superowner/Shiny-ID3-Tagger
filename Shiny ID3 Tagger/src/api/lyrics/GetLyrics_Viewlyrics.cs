@@ -11,6 +11,7 @@
 // LRC format explained: https://wiki.mobileread.com/wiki/LRC
 //-----------------------------------------------------------------------
 
+
 namespace GlobalNamespace
 {
 	using System;
@@ -24,6 +25,8 @@ namespace GlobalNamespace
 	using System.Threading;
 	using System.Threading.Tasks;
 	using Newtonsoft.Json.Linq;
+	using GlobalVariables;
+	using Utils;
 
 	public partial class Form1
 	{
@@ -51,16 +54,16 @@ namespace GlobalNamespace
 				searchRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
 				// Retrieve response from server, 4th argument tells GetResponse() to return a byte array rather than a string
-				byte[] response = await this.GetResponse(client, searchRequest, cancelToken, true);
+				byte[] response = await Utils.GetResponse(client, searchRequest, cancelToken, true);
 				string searchContent = this.DecodeResponse(response);
-				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
+				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
 				if (searchData != null && searchData.SelectToken("return.fileinfo") != null && searchData.SelectToken("return.fileinfo").Any())
 				{
 					IJEnumerable<JToken> linkList = searchData.SelectToken("return.fileinfo");
 
 					string lyricsLink = (from item in linkList
-									orderby ParseInt((string)item.SelectToken("@downloads")) descending
+									orderby Utils.ParseInt((string)item.SelectToken("@downloads")) descending
 									select (string)item.SelectToken("@link")).FirstOrDefault();
 
 					if (lyricsLink != null)
@@ -69,7 +72,7 @@ namespace GlobalNamespace
 						{
 							lyricsRequest.RequestUri = new Uri("http://www.viewlyrics.com/" + lyricsLink);
 
-							string lyricsContent = await this.GetResponse(client, lyricsRequest, cancelToken);
+							string lyricsContent = await Utils.GetResponse(client, lyricsRequest, cancelToken);
 							string rawLyrics = lyricsContent;
 
 							if (!string.IsNullOrWhiteSpace(rawLyrics))

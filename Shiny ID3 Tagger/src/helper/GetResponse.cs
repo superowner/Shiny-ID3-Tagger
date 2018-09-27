@@ -6,7 +6,10 @@
 // <summary>Executes all API requests. Has a built-in retry handler and a logger</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+
+using GlobalNamespace;
+
+namespace Utils
 {
     using System;
     using System.Collections.Generic;
@@ -14,10 +17,11 @@ namespace GlobalNamespace
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using GlobalVariables;
 
-    public partial class Form1
+    public partial class Utils
     {
-        private async Task<dynamic> GetResponse(
+        public static async Task<dynamic> GetResponse(
             HttpMessageInvoker client,
             HttpRequestMessage request,
             CancellationToken cancelToken,
@@ -57,7 +61,7 @@ namespace GlobalNamespace
                     if ((int) User.Settings["DebugLevel"] >= 3)
                     {
                         List<string> errorMsg = BuildLogMessage(request, requestContent, null);
-                        this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
+                        Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
                     }
 
                     response = await client.SendAsync(request, timeoutToken.Token);
@@ -109,7 +113,7 @@ namespace GlobalNamespace
                                     {"WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..."};
                                 errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
-                                this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
+                                Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
                             }
 
                             // Response was not successful. But it was also not a common error. And user did not press cancel
@@ -129,7 +133,7 @@ namespace GlobalNamespace
                             {"WARNING:  Server took longer than " + Timeout + " seconds to respond! Abort..."};
                         errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
-                        this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
+                        Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
                     }
 
                     break;
@@ -151,7 +155,7 @@ namespace GlobalNamespace
                         errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
                         errorMsg.Add("Message:  " + realerror.Message.ToString());
 
-                        this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
+                        Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
                     }
 
                     break;
@@ -161,7 +165,7 @@ namespace GlobalNamespace
             return result;
         }
 
-        private async Task<dynamic> GetResponse(
+        public static async Task<dynamic> GetResponse(
             HttpMessageInvoker client,
             HttpRequestMessage request,
             CancellationToken cancelToken,
@@ -203,7 +207,7 @@ namespace GlobalNamespace
                     if ((int)User.Settings["DebugLevel"] >= 3)
                     {
                         List<string> errorMsg = BuildLogMessage(request, requestContent, null);
-                        this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
+                        Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
                     }
 
                     response = await client.SendAsync(request, timeoutToken.Token);
@@ -243,7 +247,7 @@ namespace GlobalNamespace
                                     {"WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..."};
                                 errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
-                                this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
+                                Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
                             }
 
                             // Response was not successful. But it was also not a common error. And user did not press cancel
@@ -263,7 +267,7 @@ namespace GlobalNamespace
                             {"WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..."};
                         errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
-                        this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
+                        Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
                     }
 
                     break;
@@ -285,7 +289,7 @@ namespace GlobalNamespace
                         errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
                         errorMsg.Add("Message:  " + realError.Message.ToString());
 
-                        this.PrintLogMessage(this.rtbErrorLog, errorMsg.ToArray());
+                        Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
                     }
 
                     break;
