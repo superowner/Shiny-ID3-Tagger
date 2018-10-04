@@ -32,7 +32,7 @@ namespace Utils
 					"MM/dd/yyyy HH",
 					"MM/dd/yyyy HH:mm",
 					"MM/dd/yyyy HH:mm:ss",
-					"M/d/YYYY h:m:s a",
+					"M/d/YYYY h:mm:ss a",
 					"dd.MM.yyyy HH:mm:ss"
 				};
 
