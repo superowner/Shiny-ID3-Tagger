@@ -133,6 +133,9 @@
     <Compile Include="src\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\api\deprecated\GetTags_Amazon.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="src\api\id3\GetTagsService.cs" />
     <Compile Include="src\api\lyrics\GetLyricsService.cs" />
     <Compile Include="src\api\lyrics\GetLyrics_Viewlyrics.cs">
@@ -290,9 +293,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\api\id3\GetTags_7digital.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Amazon.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\api\id3\GetTags_Decibel.cs">

@@ -22,6 +22,7 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
+	[Obsolete("Not used anymore",true)]
 	public class MsGroove : IGetTagsService
 	{
 		public const string ServiceName = "Microsoft Groove";

@@ -19,7 +19,7 @@ namespace Utils
 	{
 		// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
 		// MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
-		private static string[] dateTimeformats =
+		public static string[] dateTimeformats =
 				{
 					"yyyy",
 					"yyyy-MM",
@@ -32,6 +32,7 @@ namespace Utils
 					"MM/dd/yyyy HH",
 					"MM/dd/yyyy HH:mm",
 					"MM/dd/yyyy HH:mm:ss",
+					"M/d/YYYY h:m:s a",
 					"dd.MM.yyyy HH:mm:ss"
 				};
 
@@ -43,20 +44,18 @@ namespace Utils
 				{
 					return resultDate;
 				}
-				else
-				{
-					// Handle edge cases where API database' date has default value like "0000" or "0000-00-00"
-					// They cannot converted to a date but we don't wanna log an error since this is too common
-					// RegEx tests if dateString contains anything which is not zero, dot or dash
-					Regex regEx = new Regex(@"[^\.\-0]+");
 
-					if (regEx.IsMatch(dateString))
+				// Handle edge cases where API database' date has default value like "0000" or "0000-00-00"
+				// They cannot converted to a date but we don't wanna log an error since this is too common
+				// RegEx tests if dateString contains anything which is not zero, dot or dash
+				Regex regEx = new Regex(@"[^\.\-0]+");
+
+				if (regEx.IsMatch(dateString))
+				{
+					if ((int)User.Settings["DebugLevel"] >= 2)
 					{
-						if ((int)User.Settings["DebugLevel"] >= 2)
-						{
-							string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
-							Form1.Instance.PrintErrorMessage(errorMsg);
-						}
+						string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
+						Form1.Instance.PrintErrorMessage(errorMsg);
 					}
 				}
 			}

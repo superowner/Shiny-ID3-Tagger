@@ -10,14 +10,15 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Windows.Forms;
+	using GlobalVariables;
 
 	public partial class Form1 : Form
 	{
 		private void MenuItemClick_ClearTables(object sender, EventArgs e)
 		{
-			TokenSource.Cancel();
-			albumHits.Clear();
-			ActiveDGV.Refresh();
+			GlobalVariables.TokenSource.Cancel();
+			GlobalVariables.albumHits.Clear();
+			GlobalVariables.ActiveDGV.Refresh();
 
 			this.rtbSearchLog.Clear();
 			this.rtbWriteLog.Clear();

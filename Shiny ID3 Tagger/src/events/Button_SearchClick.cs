@@ -11,14 +11,15 @@ namespace GlobalNamespace
 	using System;
 	using System.Threading;
 	using System.Windows.Forms;
+	using GlobalVariables;
 
 	public partial class Form1 : Form
 	{
 		private void Button_SearchClick(object sender, EventArgs e)
 		{
 			// Refresh cancel token which is used for all requests
-			TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = TokenSource.Token;
+			GlobalVariables.TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
 			this.StartSearching(cancelToken);
 		}

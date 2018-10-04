@@ -15,6 +15,8 @@ namespace GlobalNamespace
 	using System.Linq;
 	using System.Text;
 	using System.Windows.Forms;
+	using GlobalVariables;
+	using Utils;
 
 	public partial class Form1 : Form
 	{
@@ -24,20 +26,20 @@ namespace GlobalNamespace
 			string seperator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 			StringBuilder csvContent = new StringBuilder();
 
-			IEnumerable<DataGridViewColumn> headers = ActiveDGV.Columns.Cast<DataGridViewColumn>();
-			csvContent.AppendLine(string.Join(seperator, headers.Select(column => WellFormedCsvValue(column.HeaderCell.Value)).ToArray()));
+			IEnumerable<DataGridViewColumn> headers = GlobalVariables.ActiveDGV.Columns.Cast<DataGridViewColumn>();
+			csvContent.AppendLine(string.Join(seperator, headers.Select(column => Utils.WellFormedCsvValue(column.HeaderCell.Value)).ToArray()));
 
-			foreach (DataGridViewRow row in ActiveDGV.Rows)
+			foreach (DataGridViewRow row in GlobalVariables.ActiveDGV.Rows)
 			{
 				IEnumerable<DataGridViewCell> cells = row.Cells.Cast<DataGridViewCell>();
-				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => WellFormedCsvValue(cell.Value)).ToArray()));
+				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => Utils.WellFormedCsvValue(cell.Value)).ToArray()));
 			}
 
 			// Set dialog properties like filename, overwrite prompt and start folder
 			using (SaveFileDialog dialog = new SaveFileDialog()
 			{
 				Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
-				FileName = DateTime.Now.ToString("yyMMdd", cultEng) + " - Shiny ID3 Tagger Export - " + this.tabControl1.SelectedTab.Text,
+				FileName = DateTime.Now.ToString("yyMMdd", GlobalVariables.cultEng) + " - Shiny ID3 Tagger Export - " + this.tabControl1.SelectedTab.Text,
 				InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
 				OverwritePrompt = true
 			})

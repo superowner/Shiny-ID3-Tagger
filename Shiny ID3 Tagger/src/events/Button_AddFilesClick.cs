@@ -8,17 +8,18 @@
 
 namespace GlobalNamespace
 {
-	using System;
-	using System.Threading;
-	using System.Windows.Forms;
+    using System;
+    using System.Threading;
+    using System.Windows.Forms;
+    using GlobalVariables;
 
 	public partial class Form1 : Form
 	{
 		private async void Button_AddFilesClick(object sender, EventArgs e)
 		{
 			// Refresh cancel token
-			TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = TokenSource.Token;
+			GlobalVariables.TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
 			// Add new files
 			bool hasNewFiles = await this.AddFiles(null, cancelToken);

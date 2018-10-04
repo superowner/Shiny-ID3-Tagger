@@ -10,12 +10,13 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Windows.Forms;
+	using GlobalVariables;
 
 	public partial class Form1 : Form
 	{
 		private void Button_CancelClick(object sender, EventArgs e)
 		{
-			TokenSource.Cancel();
+			GlobalVariables.TokenSource.Cancel();
 			this.btnCancel.Visible = false;
 		}
 	}

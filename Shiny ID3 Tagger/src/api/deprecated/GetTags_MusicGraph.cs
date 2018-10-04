@@ -21,6 +21,7 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
+	[Obsolete("Not used anymore",true)]
 	public class MusicGraph : IGetTagsService
 	{
 		public const string ServiceName = "Musicgraph";

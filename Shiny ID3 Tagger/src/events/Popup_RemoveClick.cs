@@ -10,14 +10,15 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Windows.Forms;
+	using GlobalVariables;
 
 	public partial class Form1 : Form
 	{
 		private void Popup_RemoveClick(object sender, EventArgs e)
 		{
-			foreach (DataGridViewRow row in ActiveDGV.SelectedRows)
+			foreach (DataGridViewRow row in GlobalVariables.ActiveDGV.SelectedRows)
 			{
-				ActiveDGV.Rows.Remove(row);
+				GlobalVariables.ActiveDGV.Rows.Remove(row);
 			}
 		}
 	}
