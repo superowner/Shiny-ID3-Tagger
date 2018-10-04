@@ -9,23 +9,26 @@
 // https://docs.microsoft.com/en-us/groove/groove-service-rest-reference/uri-search-content#examples
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class MsGroove : IGetTagsService
 	{
-		private async Task<Id3> GetTags_MsGroove(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Microsoft Groove";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Microsoft Groove";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -47,8 +50,8 @@ namespace GlobalNamespace
 						new KeyValuePair<string, string>("scope", "app.music.xboxlive.com")
 					});
 
-					string loginContent = await this.GetResponse(client, loginRequest, cancelToken);
-					JObject loginData = this.DeserializeJson(loginContent);
+					string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);
+					JObject loginData = Utils.DeserializeJson(loginContent);
 
 					if (loginData != null && loginData.SelectToken("access_token") != null)
 					{
@@ -69,10 +72,10 @@ namespace GlobalNamespace
 					searchRequest.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 
 					// ###########################################################################
-					string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-					JObject searchData = this.DeserializeJson(searchContent);
+					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+					JObject searchData = Utils.DeserializeJson(searchContent);
 
-					if (searchData != null && searchData.SelectToken("Tracks.Items") != null)
+					if (searchData?.SelectToken("Tracks.Items") != null)
 					{
 						o.Artist = (string)searchData.SelectToken("Tracks.Items[0].Artists[0].Artist.Name");
 						o.Title = (string)searchData.SelectToken("Tracks.Items[0].Name");
@@ -90,10 +93,10 @@ namespace GlobalNamespace
 							albumRequest.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 							albumRequest.RequestUri = new Uri("https://music.xboxlive.com/1/content/" + (string)searchData.SelectToken("Tracks.Items[0].Album.Id") + "/lookup?contentType=JSON");
 
-							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = this.DeserializeJson(albumContent);
+							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							JObject albumData = Utils.DeserializeJson(albumContent);
 
-							if (albumData != null && albumData.SelectToken("Albums.Items") != null)
+							if (albumData?.SelectToken("Albums.Items") != null)
 							{
 								o.TrackCount = (string)albumData.SelectToken("Albums.Items[0].TrackCount");
 							}
@@ -104,7 +107,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

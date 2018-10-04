@@ -9,22 +9,25 @@
 // limit=1 not available for track.getInfo or album.getInfo method
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Diagnostics;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class LastFm : IGetTagsService
 	{
-		private async Task<Id3> GetTags_LastFm(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Last.fm";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Last.fm";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -41,10 +44,10 @@ namespace GlobalNamespace
 				searchRequest.Content = new StringContent("method=track.getInfo&artist=" + artistEncoded + "&track=" + titleEncoded +
 					"&api_key=" + User.Accounts["Lastfm"]["ApiKey"] + "&format=json&autocorrect=1");
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData != null && searchData.SelectToken("track") != null)
+				if (searchData?.SelectToken("track") != null)
 				{
 					o.Artist = (string)searchData.SelectToken("track.artist.name");
 					o.Title = (string)searchData.SelectToken("track.name");
@@ -53,17 +56,17 @@ namespace GlobalNamespace
 					o.TrackNumber = (string)searchData.SelectToken("track.album.@attr.position");
 
 					// ###########################################################################
-					string albumid = (string)searchData.SelectToken("track.album.mbid");
+					string albumId = (string)searchData.SelectToken("track.album.mbid");
 
 					using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 					{
 						albumRequest.Method = HttpMethod.Post;
 						albumRequest.RequestUri = new Uri("http://ws.audioscrobbler.com/2.0/");
 						albumRequest.Headers.ExpectContinue = false;
-						albumRequest.Content = new StringContent("method=album.getInfo&mbid=" + albumid + "&api_key=" + User.Accounts["Lastfm"]["ApiKey"] + "&format=json");
+						albumRequest.Content = new StringContent("method=album.getInfo&mbid=" + albumId + "&api_key=" + User.Accounts["Lastfm"]["ApiKey"] + "&format=json");
 
-						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = this.DeserializeJson(albumContent);
+						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData != null && albumData.SelectToken("album") != null)
 						{
@@ -84,7 +87,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

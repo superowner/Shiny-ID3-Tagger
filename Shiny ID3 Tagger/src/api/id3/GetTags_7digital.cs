@@ -7,23 +7,26 @@
 // http://docs.7digital.com/#_release_details_get
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class SevenDigital : IGetTagsService
 	{
-		private async Task<Id3> GetTags_7digital(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "7digital";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "7digital";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -40,10 +43,10 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://api.7digital.com/1.2/track/search?q=" + artistEncoded + "+"
 					+ titleEncoded + "&pagesize=10&imageSize=800&usageTypes=download&oauth_consumer_key=" + User.Accounts["7digital"]["key"]);
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData != null && searchData.SelectToken("searchResults.searchResult[0].track") != null)
+				if (searchData?.SelectToken("searchResults.searchResult[0].track") != null)
 				{
 					JToken track = (from tracks in searchData.SelectTokens("searchResults.searchResult[*].track")
 									where tracks["release"]["type"].ToString().ToLowerInvariant() == "album"
@@ -67,10 +70,10 @@ namespace GlobalNamespace
 							releaseRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 							releaseRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/details?releaseid=" + releaseId + "&usageTypes=download&oauth_consumer_key=" + User.Accounts["7digital"]["key"]);
 
-							string releaseContent = await this.GetResponse(client, releaseRequest, cancelToken);
-							JObject releaseData = this.DeserializeJson(releaseContent);
+							string releaseContent = await Utils.GetResponse(client, releaseRequest, cancelToken);
+							JObject releaseData = Utils.DeserializeJson(releaseContent);
 
-							if (releaseData != null && releaseData.SelectToken("release") != null)
+							if (releaseData?.SelectToken("release") != null)
 							{
 								o.TrackCount = (string)releaseData.SelectToken("release.trackCount");
 							}
@@ -82,10 +85,10 @@ namespace GlobalNamespace
 							tagsRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 							tagsRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/tags?releaseid=" + releaseId + "&country=US&oauth_consumer_key=" + User.Accounts["7digital"]["key"]);
 
-							string tagsContent = await this.GetResponse(client, tagsRequest, cancelToken);
-							JObject tagsData = this.DeserializeJson(tagsContent);
+							string tagsContent = await Utils.GetResponse(client, tagsRequest, cancelToken);
+							JObject tagsData = Utils.DeserializeJson(tagsContent);
 
-							if (tagsData != null && tagsData.SelectToken("tags.tags") != null)
+							if (tagsData?.SelectToken("tags.tags") != null)
 							{
 								o.Genre = (string)tagsData.SelectToken("tags.tags[0].text");
 							}
@@ -96,7 +99,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

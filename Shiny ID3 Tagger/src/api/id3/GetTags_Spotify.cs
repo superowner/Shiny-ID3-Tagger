@@ -12,6 +12,7 @@
 // A search for the following album returns nothing, but returns something as soon as ":, are removed: From "The Hunger Games: Mockingjay, Part 2" Soundtrack
 //-----------------------------------------------------------------------
 
+
 namespace GetTags
 {
     using System;
@@ -22,18 +23,18 @@ namespace GetTags
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using GlobalNamespace;
+    using Utils;
+    using GlobalVariables;
     using Newtonsoft.Json.Linq;
 
-    public class Spotify : GetTagsService
+    public class Spotify : IGetTagsService
     {
         public const string ServiceName = "Spotify";
 
         public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title,
             CancellationToken cancelToken)
         {
-            Id3 o = new Id3();
-            o.Service = ServiceName;
+            Id3 o = new Id3 {Service = ServiceName};
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -57,8 +58,8 @@ namespace GetTags
                     string creditsBase64 = Convert.ToBase64String(creditsBytes);
                     loginRequest.Headers.Add("Authorization", "Basic " + creditsBase64);
 
-                    string loginContent = await this.GetResponse(client, loginRequest, cancelToken);
-                    JObject loginData = this.DeserializeJson(loginContent);
+                    string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);
+                    JObject loginData = Utils.DeserializeJson(loginContent);
 
                     if (loginData != null && loginData.SelectToken("access_token") != null)
                     {
@@ -78,8 +79,8 @@ namespace GetTags
                                                        "\"+title:\"" + titleEncoded + "\"&type=track&limit=1");
                     searchRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 
-                    string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-                    JObject searchData = this.DeserializeJson(searchContent);
+                    string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+                    JObject searchData = Utils.DeserializeJson(searchContent);
 
                     if (searchData != null && searchData.SelectToken("tracks.items") != null &&
                         searchData.SelectToken("tracks.items").Any())
@@ -93,15 +94,15 @@ namespace GetTags
                         // ###########################################################################
                         string albumUrl = (string) searchData.SelectToken("tracks.items[0].album.href");
 
-                        if (IsValidUrl(albumUrl))
+                        if (Utils.IsValidUrl(albumUrl))
                         {
                             using (HttpRequestMessage albumRequest = new HttpRequestMessage())
                             {
                                 albumRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
                                 albumRequest.RequestUri = new Uri(albumUrl);
 
-                                string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-                                JObject albumData = this.DeserializeJson(albumContent);
+                                string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+                                JObject albumData = Utils.DeserializeJson(albumContent);
 
                                 if (albumData != null)
                                 {
@@ -110,7 +111,7 @@ namespace GetTags
                                     o.TrackCount = (string) albumData.SelectToken("tracks.total");
                                     o.Genre = string.Join(", ", albumData.SelectToken("genres"));
                                     o.Cover = (string) albumData.SelectToken("images")
-                                        .OrderBy(obj => ParseInt((string) obj["height"])).Last()["url"];
+                                        .OrderBy(obj => Utils.ParseInt((string) obj["height"])).Last()["url"];
                                 }
                             }
                         }
@@ -120,15 +121,15 @@ namespace GetTags
                         // Only artist lookups provide sometimes a genre. But they aren't sorted or weighted. Therefore artist genres produce bad results most of the time
                         string artistUrl = (string) searchData.SelectToken("tracks.items[0].artists[0].href");
 
-                        if (IsValidUrl(artistUrl))
+                        if (Utils.IsValidUrl(artistUrl))
                         {
                             using (HttpRequestMessage artistRequest = new HttpRequestMessage())
                             {
                                 artistRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
                                 artistRequest.RequestUri = new Uri(artistUrl);
 
-                                string artistContent = await this.GetResponse(client, artistRequest, cancelToken);
-                                JObject artistData = this.DeserializeJson(artistContent);
+                                string artistContent = await Utils.GetResponse(client, artistRequest, cancelToken);
+                                JObject artistData = Utils.DeserializeJson(artistContent);
 
                                 if (artistData != null && artistData.SelectToken("genres") != null &&
                                     artistData.SelectToken("genres").Any())

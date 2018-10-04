@@ -8,8 +8,6 @@
 // https://pythonhosted.org/tidalapi/api.html#api
 //-----------------------------------------------------------------------
 
-using GlobalNamespace;
-
 namespace GetTags
 {
     using System;
@@ -19,17 +17,18 @@ namespace GetTags
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using GlobalVariables;
     using Newtonsoft.Json.Linq;
+    using Utils;
 
-    public class Tidal : GetTagsService
+    public class Tidal : IGetTagsService
     {
         public const string ServiceName = "Tidal";
 
         public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title,
             CancellationToken cancelToken)
         {
-            Id3 o = new Id3();
-            o.Service = ServiceName;
+            Id3 o = new Id3 {Service = ServiceName};
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -50,15 +49,15 @@ namespace GetTags
                         new KeyValuePair<string, string>("password", (string)User.Accounts["Tidal"]["Password"])
                     });
 
-                    string loginContent = await this.GetResponse(client, loginRequest, cancelToken);
-                    JObject loginData = this.DeserializeJson(loginContent);
+                    string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);
+                    JObject loginData = Utils.DeserializeJson(loginContent);
 
-                    if (loginData != null && loginData.SelectToken("sessionId") != null)
+                    if (loginData?.SelectToken("sessionId") != null)
                     {
-                        ApiSessionData.TiSessionID = (string) loginData.SelectToken("sessionId");
-                        ApiSessionData.TiCountryCode = (string) loginData.SelectToken("countryCode");
+                        ApiSessionData.TiSessionID = (string)loginData.SelectToken("sessionId");
+                        ApiSessionData.TiCountryCode = (string)loginData.SelectToken("countryCode");
 
-                        string userID = (string) loginData.SelectToken("userId");
+                        string userID = (string)loginData.SelectToken("userId");
 
                         using (HttpRequestMessage sessionRequest = new HttpRequestMessage())
                         {
@@ -66,15 +65,15 @@ namespace GetTags
                                 new Uri("http://api.tidalhifi.com/v1/users/" + userID + "/subscription");
                             sessionRequest.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
 
-                            string sessionContent = await this.GetResponse(client, sessionRequest, cancelToken);
-                            JObject sessionData = this.DeserializeJson(sessionContent);
+                            string sessionContent = await Utils.GetResponse(client, sessionRequest, cancelToken);
+                            JObject sessionData = Utils.DeserializeJson(sessionContent);
 
                             if (sessionData != null)
                             {
                                 // 30mins is the "offlineGracePeriod" which I assume is the timespan a session is valid. I could be wrong since there is no documentation about this
                                 TimeSpan validDuration =
                                     TimeSpan.FromSeconds(
-                                        (int) sessionData.SelectToken("subscription.offlineGracePeriod") * 60);
+                                        (int)sessionData.SelectToken("subscription.offlineGracePeriod") * 60);
                                 ApiSessionData.TiSessionExpireDate = DateTime.Now.Add(validDuration);
                             }
                         }
@@ -91,8 +90,8 @@ namespace GetTags
                     searchRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/search?types=TRACKS&countryCode=" +
                                                        ApiSessionData.TiCountryCode + "&query=" + searchTermEnc);
 
-                    string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-                    JObject searchData = this.DeserializeJson(searchContent);
+                    string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+                    JObject searchData = Utils.DeserializeJson(searchContent);
 
                     if (searchData?.SelectToken("tracks.items[0]") != null)
                     {
@@ -112,8 +111,8 @@ namespace GetTags
                                         (string) searchData.SelectToken("tracks.items[0].album.id") + "?countryCode=" +
                                         ApiSessionData.TiCountryCode);
 
-                            string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-                            JObject albumData = this.DeserializeJson(albumContent);
+                            string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+                            JObject albumData = Utils.DeserializeJson(albumContent);
 
                             if (albumData != null)
                             {

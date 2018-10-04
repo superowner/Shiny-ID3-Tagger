@@ -9,24 +9,27 @@
 // parameter "type=10" instead of "type=1" filters for albums only. But produces less results. Stick to using "专辑" as post filter
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Netease : IGetTagsService
 	{
-		private async Task<Id3> GetTags_Netease(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Netease";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Netease";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -45,8 +48,8 @@ namespace GlobalNamespace
 						new KeyValuePair<string, string>("type", "1")
 					});
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("result.songs") != null)
 				{
@@ -70,7 +73,7 @@ namespace GlobalNamespace
 						string strMilliseconds = (string)albums[0].SelectToken("album.publishTime");
 						if (long.TryParse(strMilliseconds, out long milliseconds))
 						{
-							o.Date = epoch.AddMilliseconds(milliseconds).ToString();
+							o.Date = GlobalVariables.epoch.AddMilliseconds(milliseconds).ToString();
 						}
 					}
 				}

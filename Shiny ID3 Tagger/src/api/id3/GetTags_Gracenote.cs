@@ -9,22 +9,25 @@
 // https://developer.gracenote.com/sites/default/files/web/webapi/index.html#music-web-api/Registering%20a%20Device.html#scroll-bookmark-25
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Diagnostics;
-	using System.Net.Http;
-	using System.Text.RegularExpressions;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Net.Http;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Gracenote : IGetTagsService
 	{
-		private async Task<Id3> GetTags_Gracenote(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Gracenote (Sony)";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Gracenote (Sony)";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -55,12 +58,12 @@ namespace GlobalNamespace
 							</QUERY>
 						</QUERIES>");
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
-				if (searchData != null && searchData.SelectToken("RESPONSES.RESPONSE") != null)
+				if (searchData?.SelectToken("RESPONSES.RESPONSE") != null)
 				{
-					if (searchData != null && searchData.SelectToken("RESPONSES.RESPONSE") != null)
+					if (searchData.SelectToken("RESPONSES.RESPONSE") != null)
 					{
 						o.Artist = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.ARTIST");
 						o.Title = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.TRACK.TITLE");
@@ -78,7 +81,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

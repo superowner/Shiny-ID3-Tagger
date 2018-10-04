@@ -8,24 +8,26 @@
 // "limit=1" should not be used, filtering on client side is better
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Data;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class MusicGraph : IGetTagsService
 	{
-		private async Task<Id3> GetTags_MusicGraph(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Musicgraph";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Musicgraph";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -43,13 +45,13 @@ namespace GlobalNamespace
 			{
 				searchRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account["AppKey"] + "&artist_name=" + artistEncoded + "&title=" + titleEncoded + "&limit=5");
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData != null && searchData.SelectToken("data") != null && searchData.SelectToken("data").Any())
+				if (searchData?.SelectToken("data") != null && searchData.SelectToken("data").Any())
 				{
 					JToken track = (from item in searchData.SelectToken("data")
-									orderby ParseInt((string)item["release_year"]), ParseInt((string)item["popularity"]) descending
+									orderby Utils.ParseInt((string)item["release_year"]), Utils.ParseInt((string)item["popularity"]) descending
 									select item)
 								.ToArray()[0];
 
@@ -67,10 +69,10 @@ namespace GlobalNamespace
 						// Musicgraph has a database flaw where many album IDs in track responses point to non-existing album URLs resulting in a 404 "Not found" HTTP error
 						albumRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/album/" + (string)track.SelectToken("track_album_id") + "?api_key=" + (string)account["AppKey"]);
 
-						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = this.DeserializeJson(albumContent);
+						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						JObject albumData = Utils.DeserializeJson(albumContent);
 
-						if (albumData != null && albumData.SelectToken("data") != null)
+						if (albumData?.SelectToken("data") != null)
 						{
 							o.TrackCount = (string)albumData.SelectToken("data.number_of_tracks");
 							o.DiscCount = null;
@@ -88,7 +90,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

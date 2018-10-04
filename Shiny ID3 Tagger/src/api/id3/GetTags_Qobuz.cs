@@ -10,22 +10,25 @@
 // No English genre names possible. API returns French genre names
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Diagnostics;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Qobuz : IGetTagsService
 	{
-		private async Task<Id3> GetTags_Qobuz(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Qobuz";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Qobuz";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -37,8 +40,8 @@ namespace GlobalNamespace
 			{
 				searchRequest.RequestUri = new Uri("http://www.qobuz.com/api.json/0.2/track/search?limit=1&app_id=" + User.Accounts["Qobuz"]["AppId"] + "&query=" + searchTermEnc);
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("tracks.items[0]") != null)
 				{
@@ -55,7 +58,7 @@ namespace GlobalNamespace
 					string strSeconds = (string)searchData.SelectToken("tracks.items[0].album.released_at");
 					if (long.TryParse(strSeconds, out long seconds))
 					{
-						o.Date = epoch.AddSeconds(seconds).ToString();
+						o.Date = GlobalVariables.epoch.AddSeconds(seconds).ToString();
 					}
 				}
 			}

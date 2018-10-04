@@ -12,28 +12,29 @@
 //-----------------------------------------------------------------------
 
 
-namespace GlobalNamespace
+namespace GetLyrics
 {
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net.Http;
-	using System.Net.Http.Headers;
-	using System.Security.Cryptography;
-	using System.Text;
-	using System.Text.RegularExpressions;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
-	using GlobalVariables;
-	using Utils;
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class ViewLyrics : IGetLyricsService
 	{
-		private async Task<Id3> GetLyrics_Viewlyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
+		private const string ServiceName = "Viewlyrics";
+
+		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Viewlyrics";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -58,7 +59,7 @@ namespace GlobalNamespace
 				string searchContent = this.DecodeResponse(response);
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
-				if (searchData != null && searchData.SelectToken("return.fileinfo") != null && searchData.SelectToken("return.fileinfo").Any())
+				if (searchData?.SelectToken("return.fileinfo") != null && searchData.SelectToken("return.fileinfo").Any())
 				{
 					IJEnumerable<JToken> linkList = searchData.SelectToken("return.fileinfo");
 
@@ -95,7 +96,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}
@@ -104,26 +105,28 @@ namespace GlobalNamespace
 		{
 			string result = null;
 
-			if (data != null)
+			if (data == null)
 			{
-				// Get magic key to decode response
-				byte magicKey = data[1];
-
-				// Remove first 22 bytes. XML string starts at byte 23
-				data = data.Skip(22).ToArray();
-
-				// Loop through encoded data and decode it with magic key
-				int queryLen = data.Length;
-				byte[] dataDecBytes = new byte[queryLen];
-				for (int i = 0; i < queryLen; i++)
-				{
-					int decByte = data[i] ^ magicKey;
-					dataDecBytes[i] = (byte)decByte;
-				}
-
-				// Covert byte array to UTF8 string
-				result = Encoding.UTF8.GetString(dataDecBytes);
+				return null;
 			}
+
+			// Get magic key to decode response
+			byte magicKey = data[1];
+
+			// Remove first 22 bytes. XML string starts at byte 23
+			data = data.Skip(22).ToArray();
+
+			// Loop through encoded data and decode it with magic key
+			int queryLen = data.Length;
+			byte[] dataDecBytes = new byte[queryLen];
+			for (int i = 0; i < queryLen; i++)
+			{
+				int decByte = data[i] ^ magicKey;
+				dataDecBytes[i] = (byte)decByte;
+			}
+
+			// Covert byte array to UTF8 string
+			result = Encoding.UTF8.GetString(dataDecBytes);
 
 			return result;
 		}
@@ -136,7 +139,7 @@ namespace GlobalNamespace
 			// Generate MD5 hash from query and salt
 			string md5Salt = "Mlv1clt4.0";
 			byte[] saltedQueryBytes = Encoding.UTF8.GetBytes(query + md5Salt);
-			byte[] md5HashBytes = MD5CryptoServiceProvider.Create().ComputeHash(saltedQueryBytes);
+			byte[] md5HashBytes = MD5.Create().ComputeHash(saltedQueryBytes);
 
 			// Calculate magic key
 			decimal j = 0;

@@ -7,25 +7,28 @@
 // https://github.com/JounQin/netease-muisc-api/blob/master/api/lyric.js
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetLyrics
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Text.RegularExpressions;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Netease : IGetLyricsService
 	{
-		private async Task<Id3> GetLyrics_Netease(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
+		private const string ServiceName = "Netease";
+
+		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Netease";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -42,8 +45,8 @@ namespace GlobalNamespace
 						new KeyValuePair<string, string>("type", "1")
 					});
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null)
 				{
@@ -53,19 +56,19 @@ namespace GlobalNamespace
 									where track.SelectToken("name").ToString().ToLowerInvariant() == tagNew.Title.ToLowerInvariant()
 									select track).FirstOrDefault();
 
-					if (song != null && song.SelectToken("id") != null)
+					if (song?.SelectToken("id") != null)
 					{
-						string songid = (string)song.SelectToken("id");
+						string songId = (string)song.SelectToken("id");
 
 						using (HttpRequestMessage lyricsRequest = new HttpRequestMessage())
 						{
 							lyricsRequest.Headers.Add("referer", "http://music.163.com");
-							lyricsRequest.RequestUri = new Uri("http://music.163.com/api/song/lyric/?id=" + songid + "&lv=-1&kv=-1&tv=-1");
+							lyricsRequest.RequestUri = new Uri("http://music.163.com/api/song/lyric/?id=" + songId + "&lv=-1&kv=-1&tv=-1");
 
-							string lyricsContent = await this.GetResponse(client, lyricsRequest, cancelToken);
-							JObject lyricsData = this.DeserializeJson(lyricsContent);
+							string lyricsContent = await Utils.GetResponse(client, lyricsRequest, cancelToken);
+							JObject lyricsData = Utils.DeserializeJson(lyricsContent);
 
-							if (lyricsData != null && lyricsData.SelectToken("lrc.lyric") != null)
+							if (lyricsData?.SelectToken("lrc.lyric") != null)
 							{
 								string rawLyrics = (string)lyricsData.SelectToken("lrc.lyric");
 
@@ -90,7 +93,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

@@ -13,21 +13,24 @@
 // replace after EscapeDataString				!=%21	'=%27	(=%28	)=%29	*=%2A
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Diagnostics;
-	using System.Net.Http;
-	using System.Security.Cryptography;
-	using System.Text;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Net.Http;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Amazon : IGetTagsService
 	{
 		private static Stopwatch lastRequestTimer = new Stopwatch();
 		private static int lastRequestTimeout = 1000;
+		public const string ServiceName = "Amazon";
 
 		// ###########################################################################
 		private static string CreateSignature(string server, string parameters)
@@ -42,10 +45,9 @@ namespace GlobalNamespace
 			return sigEncoded;
 		}
 
-		private async Task<Id3> GetTags_Amazon(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Amazon";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -85,10 +87,10 @@ namespace GlobalNamespace
 					await Task.Delay(50);
 				}
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
 				lastRequestTimer.Restart();
 
-				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
+				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
 				if (searchData != null && searchData.SelectToken("ItemSearchResponse.Items.Item") != null)
 				{
@@ -148,10 +150,10 @@ namespace GlobalNamespace
 								await Task.Delay(50);
 							}
 
-							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
+							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
 							lastRequestTimer.Restart();
 
-							JObject albumData = this.DeserializeJson(this.ConvertXmlToJson(albumContent));
+							JObject albumData = Utils.DeserializeJson(Utils.ConvertXmlToJson(albumContent));
 
 							if (albumData != null)
 							{
@@ -165,7 +167,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

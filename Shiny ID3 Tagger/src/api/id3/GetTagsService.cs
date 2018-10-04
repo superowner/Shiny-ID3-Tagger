@@ -1,11 +1,11 @@
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using GlobalNamespace;
-
 namespace GetTags
 {
-    public interface GetTagsService
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+
+    public interface IGetTagsService
     {
         Task<Id3> GetTags(
             HttpMessageInvoker client,
