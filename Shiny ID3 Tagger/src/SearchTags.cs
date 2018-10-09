@@ -37,7 +37,6 @@ namespace GlobalNamespace
         private List<IGetTagsService> _tagsServices = new List<IGetTagsService>
         {
             new GetTags.Netease(),
-            new GetTags.Decibel(),
             new GetTags.Deezer(),
             new GetTags.Discogs(),
             new GetTags.Genius(),

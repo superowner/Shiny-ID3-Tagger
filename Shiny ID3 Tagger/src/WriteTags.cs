@@ -272,6 +272,12 @@ namespace GlobalNamespace
             string[] errorMsg = null;
             string url = (string)row.Cells[this.cover1.Index].Value;
 
+            // Check if any URL was found from search results
+            if (string.IsNullOrEmpty(url))
+            {
+                return tagContainer;
+            }
+
             // Check if any valid cover already exists
             foreach (IPicture picture in tagFile.Tag.Pictures)
             {
