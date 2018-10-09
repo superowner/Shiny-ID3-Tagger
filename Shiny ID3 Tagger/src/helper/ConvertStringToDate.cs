@@ -32,8 +32,10 @@ namespace Utils
 					"MM/dd/yyyy HH",
 					"MM/dd/yyyy HH:mm",
 					"MM/dd/yyyy HH:mm:ss",
-					"M/d/YYYY h:mm:ss a",
-					"dd.MM.yyyy HH:mm:ss"
+					"M/d/YYYY h:mm:ss tt",
+					"dd.MM.yyyy HH:mm:ss",
+					"MM/dd/yyyy hh:mm:ss tt",
+					"M/dd/yyyy h:mm:ss tt"
 				};
 
 		public static DateTime ConvertStringToDate(string dateString)
