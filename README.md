@@ -47,3 +47,6 @@
 - Run "Shiny ID3 Tagger.exe" 
 - Program is portable and stealth (nothing get's written to registry or AppData)
 
+## Future Features
+- [ ] Add UI for setting of the application
+- [ ] Add **option** to choose from tags service manully for each file
