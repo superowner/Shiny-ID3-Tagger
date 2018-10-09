@@ -12,25 +12,28 @@
 // 1) https://musicbrainz.org		2) http://musicbrainz-mirror.eu:5000	3) http://musicbrainz.fin-alice.de:5000		// 1) https://beta.musicbrainz.org
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net.Http;
-	using System.Net.Http.Headers;
-	using System.Text.RegularExpressions;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class MusicBrains : IGetTagsService
 	{
-		private async Task<Id3> GetTags_MusicBrainz(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Musicbrainz";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Musicbrainz";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -46,8 +49,8 @@ namespace GlobalNamespace
 				searchRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 				searchRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null && (string)searchData.SelectToken("count") != "0")
 				{
@@ -94,7 +97,7 @@ namespace GlobalNamespace
 					{
 						string curDate = (string)curRelease["date"];
 						string firstDate = (string)bestRelease["date"];
-						if (curDate != null && firstDate != null && this.ConvertStringToDate(curDate).Ticks < this.ConvertStringToDate(firstDate).Ticks)
+						if (curDate != null && firstDate != null && Utils.ConvertStringToDate(curDate).Ticks < Utils.ConvertStringToDate(firstDate).Ticks)
 						{
 							bestRelease = curRelease;
 						}
@@ -115,17 +118,17 @@ namespace GlobalNamespace
 						releasegroupRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 						releasegroupRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/release-group/" + releasegroupid + "?inc=tags+ratings+artists&fmt=json");
 
-						string releasegroupContent = await this.GetResponse(client, releasegroupRequest, cancelToken);
-						JObject releasegroupData = this.DeserializeJson(releasegroupContent);
+						string releaseGroupContent = await Utils.GetResponse(client, releasegroupRequest, cancelToken);
+						JObject releaseGroupData = Utils.DeserializeJson(releaseGroupContent);
 
-						if (releasegroupData != null)
+						if (releaseGroupData != null)
 						{
-							o.Artist = (string)releasegroupData.SelectToken("artist-credit[0].name");
-							o.Date = (string)releasegroupData.SelectToken("first-release-date");
+							o.Artist = (string)releaseGroupData.SelectToken("artist-credit[0].name");
+							o.Date = (string)releaseGroupData.SelectToken("first-release-date");
 
-							if (releasegroupData.SelectToken("tags").Any())
+							if (releaseGroupData.SelectToken("tags").Any())
 							{
-								JToken objGenre = (from tag in releasegroupData.SelectToken("tags")
+								JToken objGenre = (from tag in releaseGroupData.SelectToken("tags")
 													orderby (int)tag["count"] descending
 													select tag).ToArray()[0];
 
@@ -141,8 +144,8 @@ namespace GlobalNamespace
 						coverRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 						coverRequest.RequestUri = new Uri("http://coverartarchive.org/release-group/" + releasegroupid);
 
-						string coverContent = await this.GetResponse(client, coverRequest, cancelToken);
-						JObject coverData = this.DeserializeJson(coverContent);
+						string coverContent = await Utils.GetResponse(client, coverRequest, cancelToken);
+						JObject coverData = Utils.DeserializeJson(coverContent);
 
 						if (coverData != null)
 						{
@@ -154,7 +157,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

@@ -7,22 +7,25 @@
 // https://developer.rhapsody.com/api#search
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Diagnostics;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Napster : IGetTagsService
 	{
-		private async Task<Id3> GetTags_Napster(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Napster (Rhapsody)";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Napster (Rhapsody)";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -34,8 +37,8 @@ namespace GlobalNamespace
 			{
 				searchRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/search?q=" + searchTermEnc + "&include=genres&type=track&limit=1&apikey=" + User.Accounts["Napster"]["ApiKey"]);
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null)
 				{
@@ -56,8 +59,8 @@ namespace GlobalNamespace
 						{
 							albumRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/albums/" + albumId + "?apikey=" + User.Accounts["Napster"]["ApiKey"]);
 
-							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = this.DeserializeJson(albumContent);
+							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							JObject albumData = Utils.DeserializeJson(albumContent);
 
 							if (albumData != null)
 							{

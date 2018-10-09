@@ -8,23 +8,26 @@
 // http://www.onemusicapi.com/blog/2013/06/12/better-discogs-searching/
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Discogs : IGetTagsService
 	{
-		private async Task<Id3> GetTags_Discogs(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Discogs";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Discogs";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -45,13 +48,13 @@ namespace GlobalNamespace
 					"&key=" + User.Accounts["Discogs"]["Key"] +
 					"&secret=" + User.Accounts["Discogs"]["Secret"]);
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("results").Any())
 				{
 					string albumUrl = (string)searchData.SelectToken("results[0].resource_url");
-					if (albumUrl != null && IsValidUrl(albumUrl))
+					if (albumUrl != null && Utils.IsValidUrl(albumUrl))
 					{
 						using (HttpRequestMessage albumRequest = new HttpRequestMessage())
 						{
@@ -60,8 +63,8 @@ namespace GlobalNamespace
 								"?key=" + User.Accounts["Discogs"]["Key"] +
 								"&secret=" + User.Accounts["Discogs"]["Secret"]);
 
-							string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-							JObject albumData = this.DeserializeJson(albumContent);
+							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							JObject albumData = Utils.DeserializeJson(albumContent);
 
 							if (albumData != null)
 							{
@@ -82,8 +85,8 @@ namespace GlobalNamespace
 								// But no one will guarantee that the second search shows a title which is on your album from the first search
 								// How can I get a response which holds album and title at the same time?
 								// Currently this is just checking if album track list contains a title which equals initial search title which can be wrong since it's from filename or old ID3 tags
-								JToken[] tracklist = albumData.SelectTokens("tracklist[*].title").ToArray();
-								int temp = Array.FindIndex(tracklist, t => t.ToString().ToLowerInvariant() == title.ToLowerInvariant());
+								JToken[] trackList = albumData.SelectTokens("tracklist[*].title").ToArray();
+								int temp = Array.FindIndex(trackList, t => t.ToString().ToLowerInvariant() == title.ToLowerInvariant());
 								if (temp != -1)
 								{
 									o.Title = title;
@@ -97,7 +100,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

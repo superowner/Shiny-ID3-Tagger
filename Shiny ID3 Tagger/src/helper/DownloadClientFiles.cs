@@ -13,6 +13,8 @@
 // MAIN: Rest query Github => GET /repos/:owner/:repo/branches/:branch (use develop or master according to user settings)
 // MAIN: Compare date from remote with date in local file "lastCommit.log"
 // MAIN: If remote is newer, download all new files into new folder called "update"
+// https://developer.github.com/v3/repos/contents/#get-contents
+// fileRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/contents/Shiny%20ID3%20Tagger/config/accounts.json");
 // MAIN: Check if there are any files in "update" folder (maybe from last program start or this one)
 // MAIN: If yes, start updater.exe and close main program
 
@@ -21,7 +23,9 @@
 // UPDATER: Delete update folder
 // UPDATER: Start main program
 // UPDATER: Close updater
-namespace GlobalNamespace
+
+
+namespace Utils
 {
 	using System;
 	using System.IO;
@@ -29,11 +33,13 @@ namespace GlobalNamespace
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
+	using GlobalNamespace;
+	using GlobalVariables;
 	using Newtonsoft.Json.Linq;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private async Task<bool> DownloadClientFiles()
+		public static async Task<bool> DownloadClientFiles()
 		{
 			DateTime? lastCommitDate = null;
 			DateTime? remoteCommitDate = null;
@@ -50,7 +56,7 @@ namespace GlobalNamespace
 				string lastCommitJson = File.ReadAllText(lastCommitPath);
 
 				// Validate lastCommit.json. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
-				this.ValidateSchema(lastCommitJson, this.lastCommitSchemaStr);
+				ValidateSchema(lastCommitJson, lastCommitSchemaStr);
 
 				// Save last commit to JObject for later access throughout the program
 				JObject lastCommitData = JObject.Parse(lastCommitJson);
@@ -58,9 +64,9 @@ namespace GlobalNamespace
 				if (lastCommitData != null)
 				{
 					lastCommitSha = (string)lastCommitData.SelectToken("commit");
-					lastCommitDate = (DateTime?)lastCommitData.SelectToken("date");
+					lastCommitDate = (DateTime)lastCommitData.SelectToken("date");
 
-					this.Text = Application.ProductName + "     GitHub commit date: " + lastCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+					Form1.Instance.Text = Application.ProductName + "     GitHub commit date: " + lastCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
 				}
 			}
 			catch (Exception ex)
@@ -71,13 +77,13 @@ namespace GlobalNamespace
 					"Filepath: " + lastCommitPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n')
 				};
-				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+				Form1.Instance.PrintErrorMessage(errorMsg);
 			}
 
 			// ######################################################################################################################
 			// Issue new cancellation token
-			TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = TokenSource.Token;
+			GlobalVariables.TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
 			using (HttpClient client = InitiateHttpClient())
 			{
@@ -92,8 +98,8 @@ namespace GlobalNamespace
 
 						remoteCommitRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/branches/" + (string)User.Settings["Branch"]);
 
-						string remoteCommitContent = await this.GetResponse(client, remoteCommitRequest, cancelToken);
-						JObject remoteCommitData = this.DeserializeJson(remoteCommitContent);
+						string remoteCommitContent = await GetResponse(client, remoteCommitRequest, cancelToken);
+						JObject remoteCommitData = DeserializeJson(remoteCommitContent);
 
 						if (remoteCommitData != null)
 						{
@@ -119,8 +125,8 @@ namespace GlobalNamespace
 							// https://stackoverflow.com/questions/7106012/download-a-single-folder-or-directory-from-a-github-repo
 							remoteTreeRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/git/trees/" + remoteCommitSha + "?recursive=1");
 
-							string remoteTreeContent = await this.GetResponse(client, remoteTreeRequest, cancelToken);
-							JObject remoteTreeData = this.DeserializeJson(remoteTreeContent);
+							string remoteTreeContent = await GetResponse(client, remoteTreeRequest, cancelToken);
+							JObject remoteTreeData = DeserializeJson(remoteTreeContent);
 
 							if (remoteTreeData != null)
 							{

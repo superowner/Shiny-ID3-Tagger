@@ -8,8 +8,8 @@
 
 namespace GlobalNamespace
 {
-	using System;
 	using System.Windows.Forms;
+	using GlobalVariables;
 
 	public partial class Form1 : Form
 	{
@@ -17,7 +17,7 @@ namespace GlobalNamespace
 		{
 			if (e.KeyCode == Keys.Escape)
 			{
-				TokenSource.Cancel();
+				GlobalVariables.TokenSource.Cancel();
 			}
 		}
 	}

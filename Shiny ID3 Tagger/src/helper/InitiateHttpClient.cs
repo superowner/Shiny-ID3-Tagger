@@ -7,15 +7,15 @@
 // https://contrivedexample.com/2017/07/01/using-httpclient-as-it-was-intended-because-youre-not/
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
 	using System;
 	using System.Net;
 	using System.Net.Http;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private static HttpClient InitiateHttpClient()
+		public static HttpClient InitiateHttpClient()
 		{
 			// DEFAULT SETTINGS FOR ALL CONNECTIONS
 			HttpClientHandler handler = new HttpClientHandler();

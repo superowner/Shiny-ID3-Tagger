@@ -9,23 +9,26 @@
 // http://developers.deezer.com/api/search/autocomplete
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Deezer : IGetTagsService
 	{
-		private async Task<Id3> GetTags_Deezer(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Deezer";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Deezer";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -38,10 +41,10 @@ namespace GlobalNamespace
 			{
 				searchRequest.RequestUri = new Uri("http://api.deezer.com/search?q=artist:\"" + artistEncoded + "\"+track:\"" + titleEncoded + "\"&limit=1&order=RANKING");
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData != null && searchData.SelectToken("data") != null)
+				if (searchData?.SelectToken("data") != null)
 				{
 					o.Artist = (string)searchData.SelectToken("data[0].artist.name");
 					o.Title = (string)searchData.SelectToken("data[0].title");
@@ -51,8 +54,8 @@ namespace GlobalNamespace
 					{
 						albumRequest.RequestUri = new Uri("http://api.deezer.com/album/" + searchData.SelectToken("data[0].album.id"));
 
-						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = this.DeserializeJson(albumContent);
+						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData != null)
 						{
@@ -64,8 +67,8 @@ namespace GlobalNamespace
 							o.Cover = (string)albumData.SelectToken("cover_big");
 							o.Genre = (string)albumData.SelectToken("genres.data[0].name");
 
-							JToken[] tracklist = albumData.SelectTokens("tracks.data[*].title").ToArray();
-							int temp = Array.FindIndex(tracklist, t => t.ToString().ToLowerInvariant() == o.Title.ToLowerInvariant());
+							JToken[] trackList = albumData.SelectTokens("tracks.data[*].title").ToArray();
+							int temp = Array.FindIndex(trackList, t => string.Equals(t.ToString(), o.Title, StringComparison.InvariantCultureIgnoreCase));
 							if (temp != -1)
 							{
 								o.TrackNumber = (temp + 1).ToString();
@@ -77,7 +80,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

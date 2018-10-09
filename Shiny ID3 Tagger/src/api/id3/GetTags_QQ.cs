@@ -10,23 +10,25 @@
 // Very bad search results. Already tried it twice to improve it but without any success
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
-{
-	using System;
-	using System.Diagnostics;
-	using System.Net;
-	using System.Net.Http;
-	using System.Text.RegularExpressions;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
 
-	public partial class Form1
+namespace GetTags
+{
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Http;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
+
+	public class QQ : IGetTagsService
 	{
-		private async Task<Id3> GetTags_QQ(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "QQ (Tencent)";
+			Id3 o = new Id3 {Service = "QQ (Tencent)"};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -38,8 +40,8 @@ namespace GlobalNamespace
 			{
 				searchRequest.RequestUri = new Uri("http://c.y.qq.com/soso/fcgi-bin/search_cp?w=" + searchTermEnc + "&format=json&p=0&n=100&aggr=1&lossless=1&cr=1");
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("data.song.list[0]") != null)
 				{
@@ -60,8 +62,8 @@ namespace GlobalNamespace
 					{
 						albumRequest.RequestUri = new Uri("http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?format=json&albumid=" + firstSong["albumid"]);
 
-						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = this.DeserializeJson(albumContent);
+						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData != null && albumData.SelectToken("data") != null)
 						{
@@ -86,8 +88,8 @@ namespace GlobalNamespace
 					{
 						trackRequest.RequestUri = new Uri("http://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?format=json&songid=" + firstSong["songid"]);
 
-						string trackContent = await this.GetResponse(client, trackRequest, cancelToken);
-						JObject trackData = this.DeserializeJson(trackContent);
+						string trackContent = await Utils.GetResponse(client, trackRequest, cancelToken);
+						JObject trackData = Utils.DeserializeJson(trackContent);
 
 						if (trackData != null && trackData.SelectToken("data") != null)
 						{
