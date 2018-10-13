@@ -56,7 +56,7 @@ namespace Utils
 					if ((int)User.Settings["DebugLevel"] >= 2)
 					{
 						string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
-						Form1.Instance.PrintErrorMessage(errorMsg);
+						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
 					}
 				}
 			}

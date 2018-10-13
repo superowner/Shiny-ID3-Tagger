@@ -48,5 +48,10 @@
 - [ ] Program is portable and stealth (nothing get's written to registry or AppData)
 
 ## Future Features
-- [ ] Add UI for setting of the application
-- [ ] Add **option** to choose from tags service manully for each file
+- [ ] Implement update check for application (Github shall be the source for downloading newest app files)
+- [ ] Add UI for all options of the application
+- [ ] Add User option to choose from tags service manually for each file
+- [ ] Add User option to en/disable single APIs (sometimes they are down temporarily)
+- [ ] Add User option to choose ID3v2.3 (UTF16, Windows 7) or ID3v2.4 (UTF8, Mac)
+- [ ] Add User option to write ID3v1 tags additionally to ID3v2
+- [ ] Add User option to choose if unknown tags should be removed

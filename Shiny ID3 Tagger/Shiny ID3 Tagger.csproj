@@ -138,7 +138,7 @@
     <Compile Include="src\api\id3\IGetTagsService.cs" />
     <Compile Include="src\api\lyrics\IGetLyricsService.cs" />
     <Compile Include="src\api\lyrics\ViewLyrics.cs" />
-    <Compile Include="src\helper\EnableUI.cs">
+    <Compile Include="src\events\Form_EnableUI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\helper\GetImageType.cs" />
@@ -203,7 +203,7 @@
     <Compile Include="src\events\Popup_RemoveClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\RichTexBox_LinkClicked.cs">
+    <Compile Include="src\events\RichTextBox_LinkClicked.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\events\TabControl_SelectedIndexChanged.cs">
@@ -225,11 +225,11 @@
     <Compile Include="src\helper\IsValidMp3.cs" />
     <Compile Include="src\helper\IsValidUrl.cs" />
     <Compile Include="src\helper\LevenshteinDistance.cs" />
-    <Compile Include="src\helper\PrintLogMessage.cs">
+    <Compile Include="src\events\RichTextBox_PrintErrorMessage.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\helper\BuildLogMessage.cs" />
-    <Compile Include="src\helper\MarkChange.cs">
+    <Compile Include="src\events\DataGridView_MarkChange.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\helper\DownloadClientFiles.cs" />

@@ -31,7 +31,7 @@ namespace GlobalNamespace
 		// ###########################################################################
 		private async void StartWriting()
 		{
-			this.EnableUI(false);
+			this.Form_EnableUI(false);
 
 			this.slowProgressBar.Maximum = this.dataGridView1.Rows.Count;
 			this.slowProgressBar.Value = 0;
@@ -136,7 +136,7 @@ namespace GlobalNamespace
 			// Work finished, re-enable all buttons and hide progress bar
 			this.slowProgressBar.Visible = false;
 
-			this.EnableUI(true);
+			this.Form_EnableUI(true);
 		}
 
 		// ###########################################################################
@@ -348,8 +348,7 @@ namespace GlobalNamespace
 									MimeType = MediaTypeNames.Image.Jpeg,
 									Type = PictureType.FrontCover,
 									Description = url,
-									TextEncoding =
-										StringType.Latin1 // Strangely, Unicode is not supported for this field
+									TextEncoding = StringType.Latin1 // Strangely, Unicode is not supported for this field
 								};
 
 								// Add cover tag to tag container, this deletes all other existing covers like "BackCover" or "BandLogo"

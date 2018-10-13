@@ -61,7 +61,7 @@ namespace Utils
 					"Filepath: " + accountsConfigPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n')
 				};
-				Form1.Instance.PrintErrorMessage(errorMsg);
+				Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RichTexBox_LinkClicked.cs" company="Shiny ID3 Tagger">
+// <copyright file="RichTextBox_LinkClicked.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -8,13 +8,12 @@
 
 namespace GlobalNamespace
 {
-	using System;
 	using System.Diagnostics;
 	using System.Windows.Forms;
 
 	public partial class Form1 : Form
 	{
-		private void RichTexBox_LinkClicked(object sender, LinkClickedEventArgs e)
+		private void RichTextBox_LinkClicked(object sender, LinkClickedEventArgs e)
 		{
 			Process.Start(e.LinkText);
 		}

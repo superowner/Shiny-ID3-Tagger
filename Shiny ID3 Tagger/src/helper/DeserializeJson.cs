@@ -34,7 +34,7 @@ namespace Utils
 							"WARNING:  Could not convert response to JSON!",
 							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
 						};
-						Form1.Instance.PrintErrorMessage(errorMsg);
+						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
 					};
 				}
 

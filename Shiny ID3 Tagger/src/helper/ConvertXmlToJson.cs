@@ -35,7 +35,7 @@ namespace Utils
 							"String:   " + xmlString.TrimEnd('\r', '\n'),
 							"Message:  " + error.Message.Trim()
 						};
-						Form1.Instance.PrintErrorMessage(errorMsg);
+						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
 					}
 				}
 			}

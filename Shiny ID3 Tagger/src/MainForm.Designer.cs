@@ -245,7 +245,7 @@ namespace GlobalNamespace
 			this.rtbWriteLog.TabStop = false;
 			this.rtbWriteLog.Text = "";
 			this.rtbWriteLog.WordWrap = false;
-			this.rtbWriteLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.RichTexBox_LinkClicked);
+			this.rtbWriteLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.RichTextBox_LinkClicked);
 			// 
 			// tabPage3
 			// 
@@ -274,7 +274,7 @@ namespace GlobalNamespace
 			this.rtbErrorLog.TabStop = false;
 			this.rtbErrorLog.Text = "";
 			this.rtbErrorLog.WordWrap = false;
-			this.rtbErrorLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.RichTexBox_LinkClicked);
+			this.rtbErrorLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.RichTextBox_LinkClicked);
 			// 
 			// btnAddFiles
 			// 

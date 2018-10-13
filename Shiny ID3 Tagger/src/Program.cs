@@ -6,13 +6,6 @@
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
-// TODO: Implement update check from GitHub
-// TODO: Write extension method to get JToken from parsed JSON case insensitive, do this for all User.accounts and User.settings variables and API results
-// var value = o.GetValue("upper", StringComparison.OrdinalIgnoreCase).Value<string>();
-// TODO: User option to en/disable single APIs (sometimes they are down)
-// TODO: User option to choose ID3v2.3 (UTF16, Windows 7) or ID3v2.4 (UTF8, Mac)
-// TODO: User option to write ID3v1 tags additionally to ID3v2
-// TODO: User option to choose if unknown tags should be removed
 namespace GlobalNamespace
 {
 	using System;

@@ -18,7 +18,7 @@ namespace GlobalNamespace
 
 	public partial class Form1 : Form
 	{
-		// TODO: I don't understand the concept behind this variable. Why not leave it as it was before?
+		// REVIEW: I don't understand the concept behind this variable. Why not leave it as it was before?
 		public static Form1 Instance;
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace GlobalNamespace
 			else
 			{
 				GlobalVariables.TokenSource.Cancel();
-				this.EnableUI(false);
+				this.Form_EnableUI(false);
 			}
 		}
 
