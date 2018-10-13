@@ -13,14 +13,15 @@ namespace GlobalNamespace
 	using System.Diagnostics;
 	using System.IO;
 	using System.Windows.Forms;
+	using GlobalVariables;
 
 	public partial class Form1 : Form
 	{
 		private void Popup_ShowExplorerClick(object sender, EventArgs e)
 		{
-			if (ActiveDGV.CurrentRow != null)
+			if (GlobalVariables.ActiveDGV.CurrentRow != null)
 			{
-				string filePath = ActiveDGV.CurrentRow.Cells[this.filepath1.Index].Value.ToString();
+				string filePath = GlobalVariables.ActiveDGV.CurrentRow.Cells[this.filepath1.Index].Value.ToString();
 
 				if (File.Exists(filePath))
 				{

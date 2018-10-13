@@ -8,9 +8,9 @@
 
 namespace GlobalNamespace
 {
-	using System;
 	using System.Diagnostics;
 	using System.Windows.Forms;
+	using Utils;
 
 	public partial class Form1 : Form
 	{
@@ -20,7 +20,7 @@ namespace GlobalNamespace
 			if (dgv.Columns[e.ColumnIndex] is DataGridViewLinkColumn && e.RowIndex >= 0)
 			{
 				string url = (string)dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-				if (IsValidUrl(url))
+				if (Utils.IsValidUrl(url))
 				{
 					Process.Start(url);
 				}

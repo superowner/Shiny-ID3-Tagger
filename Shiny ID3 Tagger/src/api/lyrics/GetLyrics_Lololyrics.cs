@@ -7,23 +7,26 @@
 // http://api.lololyrics.com/
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetLyrics
 {
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class LoloLyrics : IGetLyricsService
 	{
-		private async Task<Id3> GetLyrics_Lololyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
+		private const string ServiceName = "Lololyrics";
+
+		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Lololyrics";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -36,10 +39,10 @@ namespace GlobalNamespace
 			{
 				searchRequest.RequestUri = new Uri("http://api.lololyrics.com/0.5/getLyric?artist=" + artistEncoded + "&track=" + titleEncoded + "&rawutf8=1");
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(this.ConvertXmlToJson(searchContent));
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
-				if (searchData != null && searchData.SelectToken("result.response") != null)
+				if (searchData?.SelectToken("result.response") != null)
 				{
 					string rawLyrics = (string)searchData.SelectToken("result.response");
 
@@ -57,7 +60,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

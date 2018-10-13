@@ -7,24 +7,27 @@
 // #https://github.com/LIU9293/musicAPI/tree/master/src
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetLyrics
 {
-	using System;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Text.RegularExpressions;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Xiami : IGetLyricsService
 	{
-		private async Task<Id3> GetLyrics_Xiami(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
+		private const string ServiceName = "Xiami";
+
+		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Xiami";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -37,8 +40,8 @@ namespace GlobalNamespace
 				searchRequest.RequestUri = new Uri("http://api.xiami.com/web?v=2.0&limit=30&r=search/songs&app_key=1&key=" + searchTermEnc);
 				searchRequest.Headers.Add("referer", "http://h.xiami.com/");
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null)
 				{
@@ -48,12 +51,12 @@ namespace GlobalNamespace
 									where track.SelectToken("song_name").ToString().ToLowerInvariant() == tagNew.Title.ToLowerInvariant()
 									select track.SelectToken("artist_name")).FirstOrDefault();
 
-					if (song != null && IsValidUrl((string)song.SelectToken("lyric")))
+					if (song != null && Utils.IsValidUrl((string)song.SelectToken("lyric")))
 					{
 						HttpRequestMessage lyricRequest = new HttpRequestMessage();
 						lyricRequest.RequestUri = new Uri((string)song.SelectToken("lyric"));
 
-						string lyricsContent = await this.GetResponse(client, lyricRequest, cancelToken);
+						string lyricsContent = await Utils.GetResponse(client, lyricRequest, cancelToken);
 						string rawLyrics = lyricsContent;
 
 						if (!string.IsNullOrWhiteSpace(rawLyrics))
@@ -78,7 +81,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}

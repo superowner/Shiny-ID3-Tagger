@@ -6,18 +6,20 @@
 // <summary>Gets user credentials for all used APIs from external file</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+
+namespace Utils
 {
 	using System;
-	using System.Collections.Generic;
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
+	using GlobalNamespace;
+	using GlobalVariables;
 	using Newtonsoft.Json.Linq;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private void ReadCredentials()
+		public static void ReadCredentials()
 		{
 			// Path for user credentials file
 			string accountsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.json";
@@ -37,7 +39,7 @@ namespace GlobalNamespace
 				string accountsJson = Encoding.UTF8.GetString(decryptedBytes);
 
 				// Validate credentials. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
-				this.ValidateSchema(accountsJson, this.accountsSchemaStr);
+				ValidateSchema(accountsJson, accountsSchemaStr);
 
 				// Save credentials as JObject for later access throughout the program
 				User.Accounts = JObject.Parse(accountsJson);
@@ -60,7 +62,7 @@ namespace GlobalNamespace
 					"Filepath: " + accountsConfigPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n')
 				};
-				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+				Form1.Instance.PrintErrorMessage(errorMsg);
 			}
 		}
 	}

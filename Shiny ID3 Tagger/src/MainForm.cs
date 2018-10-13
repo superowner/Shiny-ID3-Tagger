@@ -13,15 +13,19 @@ namespace GlobalNamespace
 	using System.Linq;
 	using System.Threading;
 	using System.Windows.Forms;
+	using GlobalVariables;
+	using Utils;
 
 	public partial class Form1 : Form
 	{
+		public static Form1 Instance;
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Form1"/> class.
 		/// The main form which will be shown immediately after program start
 		/// </summary>
 		public Form1()
 		{
+			Form1.Instance = this;
 			this.InitializeComponent();
 		}
 
@@ -29,8 +33,8 @@ namespace GlobalNamespace
 		internal async void Form1Shown(string[] args)
 		{
 			// Refresh cancellation token
-			TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = TokenSource.Token;
+			GlobalVariables.TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
 			// Continue only if user credentials and user settings are present
 			if (User.Accounts != null && User.Settings != null)
@@ -46,7 +50,7 @@ namespace GlobalNamespace
 			}
 			else
 			{
-				TokenSource.Cancel();
+				GlobalVariables.TokenSource.Cancel();
 				this.EnableUI(false);
 			}
 		}
@@ -57,14 +61,14 @@ namespace GlobalNamespace
 			base.OnShown(e);
 
 			// Get user settings and credentials
-			this.ReadSettings();
-			this.ReadCredentials();
+			Utils.ReadSettings();
+			Utils.ReadCredentials();
 
 			// Update this program via Github
-			bool result = await this.DownloadClientFiles();
+			bool result = await Utils.DownloadClientFiles();
 
 			// Initialize helper variable to track which dataGridView is currently shown
-			ActiveDGV = this.dataGridView1;
+			GlobalVariables.ActiveDGV = this.dataGridView1;
 
 			// Read in command line arguments and pass them to main program
 			string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();

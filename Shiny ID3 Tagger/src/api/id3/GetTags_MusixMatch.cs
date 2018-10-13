@@ -9,24 +9,26 @@
 // Only 1000 hits per day. Since 3 calls per file are needed, you can only search for 333 files a day. That's not much
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Data;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class MusixMatch : IGetTagsService
 	{
-		private async Task<Id3> GetTags_MusixMatch(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Musixmatch";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Musixmatch";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -44,8 +46,8 @@ namespace GlobalNamespace
 			{
 				searchRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&page_size=1&apikey=" + (string)account["ApiKey"]);
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("message.body.track_list[0].track") != null)
 				{
@@ -61,8 +63,8 @@ namespace GlobalNamespace
 					{
 						albumRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account["ApiKey"]);
 
-						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = this.DeserializeJson(albumContent);
+						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData != null && albumData.SelectToken("message.body.album") != null)
 						{
@@ -79,8 +81,8 @@ namespace GlobalNamespace
 					{
 						albumtracksRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account["ApiKey"]);
 
-						string albumtracksContent = await this.GetResponse(client, albumtracksRequest, cancelToken);
-						JObject albumtracksData = this.DeserializeJson(albumtracksContent);
+						string albumtracksContent = await Utils.GetResponse(client, albumtracksRequest, cancelToken);
+						JObject albumtracksData = Utils.DeserializeJson(albumtracksContent);
 
 						if (albumtracksData != null && albumtracksData.SelectToken("message.body.track_list") != null)
 						{

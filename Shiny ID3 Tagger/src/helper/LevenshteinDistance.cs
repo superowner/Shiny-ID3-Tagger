@@ -6,14 +6,13 @@
 // <summary>Calculates how similar two strings are and outputs how many edits are needed to get from one string to another</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
 	using System.Linq;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private static int LevenshteinDistance(string s, string t)
+		public static int LevenshteinDistance(string s, string t)
 		{
 			if (s == t)
 			{

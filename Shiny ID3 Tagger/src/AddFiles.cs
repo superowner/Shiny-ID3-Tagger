@@ -12,13 +12,14 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.IO;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
+	using GlobalVariables;
+	using Utils;
 
 	/// <summary>
 	/// Method selects and reads in existing tags and shows them in a dataGridView
@@ -40,16 +41,16 @@ namespace GlobalNamespace
 					Multiselect = true
 				})
 				{
-					if (LastUsedFolder == null)
+					if (GlobalVariables.LastUsedFolder == null)
 					{
-						LastUsedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + @"\";
+						GlobalVariables.LastUsedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + @"\";
 					}
 
-					dialog.InitialDirectory = LastUsedFolder;
+					dialog.InitialDirectory = GlobalVariables.LastUsedFolder;
 
 					if (dialog.ShowDialog() == DialogResult.OK)
 					{
-						LastUsedFolder = Path.GetDirectoryName(dialog.FileNames[0]);
+						GlobalVariables.LastUsedFolder = Path.GetDirectoryName(dialog.FileNames[0]);
 						newFiles = dialog.FileNames;
 					}
 				}
@@ -150,7 +151,7 @@ namespace GlobalNamespace
 					if (!existingFilePaths.Contains(filepath))
 					{
 						// Check if file is a valid mp3 file
-						if (this.IsValidMp3(filepath))
+						if (Utils.IsValidMp3(filepath))
 						{
 							using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mp3", TagLib.ReadStyle.None))
 							{
@@ -207,12 +208,12 @@ namespace GlobalNamespace
 									artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,            // Select the first non-null artist choice, value order in array is important therefore
 									titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,             // Select the first non-null title choice, value order in array is important therefore
 									tagFile.Tag.Album ?? string.Empty,
-									(tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(cultEng) : string.Empty,
+									(tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(GlobalVariables.cultEng) : string.Empty,
 									tagFile.Tag.FirstGenre ?? string.Empty,
-									(tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(cultEng) : string.Empty,
-									(tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(cultEng) : string.Empty,
-									(tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(cultEng) : string.Empty,
-									(tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(cultEng) : string.Empty,
+									(tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(GlobalVariables.cultEng) : string.Empty,
+									(tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(GlobalVariables.cultEng) : string.Empty,
+									(tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(GlobalVariables.cultEng) : string.Empty,
+									(tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(GlobalVariables.cultEng) : string.Empty,
 									tagFile.Tag.Lyrics ?? string.Empty,
 									tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty,
 									false);

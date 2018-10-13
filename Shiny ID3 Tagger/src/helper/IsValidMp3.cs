@@ -6,15 +6,19 @@
 // <summary>Checks if a given file is a real MP3 by inspecting first 3 bytes in file header</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+
+using GlobalNamespace;
+
+namespace Utils
 {
 	using System;
 	using System.IO;
 	using System.Linq;
+	using GlobalVariables;
 
-	public partial class Form1
+	public partial class Utils
 	{
-		private bool IsValidMp3(string filepath)
+		public static bool IsValidMp3(string filepath)
 		{
 			byte[] fileHeader = new byte[3];
 			byte[] mp3HeaderWithTags = { 0x49, 0x44, 0x33 };
@@ -49,7 +53,7 @@ namespace GlobalNamespace
 						"ERROR:    Not a valid MP3 file!",
 						"file:     " + filepath
 					};
-					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+					Form1.Instance.PrintErrorMessage(errorMsg);
 				}
 
 				return false;
@@ -64,7 +68,7 @@ namespace GlobalNamespace
 						"ERROR:    Invalid filepath!",
 						"file:     " + filepath
 					};
-					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+					Form1.Instance.PrintErrorMessage(errorMsg);
 				}
 
 				return false;
@@ -79,7 +83,7 @@ namespace GlobalNamespace
 						"ERROR:    File not found!",
 						"file:     " + filepath
 					};
-					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+					Form1.Instance.PrintErrorMessage(errorMsg);
 				}
 
 				return false;
@@ -94,7 +98,7 @@ namespace GlobalNamespace
 						"ERROR:    Cannot access file. Already in use!",
 						"file:     " + filepath
 					};
-					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+					Form1.Instance.PrintErrorMessage(errorMsg);
 				}
 
 				return false;

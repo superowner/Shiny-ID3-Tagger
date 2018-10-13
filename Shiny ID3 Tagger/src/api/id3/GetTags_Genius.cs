@@ -8,22 +8,25 @@
 // https://docs.genius.com/#search-h2
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
-	using System;
-	using System.Diagnostics;
-	using System.Net;
-	using System.Net.Http;
-	using System.Threading;
-	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using System;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
+	public class Genius : IGetTagsService
 	{
-		private async Task<Id3> GetTags_Genius(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+		public const string ServiceName = "Genius";
+
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Genius";
+			Id3 o = new Id3 {Service = ServiceName};
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -39,10 +42,10 @@ namespace GlobalNamespace
 					"&access_token=" + User.Accounts["Genius"]["AccessToken"] +
 					"&text_format=plain");
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData != null && searchData.SelectToken("response.hits[0].result.api_path") != null)
+				if (searchData?.SelectToken("response.hits[0].result.api_path") != null)
 				{
 					using (HttpRequestMessage trackRequest = new HttpRequestMessage())
 					{
@@ -51,8 +54,8 @@ namespace GlobalNamespace
 							"?access_token=" + User.Accounts["Genius"]["AccessToken"] +
 							"&text_format=plain");
 
-						string trackContent = await this.GetResponse(client, trackRequest, cancelToken);
-						JObject trackData = this.DeserializeJson(trackContent);
+						string trackContent = await Utils.GetResponse(client, trackRequest, cancelToken);
+						JObject trackData = Utils.DeserializeJson(trackContent);
 
 						if (trackData != null)
 						{
@@ -71,8 +74,8 @@ namespace GlobalNamespace
 								{
 									albumRequest.RequestUri = new Uri("https://api.genius.com" + albumPath + "?access_token=" + User.Accounts["Genius"]["AccessToken"] + "&text_format=plain");
 
-									string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-									JObject albumData = this.DeserializeJson(albumContent);
+									string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+									JObject albumData = Utils.DeserializeJson(albumContent);
 
 									if (albumData != null)
 									{
@@ -89,7 +92,7 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
 			return o;
 		}
