@@ -8,10 +8,10 @@
 
 namespace GlobalNamespace
 {
-    using System;
-    using System.Threading;
-    using System.Windows.Forms;
-    using GlobalVariables;
+	using System;
+	using System.Threading;
+	using System.Windows.Forms;
+	using GlobalVariables;
 
 	public partial class Form1 : Form
 	{

@@ -13,21 +13,21 @@
 
 namespace GetLyrics
 {
-    using System;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Security.Cryptography;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using System;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Net.Http;
+	using System.Net.Http.Headers;
+	using System.Security.Cryptography;
+	using System.Text;
+	using System.Text.RegularExpressions;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
-    internal class ViewLyrics : IGetLyricsService
+	internal class ViewLyrics : IGetLyricsService
 	{
 		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
@@ -76,10 +76,10 @@ namespace GetLyrics
 							if (!string.IsNullOrWhiteSpace(rawLyrics))
 							{
 								// Sanitize
-								rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);  // Remove timestamps like [01:01:123] or [01:01]
-								rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);                             // Remove square brackets [by: XYZ] credits
-								rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
-								rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks
+								rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);	// Remove timestamps like [01:01:123] or [01:01]
+								rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);								// Remove square brackets [by: XYZ] credits
+								rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));					// Remove leading or ending white space per line
+								rawLyrics = rawLyrics.Trim();																// Remove leading or ending line breaks
 
 								if (rawLyrics.Length > 1)
 								{

@@ -9,23 +9,23 @@
 
 namespace GetTags
 {
-    using System;
-    using System.Diagnostics;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using System;
+	using System.Diagnostics;
+	using System.Net;
+	using System.Net.Http;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
-    internal class ITunes : IGetTagsService
+	internal class ITunes : IGetTagsService
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-            Id3 o = new Id3{ Service = "iTunes" };
+			Id3 o = new Id3{ Service = "iTunes" };
 
-            Stopwatch sw = new Stopwatch();
+			Stopwatch sw = new Stopwatch();
 			sw.Start();
 
 			// ###########################################################################

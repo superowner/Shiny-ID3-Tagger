@@ -8,11 +8,11 @@
 
 namespace GlobalNamespace
 {
-    using System;
-    using System.Threading;
-    using System.Windows.Forms;
-    using GlobalVariables;
-    using Ookii.Dialogs;
+	using System;
+	using System.Threading;
+	using System.Windows.Forms;
+	using GlobalVariables;
+	using Ookii.Dialogs;
 
 	public partial class Form1 : Form
 	{

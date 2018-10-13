@@ -205,8 +205,8 @@ namespace GlobalNamespace
 								row.SetValues(
 									(existingFilePaths.Count + counter).ToString(),
 									filepath ?? string.Empty,
-									artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,            // Select the first non-null artist choice, value order in array is important therefore
-									titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,             // Select the first non-null title choice, value order in array is important therefore
+									artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,			// Select the first non-null artist choice, value order in array is important therefore
+									titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,				// Select the first non-null title choice, value order in array is important therefore
 									tagFile.Tag.Album ?? string.Empty,
 									(tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(GlobalVariables.CultEng) : string.Empty,
 									tagFile.Tag.FirstGenre ?? string.Empty,

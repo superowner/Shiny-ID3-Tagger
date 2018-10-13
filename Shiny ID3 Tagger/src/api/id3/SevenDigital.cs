@@ -9,18 +9,18 @@
 
 namespace GetTags
 {
-    using System;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using System;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Net;
+	using System.Net.Http;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
-    internal class SevenDigital : IGetTagsService
+	internal class SevenDigital : IGetTagsService
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{

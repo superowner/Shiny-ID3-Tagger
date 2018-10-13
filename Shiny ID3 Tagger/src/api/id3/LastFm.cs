@@ -11,17 +11,17 @@
 
 namespace GetTags
 {
-    using System;
-    using System.Diagnostics;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using System;
+	using System.Diagnostics;
+	using System.Net;
+	using System.Net.Http;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
-    internal class LastFm : IGetTagsService
+	internal class LastFm : IGetTagsService
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
@@ -76,7 +76,7 @@ namespace GetTags
 
 							if (o.Cover != null)
 							{
-								o.Cover = o.Cover.Replace("/i/u/300x300/", "/i/u/600x600/");        // Largest version on lastfm image servers seems to be 600x600 pixel
+								o.Cover = o.Cover.Replace("/i/u/300x300/", "/i/u/600x600/");		// Largest version on lastfm image servers seems to be 600x600 pixel
 							}
 						}
 					}

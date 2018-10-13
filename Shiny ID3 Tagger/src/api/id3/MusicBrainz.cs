@@ -14,20 +14,20 @@
 
 namespace GetTags
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Net.Http;
+	using System.Net.Http.Headers;
+	using System.Text.RegularExpressions;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
-    internal class MusicBrainz : IGetTagsService
+	internal class MusicBrainz : IGetTagsService
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
@@ -75,7 +75,7 @@ namespace GetTags
 						string curPrimType = (string)curRelease.SelectToken("release-group.primary-type");
 
 						if (curStatus != null &&
-                            curPrimType != null &&
+							curPrimType != null &&
 							curStatus.ToLowerInvariant() == "official" &&
 							curPrimType.ToLowerInvariant() == "album")
 						{
@@ -97,8 +97,8 @@ namespace GetTags
 						string curDate = (string)curRelease["date"];
 						string firstDate = (string)bestRelease["date"];
 						if (curDate != null &&
-                            firstDate != null &&
-                            Utils.ConvertStringToDate(curDate).Ticks < Utils.ConvertStringToDate(firstDate).Ticks)
+							firstDate != null &&
+							Utils.ConvertStringToDate(curDate).Ticks < Utils.ConvertStringToDate(firstDate).Ticks)
 						{
 							bestRelease = curRelease;
 						}
@@ -133,7 +133,7 @@ namespace GetTags
 													orderby (int)tag["count"] descending
 													select tag).ToArray()[0];
 
-								o.Genre = (string)objGenre["name"];             // Not many results for genres because musicbrainz does not support them (https://wiki.musicbrainz.org/Genre)
+								o.Genre = (string)objGenre["name"];				// Not many results for genres because musicbrainz does not support them (https://wiki.musicbrainz.org/Genre)
 							}
 						}
 					}

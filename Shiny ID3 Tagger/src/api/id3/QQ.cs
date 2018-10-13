@@ -12,18 +12,18 @@
 
 namespace GetTags
 {
-    using System;
-    using System.Diagnostics;
-    using System.Net;
-    using System.Net.Http;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using System;
+	using System.Diagnostics;
+	using System.Net;
+	using System.Net.Http;
+	using System.Text.RegularExpressions;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
-    internal class QQ : IGetTagsService
+	internal class QQ : IGetTagsService
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
@@ -93,7 +93,7 @@ namespace GetTags
 						if (trackData?.SelectToken("data") != null)
 						{
 							o.TrackNumber = (string)trackData.SelectToken("data[0].index_album");
-							o.DiscNumber = null;    // Maybe "data[0].index_cd" is the correct property, but that's unsure
+							o.DiscNumber = null;	// Maybe "data[0].index_cd" is the correct property, but that's unsure
 						}
 					}
 				}

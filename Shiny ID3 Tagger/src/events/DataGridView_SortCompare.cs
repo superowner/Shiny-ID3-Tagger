@@ -44,7 +44,7 @@ namespace GlobalNamespace
 
 			// If both values can be converted to dateTime
 			if (DateTime.TryParseExact((string)e.CellValue1, Utils.DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime outDate1) &&
-			    DateTime.TryParseExact((string)e.CellValue2, Utils.DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime outDate2))
+				DateTime.TryParseExact((string)e.CellValue2, Utils.DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime outDate2))
 			{
 				e.SortResult = DateTime.Compare(outDate1, outDate2);
 				e.Handled = true;

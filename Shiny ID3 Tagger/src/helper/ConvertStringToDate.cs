@@ -16,9 +16,9 @@ namespace Utils
 
 	internal partial class Utils
 	{
-        // Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
-        // MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
-        internal static readonly string[] DateTimeformats =
+		// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
+		// MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
+		internal static readonly string[] DateTimeformats =
 		{
 			"yyyy",
 			"yyyy-MM",
@@ -30,12 +30,12 @@ namespace Utils
 			"MM/dd/yyyy HH",
 			"MM/dd/yyyy HH:mm",
 			"MM/dd/yyyy HH:mm:ss",
-            "MM/dd/yyyy hh:mm:ss tt",
-            "M/d/YYYY h:mm:ss tt",
+			"MM/dd/yyyy hh:mm:ss tt",
+			"M/d/YYYY h:mm:ss tt",
 			"M/dd/yyyy h:mm:ss tt",
-            "dd/yyyy",
-            "dd.MM.yyyy HH:mm:ss",
-        };
+			"dd/yyyy",
+			"dd.MM.yyyy HH:mm:ss",
+		};
 
 		internal static DateTime ConvertStringToDate(string dateString)
 		{

@@ -9,9 +9,9 @@
 namespace Utils
 {
 	using GlobalNamespace;
-    using GlobalVariables;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
+	using GlobalVariables;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
 
 	internal partial class Utils
 	{

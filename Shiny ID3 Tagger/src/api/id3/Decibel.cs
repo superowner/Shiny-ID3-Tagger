@@ -20,23 +20,23 @@ namespace GetTags
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
-    internal class Decibel : IGetTagsService
-    {
-        public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+	internal class Decibel : IGetTagsService
+	{
+		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-            Id3 o = new Id3 { Service = "Decibel (Quantone Music)" };
+			Id3 o = new Id3 { Service = "Decibel (Quantone Music)" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
 
 			// ###########################################################################
 			var account = (from item in User.Accounts["Decibel"]
-						    orderby item["lastused"] ascending
-						    select item).FirstOrDefault();
+							orderby item["lastused"] ascending
+							select item).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;
 
 			string artistEncoded = WebUtility.UrlEncode(artist);
@@ -91,9 +91,9 @@ namespace GetTags
 
 			// ###########################################################################
 			sw.Stop();
-            o.Duration = $"{sw.Elapsed:s\\,f}";
+			o.Duration = $"{sw.Elapsed:s\\,f}";
 
-            return o;
+			return o;
 		}
-    }
+	}
 }

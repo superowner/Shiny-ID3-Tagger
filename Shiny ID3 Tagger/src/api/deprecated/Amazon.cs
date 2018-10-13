@@ -15,22 +15,22 @@
 
 namespace GetTags
 {
-    using System;
-    using System.Diagnostics;
-    using System.Net.Http;
-    using System.Security.Cryptography;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using System;
+	using System.Diagnostics;
+	using System.Net.Http;
+	using System.Security.Cryptography;
+	using System.Text;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
 	[Obsolete("Amazon key is not registered as an Amazon Associate. ", true)]
 	internal class Amazon : IGetTagsService
 	{
-        private const int LastRequestTimeout = 1000;
-        private static Stopwatch lastRequestTimer = new Stopwatch();
+		private const int LastRequestTimeout = 1000;
+		private static Stopwatch lastRequestTimer = new Stopwatch();
 
 		// ###########################################################################
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
@@ -80,20 +80,16 @@ namespace GetTags
 
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
-                // TODO: Can this be simplified? why double checking if "itemSearchResponse.Items.Item" is not null?
-                if (searchData?.SelectToken("ItemSearchResponse.Items.Item") != null)
+				if (searchData?.SelectToken("ItemSearchResponse.Items.Item") != null)
 				{
 					JToken item = null;
-					if (searchData.SelectToken("ItemSearchResponse.Items.Item") != null)
+					if (searchData.SelectToken("ItemSearchResponse.Items.Item").Type == JTokenType.Array)
 					{
-						if (searchData.SelectToken("ItemSearchResponse.Items.Item").Type == JTokenType.Array)
-						{
-							item = searchData.SelectToken("ItemSearchResponse.Items.Item[0]");
-						}
-						else
-						{
-							item = searchData.SelectToken("ItemSearchResponse.Items.Item");
-						}
+						item = searchData.SelectToken("ItemSearchResponse.Items.Item[0]");
+					}
+					else
+					{
+						item = searchData.SelectToken("ItemSearchResponse.Items.Item");
 					}
 
 					o.Artist = (string)item.SelectToken("ItemAttributes.Creator.#text");
@@ -161,15 +157,15 @@ namespace GetTags
 			return o;
 		}
 
-        private static string CreateSignature(string server, string parameters)
-        {
-            string stringToSign = "GET" + "\n" + server + "\n" + "/onca/xml" + "\n" + parameters;
-            byte[] bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
-            HMACSHA256 hmacSha = new HMACSHA256{ Key = Encoding.UTF8.GetBytes((string)User.Accounts["Amazon"]["SecretKey"]) };
-            byte[] sigBytes = hmacSha.ComputeHash(bytesToSign);
-            string sigBase64 = Convert.ToBase64String(sigBytes);
-            string sigEncoded = Uri.EscapeDataString(sigBase64);
-            return sigEncoded;
-        }
-    }
+		private static string CreateSignature(string server, string parameters)
+		{
+			string stringToSign = "GET" + "\n" + server + "\n" + "/onca/xml" + "\n" + parameters;
+			byte[] bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
+			HMACSHA256 hmacSha = new HMACSHA256{ Key = Encoding.UTF8.GetBytes((string)User.Accounts["Amazon"]["SecretKey"]) };
+			byte[] sigBytes = hmacSha.ComputeHash(bytesToSign);
+			string sigBase64 = Convert.ToBase64String(sigBytes);
+			string sigEncoded = Uri.EscapeDataString(sigBase64);
+			return sigEncoded;
+		}
+	}
 }

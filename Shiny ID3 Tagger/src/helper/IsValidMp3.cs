@@ -11,8 +11,8 @@ namespace Utils
 	using System;
 	using System.IO;
 	using System.Linq;
-    using GlobalNamespace;
-    using GlobalVariables;
+	using GlobalNamespace;
+	using GlobalVariables;
 
 	internal partial class Utils
 	{

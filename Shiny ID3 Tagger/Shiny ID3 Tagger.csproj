@@ -318,7 +318,6 @@
     <Content Include="..\LICENSE.txt">
       <Link>LICENSE.txt</Link>
     </Content>
-    <None Include="resources\icon_add.ico" />
     <None Include="resources\icons\icon_add.ico" />
     <None Include="resources\icons\icon_clear.ico" />
     <None Include="resources\icons\icon_export.ico" />

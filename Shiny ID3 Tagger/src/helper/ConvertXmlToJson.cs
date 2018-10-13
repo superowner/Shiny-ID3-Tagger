@@ -8,10 +8,10 @@
 
 namespace Utils
 {
-    using System.Xml;
-    using GlobalNamespace;
-    using GlobalVariables;
-    using Newtonsoft.Json;
+	using System.Xml;
+	using GlobalNamespace;
+	using GlobalVariables;
+	using Newtonsoft.Json;
 
 	internal partial class Utils
 	{

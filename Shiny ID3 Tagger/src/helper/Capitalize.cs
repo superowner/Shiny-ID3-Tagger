@@ -22,9 +22,9 @@
 
 namespace Utils
 {
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using GlobalVariables;
+	using System.Linq;
+	using System.Text.RegularExpressions;
+	using GlobalVariables;
 
 	internal partial class Utils
 	{

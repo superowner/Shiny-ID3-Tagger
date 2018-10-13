@@ -8,17 +8,17 @@
 
 namespace GetTags
 {
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
+	using System.Net.Http;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
 
-    internal interface IGetTagsService
-    {
-        Task<Id3> GetTags(
-            HttpMessageInvoker client,
-            string artist,
-            string title,
-            CancellationToken cancelToken);
-    }
+	internal interface IGetTagsService
+	{
+		Task<Id3> GetTags(
+			HttpMessageInvoker client,
+			string artist,
+			string title,
+			CancellationToken cancelToken);
+	}
 }

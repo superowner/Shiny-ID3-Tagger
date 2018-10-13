@@ -16,7 +16,7 @@ namespace GlobalVariables
 	using System.Windows.Forms;
 	using Newtonsoft.Json.Linq;
 
-    internal static class GlobalVariables
+	internal static class GlobalVariables
 	{
 		internal static readonly CultureInfo CultEng = new CultureInfo("en-US");
 
@@ -89,8 +89,8 @@ namespace GlobalVariables
 
 		internal static DataTable CreateId3Table()
 		{
-            DataTable table = new DataTable{ Locale = new CultureInfo("en-US") };
-            table.Columns.Add("number", typeof(uint));
+			DataTable table = new DataTable{ Locale = new CultureInfo("en-US") };
+			table.Columns.Add("number", typeof(uint));
 			table.Columns.Add("filepath", typeof(string));
 			table.Columns.Add("service", typeof(string));
 			table.Columns.Add("artist", typeof(string));

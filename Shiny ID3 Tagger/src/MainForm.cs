@@ -18,10 +18,10 @@ namespace GlobalNamespace
 
 	public partial class Form1 : Form
 	{
-        // TODO: I don't understand the concept behind this variable. Why not leave it as it was before?
+		// TODO: I don't understand the concept behind this variable. Why not leave it as it was before?
 		public static Form1 Instance;
 
-        /// <summary>
+		/// <summary>
 		/// Initializes a new instance of the <see cref="Form1"/> class.
 		/// The main form which will be shown immediately after program start
 		/// </summary>

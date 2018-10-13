@@ -10,17 +10,17 @@
 
 namespace GetTags
 {
-    using System;
-    using System.Diagnostics;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using System;
+	using System.Diagnostics;
+	using System.Net;
+	using System.Net.Http;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
-    internal class Genius : IGetTagsService
+	internal class Genius : IGetTagsService
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
@@ -61,8 +61,8 @@ namespace GetTags
 							o.Title = (string)trackData.SelectToken("response.song.title");
 							o.Album = (string)trackData.SelectToken("response.song.album.name");
 							o.Genre = null;				// They don't offer this tag via API (https://genius.com/discussions/279491-Are-genius-song-tags-rap-rock-etc-exposed-through-the-songs-api)
-							o.DiscNumber = null;        // Not provided in API response
-							o.TrackNumber = null;       // Not provided in API response
+							o.DiscNumber = null;		// Not provided in API response
+							o.TrackNumber = null;		// Not provided in API response
 							o.Cover = (string)trackData.SelectToken("response.song.album.cover_art_url");
 
 							string albumPath = (string)trackData.SelectToken("response.song.album.api_path");
@@ -77,8 +77,8 @@ namespace GetTags
 
 									if (albumData != null)
 									{
-										o.DiscCount = null;         // Not provided in API response
-										o.TrackCount = null;        // Not provided in API response
+										o.DiscCount = null;			// Not provided in API response
+										o.TrackCount = null;		// Not provided in API response
 										o.Date = (string)albumData.SelectToken("response.album.release_date");
 									}
 								}

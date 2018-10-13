@@ -16,7 +16,7 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-        internal void PrintErrorMessage(string[] values)
+		internal void PrintErrorMessage(string[] values)
 		{
 			this.PrintLogMessage(this.rtbErrorLog, values);
 		}

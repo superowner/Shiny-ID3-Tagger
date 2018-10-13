@@ -9,18 +9,18 @@
 
 namespace GetLyrics
 {
-    using System;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using GlobalVariables;
-    using Newtonsoft.Json.Linq;
-    using Utils;
+	using System;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Net;
+	using System.Net.Http;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using GlobalVariables;
+	using Newtonsoft.Json.Linq;
+	using Utils;
 
-    internal class LoloLyrics : IGetLyricsService
+	internal class LoloLyrics : IGetLyricsService
 	{
 		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
@@ -45,9 +45,9 @@ namespace GetLyrics
 					string rawLyrics = (string)searchData.SelectToken("result.response");
 
 					// Sanitize lyrics
-					rawLyrics = WebUtility.HtmlDecode(rawLyrics);                                               // URL decode lyrics
-					rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
-					rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks and white space
+					rawLyrics = WebUtility.HtmlDecode(rawLyrics);												// URL decode lyrics
+					rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));					// Remove leading or ending white space per line
+					rawLyrics = rawLyrics.Trim();																// Remove leading or ending line breaks and white space
 
 					if (rawLyrics.Length > 1)
 					{
