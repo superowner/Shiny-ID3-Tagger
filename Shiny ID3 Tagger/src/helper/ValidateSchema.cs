@@ -9,17 +9,17 @@
 // JSON.net schema documentation: https://www.newtonsoft.com/json/help/html/JTokenIsValidWithMessages.htm
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
 	using System;
 	using System.Collections.Generic;
 	using Newtonsoft.Json.Linq;
 	using Newtonsoft.Json.Schema;
 
-	public partial class Form1
+	internal partial class Utils
 	{
 		#region schema for accounts.json
-		private string accountsSchemaStr = @"
+		private static string accountsSchemaStr = @"
 		{
 		  ""definitions"": {},
 		  ""$schema"": ""http://json-schema.org/draft-06/schema#"",
@@ -302,7 +302,7 @@ namespace GlobalNamespace
 		#endregion
 
 		#region schema for settings.json
-		private string settingsSchemaStr = @"
+		private static string settingsSchemaStr = @"
 		{
 		  ""definitions"": {},
 		  ""$schema"": ""http://json-schema.org/draft-06/schema#"",
@@ -403,7 +403,7 @@ namespace GlobalNamespace
 		#endregion
 
 		#region schema for lastCommit.json
-		private string lastCommitSchemaStr = @"
+		private static string lastCommitSchemaStr = @"
 		{
 		  ""definitions"": {},
 		  ""$schema"": ""http://json-schema.org/draft-06/schema#"",
@@ -427,7 +427,7 @@ namespace GlobalNamespace
 		}";
 		#endregion
 
-		private IList<string> ValidateSchema(string jsonStr, string schemaStr)
+		internal static IList<string> ValidateSchema(string jsonStr, string schemaStr)
 		{
 			// Load schema
 			JSchema schema = JSchema.Parse(schemaStr);

@@ -10,6 +10,7 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Windows.Forms;
+	using GlobalVariables;
 
 	public partial class Form1 : Form
 	{
@@ -18,10 +19,10 @@ namespace GlobalNamespace
 			switch (this.tabControl1.SelectedIndex)
 			{
 				case 0:
-					ActiveDGV = this.dataGridView1;
+					GlobalVariables.ActiveDGV = this.dataGridView1;
 					break;
 				case 1:
-					ActiveDGV = this.dataGridView2;
+					GlobalVariables.ActiveDGV = this.dataGridView2;
 					break;
 			}
 		}

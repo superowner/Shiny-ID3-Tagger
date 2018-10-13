@@ -10,10 +10,12 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Drawing;
+	using GlobalVariables;
+	using Utils;
 
 	public partial class Form1
 	{
-		private void MarkChange(int row, int col, string oldValue, string newValue, bool signalBigChanges)
+		internal void MarkChange(int row, int col, string oldValue, string newValue, bool signalBigChanges)
 		{
 			if (!string.IsNullOrWhiteSpace(newValue) && oldValue != newValue)
 			{
@@ -30,7 +32,7 @@ namespace GlobalNamespace
 						this.dataGridView1[col, row].ToolTipText = oldValue;
 
 						long allowedEdits = oldValue.Length * (int)User.Settings["ThresholdRedValue"] / 100;
-						if (signalBigChanges && (LevenshteinDistance(oldValue, newValue) > allowedEdits))
+						if (signalBigChanges && (Utils.LevenshteinDistance(oldValue, newValue) > allowedEdits))
 						{
 							this.dataGridView1[col, row].Style.BackColor = Color.Red;
 						}

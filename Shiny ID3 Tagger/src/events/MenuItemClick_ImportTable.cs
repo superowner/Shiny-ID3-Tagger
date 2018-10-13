@@ -10,10 +10,10 @@
 namespace GlobalNamespace
 {
 	using System;
-	using System.Data;
 	using System.Globalization;
 	using System.Linq;
 	using System.Windows.Forms;
+	using GlobalVariables;
 	using Microsoft.VisualBasic.FileIO;
 
 	public partial class Form1 : Form
@@ -46,7 +46,9 @@ namespace GlobalNamespace
 						{
 							// Check if first line in CSV has same headers as dataGridView1 (column order is important)
 							string[] csvHeaderFields = parser.ReadFields();
-							string[] dgvHeaderFields = this.dataGridView1.Columns.Cast<DataGridViewColumn>().Select(column => column.HeaderText).ToArray<string>();
+							string[] dgvHeaderFields =
+								this.dataGridView1.Columns.Cast<DataGridViewColumn>()
+									.Select(column => column.HeaderText).ToArray<string>();
 
 							if (csvHeaderFields.SequenceEqual(dgvHeaderFields))
 							{
@@ -57,11 +59,13 @@ namespace GlobalNamespace
 									string[] fields = parser.ReadFields().ToArray();
 
 									// Update "number" with new line number
-									fields[0] = (this.dataGridView1.Rows.Count + 1).ToString(cultEng);
+									fields[0] = (this.dataGridView1.Rows.Count + 1).ToString(GlobalVariables.CultEng);
 
 									// Check if file was already added
 									bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
-															 where row.Cells[this.filepath1.Index].Value.ToString().ToLowerInvariant() == fields[1].ToLowerInvariant()
+															 where row.Cells[this.filepath1.Index].Value.ToString()
+																	  .ToLowerInvariant() ==
+																   fields[1].ToLowerInvariant()
 															 select row).Any();
 
 									// Check if file is a valid mp3 file
@@ -94,9 +98,9 @@ namespace GlobalNamespace
 							{
 								string[] errorMsg =
 								{
-										"ERROR:    Could not parse CSV \"" + fullPath + "\"",
-										"Message:  " + ex.Message.TrimEnd('\r', '\n')
-									};
+									"ERROR:    Could not parse CSV \"" + fullPath + "\"",
+									"Message:  " + ex.Message.TrimEnd('\r', '\n')
+								};
 								this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 							}
 						}

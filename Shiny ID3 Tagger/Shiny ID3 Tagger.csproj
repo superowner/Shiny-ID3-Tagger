@@ -93,15 +93,14 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>resources\packages\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json.Schema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>resources\packages\Newtonsoft.Json.Schema.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Newtonsoft.Json.Schema.3.0.10\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -133,18 +132,16 @@
     <Compile Include="src\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\api\lyrics\GetLyrics_Viewlyrics.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="src\api\id3\Amazon.cs" />
+    <Compile Include="src\api\id3\Decibel.cs" />
+    <Compile Include="src\api\id3\IGetTagsService.cs" />
+    <Compile Include="src\api\lyrics\IGetLyricsService.cs" />
+    <Compile Include="src\api\lyrics\ViewLyrics.cs" />
     <Compile Include="src\helper\EnableUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\GetImageType.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\ParseInt.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="src\helper\GetImageType.cs" />
+    <Compile Include="src\helper\ParseInt.cs" />
     <Compile Include="src\events\DataGridView_CellPainting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,150 +208,60 @@
     <Compile Include="src\events\TabControl_SelectedIndexChanged.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\Capitalize.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\CheckMalformedUtf8.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\CloneRequest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\ConvertStringToDate.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\ConvertXmlToJson.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\DeserializeJson.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\GetResponse.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="src\helper\Capitalize.cs" />
+    <Compile Include="src\helper\CheckMalformedUtf8.cs" />
+    <Compile Include="src\helper\CloneRequest.cs" />
+    <Compile Include="src\helper\ConvertStringToDate.cs" />
+    <Compile Include="src\helper\ConvertXmlToJson.cs" />
+    <Compile Include="src\helper\DeserializeJson.cs" />
+    <Compile Include="src\helper\GetResponse.cs" />
     <Compile Include="src\events\MenuItemClick_ExportTable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\IncreaseTotalDuration.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\IncreaseAlbumCounter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\InitiateHttpClient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\IsValidMp3.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\IsValidUrl.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\LevenshteinDistance.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="src\helper\IncreaseTotalDuration.cs" />
+    <Compile Include="src\helper\IncreaseAlbumCounter.cs" />
+    <Compile Include="src\helper\InitiateHttpClient.cs" />
+    <Compile Include="src\helper\IsValidMp3.cs" />
+    <Compile Include="src\helper\IsValidUrl.cs" />
+    <Compile Include="src\helper\LevenshteinDistance.cs" />
     <Compile Include="src\helper\PrintLogMessage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\BuildLogMessage.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="src\helper\BuildLogMessage.cs" />
     <Compile Include="src\helper\MarkChange.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\DownloadClientFiles.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\ReadCredentials.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\ReadSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\Strip.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\ValidateSchema.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\helper\WellFormedCsvValue.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\GlobalVariables.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="src\helper\DownloadClientFiles.cs" />
+    <Compile Include="src\helper\ReadCredentials.cs" />
+    <Compile Include="src\helper\ReadSettings.cs" />
+    <Compile Include="src\helper\Strip.cs" />
+    <Compile Include="src\helper\ValidateSchema.cs" />
+    <Compile Include="src\helper\WellFormedCsvValue.cs" />
+    <Compile Include="src\GlobalVariables.cs" />
     <Compile Include="src\SearchTags.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\api\id3\GetTags_7digital.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Amazon.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Decibel.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Deezer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Discogs.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Genius.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Gracenote.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_iTunes.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_LastFm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\deprecated\GetTags_MsGroove.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_MusicBrainz.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\deprecated\GetTags_MusicGraph.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_MusixMatch.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Napster.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Netease.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Qobuz.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_QQ.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Spotify.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\id3\GetTags_Tidal.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\lyrics\GetLyrics_Chartlyrics.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\lyrics\GetLyrics_Lololyrics.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\lyrics\GetLyrics_Netease.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\api\lyrics\GetLyrics_Xiami.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="src\api\id3\SevenDigital.cs" />
+    <Compile Include="src\api\id3\Deezer.cs" />
+    <Compile Include="src\api\id3\Discogs.cs" />
+    <Compile Include="src\api\id3\Genius.cs" />
+    <Compile Include="src\api\id3\Gracenote.cs" />
+    <Compile Include="src\api\id3\ITunes.cs" />
+    <Compile Include="src\api\id3\LastFm.cs" />
+    <Compile Include="src\api\deprecated\MsGroove.cs" />
+    <Compile Include="src\api\id3\MusicBrainz.cs" />
+    <Compile Include="src\api\deprecated\MusicGraph.cs" />
+    <Compile Include="src\api\id3\MusixMatch.cs" />
+    <Compile Include="src\api\id3\Napster.cs" />
+    <Compile Include="src\api\id3\Netease.cs" />
+    <Compile Include="src\api\id3\Qobuz.cs" />
+    <Compile Include="src\api\id3\QQ.cs" />
+    <Compile Include="src\api\id3\Spotify.cs" />
+    <Compile Include="src\api\id3\Tidal.cs" />
+    <Compile Include="src\api\lyrics\ChartLyrics.cs" />
+    <Compile Include="src\api\lyrics\LoloLyrics.cs" />
+    <Compile Include="src\api\lyrics\Netease.cs" />
+    <Compile Include="src\api\lyrics\Xiami.cs" />
     <Compile Include="src\WriteTags.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -411,7 +318,6 @@
     <Content Include="..\LICENSE.txt">
       <Link>LICENSE.txt</Link>
     </Content>
-    <None Include="resources\icon_add.ico" />
     <None Include="resources\icons\icon_add.ico" />
     <None Include="resources\icons\icon_clear.ico" />
     <None Include="resources\icons\icon_export.ico" />

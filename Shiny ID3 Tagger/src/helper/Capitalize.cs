@@ -20,13 +20,13 @@
  *		- as (if it is followed by a verb)
 //-----------------------------------------------------------------------*/
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
 	using System.Linq;
 	using System.Text.RegularExpressions;
+	using GlobalVariables;
 
-	public partial class Form1
+	internal partial class Utils
 	{
 		private static string[] lowercase =
 		{
@@ -34,7 +34,7 @@ namespace GlobalNamespace
 			"into", "of", "off", "on", "onto", "out", "over", "to", "up", "with", "as"
 		};
 
-		private static string Capitalize(string str)
+		internal static string Capitalize(string str)
 		{
 			// If string is not empty and user setting "AutoCapitalize" is set to true
 			if ((bool)User.Settings["AutoCapitalize"] && !string.IsNullOrWhiteSpace(str))

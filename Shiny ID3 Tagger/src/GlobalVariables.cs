@@ -6,7 +6,7 @@
 // <summary>Static or global variables</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GlobalVariables
 {
 	using System;
 	using System.Collections.Generic;
@@ -16,21 +16,21 @@ namespace GlobalNamespace
 	using System.Windows.Forms;
 	using Newtonsoft.Json.Linq;
 
-	public partial class Form1
+	internal static class GlobalVariables
 	{
-		private static CultureInfo cultEng = new CultureInfo("en-US");
+		internal static readonly CultureInfo CultEng = new CultureInfo("en-US");
 
-		private static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		internal static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		private static Dictionary<string, int> albumHits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+		internal static readonly Dictionary<string, int> AlbumHits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
-		private static Dictionary<string, decimal> totalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+		internal static readonly Dictionary<string, decimal> TotalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
 
-		private static DataGridView ActiveDGV { get; set; }
+		internal static DataGridView ActiveDGV { get; set; }
 
-		private static string LastUsedFolder { get; set; }
+		internal static string LastUsedFolder { get; set; }
 
-		private static CancellationTokenSource TokenSource { get; set; }
+		internal static CancellationTokenSource TokenSource { get; set; }
 	}
 
 	internal static class ApiSessionData
@@ -89,8 +89,7 @@ namespace GlobalNamespace
 
 		internal static DataTable CreateId3Table()
 		{
-			DataTable table = new DataTable();
-			table.Locale = new CultureInfo("en-US");
+			DataTable table = new DataTable{ Locale = new CultureInfo("en-US") };
 			table.Columns.Add("number", typeof(uint));
 			table.Columns.Add("filepath", typeof(string));
 			table.Columns.Add("service", typeof(string));
@@ -112,7 +111,7 @@ namespace GlobalNamespace
 
 	internal class DataGridViewDoubleBuffered : DataGridView
 	{
-		public DataGridViewDoubleBuffered()
+		internal DataGridViewDoubleBuffered()
 		{
 			this.DoubleBuffered = true;
 		}

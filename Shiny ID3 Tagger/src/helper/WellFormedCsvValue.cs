@@ -6,13 +6,11 @@
 // <summary>Handles null values when generating a CSV export. Encloses every value with double quotes</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
-
-	public partial class Form1
+	internal partial class Utils
 	{
-		private static string WellFormedCsvValue(object cell)
+		internal static string WellFormedCsvValue(object cell)
 		{
 			string value = cell != null ? cell.ToString() : string.Empty;
 			value = value.Replace("\r\n", "\n");

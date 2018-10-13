@@ -18,9 +18,43 @@ namespace GlobalNamespace
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
+	using GetLyrics;
+	using GetTags;
+	using GlobalVariables;
+	using Utils;
 
 	public partial class Form1
 	{
+		private List<IGetLyricsService> lyricsServices = new List<IGetLyricsService>
+		{
+			new GetLyrics.ChartLyrics(),
+			new GetLyrics.LoloLyrics(),
+			new GetLyrics.Netease(),
+			new GetLyrics.ViewLyrics(),
+			new GetLyrics.Xiami()
+		};
+
+		private List<IGetTagsService> tagsServices = new List<IGetTagsService>
+		{
+			new GetTags.Amazon(),
+			new GetTags.Decibel(),
+			new GetTags.Deezer(),
+			new GetTags.Discogs(),
+			new GetTags.Genius(),
+			new GetTags.Gracenote(),
+			new GetTags.ITunes(),
+			new GetTags.LastFm(),
+			new GetTags.MusicBrainz(),
+			new GetTags.MusixMatch(),
+			new GetTags.Napster(),
+			new GetTags.Netease(),
+			new GetTags.Qobuz(),
+			new GetTags.QQ(),
+			new GetTags.SevenDigital(),
+			new GetTags.Spotify(),
+			new GetTags.Tidal()
+		};
+
 		// ###########################################################################
 		private async void StartSearching(CancellationToken cancelToken)
 		{
@@ -36,7 +70,7 @@ namespace GlobalNamespace
 
 			try
 			{
-				using (HttpClient client = InitiateHttpClient())
+				using (HttpClient client = Utils.InitiateHttpClient())
 				{
 					foreach (DataGridViewRow row in this.dataGridView1.Rows)
 					{
@@ -74,7 +108,8 @@ namespace GlobalNamespace
 							};
 
 							Task<DataTable> apiTask = this.StartId3Search(client, tagOld, cancelToken);
-							Task<KeyValuePair<string, string>> lyricSearchTask = this.StartLyricsSearch(client, tagOld, cancelToken);
+							Task<KeyValuePair<string, string>> lyricSearchTask =
+								this.StartLyricsSearch(client, tagOld, cancelToken);
 
 							await Task.WhenAll(apiTask, lyricSearchTask);
 
@@ -83,14 +118,17 @@ namespace GlobalNamespace
 
 							string artistNew = (from row1 in apiResults.AsEnumerable()
 												where !string.IsNullOrWhiteSpace(row1.Field<string>("artist"))
-												group row1 by Capitalize(Strip(row1.Field<string>("artist"))) into grp
+												group row1 by Utils.Capitalize(
+													Utils.Strip(row1.Field<string>("artist")))
+												into grp
 												where grp.Count() >= 3
 												orderby grp.Count() descending
 												select grp.Key).FirstOrDefault();
 
 							string titleNew = (from row1 in apiResults.AsEnumerable()
 											   where !string.IsNullOrWhiteSpace(row1.Field<string>("title"))
-											   group row1 by Capitalize(Strip(row1.Field<string>("title"))) into grp
+											   group row1 by Utils.Capitalize(Utils.Strip(row1.Field<string>("title")))
+											   into grp
 											   where grp.Count() >= 3
 											   orderby grp.Count() descending
 											   select grp.Key).FirstOrDefault();
@@ -99,9 +137,9 @@ namespace GlobalNamespace
 							// This happens when spelling mistakes were corrected by many APIs
 							if (artistNew != null && titleNew != null &&
 								(artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
-									titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
+								 titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
 							{
-								this.PrintLogMessage(this.rtbSearchLog, new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" });
+								this.PrintLogMessage(this.rtbSearchLog, new[] {"  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\""});
 
 								sw.Restart();
 
@@ -124,13 +162,15 @@ namespace GlobalNamespace
 							if (tagNew.Album != null && lyricsNew.Value != null)
 							{
 								tagNew.Lyrics = lyricsNew.Value;
-								this.PrintLogMessage(this.rtbSearchLog, new[] { "  Lyrics taken from " + lyricsNew.Key });
+								this.PrintLogMessage(this.rtbSearchLog, new[] {"  Lyrics taken from " + lyricsNew.Key});
 							}
 
 							foreach (DataRow r in apiResults.Rows)
 							{
-								string albumhit = IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
-								string durationTotal = IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
+								string albumhit =
+									Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
+								string durationTotal =
+									Utils.IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
 
 								this.dataGridView2.Rows.Add(
 									(this.dataGridView2.Rows.Count + 1).ToString(),
@@ -154,10 +194,14 @@ namespace GlobalNamespace
 								// Set row foreground color to gray if current row album doesn't match most frequent album
 								if (tagNew.Album == null ||
 									(tagNew.Album != null && r["album"] != null &&
-									Strip(tagNew.Album).ToLowerInvariant() != Strip(r["album"].ToString().ToLowerInvariant())))
+									 Utils.Strip(tagNew.Album).ToLowerInvariant() !=
+									 Utils.Strip(r["album"].ToString().ToLowerInvariant())))
 								{
-									this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.ForeColor = Color.Gray;
-									DataGridViewLinkCell c = this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.cover2.Index] as DataGridViewLinkCell;
+									this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle
+										.ForeColor = Color.Gray;
+									DataGridViewLinkCell c =
+										this.dataGridView2.Rows[this.dataGridView2.RowCount - 1]
+											.Cells[this.cover2.Index] as DataGridViewLinkCell;
 									c.LinkColor = Color.Gray;
 								}
 							}
@@ -177,7 +221,7 @@ namespace GlobalNamespace
 
 							sw.Stop();
 							tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
-							string allApiDurationTotal = IncreaseTotalDuration(tagNew.Service, tagNew.Duration);
+							string allApiDurationTotal = Utils.IncreaseTotalDuration(tagNew.Service, tagNew.Duration);
 
 							this.dataGridView2.Rows.Add(
 								(this.dataGridView2.Rows.Count + 1).ToString(),
@@ -198,8 +242,10 @@ namespace GlobalNamespace
 								allApiDurationTotal ?? string.Empty,
 								string.Empty);
 
-							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index].ToolTipText = tagNew.Lyrics;
-							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor = Color.Yellow;
+							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index]
+								.ToolTipText = tagNew.Lyrics;
+							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor =
+								Color.Yellow;
 							this.dataGridView2.FirstDisplayedScrollingRowIndex = this.dataGridView2.RowCount - 1;
 							this.dataGridView2.ClearSelection();
 						}
@@ -231,14 +277,8 @@ namespace GlobalNamespace
 				return lyrics;
 			}
 
-			List<Task<Id3>> taskList = new List<Task<Id3>>
-			{
-				this.GetLyrics_Viewlyrics(client, tagNew, cancelToken),
-				this.GetLyrics_Netease(client, tagNew, cancelToken),
-				this.GetLyrics_Chartlyrics(client, tagNew, cancelToken),
-				this.GetLyrics_Lololyrics(client, tagNew, cancelToken),
-				this.GetLyrics_Xiami(client, tagNew, cancelToken)
-			};
+			List<Task<Id3>> taskList = this.lyricsServices.Select(service => service.GetLyrics(
+																  client, tagNew, cancelToken)).ToList();
 
 			try
 			{
@@ -263,9 +303,9 @@ namespace GlobalNamespace
 			foreach (string api in User.Settings["LyricsPriority"])
 			{
 				lyrics = (from kvp in lyricResults
-							where !string.IsNullOrWhiteSpace(kvp.Value)
-							where kvp.Key.ToLowerInvariant() == api.ToLowerInvariant()
-							select kvp).FirstOrDefault();
+						  where !string.IsNullOrWhiteSpace(kvp.Value)
+						  where kvp.Key.ToLowerInvariant() == api.ToLowerInvariant()
+						  select kvp).FirstOrDefault();
 
 				if (lyrics.Value != null)
 				{
@@ -281,35 +321,19 @@ namespace GlobalNamespace
 		{
 			DataTable apiResults = Id3.CreateId3Table();
 
-			string artistToSearch = Strip(tagOld.Artist);
-			string titleToSearch = Strip(tagOld.Title);
+			string artistToSearch = Utils.Strip(tagOld.Artist);
+			string titleToSearch = Utils.Strip(tagOld.Title);
 
-			string message = string.Format(
-								"{0,-100}{1}",
-								"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",
-								"file: \"" + tagOld.Filepath + "\"");
-			this.PrintLogMessage(this.rtbSearchLog, new[] { message });
+			string message = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"", -100}{"file: \"" + tagOld.Filepath + "\""}";
+			this.PrintLogMessage(this.rtbSearchLog, new[] {message});
 
-			List<Task<Id3>> taskList = new List<Task<Id3>>
-			{
-				this.GetTags_7digital(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Amazon(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Decibel(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Deezer(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Discogs(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Genius(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Gracenote(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_iTunes(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_LastFm(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_MusicBrainz(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_MusixMatch(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Napster(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Netease(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Qobuz(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_QQ(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Spotify(client, artistToSearch, titleToSearch, cancelToken),
-				this.GetTags_Tidal(client, artistToSearch, titleToSearch, cancelToken)
-			};
+			List<Task<Id3>> taskList = this.tagsServices.Select(service =>
+																	 service.GetTags(
+																		 client,
+																		 artistToSearch,
+																		 titleToSearch,
+																		 cancelToken))
+										   .ToList();
 
 			this.fastProgressBar.Maximum = taskList.Count;
 			this.fastProgressBar.Value = 0;
@@ -372,16 +396,20 @@ namespace GlobalNamespace
 		{
 			var majorityAlbumRows = (from row in apiResults.AsEnumerable()
 									 where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
-									 orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
-									 group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
+									 orderby Utils.ConvertStringToDate(row.Field<string>("date"))
+												  .ToString("yyyyMMddHHmmss", GlobalVariables.CultEng)
+									 group row by Utils.Strip(row.Field<string>("album").ToUpperInvariant())
+									 into grp
 									 where grp.Count() >= 3
 									 orderby grp.Count() descending
 									 select grp).FirstOrDefault();
 
 			var test = from row in apiResults.AsEnumerable()
 					   where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
-					   orderby this.ConvertStringToDate(row.Field<string>("date")).ToString("yyyyMMddHHmmss", cultEng)
-					   group row by Strip(row.Field<string>("album").ToUpperInvariant()) into grp
+					   orderby Utils.ConvertStringToDate(row.Field<string>("date"))
+									.ToString("yyyyMMddHHmmss", GlobalVariables.CultEng)
+					   group row by Utils.Strip(row.Field<string>("album").ToUpperInvariant())
+					   into grp
 					   where grp.Count() >= 3
 					   orderby grp.Count() descending
 					   select grp;
@@ -389,57 +417,67 @@ namespace GlobalNamespace
 			if (majorityAlbumRows != null)
 			{
 				tagNew.Album = (from row in majorityAlbumRows
-								group row by Capitalize(Strip(row.Field<string>("album"))) into grp
+								group row by Utils.Capitalize(Utils.Strip(row.Field<string>("album")))
+								into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
 				tagNew.Artist = (from row in majorityAlbumRows
-								where !string.IsNullOrWhiteSpace(row.Field<string>("artist"))
-								group row by Capitalize(Strip(row.Field<string>("artist"))) into grp
-								orderby grp.Count() descending
-								select grp.Key).FirstOrDefault();
+								 where !string.IsNullOrWhiteSpace(row.Field<string>("artist"))
+								 group row by Utils.Capitalize(Utils.Strip(row.Field<string>("artist")))
+								 into grp
+								 orderby grp.Count() descending
+								 select grp.Key).FirstOrDefault();
 
 				tagNew.Title = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("title"))
-								group row by Capitalize(Strip(row.Field<string>("title"))) into grp
+								group row by Utils.Capitalize(Utils.Strip(row.Field<string>("title")))
+								into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
 				tagNew.Date = (from row in majorityAlbumRows
-								where !string.IsNullOrWhiteSpace(row.Field<string>("date"))
-								group row by this.ConvertStringToDate(row.Field<string>("date")).Year.ToString(cultEng) into grp
-								orderby grp.Count() descending, grp.Key ascending
-								select grp.Key).FirstOrDefault();
+							   where !string.IsNullOrWhiteSpace(row.Field<string>("date"))
+							   group row by Utils.ConvertStringToDate(row.Field<string>("date")).Year
+												 .ToString(GlobalVariables.CultEng)
+							   into grp
+							   orderby grp.Count() descending, grp.Key ascending
+							   select grp.Key).FirstOrDefault();
 
 				tagNew.Genre = (from row in majorityAlbumRows
 								where !string.IsNullOrWhiteSpace(row.Field<string>("genre"))
-								group row by Capitalize(Strip(row.Field<string>("genre"))) into grp
+								group row by Utils.Capitalize(Utils.Strip(row.Field<string>("genre")))
+								into grp
 								orderby grp.Count() descending
 								select grp.Key).FirstOrDefault();
 
 				tagNew.DiscCount = (from row in majorityAlbumRows
-								where !string.IsNullOrWhiteSpace(row.Field<string>("disccount"))
-								group row by row.Field<string>("disccount") into grp
-								orderby grp.Count() descending
-								select grp.Key).FirstOrDefault();
+									where !string.IsNullOrWhiteSpace(row.Field<string>("disccount"))
+									group row by row.Field<string>("disccount")
+									into grp
+									orderby grp.Count() descending
+									select grp.Key).FirstOrDefault();
 
 				tagNew.DiscNumber = (from row in majorityAlbumRows
-								where !string.IsNullOrWhiteSpace(row.Field<string>("discnumber"))
-								group row by row.Field<string>("discnumber") into grp
-								orderby grp.Count() descending
-								select grp.Key).FirstOrDefault();
+									 where !string.IsNullOrWhiteSpace(row.Field<string>("discnumber"))
+									 group row by row.Field<string>("discnumber")
+									 into grp
+									 orderby grp.Count() descending
+									 select grp.Key).FirstOrDefault();
 
 				tagNew.TrackCount = (from row in majorityAlbumRows
-								where !string.IsNullOrWhiteSpace(row.Field<string>("trackcount"))
-								group row by row.Field<string>("trackcount") into grp
-								orderby grp.Count() descending
-								select grp.Key).FirstOrDefault();
+									 where !string.IsNullOrWhiteSpace(row.Field<string>("trackcount"))
+									 group row by row.Field<string>("trackcount")
+									 into grp
+									 orderby grp.Count() descending
+									 select grp.Key).FirstOrDefault();
 
 				tagNew.TrackNumber = (from row in majorityAlbumRows
-								where !string.IsNullOrWhiteSpace(row.Field<string>("tracknumber"))
-								group row by row.Field<string>("tracknumber") into grp
-								orderby grp.Count() descending
-								select grp.Key).FirstOrDefault();
+									  where !string.IsNullOrWhiteSpace(row.Field<string>("tracknumber"))
+									  group row by row.Field<string>("tracknumber")
+									  into grp
+									  orderby grp.Count() descending
+									  select grp.Key).FirstOrDefault();
 
 				/* COVER PRIORITY in settings.json
 				 * Napster (Rhapsody)	no CDN, persistent cover URLs									500 px, always squared
@@ -467,13 +505,13 @@ namespace GlobalNamespace
 				foreach (string api in User.Settings["CoverPriority"])
 				{
 					tagNew.Cover = (from row in majorityAlbumRows
-								where !string.IsNullOrWhiteSpace(row.Field<string>("cover"))
-								where row.Field<string>("service").ToLowerInvariant() == api.ToLowerInvariant()
-								select row.Field<string>("cover")).FirstOrDefault();
+									where !string.IsNullOrWhiteSpace(row.Field<string>("cover"))
+									where row.Field<string>("service").ToLowerInvariant() == api.ToLowerInvariant()
+									select row.Field<string>("cover")).FirstOrDefault();
 
 					if (tagNew.Cover != null)
 					{
-						this.PrintLogMessage(this.rtbSearchLog, new[] { "  Cover taken from " + api });
+						this.PrintLogMessage(this.rtbSearchLog, new[] {"  Cover taken from " + api});
 						break;
 					}
 				}

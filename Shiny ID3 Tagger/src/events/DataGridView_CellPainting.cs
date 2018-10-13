@@ -9,9 +9,9 @@
 
 namespace GlobalNamespace
 {
-	using System;
 	using System.Drawing;
 	using System.Windows.Forms;
+	using GlobalVariables;
 
 	public partial class Form1 : Form
 	{
@@ -23,10 +23,10 @@ namespace GlobalNamespace
 				// Pen with color for selected row borders
 				using (Pen selectedPen = new Pen(Color.FromArgb(255, 153, 209, 255), 1))
 
-				// Pen with grid line colors
+					// Pen with grid line colors
 				using (Pen gridlinePen = new Pen(Color.FromArgb(255, 227, 227, 227), 1))
 
-				// Pen with background color
+					// Pen with background color
 				using (Pen backGroundPen = new Pen(Color.FromArgb(255, 205, 232, 255), 1))
 				{
 					// Cell coordinates
@@ -36,7 +36,8 @@ namespace GlobalNamespace
 					Point bottomleftPoint = new Point(e.CellBounds.Left, e.CellBounds.Bottom - 1);
 
 					// Draw active row
-					if (e.RowIndex == ActiveDGV.CurrentRow.Index)
+					if (GlobalVariables.ActiveDGV.CurrentRow != null &&
+						e.RowIndex == GlobalVariables.ActiveDGV.CurrentRow.Index)
 					{
 						// Paint all parts except borders.
 						e.Paint(e.ClipBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.Border);

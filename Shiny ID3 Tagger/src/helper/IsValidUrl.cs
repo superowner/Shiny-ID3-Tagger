@@ -8,13 +8,13 @@
 // https://mathiasbynens.be/demo/url-regex		RegEx validator pattern comparison
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
 	using System;
 
-	public partial class Form1
+	internal partial class Utils
 	{
-		private static bool IsValidUrl(string stringUri)
+		internal static bool IsValidUrl(string stringUri)
 		{
 			bool result = Uri.TryCreate(stringUri, UriKind.Absolute, out Uri uriResult)
 								&& (uriResult.Scheme == Uri.UriSchemeHttp

@@ -6,24 +6,24 @@
 // <summary>Sums up duration per API/per file to total duration per API</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
+	using GlobalVariables;
 
-	public partial class Form1
+	internal partial class Utils
 	{
-		private static string IncreaseTotalDuration(string service, string duration)
+		internal static string IncreaseTotalDuration(string service, string duration)
 		{
 			decimal.TryParse(duration, out decimal durationAsDecimal);
 
-			if (!totalDuration.ContainsKey(service))
+			if (!GlobalVariables.TotalDuration.ContainsKey(service))
 			{
-				totalDuration.Add(service.ToString(), 0);
+				GlobalVariables.TotalDuration.Add(service.ToString(), 0);
 			}
 
-			totalDuration[service] = totalDuration[service] + durationAsDecimal;
+			GlobalVariables.TotalDuration[service] = GlobalVariables.TotalDuration[service] + durationAsDecimal;
 
-			return totalDuration[service].ToString(cultEng);
+			return GlobalVariables.TotalDuration[service].ToString(GlobalVariables.CultEng);
 		}
 	}
 }

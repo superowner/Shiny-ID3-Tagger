@@ -8,17 +8,16 @@
 // https://www.garykessler.net/library/file_sigs.html
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Drawing.Imaging;
 	using System.IO;
 	using System.Linq;
 
-	public partial class Form1
+	internal partial class Utils
 	{
-		private Dictionary<byte[], ImageFormat> imageFormatDecoders = new Dictionary<byte[], ImageFormat>()
+		private static Dictionary<byte[], ImageFormat> imageFormatDecoders = new Dictionary<byte[], ImageFormat>()
 		{
 			{ new byte[] { 0x42, 0x4D }, ImageFormat.Bmp },
 			{ new byte[] { 0x47, 0x49, 0x46, 0x38, 0x37, 0x61 }, ImageFormat.Gif },
@@ -27,12 +26,12 @@ namespace GlobalNamespace
 			{ new byte[] { 0xff, 0xd8 }, ImageFormat.Jpeg }
 		};
 
-		private bool IsValidImage(MemoryStream stream)
+		internal static bool IsValidImage(MemoryStream stream)
 		{
 			byte[] imageBytes = stream.ToArray();
 			bool isImage = false;
 
-			foreach (var imageType in this.imageFormatDecoders)
+			foreach (var imageType in imageFormatDecoders)
 			{
 				if (imageType.Key.SequenceEqual(imageBytes.Take(imageType.Key.Length)))
 				{

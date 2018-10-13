@@ -6,28 +6,28 @@
 // <summary>Checks if current WEB API has returned an album which is also the majority album from all other APIs</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
+	using GlobalVariables;
 
-	public partial class Form1
+	internal partial class Utils
 	{
-		private static string IncreaseAlbumCounter(string service, string apiAlbum, string majorityAlbum)
+		internal static string IncreaseAlbumCounter(string service, string apiAlbum, string majorityAlbum)
 		{
-			if (!albumHits.ContainsKey(service.ToString()))
+			if (!GlobalVariables.AlbumHits.ContainsKey(service.ToString()))
 			{
-				albumHits.Add(service.ToString(), 0);
+				GlobalVariables.AlbumHits.Add(service.ToString(), 0);
 			}
 
 			if (apiAlbum != null && majorityAlbum != null)
 			{
 				if (Strip(apiAlbum.ToString().ToLowerInvariant()) == Strip(majorityAlbum.ToLowerInvariant()))
 				{
-					albumHits[service.ToString()] += 1;
+					GlobalVariables.AlbumHits[service.ToString()] += 1;
 				}
 			}
 
-			string result = albumHits[service.ToString()].ToString().ToLowerInvariant();
+			string result = GlobalVariables.AlbumHits[service.ToString()].ToString().ToLowerInvariant();
 
 			return result;
 		}

@@ -6,13 +6,11 @@
 // <summary>Checks and parses a given string to an integer. Can handle NULL values</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
-
-	public partial class Form1
+	internal partial class Utils
 	{
-		private static int ParseInt(string str, int defaultValue = 0)
+		internal static int ParseInt(string str, int defaultValue = 0)
 		{
 			return int.TryParse(str, out int result) ? result : defaultValue;
 		}

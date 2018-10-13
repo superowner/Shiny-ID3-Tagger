@@ -11,7 +11,6 @@ namespace GlobalNamespace
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Drawing;
 	using System.Drawing.Drawing2D;
 	using System.Drawing.Imaging;
@@ -22,8 +21,10 @@ namespace GlobalNamespace
 	using System.Text.RegularExpressions;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
+	using GlobalVariables;
 	using TagLib;
 	using TagLib.Id3v2;
+	using Utils;
 
 	public partial class Form1
 	{
@@ -36,7 +37,7 @@ namespace GlobalNamespace
 			this.slowProgressBar.Value = 0;
 			this.slowProgressBar.Visible = true;
 
-			using (HttpClient client = InitiateHttpClient())
+			using (HttpClient client = Utils.InitiateHttpClient())
 			{
 				// Begin looping through all files in first dataGridView
 				foreach (DataGridViewRow row in this.dataGridView1.Rows)
@@ -54,8 +55,8 @@ namespace GlobalNamespace
 					string tagType = "ID3v2.3";
 
 					// Log message to signal begin of writing
-					string message = string.Format(cultEng, "{0,-100}{1}", "Begin writing of " + tagType + " tags", "filepath: \"" + filepath + "\"");
-					this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+					string message = string.Format(GlobalVariables.CultEng, "{0,-100}{1}", $"Begin writing of {tagType} tags", "filepath: \"" + filepath + "\"");
+					this.PrintLogMessage(this.rtbWriteLog, new[] {message});
 
 					// Get all existing frames from current file
 					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
@@ -116,7 +117,7 @@ namespace GlobalNamespace
 						if (successWrite)
 						{
 							// Log message to signal end of writing
-							this.PrintLogMessage(this.rtbWriteLog, new[] { "DONE!" });
+							this.PrintLogMessage(this.rtbWriteLog, new[] {"DONE!"});
 
 							foreach (DataGridViewCell cell in row.Cells)
 							{
@@ -126,7 +127,7 @@ namespace GlobalNamespace
 						else
 						{
 							// Log message to signal end of writing
-							this.PrintLogMessage(this.rtbWriteLog, new[] { "FAILED!" });
+							this.PrintLogMessage(this.rtbWriteLog, new[] {"FAILED!"});
 						}
 					}
 				}
@@ -140,7 +141,10 @@ namespace GlobalNamespace
 
 		// ###########################################################################
 		// Overwrite tag values with results from API search
-		private TagLib.Id3v2.Tag AddResultsToTagContainer(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag tagContainer)
+		private TagLib.Id3v2.Tag AddResultsToTagContainer(
+			TagLib.File tagFile,
+			DataGridViewRow row,
+			TagLib.Id3v2.Tag tagContainer)
 		{
 			// Artist
 			string oldArtist = tagFile.Tag.FirstPerformer;
@@ -150,7 +154,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TPE1");
 				tagContainer.SetTextFrame("TPE1", newArtist);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] { "Artist:   " + newArtist });
+				this.PrintLogMessage(this.rtbWriteLog, new[] {"Artist:   " + newArtist});
 			}
 
 			// Title
@@ -161,7 +165,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TIT2");
 				tagContainer.SetTextFrame("TIT2", newTitle);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] { "Title:    " + newTitle });
+				this.PrintLogMessage(this.rtbWriteLog, new[] {"Title:    " + newTitle});
 			}
 
 			// Album
@@ -172,7 +176,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TALB");
 				tagContainer.SetTextFrame("TALB", newAlbum);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] { "Album:    " + newAlbum });
+				this.PrintLogMessage(this.rtbWriteLog, new[] {"Album:    " + newAlbum});
 			}
 
 			// Genre
@@ -183,12 +187,12 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TCON");
 				tagContainer.SetTextFrame("TCON", newGenre);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] { "Genre:    " + newGenre });
+				this.PrintLogMessage(this.rtbWriteLog, new[] {"Genre:    " + newGenre});
 			}
 
 			// Disc number + disc count
-			string oldDiscnumber = tagFile.Tag.Disc.ToString(cultEng);
-			string oldDisccount = tagFile.Tag.DiscCount.ToString(cultEng);
+			string oldDiscnumber = tagFile.Tag.Disc.ToString(GlobalVariables.CultEng);
+			string oldDisccount = tagFile.Tag.DiscCount.ToString(GlobalVariables.CultEng);
 			string newDiscnumber = (string)row.Cells[this.discnumber1.Index].Value;
 			string newDisccount = (string)row.Cells[this.disccount1.Index].Value;
 			if ((oldDiscnumber != newDiscnumber && !string.IsNullOrWhiteSpace(newDiscnumber)) ||
@@ -199,23 +203,23 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TPOS");
 				tagContainer.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] { "Disc:     " + newDiscnumber + "/" + newDisccount });
+				this.PrintLogMessage(this.rtbWriteLog, new[] {"Disc:     " + newDiscnumber + "/" + newDisccount});
 			}
 
 			// Track number + track count
-			string oldTracknumber = tagFile.Tag.Track.ToString(cultEng);
-			string oldTrackcount = tagFile.Tag.TrackCount.ToString(cultEng);
-			string newTracknumber = (string)row.Cells[this.tracknumber1.Index].Value;
-			string newTrackcount = (string)row.Cells[this.trackcount1.Index].Value;
-			if ((oldTracknumber != newTracknumber && !string.IsNullOrWhiteSpace(newTracknumber)) ||
-				(oldTrackcount != newTrackcount && !string.IsNullOrWhiteSpace(newTrackcount)))
+			string oldTrackNumber = tagFile.Tag.Track.ToString(GlobalVariables.CultEng);
+			string oldTrackCount = tagFile.Tag.TrackCount.ToString(GlobalVariables.CultEng);
+			string newTrackNumber = (string)row.Cells[this.tracknumber1.Index].Value;
+			string newTrackCount = (string)row.Cells[this.trackcount1.Index].Value;
+			if ((oldTrackNumber != newTrackNumber && !string.IsNullOrWhiteSpace(newTrackNumber)) ||
+				(oldTrackCount != newTrackCount && !string.IsNullOrWhiteSpace(newTrackCount)))
 			{
-				newTracknumber = string.IsNullOrWhiteSpace(newTracknumber) ? oldTracknumber : newTracknumber;
-				newTrackcount = string.IsNullOrWhiteSpace(newTrackcount) ? oldTrackcount : newTrackcount;
+				newTrackNumber = string.IsNullOrWhiteSpace(newTrackNumber) ? oldTrackNumber : newTrackNumber;
+				newTrackCount = string.IsNullOrWhiteSpace(newTrackCount) ? oldTrackCount : newTrackCount;
 				tagContainer.RemoveFrames("TRCK");
-				tagContainer.SetTextFrame("TRCK", newTracknumber + "/" + newTrackcount);
+				tagContainer.SetTextFrame("TRCK", newTrackNumber + "/" + newTrackCount);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] { "Track:    " + newTracknumber + "/" + newTrackcount });
+				this.PrintLogMessage(this.rtbWriteLog, new[] {"Track:    " + newTrackNumber + "/" + newTrackCount});
 			}
 
 			// Date
@@ -223,7 +227,7 @@ namespace GlobalNamespace
 			// TDRC (date of recording) stores full date+time info and consolidates TYER (YYYY), TDAT (DDMM) and TIME (HHMM)
 			// But TDRC is only available in ID3v2.4 - and this program uses ID3v2.3 for Windows XP/Vista/7 Explorer compatibility. Windows 10 (Creators Update) finally supports ID3v2.4
 			// Surprisingly you have to remove TDRC to also remove TYER frames. Probably because taglib operates with 2.4 frame names internally
-			string oldDate = tagFile.Tag.Year.ToString(cultEng);
+			string oldDate = tagFile.Tag.Year.ToString(GlobalVariables.CultEng);
 			string newDate = (string)row.Cells[this.date1.Index].Value;
 			if (oldDate != newDate && !string.IsNullOrWhiteSpace(newDate))
 			{
@@ -231,9 +235,9 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TYER");
 				tagContainer.RemoveFrames("TDAT");
 				tagContainer.RemoveFrames("TIME");
-				tagContainer.SetNumberFrame("TYER", (uint)this.ConvertStringToDate(newDate).Year, 0);
+				tagContainer.SetNumberFrame("TYER", (uint)Utils.ConvertStringToDate(newDate).Year, 0);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] { "Date:     " + newDate });
+				this.PrintLogMessage(this.rtbWriteLog, new[] {"Date:     " + newDate});
 			}
 
 			// Lyrics
@@ -250,7 +254,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("USLT");
 				tagContainer.AddFrame(frmUSLT);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] { "Lyrics:   " + lyricsSnippet + "..." });
+				this.PrintLogMessage(this.rtbWriteLog, new[] {"Lyrics:   " + lyricsSnippet + "..."});
 			}
 
 			return tagContainer;
@@ -262,6 +266,12 @@ namespace GlobalNamespace
 		{
 			string[] errorMsg = null;
 			string url = (string)row.Cells[this.cover1.Index].Value;
+
+			// Check if any URL was found from search results
+			if (string.IsNullOrEmpty(url))
+			{
+				return tagContainer;
+			}
 
 			// Check if any valid cover already exists
 			foreach (IPicture picture in tagFile.Tag.Pictures)
@@ -281,10 +291,10 @@ namespace GlobalNamespace
 
 			HttpResponseMessage response = new HttpResponseMessage();
 			HttpRequestMessage request = new HttpRequestMessage();
-			request.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);  // Mandatory for downloads from Discogs
+			request.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]); // Mandatory for downloads from Discogs
 
 			// Check if cover URL from search results is a valid URL. If yes, download cover
-			if (IsValidUrl(url))
+			if (Utils.IsValidUrl(url))
 			{
 				request.RequestUri = new Uri(url);
 				response = await client.SendAsync(request);
@@ -297,12 +307,12 @@ namespace GlobalNamespace
 					using (MemoryStream streamResized = new MemoryStream())
 					{
 						// Check if downloaded stream is an image. Some servers use a wrong content type for HTTP response. Therefore you need to check byte markers
-						if (this.IsValidImage(streamOrg))
+						if (Utils.IsValidImage(streamOrg))
 						{
 							using (Image image = Image.FromStream(streamOrg))
 							{
 								// Resize image according to user setting "MaxImageSize". Always resize and re-encode
-								int longSide = new List<int> { image.Width, image.Height }.Max();
+								int longSide = new List<int> {image.Width, image.Height}.Max();
 								float resizeFactor = new List<float>
 								{
 									(float)User.Settings["MaxImageSize"] / (float)image.Width,
@@ -320,7 +330,10 @@ namespace GlobalNamespace
 									graph.DrawImage(image, 0, 0, newSize.Width, newSize.Height);
 
 									// Prepare encoder object for JPEG format
-									ImageCodecInfo imageEncoder = ImageCodecInfo.GetImageEncoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
+									ImageCodecInfo imageEncoder = ImageCodecInfo
+																 .GetImageEncoders()
+																 .First(
+																	  codec => codec.FormatID == ImageFormat.Jpeg.Guid);
 									encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
 
 									// Save and encode bitmap as new stream which now holds a resized JPEG
@@ -335,11 +348,12 @@ namespace GlobalNamespace
 									MimeType = MediaTypeNames.Image.Jpeg,
 									Type = PictureType.FrontCover,
 									Description = url,
-									TextEncoding = StringType.Latin1	// Strangely, Unicode is not supported for this field
+									TextEncoding =
+										StringType.Latin1 // Strangely, Unicode is not supported for this field
 								};
 
 								// Add cover tag to tag container, this deletes all other existing covers like "BackCover" or "BandLogo"
-								tagContainer.Pictures = new IPicture[] { taglibpicture };
+								tagContainer.Pictures = new IPicture[] {taglibpicture};
 							}
 						}
 						else
@@ -375,7 +389,7 @@ namespace GlobalNamespace
 			if (errorMsg == null)
 			{
 				string message = string.Format("Picture:  " + request.RequestUri);
-				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
+				this.PrintLogMessage(this.rtbWriteLog, new[] {message});
 			}
 			else
 			{
@@ -462,11 +476,11 @@ namespace GlobalNamespace
 			if (!successWrite)
 			{
 				string[] errorMsg =
-					{
-						@"ERROR:    Could not write ID3 tags to file!",
-						"File:     " + tagFile.Name,
-						"Message:  " + exMessage
-					};
+				{
+					@"ERROR:    Could not write ID3 tags to file!",
+					"File:     " + tagFile.Name,
+					"Message:  " + exMessage
+				};
 				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
 			}
 

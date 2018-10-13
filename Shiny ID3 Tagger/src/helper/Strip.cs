@@ -6,14 +6,14 @@
 // <summary>Removes brackets and unwanted stuff like "feat.". Some weird chars are replaced through better alternatives</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Utils
 {
-	using System;
 	using System.Text.RegularExpressions;
+	using GlobalVariables;
 
-	public partial class Form1
+	internal partial class Utils
 	{
-		private static string Strip(string str)
+		internal static string Strip(string str)
 		{
 			if (str != null)
 			{

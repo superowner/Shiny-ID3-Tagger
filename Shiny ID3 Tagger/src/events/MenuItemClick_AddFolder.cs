@@ -11,6 +11,7 @@ namespace GlobalNamespace
 	using System;
 	using System.Threading;
 	using System.Windows.Forms;
+	using GlobalVariables;
 	using Ookii.Dialogs;
 
 	public partial class Form1 : Form
@@ -18,23 +19,23 @@ namespace GlobalNamespace
 		private async void MenuItemClick_AddFolder(object sender, EventArgs e)
 		{
 			// Refresh cancel token
-			TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = TokenSource.Token;
+			GlobalVariables.TokenSource = new CancellationTokenSource();
+			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
-			if (LastUsedFolder == null)
+			if (GlobalVariables.LastUsedFolder == null)
 			{
-				LastUsedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + @"\";
+				GlobalVariables.LastUsedFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + @"\";
 			}
 
 			// Ookii dialog (3rd party library) looks more like a normal file selection dialog. (windows forms default folder dialog looks ugly)
 			using (VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog()
 			{
-				SelectedPath = LastUsedFolder
+				SelectedPath = GlobalVariables.LastUsedFolder
 			})
 			{
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					LastUsedFolder = dialog.SelectedPath;
+					GlobalVariables.LastUsedFolder = dialog.SelectedPath;
 					string[] folderpath = { dialog.SelectedPath };
 
 					// Add new files
