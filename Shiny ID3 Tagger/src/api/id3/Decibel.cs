@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_Decibel.cs" company="Shiny ID3 Tagger">
+// <copyright file="Decibel.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -10,7 +10,7 @@
 // titleSearchType=PartialName has poorer results than without
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace GetTags
 {
 	using System;
 	using System.Data;
@@ -20,22 +20,23 @@ namespace GlobalNamespace
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Newtonsoft.Json.Linq;
+    using GlobalVariables;
+    using Newtonsoft.Json.Linq;
+    using Utils;
 
-	public partial class Form1
-	{
-		private async Task<Id3> GetTags_Decibel(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
+    internal class Decibel : IGetTagsService
+    {
+        public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3();
-			o.Service = "Decibel (Quantone Music)";
+            Id3 o = new Id3 { Service = "Decibel (Quantone Music)" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
 
 			// ###########################################################################
 			var account = (from item in User.Accounts["Decibel"]
-						   orderby item["lastused"] ascending
-						   select item).FirstOrDefault();
+						    orderby item["lastused"] ascending
+						    select item).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;
 
 			string artistEncoded = WebUtility.UrlEncode(artist);
@@ -47,10 +48,10 @@ namespace GlobalNamespace
 				searchRequest.Headers.Add("DecibelAppID", (string)account["AppId"]);
 				searchRequest.Headers.Add("DecibelAppKey", (string)account["AppKey"]);
 
-				string searchContent = await this.GetResponse(client, searchRequest, cancelToken);
-				JObject searchData = this.DeserializeJson(searchContent);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData != null && searchData.SelectToken("Results") != null && searchData.SelectToken("Results").ToString() != "[]")
+				if (searchData?.SelectToken("Results") != null && searchData?.SelectToken("Results").ToString() != "[]")
 				{
 					o.Artist = (string)searchData.SelectToken("Results[0].MainArtistsLiteral");
 					o.Title = (string)searchData.SelectToken("Results[0].Title");
@@ -66,10 +67,10 @@ namespace GlobalNamespace
 						albumRequest.Headers.Add("DecibelAppID", (string)account["AppId"]);
 						albumRequest.Headers.Add("DecibelAppKey", (string)account["AppKey"]);
 
-						string albumContent = await this.GetResponse(client, albumRequest, cancelToken);
-						JObject albumData = this.DeserializeJson(albumContent);
+						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						JObject albumData = Utils.DeserializeJson(albumContent);
 
-						if (albumData != null && albumData.SelectToken("Results") != null && albumData.SelectToken("Results").ToString() != "[]")
+						if (albumData?.SelectToken("Results") != null && albumData?.SelectToken("Results").ToString() != "[]")
 						{
 							o.Genre = (string)albumData.SelectToken("Results[0].Genres[0].Name");
 							o.TrackCount = (string)albumData.SelectToken("Results[0].Recordings[-1:].AlbumSequence");
@@ -90,9 +91,9 @@ namespace GlobalNamespace
 
 			// ###########################################################################
 			sw.Stop();
-			o.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
+            o.Duration = $"{sw.Elapsed:s\\,f}";
 
-			return o;
+            return o;
 		}
-	}
+    }
 }

@@ -39,7 +39,7 @@ namespace GlobalNamespace
 			using (SaveFileDialog dialog = new SaveFileDialog()
 			{
 				Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
-				FileName = DateTime.Now.ToString("yyMMdd", GlobalVariables.cultEng) + " - Shiny ID3 Tagger Export - " + this.tabControl1.SelectedTab.Text,
+				FileName = DateTime.Now.ToString("yyMMdd", GlobalVariables.CultEng) + " - Shiny ID3 Tagger Export - " + this.tabControl1.SelectedTab.Text,
 				InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
 				OverwritePrompt = true
 			})

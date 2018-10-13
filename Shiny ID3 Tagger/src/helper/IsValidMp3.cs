@@ -6,19 +6,17 @@
 // <summary>Checks if a given file is a real MP3 by inspecting first 3 bytes in file header</summary>
 //-----------------------------------------------------------------------
 
-
-using GlobalNamespace;
-
 namespace Utils
 {
 	using System;
 	using System.IO;
 	using System.Linq;
-	using GlobalVariables;
+    using GlobalNamespace;
+    using GlobalVariables;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static bool IsValidMp3(string filepath)
+		internal static bool IsValidMp3(string filepath)
 		{
 			byte[] fileHeader = new byte[3];
 			byte[] mp3HeaderWithTags = { 0x49, 0x44, 0x33 };

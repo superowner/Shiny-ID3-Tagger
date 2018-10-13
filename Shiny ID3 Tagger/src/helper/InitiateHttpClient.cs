@@ -13,9 +13,9 @@ namespace Utils
 	using System.Net;
 	using System.Net.Http;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static HttpClient InitiateHttpClient()
+		internal static HttpClient InitiateHttpClient()
 		{
 			// DEFAULT SETTINGS FOR ALL CONNECTIONS
 			HttpClientHandler handler = new HttpClientHandler();

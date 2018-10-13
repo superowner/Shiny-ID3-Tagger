@@ -13,9 +13,9 @@ namespace Utils
 	using System.Text;
 	using System.Text.RegularExpressions;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static string CheckMalformedUtf8(string data)
+		internal static string CheckMalformedUtf8(string data)
 		{
 			Match match = CreateRegex().Match(data);
 			if (match.Success)

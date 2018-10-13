@@ -11,9 +11,9 @@ namespace Utils
 	using System.Collections.Generic;
 	using System.Net.Http;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response)
+		internal static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response)
 		{
 			// Add parameters from request
 			List<string> errorMsg = new List<string>();

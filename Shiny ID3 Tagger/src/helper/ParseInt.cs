@@ -8,9 +8,9 @@
 
 namespace Utils
 {
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static int ParseInt(string str, int defaultValue = 0)
+		internal static int ParseInt(string str, int defaultValue = 0)
 		{
 			return int.TryParse(str, out int result) ? result : defaultValue;
 		}

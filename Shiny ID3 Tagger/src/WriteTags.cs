@@ -55,9 +55,7 @@ namespace GlobalNamespace
                     string tagType = "ID3v2.3";
 
                     // Log message to signal begin of writing
-                    string message = string.Format(GlobalVariables.cultEng, "{0,-100}{1}",
-                                                   $"Begin writing of {tagType} tags",
-                                                   "filepath: \"" + filepath + "\"");
+                    string message = string.Format(GlobalVariables.CultEng, "{0,-100}{1}", $"Begin writing of {tagType} tags", "filepath: \"" + filepath + "\"");
                     this.PrintLogMessage(this.rtbWriteLog, new[] {message});
 
                     // Get all existing frames from current file
@@ -143,9 +141,10 @@ namespace GlobalNamespace
 
         // ###########################################################################
         // Overwrite tag values with results from API search
-        private TagLib.Id3v2.Tag AddResultsToTagContainer(TagLib.File tagFile,
-                                                          DataGridViewRow row,
-                                                          TagLib.Id3v2.Tag tagContainer)
+        private TagLib.Id3v2.Tag AddResultsToTagContainer(
+            TagLib.File tagFile,
+            DataGridViewRow row,
+            TagLib.Id3v2.Tag tagContainer)
         {
             // Artist
             string oldArtist = tagFile.Tag.FirstPerformer;
@@ -192,8 +191,8 @@ namespace GlobalNamespace
             }
 
             // Disc number + disc count
-            string oldDiscnumber = tagFile.Tag.Disc.ToString(GlobalVariables.cultEng);
-            string oldDisccount = tagFile.Tag.DiscCount.ToString(GlobalVariables.cultEng);
+            string oldDiscnumber = tagFile.Tag.Disc.ToString(GlobalVariables.CultEng);
+            string oldDisccount = tagFile.Tag.DiscCount.ToString(GlobalVariables.CultEng);
             string newDiscnumber = (string)row.Cells[this.discnumber1.Index].Value;
             string newDisccount = (string)row.Cells[this.disccount1.Index].Value;
             if ((oldDiscnumber != newDiscnumber && !string.IsNullOrWhiteSpace(newDiscnumber)) ||
@@ -208,8 +207,8 @@ namespace GlobalNamespace
             }
 
             // Track number + track count
-            string oldTrackNumber = tagFile.Tag.Track.ToString(GlobalVariables.cultEng);
-            string oldTrackCount = tagFile.Tag.TrackCount.ToString(GlobalVariables.cultEng);
+            string oldTrackNumber = tagFile.Tag.Track.ToString(GlobalVariables.CultEng);
+            string oldTrackCount = tagFile.Tag.TrackCount.ToString(GlobalVariables.CultEng);
             string newTrackNumber = (string)row.Cells[this.tracknumber1.Index].Value;
             string newTrackCount = (string)row.Cells[this.trackcount1.Index].Value;
             if ((oldTrackNumber != newTrackNumber && !string.IsNullOrWhiteSpace(newTrackNumber)) ||
@@ -228,7 +227,7 @@ namespace GlobalNamespace
             // TDRC (date of recording) stores full date+time info and consolidates TYER (YYYY), TDAT (DDMM) and TIME (HHMM)
             // But TDRC is only available in ID3v2.4 - and this program uses ID3v2.3 for Windows XP/Vista/7 Explorer compatibility. Windows 10 (Creators Update) finally supports ID3v2.4
             // Surprisingly you have to remove TDRC to also remove TYER frames. Probably because taglib operates with 2.4 frame names internally
-            string oldDate = tagFile.Tag.Year.ToString(GlobalVariables.cultEng);
+            string oldDate = tagFile.Tag.Year.ToString(GlobalVariables.CultEng);
             string newDate = (string)row.Cells[this.date1.Index].Value;
             if (oldDate != newDate && !string.IsNullOrWhiteSpace(newDate))
             {
@@ -250,8 +249,7 @@ namespace GlobalNamespace
             {
                 string lyricsSnippet = string.Join(string.Empty, newLyrics.Take(80));
                 lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
-                UnsynchronisedLyricsFrame
-                    frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
+                UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
                 frmUSLT.Text = newLyrics;
                 tagContainer.RemoveFrames("USLT");
                 tagContainer.AddFrame(frmUSLT);
@@ -264,10 +262,7 @@ namespace GlobalNamespace
 
         // ###########################################################################
         // Download and add cover image
-        private async Task<TagLib.Id3v2.Tag> AddCoverToTagContainer(TagLib.File tagFile,
-                                                                    DataGridViewRow row,
-                                                                    TagLib.Id3v2.Tag tagContainer,
-                                                                    HttpClient client)
+        private async Task<TagLib.Id3v2.Tag> AddCoverToTagContainer(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag tagContainer, HttpClient client)
         {
             string[] errorMsg = null;
             string url = (string)row.Cells[this.cover1.Index].Value;
@@ -296,8 +291,7 @@ namespace GlobalNamespace
 
             HttpResponseMessage response = new HttpResponseMessage();
             HttpRequestMessage request = new HttpRequestMessage();
-            request.Headers.Add("User-Agent",
-                                (string)User.Settings["UserAgent"]); // Mandatory for downloads from Discogs
+            request.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]); // Mandatory for downloads from Discogs
 
             // Check if cover URL from search results is a valid URL. If yes, download cover
             if (Utils.IsValidUrl(url))
@@ -325,8 +319,7 @@ namespace GlobalNamespace
                                     (float)User.Settings["MaxImageSize"] / (float)image.Height
                                 }.Min();
 
-                                Size newSize = new Size((int)Math.Round(image.Width * resizeFactor),
-                                                        (int)Math.Round(image.Height * resizeFactor));
+                                Size newSize = new Size((int)Math.Round(image.Width * resizeFactor), (int)Math.Round(image.Height * resizeFactor));
 
                                 using (Bitmap bitmap = new Bitmap(newSize.Width, newSize.Height))
                                 using (Graphics graph = Graphics.FromImage(bitmap))

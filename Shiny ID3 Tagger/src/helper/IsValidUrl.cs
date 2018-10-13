@@ -12,9 +12,9 @@ namespace Utils
 {
 	using System;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static bool IsValidUrl(string stringUri)
+		internal static bool IsValidUrl(string stringUri)
 		{
 			bool result = Uri.TryCreate(stringUri, UriKind.Absolute, out Uri uriResult)
 								&& (uriResult.Scheme == Uri.UriSchemeHttp

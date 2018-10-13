@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_LastFm.cs" company="Shiny ID3 Tagger">
+// <copyright file="LastFm.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -21,13 +21,11 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	public class LastFm : IGetTagsService
+    internal class LastFm : IGetTagsService
 	{
-		public const string ServiceName = "Last.fm";
-
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Last.fm" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -68,7 +66,7 @@ namespace GetTags
 						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
 						JObject albumData = Utils.DeserializeJson(albumContent);
 
-						if (albumData != null && albumData.SelectToken("album") != null)
+						if (albumData?.SelectToken("album") != null)
 						{
 							o.Date = null;  // "releasedate" property is broken on Lastfm's site. They eventually fix this in 2018 with a new API (https://getsatisfaction.com/lastfm/topics/album-getinfo-is-missing-releasedate)
 							o.DiscCount = null;

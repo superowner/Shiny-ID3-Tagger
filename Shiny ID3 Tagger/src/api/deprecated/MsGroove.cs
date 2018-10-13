@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_MsGroove.cs" company="Shiny ID3 Tagger">
+// <copyright file="MsGroove.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -22,14 +22,12 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	[Obsolete("Not used anymore",true)]
-	public class MsGroove : IGetTagsService
+	[Obsolete("Not used anymore", true)]
+    internal class MsGroove : IGetTagsService
 	{
-		public const string ServiceName = "Microsoft Groove";
-
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Microsoft Groove" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -54,7 +52,7 @@ namespace GetTags
 					string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);
 					JObject loginData = Utils.DeserializeJson(loginContent);
 
-					if (loginData != null && loginData.SelectToken("access_token") != null)
+					if (loginData?.SelectToken("access_token") != null)
 					{
 						ApiSessionData.MsAccessToken = (string)loginData.SelectToken("access_token");
 						TimeSpan validDuration = TimeSpan.FromSeconds((int)loginData.SelectToken("expires_in"));

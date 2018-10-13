@@ -6,15 +6,14 @@
 // <summary>Removes brackets and unwanted stuff like "feat.". Some weird chars are replaced through better alternatives</summary>
 //-----------------------------------------------------------------------
 
-
 namespace Utils
 {
 	using System.Text.RegularExpressions;
 	using GlobalVariables;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static string Strip(string str)
+		internal static string Strip(string str)
 		{
 			if (str != null)
 			{

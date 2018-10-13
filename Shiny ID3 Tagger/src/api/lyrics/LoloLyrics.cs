@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetLyrics_Lololyrics.cs" company="Shiny ID3 Tagger">
+// <copyright file="LoloLyrics.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -20,13 +20,11 @@ namespace GetLyrics
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	public class LoloLyrics : IGetLyricsService
+    internal class LoloLyrics : IGetLyricsService
 	{
-		private const string ServiceName = "Lololyrics";
-
 		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Lololyrics" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

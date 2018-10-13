@@ -6,7 +6,6 @@
 // <summary>Sets non-default settings for all JSON deserializations. This is helpful for debugging invalid JSON strings</summary>
 //-----------------------------------------------------------------------
 
-
 namespace Utils
 {
 	using GlobalNamespace;
@@ -14,9 +13,9 @@ namespace Utils
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static JObject DeserializeJson(string content)
+		internal static JObject DeserializeJson(string content)
 		{
 			JObject data = null;
 

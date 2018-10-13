@@ -26,7 +26,7 @@ namespace Utils
     using System.Text.RegularExpressions;
     using GlobalVariables;
 
-	public partial class Utils
+	internal partial class Utils
 	{
 		private static string[] lowercase =
 		{
@@ -34,7 +34,7 @@ namespace Utils
 			"into", "of", "off", "on", "onto", "out", "over", "to", "up", "with", "as"
 		};
 
-		public static string Capitalize(string str)
+		internal static string Capitalize(string str)
 		{
 			// If string is not empty and user setting "AutoCapitalize" is set to true
 			if ((bool)User.Settings["AutoCapitalize"] && !string.IsNullOrWhiteSpace(str))

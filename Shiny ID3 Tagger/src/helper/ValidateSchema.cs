@@ -16,7 +16,7 @@ namespace Utils
 	using Newtonsoft.Json.Linq;
 	using Newtonsoft.Json.Schema;
 
-	public partial class Utils
+	internal partial class Utils
 	{
 		#region schema for accounts.json
 		private static string accountsSchemaStr = @"
@@ -427,7 +427,7 @@ namespace Utils
 		}";
 		#endregion
 
-		public static IList<string> ValidateSchema(string jsonStr, string schemaStr)
+		internal static IList<string> ValidateSchema(string jsonStr, string schemaStr)
 		{
 			// Load schema
 			JSchema schema = JSchema.Parse(schemaStr);

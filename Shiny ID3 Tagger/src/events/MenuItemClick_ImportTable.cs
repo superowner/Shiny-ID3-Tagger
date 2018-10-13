@@ -59,7 +59,7 @@ namespace GlobalNamespace
                                     string[] fields = parser.ReadFields().ToArray();
 
                                     // Update "number" with new line number
-                                    fields[0] = (this.dataGridView1.Rows.Count + 1).ToString(GlobalVariables.cultEng);
+                                    fields[0] = (this.dataGridView1.Rows.Count + 1).ToString(GlobalVariables.CultEng);
 
                                     // Check if file was already added
                                     bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()

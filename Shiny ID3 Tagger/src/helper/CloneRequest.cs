@@ -10,9 +10,9 @@ namespace Utils
 {
 	using System.Net.Http;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static HttpRequestMessage CloneRequest(HttpRequestMessage original)
+		internal static HttpRequestMessage CloneRequest(HttpRequestMessage original)
 		{
 			HttpRequestMessage backup = new HttpRequestMessage(original.Method, original.RequestUri);
 

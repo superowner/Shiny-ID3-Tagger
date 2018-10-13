@@ -10,20 +10,20 @@ namespace Utils
 {
 	using GlobalVariables;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static string IncreaseTotalDuration(string service, string duration)
+		internal static string IncreaseTotalDuration(string service, string duration)
 		{
 			decimal.TryParse(duration, out decimal durationAsDecimal);
 
-			if (!GlobalVariables.totalDuration.ContainsKey(service))
+			if (!GlobalVariables.TotalDuration.ContainsKey(service))
 			{
-				GlobalVariables.totalDuration.Add(service.ToString(), 0);
+				GlobalVariables.TotalDuration.Add(service.ToString(), 0);
 			}
 
-			GlobalVariables.totalDuration[service] = GlobalVariables.totalDuration[service] + durationAsDecimal;
+			GlobalVariables.TotalDuration[service] = GlobalVariables.TotalDuration[service] + durationAsDecimal;
 
-			return GlobalVariables.totalDuration[service].ToString(GlobalVariables.cultEng);
+			return GlobalVariables.TotalDuration[service].ToString(GlobalVariables.CultEng);
 		}
 	}
 }

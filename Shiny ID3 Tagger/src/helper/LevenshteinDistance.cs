@@ -10,9 +10,9 @@ namespace Utils
 {
 	using System.Linq;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static int LevenshteinDistance(string s, string t)
+		internal static int LevenshteinDistance(string s, string t)
 		{
 			if (s == t)
 			{

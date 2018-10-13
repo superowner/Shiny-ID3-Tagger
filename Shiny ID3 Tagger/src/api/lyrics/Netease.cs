@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetLyrics_Netease.cs" company="Shiny ID3 Tagger">
+// <copyright file="Netease.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -22,13 +22,11 @@ namespace GetLyrics
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	public class Netease : IGetLyricsService
+    internal class Netease : IGetLyricsService
 	{
-		private const string ServiceName = "Netease";
-
 		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Netease" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

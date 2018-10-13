@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_Deezer.cs" company="Shiny ID3 Tagger">
+// <copyright file="Deezer.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -22,13 +22,11 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	public class Deezer : IGetTagsService
+    internal class Deezer : IGetTagsService
 	{
-		public const string ServiceName = "Deezer";
-
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Deezer" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

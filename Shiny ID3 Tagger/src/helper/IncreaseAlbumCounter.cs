@@ -10,24 +10,24 @@ namespace Utils
 {
 	using GlobalVariables;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static string IncreaseAlbumCounter(string service, string apiAlbum, string majorityAlbum)
+		internal static string IncreaseAlbumCounter(string service, string apiAlbum, string majorityAlbum)
 		{
-			if (!GlobalVariables.albumHits.ContainsKey(service.ToString()))
+			if (!GlobalVariables.AlbumHits.ContainsKey(service.ToString()))
 			{
-				GlobalVariables.albumHits.Add(service.ToString(), 0);
+				GlobalVariables.AlbumHits.Add(service.ToString(), 0);
 			}
 
 			if (apiAlbum != null && majorityAlbum != null)
 			{
 				if (Strip(apiAlbum.ToString().ToLowerInvariant()) == Strip(majorityAlbum.ToLowerInvariant()))
 				{
-					GlobalVariables.albumHits[service.ToString()] += 1;
+					GlobalVariables.AlbumHits[service.ToString()] += 1;
 				}
 			}
 
-			string result = GlobalVariables.albumHits[service.ToString()].ToString().ToLowerInvariant();
+			string result = GlobalVariables.AlbumHits[service.ToString()].ToString().ToLowerInvariant();
 
 			return result;
 		}

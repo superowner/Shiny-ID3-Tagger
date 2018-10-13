@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_Gracenote.cs" company="Shiny ID3 Tagger">
+// <copyright file="Gracenote.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -21,13 +21,11 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	public class Gracenote : IGetTagsService
+    internal class Gracenote : IGetTagsService
 	{
-		public const string ServiceName = "Gracenote (Sony)";
-
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Gracenote (Sony)" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

@@ -15,7 +15,7 @@ namespace Utils
 	using System.IO;
 	using System.Linq;
 
-	public partial class Utils
+	internal partial class Utils
 	{
 		private static Dictionary<byte[], ImageFormat> imageFormatDecoders = new Dictionary<byte[], ImageFormat>()
 		{
@@ -26,7 +26,7 @@ namespace Utils
 			{ new byte[] { 0xff, 0xd8 }, ImageFormat.Jpeg }
 		};
 
-		public static bool IsValidImage(MemoryStream stream)
+		internal static bool IsValidImage(MemoryStream stream)
 		{
 			byte[] imageBytes = stream.ToArray();
 			bool isImage = false;

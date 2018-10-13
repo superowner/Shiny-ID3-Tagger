@@ -6,7 +6,6 @@
 // <summary>Tries to convert a given string to a dateTime object</summary>
 //-----------------------------------------------------------------------
 
-
 namespace Utils
 {
 	using System;
@@ -15,34 +14,34 @@ namespace Utils
 	using GlobalNamespace;
 	using GlobalVariables;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
-		// MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
-		public static string[] dateTimeformats =
-				{
-					"yyyy",
-					"yyyy-MM",
-					"yyyy-MM-dd",
-					"yyyy-MM-dd HH",
-					"yyyy-MM-dd HH:mm",
-					"yyyy-MM-dd HH:mm:ss",
-					"dd/yyyy",
-					"MM/dd/yyyy",
-					"MM/dd/yyyy HH",
-					"MM/dd/yyyy HH:mm",
-					"MM/dd/yyyy HH:mm:ss",
-					"M/d/YYYY h:mm:ss tt",
-					"dd.MM.yyyy HH:mm:ss",
-					"MM/dd/yyyy hh:mm:ss tt",
-					"M/dd/yyyy h:mm:ss tt"
-				};
+        // Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
+        // MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
+        internal static readonly string[] DateTimeformats =
+		{
+			"yyyy",
+			"yyyy-MM",
+			"yyyy-MM-dd",
+			"yyyy-MM-dd HH",
+			"yyyy-MM-dd HH:mm",
+			"yyyy-MM-dd HH:mm:ss",
+			"MM/dd/yyyy",
+			"MM/dd/yyyy HH",
+			"MM/dd/yyyy HH:mm",
+			"MM/dd/yyyy HH:mm:ss",
+            "MM/dd/yyyy hh:mm:ss tt",
+            "M/d/YYYY h:mm:ss tt",
+			"M/dd/yyyy h:mm:ss tt",
+            "dd/yyyy",
+            "dd.MM.yyyy HH:mm:ss",
+        };
 
-		public static DateTime ConvertStringToDate(string dateString)
+		internal static DateTime ConvertStringToDate(string dateString)
 		{
 			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
 			{
-				if (DateTime.TryParseExact(dateString, dateTimeformats, GlobalVariables.cultEng, DateTimeStyles.None, out DateTime resultDate))
+				if (DateTime.TryParseExact(dateString, DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime resultDate))
 				{
 					return resultDate;
 				}

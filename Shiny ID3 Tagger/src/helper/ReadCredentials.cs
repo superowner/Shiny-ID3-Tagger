@@ -6,7 +6,6 @@
 // <summary>Gets user credentials for all used APIs from external file</summary>
 //-----------------------------------------------------------------------
 
-
 namespace Utils
 {
 	using System;
@@ -17,9 +16,9 @@ namespace Utils
 	using GlobalVariables;
 	using Newtonsoft.Json.Linq;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static void ReadCredentials()
+		internal static void ReadCredentials()
 		{
 			// Path for user credentials file
 			string accountsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.json";

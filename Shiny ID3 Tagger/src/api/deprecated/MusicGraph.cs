@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_MusicGraph.cs" company="Shiny ID3 Tagger">
+// <copyright file="MusicGraph.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -21,14 +21,12 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	[Obsolete("Not used anymore",true)]
-	public class MusicGraph : IGetTagsService
+	[Obsolete("Not used anymore", true)]
+    internal class MusicGraph : IGetTagsService
 	{
-		public const string ServiceName = "Musicgraph";
-
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Musicgraph" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

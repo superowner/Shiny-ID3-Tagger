@@ -6,7 +6,6 @@
 // <summary>Inserts green, yellow or red as cell background color if a cell was changed</summary>
 //-----------------------------------------------------------------------
 
-
 namespace GlobalNamespace
 {
 	using System;
@@ -16,7 +15,7 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		public void MarkChange(int row, int col, string oldValue, string newValue, bool signalBigChanges)
+		internal void MarkChange(int row, int col, string oldValue, string newValue, bool signalBigChanges)
 		{
 			if (!string.IsNullOrWhiteSpace(newValue) && oldValue != newValue)
 			{

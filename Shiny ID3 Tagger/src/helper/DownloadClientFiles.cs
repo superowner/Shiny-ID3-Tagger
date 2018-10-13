@@ -23,8 +23,6 @@
 // UPDATER: Delete update folder
 // UPDATER: Start main program
 // UPDATER: Close updater
-
-
 namespace Utils
 {
 	using System;
@@ -37,9 +35,9 @@ namespace Utils
 	using GlobalVariables;
 	using Newtonsoft.Json.Linq;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static async Task<bool> DownloadClientFiles()
+		internal static async Task<bool> DownloadClientFiles()
 		{
 			DateTime? lastCommitDate = null;
 			DateTime? remoteCommitDate = null;

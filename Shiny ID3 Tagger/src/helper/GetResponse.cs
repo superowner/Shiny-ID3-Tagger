@@ -6,9 +6,6 @@
 // <summary>Executes all API requests. Has a built-in retry handler and a logger</summary>
 //-----------------------------------------------------------------------
 
-
-using GlobalNamespace;
-
 namespace Utils
 {
     using System;
@@ -17,11 +14,12 @@ namespace Utils
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using GlobalNamespace;
     using GlobalVariables;
 
-    public partial class Utils
+    internal partial class Utils
     {
-        public static async Task<dynamic> GetResponse(
+        internal static async Task<dynamic> GetResponse(
             HttpMessageInvoker client,
             HttpRequestMessage request,
             CancellationToken cancelToken,
@@ -58,7 +56,7 @@ namespace Utils
                     }
 
                     // If debugging level is 3 (DEBUG) or higher, print out all requests, not only failed once
-                    if ((int) User.Settings["DebugLevel"] >= 3)
+                    if ((int)User.Settings["DebugLevel"] >= 3)
                     {
                         List<string> errorMsg = BuildLogMessage(request, requestContent, null);
                         Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
@@ -107,7 +105,7 @@ namespace Utils
                         if (!cancelToken.IsCancellationRequested)
                         {
                             // If debugging is enabled in settings, print out all request and response properties
-                            if ((int) User.Settings["DebugLevel"] >= 2)
+                            if ((int)User.Settings["DebugLevel"] >= 2)
                             {
                                 List<string> errorMsg = new List<string>
                                     {"WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..."};
@@ -127,7 +125,7 @@ namespace Utils
                 {
                     // Request timed out. Server took too long to respond. Cancel request immediately and don't try again
                     // If debugging is enabled in settings, print out all request properties
-                    if (!cancelToken.IsCancellationRequested && (int) User.Settings["DebugLevel"] >= 2)
+                    if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 2)
                     {
                         List<string> errorMsg = new List<string>
                             {"WARNING:  Server took longer than " + Timeout + " seconds to respond! Abort..."};
@@ -142,18 +140,18 @@ namespace Utils
                 {
                     // An unknown application error occurred. Cancel request immediately and don't try again
                     // If debugging is enabled in settings, print out all request properties
-                    if (!cancelToken.IsCancellationRequested && (int) User.Settings["DebugLevel"] >= 1)
+                    if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 1)
                     {
-                        Exception realerror = error;
-                        while (realerror.InnerException != null)
+                        Exception realError = error;
+                        while (realError.InnerException != null)
                         {
-                            realerror = realerror.InnerException;
+                            realError = realError.InnerException;
                         }
 
                         List<string> errorMsg = new List<string>
                             {"ERROR:    An unknown application error occured! Abort..."};
                         errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-                        errorMsg.Add("Message:  " + realerror.Message.ToString());
+                        errorMsg.Add("Message:  " + realError.Message.ToString());
 
                         Form1.Instance.PrintErrorMessage(errorMsg.ToArray());
                     }
@@ -165,7 +163,7 @@ namespace Utils
             return result;
         }
 
-        public static async Task<dynamic> GetResponse(
+        internal static async Task<dynamic> GetResponse(
             HttpMessageInvoker client,
             HttpRequestMessage request,
             CancellationToken cancelToken,
@@ -241,7 +239,7 @@ namespace Utils
                         if (!cancelToken.IsCancellationRequested)
                         {
                             // If debugging is enabled in settings, print out all request and response properties
-                            if ((int) User.Settings["DebugLevel"] >= 2)
+                            if ((int)User.Settings["DebugLevel"] >= 2)
                             {
                                 List<string> errorMsg = new List<string>
                                     {"WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..."};
@@ -261,7 +259,7 @@ namespace Utils
                 {
                     // Request timed out. Server took too long to respond. Cancel request immediately and don't try again
                     // If debugging is enabled in settings, print out all request properties
-                    if (!cancelToken.IsCancellationRequested && (int) User.Settings["DebugLevel"] >= 2)
+                    if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 2)
                     {
                         List<string> errorMsg = new List<string>
                             {"WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..."};
@@ -276,7 +274,7 @@ namespace Utils
                 {
                     // An unknown application error occurred. Cancel request immediately and don't try again
                     // If debugging is enabled in settings, print out all request properties
-                    if (!cancelToken.IsCancellationRequested && (int) User.Settings["DebugLevel"] >= 1)
+                    if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 1)
                     {
                         Exception realError = error;
                         while (realError.InnerException != null)

@@ -16,82 +16,81 @@ namespace GlobalVariables
 	using System.Windows.Forms;
 	using Newtonsoft.Json.Linq;
 
-	public class GlobalVariables
+    internal static class GlobalVariables
 	{
-		public static CultureInfo cultEng = new CultureInfo("en-US");
+		internal static readonly CultureInfo CultEng = new CultureInfo("en-US");
 
-		public static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		internal static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		public static Dictionary<string, int> albumHits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+		internal static readonly Dictionary<string, int> AlbumHits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
-		public static Dictionary<string, decimal> totalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+		internal static readonly Dictionary<string, decimal> TotalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
 
-		public static DataGridView ActiveDGV { get; set; }
+		internal static DataGridView ActiveDGV { get; set; }
 
-		public static string LastUsedFolder { get; set; }
+		internal static string LastUsedFolder { get; set; }
 
-		public static CancellationTokenSource TokenSource { get; set; }
+		internal static CancellationTokenSource TokenSource { get; set; }
 	}
 
-	public static class ApiSessionData
+	internal static class ApiSessionData
 	{
-		public static string MsAccessToken { get; set; }
+		internal static string MsAccessToken { get; set; }
 
-		public static DateTime MsAccessTokenExpireDate { get; set; }
+		internal static DateTime MsAccessTokenExpireDate { get; set; }
 
-		public static string SpAccessToken { get; set; }
+		internal static string SpAccessToken { get; set; }
 
-		public static DateTime SpAccessTokenExpireDate { get; set; }
+		internal static DateTime SpAccessTokenExpireDate { get; set; }
 
-		public static string TiSessionID { get; set; }
+		internal static string TiSessionID { get; set; }
 
-		public static string TiCountryCode { get; set; }
+		internal static string TiCountryCode { get; set; }
 
-		public static DateTime TiSessionExpireDate { get; set; }
+		internal static DateTime TiSessionExpireDate { get; set; }
 	}
 
-	public static class User
+	internal static class User
 	{
-		public static JObject Accounts { get; set; }
+		internal static JObject Accounts { get; set; }
 
-		public static JObject Settings { get; set; }
+		internal static JObject Settings { get; set; }
 	}
 
-	public class Id3
+	internal class Id3
 	{
-		public string Filepath { get; set; }
+		internal string Filepath { get; set; }
 
-		public string Service { get; set; }
+		internal string Service { get; set; }
 
-		public string Artist { get; set; }
+		internal string Artist { get; set; }
 
-		public string Title { get; set; }
+		internal string Title { get; set; }
 
-		public string Album { get; set; }
+		internal string Album { get; set; }
 
-		public string Date { get; set; }
+		internal string Date { get; set; }
 
-		public string Genre { get; set; }
+		internal string Genre { get; set; }
 
-		public string DiscNumber { get; set; }
+		internal string DiscNumber { get; set; }
 
-		public string DiscCount { get; set; }
+		internal string DiscCount { get; set; }
 
-		public string TrackNumber { get; set; }
+		internal string TrackNumber { get; set; }
 
-		public string TrackCount { get; set; }
+		internal string TrackCount { get; set; }
 
-		public string Lyrics { get; set; }
+		internal string Lyrics { get; set; }
 
-		public string Cover { get; set; }
+		internal string Cover { get; set; }
 
-		public string Duration { get; set; }
+		internal string Duration { get; set; }
 
-		public static DataTable CreateId3Table()
+		internal static DataTable CreateId3Table()
 		{
-			DataTable table = new DataTable();
-			table.Locale = new CultureInfo("en-US");
-			table.Columns.Add("number", typeof(uint));
+            DataTable table = new DataTable{ Locale = new CultureInfo("en-US") };
+            table.Columns.Add("number", typeof(uint));
 			table.Columns.Add("filepath", typeof(string));
 			table.Columns.Add("service", typeof(string));
 			table.Columns.Add("artist", typeof(string));
@@ -110,9 +109,9 @@ namespace GlobalVariables
 		}
 	}
 
-	public class DataGridViewDoubleBuffered : DataGridView
+	internal class DataGridViewDoubleBuffered : DataGridView
 	{
-		public DataGridViewDoubleBuffered()
+		internal DataGridViewDoubleBuffered()
 		{
 			this.DoubleBuffered = true;
 		}

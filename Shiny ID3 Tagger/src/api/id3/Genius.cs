@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_Genius.cs" company="Shiny ID3 Tagger">
+// <copyright file="Genius.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -20,13 +20,11 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	public class Genius : IGetTagsService
+    internal class Genius : IGetTagsService
 	{
-		public const string ServiceName = "Genius";
-
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Genius" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

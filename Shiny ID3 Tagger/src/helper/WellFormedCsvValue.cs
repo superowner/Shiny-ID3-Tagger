@@ -8,9 +8,9 @@
 
 namespace Utils
 {
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static string WellFormedCsvValue(object cell)
+		internal static string WellFormedCsvValue(object cell)
 		{
 			string value = cell != null ? cell.ToString() : string.Empty;
 			value = value.Replace("\r\n", "\n");

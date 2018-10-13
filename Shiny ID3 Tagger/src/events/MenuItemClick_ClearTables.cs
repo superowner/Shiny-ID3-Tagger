@@ -17,7 +17,7 @@ namespace GlobalNamespace
 		private void MenuItemClick_ClearTables(object sender, EventArgs e)
 		{
 			GlobalVariables.TokenSource.Cancel();
-			GlobalVariables.albumHits.Clear();
+			GlobalVariables.AlbumHits.Clear();
 			GlobalVariables.ActiveDGV.Refresh();
 
 			this.rtbSearchLog.Clear();

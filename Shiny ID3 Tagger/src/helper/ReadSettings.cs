@@ -14,9 +14,9 @@ namespace Utils
     using GlobalVariables;
     using Newtonsoft.Json.Linq;
 
-    public partial class Utils
+    internal partial class Utils
     {
-        public static void ReadSettings()
+        internal static void ReadSettings()
         {
             // Path for user settings file
             string settingsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.json";

@@ -25,32 +25,33 @@ namespace GlobalNamespace
 
     public partial class Form1
     {
-        private List<IGetLyricsService> _lyricsServices = new List<IGetLyricsService>
+        private List<IGetLyricsService> lyricsServices = new List<IGetLyricsService>
         {
-            new GetLyrics.Netease(),
-            new GetLyrics.Xiami(),
             new GetLyrics.ChartLyrics(),
             new GetLyrics.LoloLyrics(),
-            new GetLyrics.ViewLyrics()
+            new GetLyrics.Netease(),
+            new GetLyrics.ViewLyrics(),
+            new GetLyrics.Xiami()
         };
 
-        private List<IGetTagsService> _tagsServices = new List<IGetTagsService>
+        private List<IGetTagsService> tagsServices = new List<IGetTagsService>
         {
-            new GetTags.Netease(),
+            new GetTags.Decibel(),
             new GetTags.Deezer(),
             new GetTags.Discogs(),
             new GetTags.Genius(),
             new GetTags.Gracenote(),
-            new GetTags.Napster(),
-            new GetTags.Qobuz(),
-            new GetTags.Spotify(),
-            new GetTags.Tidal(),
             new GetTags.ITunes(),
             new GetTags.LastFm(),
-            new GetTags.MusicBrains(),
+            new GetTags.MusicBrainz(),
             new GetTags.MusixMatch(),
+            new GetTags.Napster(),
+            new GetTags.Netease(),
+            new GetTags.Qobuz(),
             new GetTags.QQ(),
-            new GetTags.SevenDigital()
+            new GetTags.SevenDigital(),
+            new GetTags.Spotify(),
+            new GetTags.Tidal()
         };
 
         // ###########################################################################
@@ -137,12 +138,7 @@ namespace GlobalNamespace
                                 (artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
                                  titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
                             {
-                                this.PrintLogMessage(this.rtbSearchLog,
-                                                     new[]
-                                                     {
-                                                         "  Spelling mistake detected. New search for: \"" + artistNew +
-                                                         " - " + titleNew + "\""
-                                                     });
+                                this.PrintLogMessage(this.rtbSearchLog, new[] {"  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\""});
 
                                 sw.Restart();
 
@@ -171,8 +167,7 @@ namespace GlobalNamespace
                             foreach (DataRow r in apiResults.Rows)
                             {
                                 string albumhit =
-                                    Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(),
-                                                               tagNew.Album);
+                                    Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
                                 string durationTotal =
                                     Utils.IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
 
@@ -216,14 +211,10 @@ namespace GlobalNamespace
                             this.MarkChange(row.Index, this.album1.Index, tagOld.Album, tagNew.Album, true);
                             this.MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date, false);
                             this.MarkChange(row.Index, this.genre1.Index, tagOld.Genre, tagNew.Genre, true);
-                            this.MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount,
-                                            false);
-                            this.MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber,
-                                            false);
-                            this.MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount,
-                                            false);
-                            this.MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber,
-                                            false);
+                            this.MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount, false);
+                            this.MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber, false);
+                            this.MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount, false);
+                            this.MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber, false);
                             this.MarkChange(row.Index, this.lyrics1.Index, tagOld.Lyrics, tagNew.Lyrics, false);
                             this.MarkChange(row.Index, this.cover1.Index, tagOld.Cover, tagNew.Cover, false);
 
@@ -275,9 +266,7 @@ namespace GlobalNamespace
         }
 
         // ###########################################################################
-        private async Task<KeyValuePair<string, string>> StartLyricsSearch(HttpMessageInvoker client,
-                                                                           Id3 tagNew,
-                                                                           CancellationToken cancelToken)
+        private async Task<KeyValuePair<string, string>> StartLyricsSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
         {
             KeyValuePair<string, string> lyrics = default(KeyValuePair<string, string>);
             Dictionary<string, string> lyricResults = new Dictionary<string, string>();
@@ -287,7 +276,7 @@ namespace GlobalNamespace
                 return lyrics;
             }
 
-            List<Task<Id3>> taskList = _lyricsServices.Select(service => service.GetLyrics(
+            List<Task<Id3>> taskList = this.lyricsServices.Select(service => service.GetLyrics(
                                                                   client, tagNew, cancelToken)).ToList();
 
             try
@@ -327,21 +316,17 @@ namespace GlobalNamespace
         }
 
         // ###########################################################################
-        private async Task<DataTable> StartId3Search(HttpMessageInvoker client,
-                                                     Id3 tagOld,
-                                                     CancellationToken cancelToken)
+        private async Task<DataTable> StartId3Search(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
         {
             DataTable apiResults = Id3.CreateId3Table();
 
             string artistToSearch = Utils.Strip(tagOld.Artist);
             string titleToSearch = Utils.Strip(tagOld.Title);
 
-            string message =
-                $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",-100}{"file: \"" + tagOld.Filepath + "\""}";
+            string message = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"", -100}{"file: \"" + tagOld.Filepath + "\""}";
             this.PrintLogMessage(this.rtbSearchLog, new[] {message});
 
-
-            List<Task<Id3>> taskList = this._tagsServices.Select(service =>
+            List<Task<Id3>> taskList = this.tagsServices.Select(service =>
                                                                      service.GetTags(
                                                                          client,
                                                                          artistToSearch,
@@ -406,13 +391,12 @@ namespace GlobalNamespace
         }
 
         // ###########################################################################
-        private Id3 CalculateResults(DataTable apiResults,
-                                     Id3 tagNew)
+        private Id3 CalculateResults(DataTable apiResults, Id3 tagNew)
         {
             var majorityAlbumRows = (from row in apiResults.AsEnumerable()
                                      where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
                                      orderby Utils.ConvertStringToDate(row.Field<string>("date"))
-                                                  .ToString("yyyyMMddHHmmss", GlobalVariables.cultEng)
+                                                  .ToString("yyyyMMddHHmmss", GlobalVariables.CultEng)
                                      group row by Utils.Strip(row.Field<string>("album").ToUpperInvariant())
                                      into grp
                                      where grp.Count() >= 3
@@ -422,7 +406,7 @@ namespace GlobalNamespace
             var test = from row in apiResults.AsEnumerable()
                        where !string.IsNullOrWhiteSpace(row.Field<string>("album"))
                        orderby Utils.ConvertStringToDate(row.Field<string>("date"))
-                                    .ToString("yyyyMMddHHmmss", GlobalVariables.cultEng)
+                                    .ToString("yyyyMMddHHmmss", GlobalVariables.CultEng)
                        group row by Utils.Strip(row.Field<string>("album").ToUpperInvariant())
                        into grp
                        where grp.Count() >= 3
@@ -454,7 +438,7 @@ namespace GlobalNamespace
                 tagNew.Date = (from row in majorityAlbumRows
                                where !string.IsNullOrWhiteSpace(row.Field<string>("date"))
                                group row by Utils.ConvertStringToDate(row.Field<string>("date")).Year
-                                                 .ToString(GlobalVariables.cultEng)
+                                                 .ToString(GlobalVariables.CultEng)
                                into grp
                                orderby grp.Count() descending, grp.Key ascending
                                select grp.Key).FirstOrDefault();

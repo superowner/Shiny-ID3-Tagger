@@ -208,12 +208,12 @@ namespace GlobalNamespace
 									artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,            // Select the first non-null artist choice, value order in array is important therefore
 									titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,             // Select the first non-null title choice, value order in array is important therefore
 									tagFile.Tag.Album ?? string.Empty,
-									(tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(GlobalVariables.cultEng) : string.Empty,
+									(tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(GlobalVariables.CultEng) : string.Empty,
 									tagFile.Tag.FirstGenre ?? string.Empty,
-									(tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(GlobalVariables.cultEng) : string.Empty,
-									(tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(GlobalVariables.cultEng) : string.Empty,
-									(tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(GlobalVariables.cultEng) : string.Empty,
-									(tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(GlobalVariables.cultEng) : string.Empty,
+									(tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(GlobalVariables.CultEng) : string.Empty,
+									(tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(GlobalVariables.CultEng) : string.Empty,
+									(tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(GlobalVariables.CultEng) : string.Empty,
+									(tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(GlobalVariables.CultEng) : string.Empty,
 									tagFile.Tag.Lyrics ?? string.Empty,
 									tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty,
 									false);

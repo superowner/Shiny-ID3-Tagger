@@ -16,12 +16,12 @@ namespace GlobalNamespace
 
 	public partial class Form1
 	{
-		public void PrintErrorMessage(string[] values)
+        internal void PrintErrorMessage(string[] values)
 		{
 			this.PrintLogMessage(this.rtbErrorLog, values);
 		}
 
-		public void PrintLogMessage(RichTextBox richTextBox, string[] values)
+		internal void PrintLogMessage(RichTextBox richTextBox, string[] values)
 		{
 			// When called from a different thread then Form1, switch back to thread which owns Form1
 			if (this.InvokeRequired)
@@ -39,7 +39,7 @@ namespace GlobalNamespace
 			try
 			{
 				richTextBox.SelectionColor = Color.Gray;
-				richTextBox.AppendText(DateTime.Now.ToString("HH:mm:ss.fff   ", GlobalVariables.cultEng));
+				richTextBox.AppendText(DateTime.Now.ToString("HH:mm:ss.fff   ", GlobalVariables.CultEng));
 
 				richTextBox.SelectionColor = Color.Black;
 				richTextBox.AppendText(message + Environment.NewLine);

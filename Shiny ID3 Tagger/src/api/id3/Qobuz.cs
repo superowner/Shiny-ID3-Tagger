@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_Qobuz.cs" company="Shiny ID3 Tagger">
+// <copyright file="Qobuz.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -22,13 +22,11 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	public class Qobuz : IGetTagsService
+    internal class Qobuz : IGetTagsService
 	{
-		public const string ServiceName = "Qobuz";
-
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Qobuz" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -43,7 +41,7 @@ namespace GetTags
 				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData != null && searchData.SelectToken("tracks.items[0]") != null)
+				if (searchData?.SelectToken("tracks.items[0]") != null)
 				{
 					o.Artist = (string)searchData.SelectToken("tracks.items[0].album.artist.name");
 					o.Title = (string)searchData.SelectToken("tracks.items[0].title");
@@ -58,7 +56,7 @@ namespace GetTags
 					string strSeconds = (string)searchData.SelectToken("tracks.items[0].album.released_at");
 					if (long.TryParse(strSeconds, out long seconds))
 					{
-						o.Date = GlobalVariables.epoch.AddSeconds(seconds).ToString();
+						o.Date = GlobalVariables.Epoch.AddSeconds(seconds).ToString();
 					}
 				}
 			}

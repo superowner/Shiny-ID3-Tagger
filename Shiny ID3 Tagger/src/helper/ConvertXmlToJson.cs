@@ -13,9 +13,9 @@ namespace Utils
     using GlobalVariables;
     using Newtonsoft.Json;
 
-	public partial class Utils
+	internal partial class Utils
 	{
-		public static string ConvertXmlToJson(string xmlString)
+		internal static string ConvertXmlToJson(string xmlString)
 		{
 			XmlDocument xml = new XmlDocument();
 

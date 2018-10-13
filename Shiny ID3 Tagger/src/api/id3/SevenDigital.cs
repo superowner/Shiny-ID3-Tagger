@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_7digital.cs" company="Shiny ID3 Tagger">
+// <copyright file="SevenDigital.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -20,13 +20,11 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	public class SevenDigital : IGetTagsService
+    internal class SevenDigital : IGetTagsService
 	{
-		public const string ServiceName = "7digital";
-
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "7digital" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

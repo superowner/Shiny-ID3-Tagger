@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetTags_Amazon.cs" company="Shiny ID3 Tagger">
+// <copyright file="Amazon.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -26,29 +26,16 @@ namespace GetTags
     using Newtonsoft.Json.Linq;
     using Utils;
 
-	[Obsolete("Amazon key is not registered as an Amazon Associate. ",true)]
-	public class Amazon : IGetTagsService
+	[Obsolete("Amazon key is not registered as an Amazon Associate. ", true)]
+	internal class Amazon : IGetTagsService
 	{
-		private static Stopwatch lastRequestTimer = new Stopwatch();
-		private static int lastRequestTimeout = 1000;
-		public const string ServiceName = "Amazon";
+        private const int LastRequestTimeout = 1000;
+        private static Stopwatch lastRequestTimer = new Stopwatch();
 
 		// ###########################################################################
-		private static string CreateSignature(string server, string parameters)
-		{
-			string stringToSign = "GET" + "\n" + server + "\n" + "/onca/xml" + "\n" + parameters;
-			byte[] bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
-			HMACSHA256 hmacSha = new HMACSHA256();
-			hmacSha.Key = Encoding.UTF8.GetBytes((string)User.Accounts["Amazon"]["SecretKey"]);
-			byte[] sigBytes = hmacSha.ComputeHash(bytesToSign);
-			string sigBase64 = Convert.ToBase64String(sigBytes);
-			string sigEncoded = Uri.EscapeDataString(sigBase64);
-			return sigEncoded;
-		}
-
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = ServiceName};
+			Id3 o = new Id3 {Service = "Amazon" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -83,7 +70,7 @@ namespace GetTags
 
 				// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/TroubleshootingApplications.html#efficiency-guidelines
 				// Check if 1 second already passed since last request
-				while (lastRequestTimer.ElapsedMilliseconds < lastRequestTimeout && lastRequestTimer.IsRunning)
+				while (lastRequestTimer.ElapsedMilliseconds < LastRequestTimeout && lastRequestTimer.IsRunning)
 				{
 					await Task.Delay(50);
 				}
@@ -93,7 +80,8 @@ namespace GetTags
 
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
-				if (searchData != null && searchData.SelectToken("ItemSearchResponse.Items.Item") != null)
+                // TODO: Can this be simplified? why double checking if "itemSearchResponse.Items.Item" is not null?
+                if (searchData?.SelectToken("ItemSearchResponse.Items.Item") != null)
 				{
 					JToken item = null;
 					if (searchData.SelectToken("ItemSearchResponse.Items.Item") != null)
@@ -146,7 +134,7 @@ namespace GetTags
 							albumRequest.RequestUri = new Uri("http://" + Server + "/onca/xml?" + parameters + "&Signature=" + CreateSignature(Server, parameters));
 
 							// Check if 1 second already passed since last request
-							while (lastRequestTimer.ElapsedMilliseconds < lastRequestTimeout && lastRequestTimer.IsRunning)
+							while (lastRequestTimer.ElapsedMilliseconds < LastRequestTimeout && lastRequestTimer.IsRunning)
 							{
 								await Task.Delay(50);
 							}
@@ -172,5 +160,16 @@ namespace GetTags
 
 			return o;
 		}
-	}
+
+        private static string CreateSignature(string server, string parameters)
+        {
+            string stringToSign = "GET" + "\n" + server + "\n" + "/onca/xml" + "\n" + parameters;
+            byte[] bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
+            HMACSHA256 hmacSha = new HMACSHA256{ Key = Encoding.UTF8.GetBytes((string)User.Accounts["Amazon"]["SecretKey"]) };
+            byte[] sigBytes = hmacSha.ComputeHash(bytesToSign);
+            string sigBase64 = Convert.ToBase64String(sigBytes);
+            string sigEncoded = Uri.EscapeDataString(sigBase64);
+            return sigEncoded;
+        }
+    }
 }
