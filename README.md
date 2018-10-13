@@ -4,48 +4,48 @@
 ![Main window](https://cloud.githubusercontent.com/assets/21058782/20148484/28893abe-a6ad-11e6-9941-ab1dfded8c24.png)
 
 ## Currently supported webservices to query data
-- **7digital**
-- **Amazon**
-- **Decibel**
-- **Deezer**
-- **Discogs**
-- **Genius**
-- **Gracenote**
-- **iTunes**
-- **Last.fm**
-- **Musicbrainz**
-- **Musixmatch**
-- **Napster**
-- **Netease**
-- **Qobuz**
-- **QQ**
-- **Spotify**
-- **Tidal**
-- **Chartlyrics** (only for lyrics)
-- **Lololyrics** (only for lyrics)
-- **Viewlyrics** (only for lyrics)
-- **Xiami** (only for lyrics)
+- [ ] **7digital**
+- [ ] **Amazon**
+- [ ] **Decibel**
+- [ ] **Deezer**
+- [ ] **Discogs**
+- [ ] **Genius**
+- [ ] **Gracenote**
+- [ ] **iTunes**
+- [ ] **Last.fm**
+- [ ] **Musicbrainz**
+- [ ] **Musixmatch**
+- [ ] **Napster**
+- [ ] **Netease**
+- [ ] **Qobuz**
+- [ ] **QQ**
+- [ ] **Spotify**
+- [ ] **Tidal**
+- [ ] **Chartlyrics** (only for lyrics)
+- [ ] **Lololyrics** (only for lyrics)
+- [ ] **Viewlyrics** (only for lyrics)
+- [ ] **Xiami** (only for lyrics)
 
 ## Key Features
-- Queries 17 databases and selects/adds the most frequent results for
-  - **Artist name**
-  - **Track title**
-  - **Album name**
-  - **Release date**
-  - **Genre**
-  - **Disc count**
-  - **Disc number**
-  - **Track count**
-  - **Track number**
-- Finds and embeds an **album cover**
-- Finds and embeds lyrics
-- All tags are written as ID3v2.3
-- Fixes encoding errors in tags. All tags will be resaved as UTF16 strings
+- [ ] Queries 17 databases and selects/adds the most frequent results for
+  - [ ] **Artist name**
+  - [ ] **Track title**
+  - [ ] **Album name**
+  - [ ] **Release date**
+  - [ ] **Genre**
+  - [ ] **Disc count**
+  - [ ] **Disc number**
+  - [ ] **Track count**
+  - [ ] **Track number**
+- [ ] Finds and embeds an **album cover**
+- [ ] Finds and embeds lyrics
+- [ ] All tags are written as ID3v2.3
+- [ ] Fixes encoding errors in tags. All tags will be resaved as UTF16 strings
 
 ## How To Use
-- [Download and extract latest release](https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest)
-- Run "Shiny ID3 Tagger.exe" 
-- Program is portable and stealth (nothing get's written to registry or AppData)
+- [ ] [Download and extract latest release](https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest)
+- [ ] Run "Shiny ID3 Tagger.exe" 
+- [ ] Program is portable and stealth (nothing get's written to registry or AppData)
 
 ## Future Features
 - [ ] Add UI for setting of the application
