@@ -132,7 +132,7 @@
     <Compile Include="src\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\api\deprecated\Amazon.cs" />
+    <Compile Include="src\api\id3\Amazon.cs" />
     <Compile Include="src\api\id3\Decibel.cs" />
     <Compile Include="src\api\id3\IGetTagsService.cs" />
     <Compile Include="src\api\lyrics\IGetLyricsService.cs" />

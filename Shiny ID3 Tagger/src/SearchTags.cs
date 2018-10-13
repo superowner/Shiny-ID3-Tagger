@@ -36,6 +36,7 @@ namespace GlobalNamespace
 
 		private List<IGetTagsService> tagsServices = new List<IGetTagsService>
 		{
+			new GetTags.Amazon(),
 			new GetTags.Decibel(),
 			new GetTags.Deezer(),
 			new GetTags.Discogs(),

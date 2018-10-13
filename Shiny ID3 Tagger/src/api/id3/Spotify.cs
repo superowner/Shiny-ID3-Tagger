@@ -4,8 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from Spotify API for current track</summary>
-// https://developer.spotify.com/web-api/search-item/
-// https://developer.spotify.com/web-api/object-model/
+// https://developer.spotify.com/documentation/web-api/reference/search/search/#writing-a-query---guidelines
 // https://github.com/spotify/web-api/issues/140	=> overall results are worse when removing the chars ",:
 // https://github.com/spotify/web-api/issues/409
 // fuzzy search with an appended asterisk (*) is useless since it only applies to a single word. And you can only use a maximum of 2 asterisk per query
@@ -70,8 +69,7 @@ namespace GetTags
 			{
 				using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 				{
-					searchRequest.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEncoded +
-													   "\"+title:\"" + titleEncoded + "\"&type=track&limit=1");
+					searchRequest.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEncoded + "\"+track:\"" + titleEncoded + "\"&type=track&limit=1");
 					searchRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 
 					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);

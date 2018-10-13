@@ -26,7 +26,6 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
-	[Obsolete("Amazon key is not registered as an Amazon Associate. ", true)]
 	internal class Amazon : IGetTagsService
 	{
 		private const int LastRequestTimeout = 1000;
@@ -41,7 +40,7 @@ namespace GetTags
 			sw.Start();
 
 			// ###########################################################################
-			const string Server = "webservices.amazon.com";
+			const string Server = "webservices.amazon.de";
 
 			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
 			timestamp = Uri.EscapeDataString(timestamp);
