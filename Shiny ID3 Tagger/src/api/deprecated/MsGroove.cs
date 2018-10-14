@@ -71,7 +71,7 @@ namespace GetTags
 					searchRequest.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 
 					// ###########################################################################
-					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
 					JObject searchData = Utils.DeserializeJson(searchContent);
 
 					if (searchData?.SelectToken("Tracks.Items") != null)

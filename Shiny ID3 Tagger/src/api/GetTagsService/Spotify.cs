@@ -73,7 +73,7 @@ namespace GetTags
 					searchRequest.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEncoded + "\"+track:\"" + titleEncoded + "\"&type=track&limit=1");
 					searchRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 
-					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 502 });
+					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
 					JObject searchData = Utils.DeserializeJson(searchContent);
 
 					if (searchData?.SelectToken("tracks.items") != null &&

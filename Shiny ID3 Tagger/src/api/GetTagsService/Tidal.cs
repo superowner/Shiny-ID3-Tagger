@@ -108,7 +108,7 @@ namespace GetTags
 										(string)searchData.SelectToken("tracks.items[0].album.id") + "?countryCode=" +
 										ApiSessionData.TiCountryCode);
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 							JObject albumData = Utils.DeserializeJson(albumContent);
 
 							if (albumData != null)

@@ -9,6 +9,7 @@
 // Only 1000 hits per day. Since 3 calls per file are needed, you can only search for 333 files a day. That's not much
 //-----------------------------------------------------------------------
 
+// TODO: Review the whole method. One year ago the old code got 29 correct hits out of 58 (oldies folder). Now its only 6. Maybe sort by track_rating or first_release_date
 namespace GetTags
 {
 	using System;
@@ -42,7 +43,7 @@ namespace GetTags
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&page_size=1&apikey=" + (string)account["ApiKey"]);
+				searchRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&apikey=" + (string)account["ApiKey"]);
 
 				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
