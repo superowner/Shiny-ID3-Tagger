@@ -18,7 +18,6 @@ namespace GlobalNamespace
 
 	public partial class Form1 : Form
 	{
-		// REVIEW: I don't understand the concept behind this variable. Why not leave it as it was before?
 		public static Form1 Instance;
 
 		/// <summary>

@@ -22,7 +22,7 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
-	[Obsolete("Not used anymore", true)]
+	[Obsolete("API shutdown end of 2017 (https://docs.microsoft.com/en-us/groove/api-overview)", true)]
 	internal class MsGroove : IGetTagsService
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
@@ -71,7 +71,7 @@ namespace GetTags
 					searchRequest.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 
 					// ###########################################################################
-					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 					JObject searchData = Utils.DeserializeJson(searchContent);
 
 					if (searchData?.SelectToken("Tracks.Items") != null)
@@ -92,7 +92,7 @@ namespace GetTags
 							albumRequest.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 							albumRequest.RequestUri = new Uri("https://music.xboxlive.com/1/content/" + (string)searchData.SelectToken("Tracks.Items[0].Album.Id") + "/lookup?contentType=JSON");
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 							JObject albumData = Utils.DeserializeJson(albumContent);
 
 							if (albumData?.SelectToken("Albums.Items") != null)

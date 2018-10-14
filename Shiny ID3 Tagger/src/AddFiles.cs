@@ -156,8 +156,8 @@ namespace GlobalNamespace
 							using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mp3", TagLib.ReadStyle.None))
 							{
 								string filename = Path.GetFileNameWithoutExtension(filepath);
-								string[] artistChoices = new string[] { null, null, filename };
-								string[] titleChoices = new string[] { null, null, filename };
+								string[] artistChoices = new[] { null, null, filename };
+								string[] titleChoices = new[] { null, null, filename };
 
 								foreach (string pattern in User.Settings["FilenamePatterns"])
 								{

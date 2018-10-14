@@ -11,6 +11,7 @@
 namespace GetTags
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Net;
@@ -21,7 +22,7 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
-	[Obsolete("Not used anymore", true)]
+	[Obsolete("Website and API service is closed", true)]
 	internal class MusicGraph : IGetTagsService
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
@@ -44,7 +45,7 @@ namespace GetTags
 			{
 				searchRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account["AppKey"] + "&artist_name=" + artistEncoded + "&title=" + titleEncoded + "&limit=5");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("data") != null && searchData.SelectToken("data").Any())
@@ -68,7 +69,7 @@ namespace GetTags
 						// Musicgraph has a database flaw where many album IDs in track responses point to non-existing album URLs resulting in a 404 "Not found" HTTP error
 						albumRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/album/" + (string)track.SelectToken("track_album_id") + "?api_key=" + (string)account["AppKey"]);
 
-						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData?.SelectToken("data") != null)

@@ -133,136 +133,136 @@
     <Compile Include="src\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\api\id3\Amazon.cs" />
-    <Compile Include="src\api\id3\Decibel.cs" />
-    <Compile Include="src\api\id3\IGetTagsService.cs" />
-    <Compile Include="src\api\lyrics\IGetLyricsService.cs" />
-    <Compile Include="src\api\lyrics\ViewLyrics.cs" />
-    <Compile Include="src\events\Form_EnableUI.cs">
+    <Compile Include="src\api\GetTagsService\Amazon.cs" />
+    <Compile Include="src\api\GetTagsService\Decibel.cs" />
+    <Compile Include="src\api\GetTagsService\IGetTagsService.cs" />
+    <Compile Include="src\api\GetLyricsService\IGetLyricsService.cs" />
+    <Compile Include="src\api\GetLyricsService\ViewLyrics.cs" />
+    <Compile Include="src\Form1\Form_EnableUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\GetImageType.cs" />
-    <Compile Include="src\helper\ParseInt.cs" />
-    <Compile Include="src\events\DataGridView_CellPainting.cs">
+    <Compile Include="src\Utils\GetImageType.cs" />
+    <Compile Include="src\Utils\ParseInt.cs" />
+    <Compile Include="src\Form1\DataGridView_CellPainting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\Form_KeyDown.cs">
+    <Compile Include="src\Form1\Form_KeyDown.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\MenuItemClick_AddFolder.cs">
+    <Compile Include="src\Form1\MenuItemClick_AddFolder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\Button_AddFilesClick.cs">
+    <Compile Include="src\Form1\Button_AddFilesClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\Button_CancelClick.cs">
+    <Compile Include="src\Form1\Button_CancelClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\Button_SearchClick.cs">
+    <Compile Include="src\Form1\Button_SearchClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\Button_WriteClick.cs">
+    <Compile Include="src\Form1\Button_WriteClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\MenuItemClick_ClearTables.cs">
+    <Compile Include="src\Form1\MenuItemClick_ClearTables.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\DataGridView_CellContentClick.cs">
+    <Compile Include="src\Form1\DataGridView_CellContentClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\DataGridView_CellDoubleClick.cs">
+    <Compile Include="src\Form1\DataGridView_CellDoubleClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\DataGridView_CellMouseDown.cs">
+    <Compile Include="src\Form1\DataGridView_CellMouseDown.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\DataGridView_CellMouseEnter.cs">
+    <Compile Include="src\Form1\DataGridView_CellMouseEnter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\DataGridView_CellMouseLeave.cs">
+    <Compile Include="src\Form1\DataGridView_CellMouseLeave.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\DataGridView_KeyPress.cs">
+    <Compile Include="src\Form1\DataGridView_KeyPress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\MenuItemClick_ImportTable.cs">
+    <Compile Include="src\Form1\MenuItemClick_ImportTable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\MenuItemClick_OpenSettings.cs">
+    <Compile Include="src\Form1\MenuItemClick_OpenSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\DataGridView_SortCompare.cs">
+    <Compile Include="src\Form1\DataGridView_SortCompare.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\Popup_ShowExplorerClick.cs">
+    <Compile Include="src\Form1\Popup_ShowExplorerClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\SlowProgressBar_VisibleChanged.cs">
+    <Compile Include="src\Form1\SlowProgressBar_VisibleChanged.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\Popup_RemoveClick.cs">
+    <Compile Include="src\Form1\Popup_RemoveClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\RichTextBox_LinkClicked.cs">
+    <Compile Include="src\Form1\RichTextBox_LinkClicked.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\events\TabControl_SelectedIndexChanged.cs">
+    <Compile Include="src\Form1\TabControl_SelectedIndexChanged.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\Capitalize.cs" />
-    <Compile Include="src\helper\CheckMalformedUtf8.cs" />
-    <Compile Include="src\helper\CloneRequest.cs" />
-    <Compile Include="src\helper\ConvertStringToDate.cs" />
-    <Compile Include="src\helper\ConvertXmlToJson.cs" />
-    <Compile Include="src\helper\DeserializeJson.cs" />
-    <Compile Include="src\helper\GetResponse.cs" />
-    <Compile Include="src\events\MenuItemClick_ExportTable.cs">
+    <Compile Include="src\Utils\Capitalize.cs" />
+    <Compile Include="src\Utils\CheckMalformedUtf8.cs" />
+    <Compile Include="src\Utils\CloneRequest.cs" />
+    <Compile Include="src\Utils\ConvertStringToDate.cs" />
+    <Compile Include="src\Utils\ConvertXmlToJson.cs" />
+    <Compile Include="src\Utils\DeserializeJson.cs" />
+    <Compile Include="src\Utils\GetResponse.cs" />
+    <Compile Include="src\Form1\MenuItemClick_ExportTable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\IncreaseTotalDuration.cs" />
-    <Compile Include="src\helper\IncreaseAlbumCounter.cs" />
-    <Compile Include="src\helper\InitiateHttpClient.cs" />
-    <Compile Include="src\helper\IsValidMp3.cs" />
-    <Compile Include="src\helper\IsValidUrl.cs" />
-    <Compile Include="src\helper\LevenshteinDistance.cs" />
-    <Compile Include="src\events\RichTextBox_PrintErrorMessage.cs">
+    <Compile Include="src\Utils\IncreaseTotalDuration.cs" />
+    <Compile Include="src\Utils\IncreaseAlbumCounter.cs" />
+    <Compile Include="src\Utils\InitiateHttpClient.cs" />
+    <Compile Include="src\Utils\IsValidMp3.cs" />
+    <Compile Include="src\Utils\IsValidUrl.cs" />
+    <Compile Include="src\Utils\LevenshteinDistance.cs" />
+    <Compile Include="src\Form1\RichTextBox_PrintErrorMessage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\BuildLogMessage.cs" />
-    <Compile Include="src\events\DataGridView_MarkChange.cs">
+    <Compile Include="src\Utils\BuildLogMessage.cs" />
+    <Compile Include="src\Form1\DataGridView_MarkChange.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\helper\DownloadClientFiles.cs" />
-    <Compile Include="src\helper\ReadCredentials.cs" />
-    <Compile Include="src\helper\ReadSettings.cs" />
-    <Compile Include="src\helper\Strip.cs" />
-    <Compile Include="src\helper\ValidateSchema.cs" />
-    <Compile Include="src\helper\WellFormedCsvValue.cs" />
+    <Compile Include="src\Utils\DownloadClientFiles.cs" />
+    <Compile Include="src\Utils\ReadCredentials.cs" />
+    <Compile Include="src\Utils\ReadSettings.cs" />
+    <Compile Include="src\Utils\Strip.cs" />
+    <Compile Include="src\Utils\ValidateSchema.cs" />
+    <Compile Include="src\Utils\WellFormedCsvValue.cs" />
     <Compile Include="src\GlobalVariables.cs" />
     <Compile Include="src\SearchTags.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\api\id3\SevenDigital.cs" />
-    <Compile Include="src\api\id3\Deezer.cs" />
-    <Compile Include="src\api\id3\Discogs.cs" />
-    <Compile Include="src\api\id3\Genius.cs" />
-    <Compile Include="src\api\id3\Gracenote.cs" />
-    <Compile Include="src\api\id3\ITunes.cs" />
-    <Compile Include="src\api\id3\LastFm.cs" />
+    <Compile Include="src\api\GetTagsService\SevenDigital.cs" />
+    <Compile Include="src\api\GetTagsService\Deezer.cs" />
+    <Compile Include="src\api\GetTagsService\Discogs.cs" />
+    <Compile Include="src\api\GetTagsService\Genius.cs" />
+    <Compile Include="src\api\GetTagsService\Gracenote.cs" />
+    <Compile Include="src\api\GetTagsService\ITunes.cs" />
+    <Compile Include="src\api\GetTagsService\LastFm.cs" />
     <Compile Include="src\api\deprecated\MsGroove.cs" />
-    <Compile Include="src\api\id3\MusicBrainz.cs" />
+    <Compile Include="src\api\GetTagsService\MusicBrainz.cs" />
     <Compile Include="src\api\deprecated\MusicGraph.cs" />
-    <Compile Include="src\api\id3\MusixMatch.cs" />
-    <Compile Include="src\api\id3\Napster.cs" />
-    <Compile Include="src\api\id3\Netease.cs" />
-    <Compile Include="src\api\id3\Qobuz.cs" />
-    <Compile Include="src\api\id3\QQ.cs" />
-    <Compile Include="src\api\id3\Spotify.cs" />
-    <Compile Include="src\api\id3\Tidal.cs" />
-    <Compile Include="src\api\lyrics\ChartLyrics.cs" />
-    <Compile Include="src\api\lyrics\LoloLyrics.cs" />
-    <Compile Include="src\api\lyrics\Netease.cs" />
-    <Compile Include="src\api\lyrics\Xiami.cs" />
+    <Compile Include="src\api\GetTagsService\MusixMatch.cs" />
+    <Compile Include="src\api\GetTagsService\Napster.cs" />
+    <Compile Include="src\api\GetTagsService\Netease.cs" />
+    <Compile Include="src\api\GetTagsService\Qobuz.cs" />
+    <Compile Include="src\api\GetTagsService\QQ.cs" />
+    <Compile Include="src\api\GetTagsService\Spotify.cs" />
+    <Compile Include="src\api\GetTagsService\Tidal.cs" />
+    <Compile Include="src\api\GetLyricsService\ChartLyrics.cs" />
+    <Compile Include="src\api\GetLyricsService\LoloLyrics.cs" />
+    <Compile Include="src\api\GetLyricsService\Netease.cs" />
+    <Compile Include="src\api\GetLyricsService\Xiami.cs" />
     <Compile Include="src\WriteTags.cs">
       <SubType>Form</SubType>
     </Compile>
