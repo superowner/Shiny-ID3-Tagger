@@ -51,3 +51,12 @@
 - [ ] Add auto update
 - [ ] Add UI for setting of the application
 - [ ] Add **option** to choose from tags service manully for each file
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+ | <img src="https://avatars1.githubusercontent.com/u/21058782?v=2" width="100"><br /><b>[ShinyId3Tagger](https://github.com/ShinyId3Tagger)</b> | <img src="https://avatars3.githubusercontent.com/u/16746759?v=3" width="100px;"/><br/><b>[Raz Luvaton](https://github.com/rluvaton)</b>
+ |  ----- | ----- |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
