@@ -4,12 +4,11 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Gets ID3 data from MusixMatch API for current track</summary>
-// https://developer.musixmatch.com/documentation/api-reference/track-search
+// https://developer.musixmatch.com/documentation/api-reference/matcher-track-get
 // https://developer.musixmatch.com/documentation/input-parameters
 // Only 1000 hits per day. Since 3 calls per file are needed, you can only search for 333 files a day. That's not much
 //-----------------------------------------------------------------------
 
-// TODO: Review the whole method. One year ago the old code got 29 correct hits out of 58 (oldies folder). Now its only 6. Maybe sort by track_rating or first_release_date
 namespace GetTags
 {
 	using System;
@@ -43,19 +42,19 @@ namespace GetTags
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/track.search?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&apikey=" + (string)account["ApiKey"]);
+				searchRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&apikey=" + (string)account["ApiKey"]);
 
 				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData?.SelectToken("message.body.track_list[0].track") != null)
+				if (searchData?.SelectToken("message.body.track") != null)
 				{
-					o.Artist = (string)searchData.SelectToken("message.body.track_list[0].track.artist_name");
-					o.Title = (string)searchData.SelectToken("message.body.track_list[0].track.track_name");
-					o.Album = (string)searchData.SelectToken("message.body.track_list[0].track.album_name");
-					o.Genre = (string)searchData.SelectToken("message.body.track_list[0].track.primary_genres.music_genre_list[0].music_genre.music_genre_name");
+					o.Artist = (string)searchData.SelectToken("message.body.track.artist_name");
+					o.Title = (string)searchData.SelectToken("message.body.track.track_name");
+					o.Album = (string)searchData.SelectToken("message.body.track.album_name");
+					o.Genre = (string)searchData.SelectToken("message.body.track.primary_genres.music_genre_list[0].music_genre.music_genre_name");
 
-					string albumid = (string)searchData.SelectToken("message.body.track_list[0].track.album_id");
+					string albumid = (string)searchData.SelectToken("message.body.track.album_id");
 
 					// ###########################################################################
 					using (HttpRequestMessage albumRequest = new HttpRequestMessage())
