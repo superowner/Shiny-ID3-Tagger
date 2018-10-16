@@ -59,7 +59,7 @@ namespace GlobalNamespace
 		private async void StartSearching(CancellationToken cancelToken)
 		{
 			// Prepare visual stuff like disable buttons during work, show two progress bars
-			this.EnableUI(false);
+			this.Form_EnableUI(false);
 
 			this.slowProgressBar.Maximum = this.dataGridView1.Rows.Count;
 			this.slowProgressBar.Value = 0;
@@ -207,17 +207,17 @@ namespace GlobalNamespace
 							}
 
 							// Color cells green, yellow or red according to Levenshtein and allowedEditPercent setting
-							this.MarkChange(row.Index, this.artist1.Index, tagOld.Artist, tagNew.Artist, true);
-							this.MarkChange(row.Index, this.title1.Index, tagOld.Title, tagNew.Title, true);
-							this.MarkChange(row.Index, this.album1.Index, tagOld.Album, tagNew.Album, true);
-							this.MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date, false);
-							this.MarkChange(row.Index, this.genre1.Index, tagOld.Genre, tagNew.Genre, true);
-							this.MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount, false);
-							this.MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber, false);
-							this.MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount, false);
-							this.MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber, false);
-							this.MarkChange(row.Index, this.lyrics1.Index, tagOld.Lyrics, tagNew.Lyrics, false);
-							this.MarkChange(row.Index, this.cover1.Index, tagOld.Cover, tagNew.Cover, false);
+							this.DataGridView_MarkChange(row.Index, this.artist1.Index, tagOld.Artist, tagNew.Artist, true);
+							this.DataGridView_MarkChange(row.Index, this.title1.Index, tagOld.Title, tagNew.Title, true);
+							this.DataGridView_MarkChange(row.Index, this.album1.Index, tagOld.Album, tagNew.Album, true);
+							this.DataGridView_MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date, false);
+							this.DataGridView_MarkChange(row.Index, this.genre1.Index, tagOld.Genre, tagNew.Genre, true);
+							this.DataGridView_MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount, false);
+							this.DataGridView_MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber, false);
+							this.DataGridView_MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount, false);
+							this.DataGridView_MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber, false);
+							this.DataGridView_MarkChange(row.Index, this.lyrics1.Index, tagOld.Lyrics, tagNew.Lyrics, false);
+							this.DataGridView_MarkChange(row.Index, this.cover1.Index, tagOld.Cover, tagNew.Cover, false);
 
 							sw.Stop();
 							tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
@@ -263,7 +263,7 @@ namespace GlobalNamespace
 			this.slowProgressBar.Visible = false;
 			this.fastProgressBar.Visible = false;
 
-			this.EnableUI(true);
+			this.Form_EnableUI(true);
 		}
 
 		// ###########################################################################

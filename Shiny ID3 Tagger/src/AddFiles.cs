@@ -30,7 +30,7 @@ namespace GlobalNamespace
 		private async Task<bool> AddFiles(string[] newFiles, CancellationToken cancelToken)
 		{
 			// Work starts, disable all buttons to prevent side effects when user clicks them despite an already running task
-			this.EnableUI(false);
+			this.Form_EnableUI(false);
 
 			// If no files were passed through command line, open a new file dialog. files can be an empty array, so use any() to check this
 			if (newFiles == null || !newFiles.Any())
@@ -128,7 +128,7 @@ namespace GlobalNamespace
 			// Work finished, re-enable all buttons and hide progress bar
 			this.slowProgressBar.Visible = false;
 
-			this.EnableUI(true);
+			this.Form_EnableUI(true);
 
 			// Report to parent method if any new files were added
 			return fileTable.Any();
@@ -156,8 +156,8 @@ namespace GlobalNamespace
 							using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mp3", TagLib.ReadStyle.None))
 							{
 								string filename = Path.GetFileNameWithoutExtension(filepath);
-								string[] artistChoices = new string[] { null, null, filename };
-								string[] titleChoices = new string[] { null, null, filename };
+								string[] artistChoices = new[] { null, null, filename };
+								string[] titleChoices = new[] { null, null, filename };
 
 								foreach (string pattern in User.Settings["FilenamePatterns"])
 								{
