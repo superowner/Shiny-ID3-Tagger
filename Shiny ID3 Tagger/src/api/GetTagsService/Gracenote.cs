@@ -13,6 +13,7 @@ namespace GetTags
 {
 	using System;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Net.Http;
 	using System.Text.RegularExpressions;
 	using System.Threading;
@@ -39,40 +40,87 @@ namespace GetTags
 				searchRequest.Method = HttpMethod.Post;
 				searchRequest.RequestUri = new Uri("https://c123.web.cddbp.net/webapi/xml/1.0/");
 				searchRequest.Content = new StringContent(@"
-						<QUERIES>
-							<AUTH>
-								<CLIENT>" + User.Accounts["Gracenote"]["ClientId"] + @"</CLIENT>
-								<USER>" + User.Accounts["Gracenote"]["UserId"] + @"</USER>
-							</AUTH>
-							<LANG>eng</LANG>
-							<QUERY CMD=""ALBUM_SEARCH"">
-								<MODE>SINGLE_BEST_COVER</MODE>
-								<TEXT TYPE=""ARTIST"">" + artistTemp + @"</TEXT>
-								<TEXT TYPE=""TRACK_TITLE"">" + titleTemp + @"</TEXT>
-								<OPTION>
-									<PARAMETER>COVER_SIZE</PARAMETER>
-									<VALUE>LARGE,XLARGE,MEDIUM,SMALL,THUMBNAIL</VALUE>
-								</OPTION>
-							</QUERY>
-						</QUERIES>");
+					<QUERIES>
+						<AUTH>
+							<CLIENT>" + User.Accounts["Gracenote"]["ClientId"] + @"</CLIENT>
+							<USER>" + User.Accounts["Gracenote"]["UserId"] + @"</USER>
+						</AUTH>
+						<LANG>eng</LANG>
+						<QUERY CMD=""ALBUM_SEARCH"">
+							<TEXT TYPE=""ARTIST"">" + artistTemp + @"</TEXT>
+							<TEXT TYPE=""TRACK_TITLE"">" + titleTemp + @"</TEXT>
+							<RANGE>
+								<START>1</START>
+								<END>3</END>
+							</RANGE>
+						</QUERY>
+					</QUERIES>");
 
 				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
-				if (searchData?.SelectToken("RESPONSES.RESPONSE") != null)
+				if (searchData?.SelectToken("RESPONSES.RESPONSE.ALBUM") != null)
 				{
-					if (searchData.SelectToken("RESPONSES.RESPONSE") != null)
+					JToken album = searchData.SelectToken("RESPONSES.RESPONSE.ALBUM");
+
+					// album can be an array of objects (=multiple albums returned) or just an object (=just one album returned)
+					if (album is JArray)
 					{
-						o.Artist = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.ARTIST");
-						o.Title = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.TRACK.TITLE");
-						o.Album = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.TITLE");
-						o.Date = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.DATE");
-						o.Genre = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.GENRE.#text");
-						o.DiscCount = null;
-						o.DiscNumber = null;
-						o.TrackCount = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.TRACK_COUNT");
-						o.TrackNumber = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.MATCHED_TRACK_NUM");
-						o.Cover = (string)searchData.SelectToken("RESPONSES.RESPONSE.ALBUM.URL.#text");
+						// Sort all albums by date, take the oldest one
+						JToken oldestAlbum = (from albumItem in album
+												where albumItem.SelectToken("DATE") != null
+												orderby Utils.ConvertStringToDate((string)albumItem["DATE"]) ascending
+												select albumItem).FirstOrDefault();
+
+						// If none of the albums have a "DATE" value, then oldestAlbum will be null. Take the first album then
+						album = oldestAlbum ?? album.FirstOrDefault();
+					}
+
+					o.Artist = (string)album.SelectToken("ARTIST");
+					o.Title = (string)album.SelectToken("TITLE");
+					o.Album = (string)album.SelectToken("TITLE");
+					o.Date = (string)album.SelectToken("DATE");
+					o.Genre = (string)album.SelectToken("GENRE.#text");
+					o.DiscCount = null;
+					o.DiscNumber = null;
+					o.TrackCount = (string)album.SelectToken("TRACK_COUNT");
+					o.TrackNumber = (string)album.SelectToken("MATCHED_TRACK_NUM");
+
+					// Additional query just for the cover (cover like you only get a cover when using SINGLE_BEST or SINGLE_BEST_COVER or ALBUM_FETCH)
+					if (album.SelectToken("GN_ID") != null)
+					{
+						using (HttpRequestMessage albumRequest = new HttpRequestMessage())
+						{
+							albumRequest.Method = HttpMethod.Post;
+							albumRequest.RequestUri = new Uri("https://c123.web.cddbp.net/webapi/xml/1.0/");
+							albumRequest.Content = new StringContent(@"
+								<QUERIES>
+									<AUTH>
+										<CLIENT>" + User.Accounts["Gracenote"]["ClientId"] + @"</CLIENT>
+										<USER>" + User.Accounts["Gracenote"]["UserId"] + @"</USER>
+									</AUTH>
+									<LANG>eng</LANG>
+									<QUERY CMD=""ALBUM_FETCH"">
+										<GN_ID>" + album.SelectToken("GN_ID") + @"</GN_ID>
+										<OPTION>
+											<PARAMETER>SELECT_EXTENDED</PARAMETER>
+											<VALUE>COVER</VALUE>
+										</OPTION>
+										<OPTION>
+											<PARAMETER>COVER_SIZE</PARAMETER>
+											<VALUE>XLARGE,LARGE,MEDIUM,SMALL</VALUE>
+										</OPTION>
+									</QUERY>
+								</QUERIES>");
+
+							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							JObject albumData = Utils.DeserializeJson(Utils.ConvertXmlToJson(albumContent));
+
+							if (albumData != null)
+							{
+								o.Cover = (string)albumData.SelectToken("RESPONSES.RESPONSE.ALBUM.URL.#text");
+							}
+						}
 					}
 				}
 			}

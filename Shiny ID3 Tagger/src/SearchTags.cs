@@ -256,6 +256,7 @@ namespace GlobalNamespace
 			}
 			catch
 			{
+				// REVIEW: Find a better way to handle cancelation to get rid of this try-catch which makes it hard to find errors
 				// User pressed Cancel button. Nothing further to do
 			}
 

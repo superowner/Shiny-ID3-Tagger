@@ -40,6 +40,7 @@ namespace GetTags
 			sw.Start();
 
 			// ###########################################################################
+			// REVIEW: Since the forced switch to amazon.de instead of amazon.com the matches were going down by 50%
 			const string Server = "webservices.amazon.de";
 
 			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
