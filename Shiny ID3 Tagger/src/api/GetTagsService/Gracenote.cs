@@ -51,7 +51,7 @@ namespace GetTags
 							<TEXT TYPE=""TRACK_TITLE"">" + titleTemp + @"</TEXT>
 							<RANGE>
 								<START>1</START>
-								<END>3</END>
+								<END>2</END>
 							</RANGE>
 						</QUERY>
 					</QUERIES>");

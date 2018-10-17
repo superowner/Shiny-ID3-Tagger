@@ -69,7 +69,7 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>7418A269A84798E654D5165F66893116BFB2AEEE</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>7D98651336C87DC0DBF04E86D981304E7132D4E4</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestTimestampUrl>

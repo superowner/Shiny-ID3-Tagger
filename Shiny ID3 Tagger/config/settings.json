@@ -2,7 +2,7 @@
 	"Branch":  "develop",
 	"DebugLevel": 2,
 	"PreferTags": true,
-	"RemoveBrackets": true,
+	"RemoveVersion": true,
 	"RemoveFeaturing": true,
 	"OverwriteImage": true,
 	"AutoSearch": true,

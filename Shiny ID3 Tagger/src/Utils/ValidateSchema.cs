@@ -322,8 +322,8 @@ namespace Utils
 				  ""$id"": ""/properties/PreferTags"",
 				  ""type"": ""boolean""
 				},
-				""RemoveBrackets"": {
-				  ""$id"": ""/properties/RemoveBrackets"",
+				""RemoveVersion"": {
+				  ""$id"": ""/properties/RemoveVersion"",
 				  ""type"": ""boolean""
 				},
 				""RemoveFeaturing"": {
@@ -387,7 +387,7 @@ namespace Utils
 				""Branch"",
 				""DebugLevel"",
 				""PreferTags"",
-				""RemoveBrackets"",
+				""RemoveVersion"",
 				""RemoveFeaturing"",
 				""OverwriteImage"",
 				""AutoSearch"",
