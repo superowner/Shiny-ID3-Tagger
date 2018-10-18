@@ -289,6 +289,15 @@
       <Link>README.md</Link>
     </None>
     <None Include="app.config" />
+    <None Include="config\schemas\accounts.schema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="config\schemas\lastCommit.Schema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="config\schemas\settings.schema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="config\accounts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

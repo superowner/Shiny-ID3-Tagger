@@ -20,6 +20,7 @@ namespace Utils
 		{
 			// Path for user settings file
 			string settingsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.json";
+			string settingsSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\settings.schema.json";
 
 			try
 			{
@@ -27,7 +28,7 @@ namespace Utils
 				string settingsJson = File.ReadAllText(settingsConfigPath);
 
 				// Validate settings config. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
-				ValidateSchema(settingsJson, settingsSchemaStr);
+				ValidateSchema(settingsJson, settingsSchemaPath);
 
 				// Save settings to JObject for later access throughout the program
 				User.Settings = JObject.Parse(settingsJson);

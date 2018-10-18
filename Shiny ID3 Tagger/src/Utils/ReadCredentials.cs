@@ -20,8 +20,10 @@ namespace Utils
 	{
 		internal static void ReadCredentials()
 		{
+			// TODO: Use accounts_plain.json if present, skip decrypting then
 			// Path for user credentials file
 			string accountsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.json";
+			string accountsSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\accounts.schema.json";
 
 			try
 			{
@@ -38,7 +40,7 @@ namespace Utils
 				string accountsJson = Encoding.UTF8.GetString(decryptedBytes);
 
 				// Validate credentials. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
-				ValidateSchema(accountsJson, accountsSchemaStr);
+				ValidateSchema(accountsJson, accountsSchemaPath);
 
 				// Save credentials as JObject for later access throughout the program
 				User.Accounts = JObject.Parse(accountsJson);

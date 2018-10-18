@@ -34,6 +34,7 @@ namespace Utils
 			// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)lastCommit.json"
 			// Read command documentation: https://git-scm.com/docs/git-show
 			string lastCommitPath = AppDomain.CurrentDomain.BaseDirectory + @"lastCommit.json";
+			string lastCommitSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.schema.json";
 
 			try
 			{
@@ -41,7 +42,7 @@ namespace Utils
 				string lastCommitJson = File.ReadAllText(lastCommitPath);
 
 				// Validate lastCommit.json. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
-				ValidateSchema(lastCommitJson, lastCommitSchemaStr);
+				ValidateSchema(lastCommitJson, lastCommitSchemaPath);
 
 				// Save last commit to JObject for later access throughout the program
 				JObject lastCommitData = JObject.Parse(lastCommitJson);

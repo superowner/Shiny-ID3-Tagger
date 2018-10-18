@@ -1,0 +1,97 @@
+﻿{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"$id": "https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/settingsSchema.json",
+	"type": "object",
+	"properties": {
+		"Branch": {
+			"$id": "/properties/Branch",
+			"type": "string",
+			"enum": ["master", "develop"]
+		},
+		"DebugLevel": {
+			"$id": "/properties/DebugLevel",
+			"type": "integer"
+		},
+		"PreferTags": {
+			"$id": "/properties/PreferTags",
+			"type": "boolean"
+		},
+		"RemoveVersion": {
+			"$id": "/properties/RemoveVersion",
+			"type": "boolean"
+		},
+		"RemoveFeaturing": {
+			"$id": "/properties/RemoveFeaturing",
+			"type": "boolean"
+		},
+		"OverwriteImage": {
+			"$id": "/properties/OverwriteImage",
+			"type": "boolean"
+		},
+		"AutoSearch": {
+			"$id": "/properties/AutoSearch",
+			"type": "boolean"
+		},
+		"AutoCapitalize": {
+			"$id": "/properties/AutoCapitalize",
+			"type": "boolean"
+		},
+		"ThresholdRedValue": {
+			"$id": "/properties/ThresholdRedValue",
+			"type": "integer"
+		},
+		"MaxImageSize": {
+			"$id": "/properties/MaxImageSize",
+			"type": "integer"
+		},
+		"UserAgent": {
+			"$id": "/properties/UserAgent",
+			"type": "string"
+		},
+		"FilenamePatterns": {
+			"$id": "/properties/FilenamePatterns",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$id": "/properties/FilenamePatterns/items",
+				"type": "string"
+			}
+		},
+		"CoverPriority": {
+			"$id": "/properties/CoverPriority",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$id": "/properties/CoverPriority/items",
+				"type": "string"
+			}
+		},
+		"LyricsPriority": {
+			"$id": "/properties/LyricsPriority",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$id": "/properties/LyricsPriority/items",
+				"type": "string"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": [
+		"Branch",
+		"DebugLevel",
+		"PreferTags",
+		"RemoveVersion",
+		"RemoveFeaturing",
+		"OverwriteImage",
+		"AutoSearch",
+		"AutoCapitalize",
+		"ThresholdRedValue",
+		"MaxImageSize",
+		"UserAgent",
+		"FilenamePatterns",
+		"CoverPriority",
+		"LyricsPriority"
+	]
+}
