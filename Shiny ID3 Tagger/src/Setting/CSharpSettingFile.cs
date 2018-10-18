@@ -1,36 +1,37 @@
 ﻿namespace Shiny_ID3_Tagger.Setting
 {
     using System;
+    using Newtonsoft.Json.Linq;
 
-    public class CSharpSettingFile : ISetting
+    public class CSharpSettingFile : BaseSetting
     {
-        private global::System.Configuration.ApplicationSettingsBase _setting;
-        private dynamic _defaultSettings;
+        private System.Configuration.ApplicationSettingsBase setting;
 
-        public CSharpSettingFile(global::System.Configuration.ApplicationSettingsBase setting, dynamic defaultSetting)
+        public CSharpSettingFile(System.Configuration.ApplicationSettingsBase setting, JObject defaultSetting)
+            : base(defaultSetting)
         {
-            this._setting = setting ?? throw new ArgumentException(@"Setting Can't be null", nameof(setting));
-            this._defaultSettings = defaultSetting;
+            this.setting = setting ?? throw new ArgumentException(@"Setting Can't be null", nameof(setting));
         }
 
-        public dynamic GetValue(string key)
+        public override dynamic GetValue(string key)
         {
-            return this._setting.Context[key];
+            return this.setting.Context[key];
         }
 
-        public bool SetValue(string key, dynamic value)
+        public override bool SetValue(string key, dynamic value)
         {
-            this._setting.Context[key] = value;
+            this.setting.Context[key] = value;
+            this.setting.Save();
             return true;
         }
 
-        public bool RemoveKey(string key)
+        public override bool RemoveKey(string key)
         {
-            this._setting.Context.Remove(key);
+            this.setting.Context.Remove(key);
             return true;
         }
 
-        public void ResetToDefault()
+        public override void ResetToDefault()
         {
             throw new System.NotImplementedException();
         }
