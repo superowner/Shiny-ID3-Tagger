@@ -43,6 +43,10 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #####                   THIRD PARTY LICENSES (for RESTful APIs)         #####
 #############################################################################
 
+- Apiseeds              Custom license                        https://apiseeds.com/documentation/lyrics
+                        => Selling: ???                       No terms of condition can be found
+                        => Public access: ???
+
 - 7digital              Custom license                        http://developer.7digital.com/content/api-terms-conditions
                         => Selling: No
                         => Public access: ???
@@ -51,7 +55,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
                         => Selling: No                        Under "Section 4-m" it does not allow reselling
                         => Public access: ???
 
-- Chartlyrics            Custom license                       http://www.chartlyrics.com/api.aspx
+- Chartlyrics           Custom license                        http://www.chartlyrics.com/api.aspx
                         => Selling: No                        Under "TERMS OF USE" using the API is only for non-commercial use
                         => Publishing: Yes
 
@@ -87,17 +91,9 @@ OR OTHER DEALINGS IN THE SOFTWARE.
                         => Selling: No                        Under 4.3.3 "License to use the Last.fm Data" it's not allowed to sub-license Last.fm Data
                         => Public access: Yes                 Under 4.1 "License to use the Last.fm Data" publishing is allowed
 
-- Microsoft Groove      Custom license                        https://msdn.microsoft.com/en-us/library/dn546691.aspx
-                        => Selling: No                        Under "4. CODE OF CONDUCT / RESTRICTIONS ON US?" point (f) commercializing is not allowed
-                        => Public access: ???
-
 - Musicbrainz           Creative Commons license (CC0)        https://wiki.musicbrainz.org/About/Data_License
                         => Selling: Yes                       No restrictions on what you can do with it
                         => Public access: Yes
-
-- Musicgraph            Custom license                        https://developer.musicgraph.com/policies
-                        => Selling: No                        Under "2.LICENSE GRANT/SCOPE" point (d) Licensee shall not copy, re-sell [...] provide access to third parties
-                        => Public access: ???
 
 - Musixmatch            Custom license                        https://about.musixmatch.com/apiterms/
                         => Selling: No                        Under 6.1.3 "GRANT OF RIGHTS" for non-commercial purposes only

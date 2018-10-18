@@ -3,7 +3,7 @@
 
 ![Main window](https://cloud.githubusercontent.com/assets/21058782/20148484/28893abe-a6ad-11e6-9941-ab1dfded8c24.png)
 
-## Currently supported webservices to query data
+## Currently supported webservices to query ID3 data
 - **7digital**
 - **Amazon**
 - **Decibel**
@@ -21,10 +21,14 @@
 - **QQ**
 - **Spotify**
 - **Tidal**
-- **Chartlyrics** (only for lyrics)
-- **Lololyrics** (only for lyrics)
-- **Viewlyrics** (only for lyrics)
-- **Xiami** (only for lyrics)
+
+## Currently supported webservices to query lyrics
+- **Apiseeds**
+- **Chartlyrics**
+- **Lololyrics**
+- **Netease**
+- **Viewlyrics**
+- **Xiami**
 
 ## Key Features
 - Queries 17 databases and selects/adds the most frequent results for
