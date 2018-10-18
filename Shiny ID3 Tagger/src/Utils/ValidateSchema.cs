@@ -16,6 +16,7 @@ namespace Utils
 	using Newtonsoft.Json.Linq;
 	using Newtonsoft.Json.Schema;
 
+	// TODO: Move all schemas to seperate json files and read them in
 	internal partial class Utils
 	{
 		#region schema for accounts.json
@@ -73,6 +74,19 @@ namespace Utils
 				""AssociateTag"",
 				""AccessKey"",
 				""SecretKey""
+			  ]
+			},
+			""Apiseeds"": {
+			  ""$id"": ""/properties/Apiseeds"",
+			  ""type"": ""object"",
+			  ""properties"": {
+				""ApiKey"": {
+				  ""$id"": ""/properties/Apiseeds/properties/ApiKey"",
+				  ""type"": ""string""
+				}
+			  },
+			  ""required"": [
+				""ApiKey""
 			  ]
 			},
 			""Decibel"": {

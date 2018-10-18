@@ -133,6 +133,7 @@
     <Compile Include="src\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="src\api\GetLyricsService\Apiseeds.cs" />
     <Compile Include="src\api\GetTagsService\Amazon.cs" />
     <Compile Include="src\api\GetTagsService\Decibel.cs" />
     <Compile Include="src\api\GetTagsService\IGetTagsService.cs" />

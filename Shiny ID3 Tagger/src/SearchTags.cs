@@ -27,11 +27,12 @@ namespace GlobalNamespace
 	{
 		private List<IGetLyricsService> lyricsServices = new List<IGetLyricsService>
 		{
-			new GetLyrics.ChartLyrics(),
-			new GetLyrics.LoloLyrics(),
-			new GetLyrics.Netease(),
-			new GetLyrics.ViewLyrics(),
-			new GetLyrics.Xiami()
+			new GetLyrics.Apiseeds(),
+			//new GetLyrics.ChartLyrics(),
+			//new GetLyrics.LoloLyrics(),
+			//new GetLyrics.Netease(),
+			//new GetLyrics.ViewLyrics(),
+			//new GetLyrics.Xiami()
 		};
 
 		private List<IGetTagsService> tagsServices = new List<IGetTagsService>
