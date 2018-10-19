@@ -6,7 +6,7 @@
 // <summary>Uses the main token source to signalize all running tasks to cancel their work and return to main method</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Windows.Forms;

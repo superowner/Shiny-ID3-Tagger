@@ -6,7 +6,7 @@
 // <summary>Show cancel button as long as slow progress bar is visible. Hide cancel button if not</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Windows.Forms;

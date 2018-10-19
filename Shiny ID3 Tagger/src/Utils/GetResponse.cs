@@ -14,8 +14,8 @@ namespace Utils
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using GlobalNamespace;
 	using GlobalVariables;
+	using Shiny_ID3_Tagger;
 
 	internal partial class Utils
 	{

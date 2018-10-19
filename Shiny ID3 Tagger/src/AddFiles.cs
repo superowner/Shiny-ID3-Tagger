@@ -8,7 +8,7 @@
 // HowTo use Task.Run: https://blog.stephencleary.com/2013/08/taskrun-vs-backgroundworker-round-3.html
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Collections.Generic;

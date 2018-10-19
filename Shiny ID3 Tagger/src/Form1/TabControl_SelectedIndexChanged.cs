@@ -6,7 +6,7 @@
 // <summary>Helper to set variable "ActiveDGV" accordingly to the active tab (datagridview)</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Windows.Forms;

@@ -6,7 +6,7 @@
 // <summary>Opens a file selection window when pressing "Add files" button</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Threading;

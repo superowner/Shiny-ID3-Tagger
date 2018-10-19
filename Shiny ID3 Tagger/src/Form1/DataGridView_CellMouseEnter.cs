@@ -6,7 +6,7 @@
 // <summary>Highlights currently selected row/rows</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Drawing;

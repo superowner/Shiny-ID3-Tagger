@@ -7,7 +7,7 @@
 // https://stackoverflow.com/a/3508572/935614
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Globalization;

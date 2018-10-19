@@ -6,7 +6,7 @@
 // <summary>Starts main routine "WriteTags" for writing all results to files</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Windows.Forms;

@@ -6,7 +6,7 @@
 // <summary>Starts browser which is associated with URLs when clicking on them</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System.Diagnostics;
 	using System.Windows.Forms;

@@ -6,7 +6,7 @@
 // <summary>Exports a CSV file</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Collections.Generic;

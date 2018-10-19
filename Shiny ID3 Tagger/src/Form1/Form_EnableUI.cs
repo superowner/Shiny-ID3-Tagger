@@ -6,7 +6,7 @@
 // <summary>Enables or disables UI elements which could potentially interrupt add/search/write methods</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	public partial class Form1
 	{

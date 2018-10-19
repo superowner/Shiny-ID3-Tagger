@@ -7,7 +7,7 @@
 // https://stackoverflow.com/questions/334630/opening-a-folder-in-explorer-and-selecting-a-file
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Diagnostics;

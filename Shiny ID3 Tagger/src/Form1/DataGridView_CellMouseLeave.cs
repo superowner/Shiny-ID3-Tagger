@@ -6,7 +6,7 @@
 // <summary>De-highlights rows after they aren't selected anymore. Opposing method to "DataGridView_CellMouseEnter"</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Drawing;

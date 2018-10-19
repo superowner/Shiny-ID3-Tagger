@@ -6,7 +6,7 @@
 // <summary>Clears log and results from all dataGridViews</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Windows.Forms;

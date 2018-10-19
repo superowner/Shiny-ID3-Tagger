@@ -6,7 +6,7 @@
 // <summary>Code fired when "Search tags" button is clicked. Calls all APIs and presents their results</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Collections.Generic;

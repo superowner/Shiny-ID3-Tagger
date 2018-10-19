@@ -6,7 +6,7 @@
 // <summary>Starts main routine "SearchTags" for querying all APIs</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Threading;

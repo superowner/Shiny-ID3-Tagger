@@ -11,8 +11,8 @@ namespace Utils
 	using System;
 	using System.IO;
 	using System.Linq;
-	using GlobalNamespace;
 	using GlobalVariables;
+	using Shiny_ID3_Tagger;
 
 	internal partial class Utils
 	{

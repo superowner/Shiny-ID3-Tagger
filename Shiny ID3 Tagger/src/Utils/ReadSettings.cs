@@ -10,9 +10,9 @@ namespace Utils
 {
 	using System;
 	using System.IO;
-	using GlobalNamespace;
 	using GlobalVariables;
 	using Newtonsoft.Json.Linq;
+	using Shiny_ID3_Tagger;
 
 	internal partial class Utils
 	{

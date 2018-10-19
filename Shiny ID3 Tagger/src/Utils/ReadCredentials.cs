@@ -12,9 +12,9 @@ namespace Utils
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
-	using GlobalNamespace;
 	using GlobalVariables;
 	using Newtonsoft.Json.Linq;
+	using Shiny_ID3_Tagger;
 
 	internal partial class Utils
 	{

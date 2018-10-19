@@ -14,9 +14,9 @@ namespace Utils
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
-	using GlobalNamespace;
 	using GlobalVariables;
 	using Newtonsoft.Json.Linq;
+	using Shiny_ID3_Tagger;
 
 	internal partial class Utils
 	{

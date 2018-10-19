@@ -6,7 +6,7 @@
 // <summary>Starts the external program associated with mp3 files</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Diagnostics;

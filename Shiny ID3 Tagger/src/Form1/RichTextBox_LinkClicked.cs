@@ -6,7 +6,7 @@
 // <summary>Start default browser when clicking links in rich text boxes (search, write, error log)</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System.Diagnostics;
 	using System.Windows.Forms;

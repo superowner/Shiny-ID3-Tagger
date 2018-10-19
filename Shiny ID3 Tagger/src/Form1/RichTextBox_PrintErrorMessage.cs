@@ -6,7 +6,7 @@
 // <summary>Outputs a given log message to it's corresponding richTextBox</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Drawing;

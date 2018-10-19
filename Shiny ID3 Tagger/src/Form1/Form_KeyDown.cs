@@ -6,7 +6,7 @@
 // <summary>Cancels all running tasks when pressing ESC key</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System.Windows.Forms;
 	using GlobalVariables;

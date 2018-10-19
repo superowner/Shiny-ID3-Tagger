@@ -6,7 +6,7 @@
 // <summary>Code executed when program starts. Assures that only one instance is running</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Collections.Generic;

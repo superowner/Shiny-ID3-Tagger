@@ -2,7 +2,7 @@
 
 using GlobalVariables;
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	partial class Form1
 	{

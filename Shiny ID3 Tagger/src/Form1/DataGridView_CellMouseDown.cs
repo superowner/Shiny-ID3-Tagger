@@ -6,7 +6,7 @@
 // <summary>Selects a new row if right clicking on a row which is not already selected</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Windows.Forms;

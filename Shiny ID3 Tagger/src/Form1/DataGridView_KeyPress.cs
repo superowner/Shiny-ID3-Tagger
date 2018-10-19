@@ -6,7 +6,7 @@
 // <summary>Clears a selected row/rows when pressing ESC key</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Windows.Forms;

@@ -6,7 +6,7 @@
 // <summary>Remove all selected rows from active datagridview when using the context menu "Remove lines"</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Windows.Forms;

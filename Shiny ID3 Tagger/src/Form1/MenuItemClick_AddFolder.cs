@@ -6,7 +6,7 @@
 // <summary>Opens a Ookii folder selection window when using menu item "Add directory"</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Threading;

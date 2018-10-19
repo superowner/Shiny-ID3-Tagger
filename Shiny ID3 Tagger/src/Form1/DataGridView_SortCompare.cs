@@ -6,7 +6,7 @@
 // <summary>Custom sort rules when sorting datagridview columns. tries to convert string to dates or integers</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Globalization;

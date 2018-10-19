@@ -6,7 +6,7 @@
 // <summary>Inserts green, yellow or red as cell background color if a cell was changed</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Drawing;

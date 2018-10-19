@@ -7,7 +7,7 @@
 // https://stackoverflow.com/questions/32154847/how-do-you-draw-a-border-around-a-datagridview-cell-while-its-being-edited/32170212#32170212
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System.Drawing;
 	using System.Windows.Forms;

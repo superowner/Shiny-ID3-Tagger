@@ -7,7 +7,7 @@
 // https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Collections.Generic;
