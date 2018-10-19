@@ -28,11 +28,11 @@ namespace GlobalNamespace
 		private List<IGetLyricsService> lyricsServices = new List<IGetLyricsService>
 		{
 			new GetLyrics.Apiseeds(),
-			//new GetLyrics.ChartLyrics(),
-			//new GetLyrics.LoloLyrics(),
-			//new GetLyrics.Netease(),
-			//new GetLyrics.ViewLyrics(),
-			//new GetLyrics.Xiami()
+			new GetLyrics.ChartLyrics(),
+			new GetLyrics.LoloLyrics(),
+			new GetLyrics.Netease(),
+			new GetLyrics.ViewLyrics(),
+			new GetLyrics.Xiami()
 		};
 
 		private List<IGetTagsService> tagsServices = new List<IGetTagsService>
@@ -255,9 +255,8 @@ namespace GlobalNamespace
 					}
 				}
 			}
-			catch
+			catch (OperationCanceledException)
 			{
-				// REVIEW: Find a better way to handle cancelation to get rid of this try-catch which makes it hard to find errors
 				// User pressed Cancel button. Nothing further to do
 			}
 

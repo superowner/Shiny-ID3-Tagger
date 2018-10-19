@@ -3,7 +3,7 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Retrieves track lyrics from audd.io</summary>
+// <summary>Retrieves track lyrics from apiseeds.com</summary>
 // https://apiseeds.com/account/dashboard
 // https://apiseeds.com/documentation/lyrics
 // IMPORTANT: Can only do 20.000 calls per month
@@ -40,7 +40,7 @@ namespace GetLyrics
 				searchRequest.RequestUri = new Uri("https://orion.apiseeds.com/api/music/lyric/" +
 					artistEncoded + "/" + titleEncoded + "?apikey=" + (string)User.Accounts["Apiseeds"]["ApiKey"]);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 }, customTimeout: 2);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("result.track.text") != null)

@@ -3,7 +3,7 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Executes all API requests. Has a built-in retry handler and a logger</summary>
+// <summary>Executes all API requests. Has a built-in retry handler and error logger</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -24,11 +24,12 @@ namespace Utils
 			HttpRequestMessage request,
 			CancellationToken cancelToken,
 			bool returnByteArray = false,
-			int[] suppressedStatusCodes = null)
+			int[] suppressedStatusCodes = null,
+			int? customTimeout = null)
 		{
-			const int timeout = 15;
 			const int maxRetries = 3;
 			const int retryDelay = 2;
+			int timeout = customTimeout ?? 15;
 
 			dynamic result = null;
 			HttpResponseMessage response = new HttpResponseMessage();
@@ -65,9 +66,6 @@ namespace Utils
 
 					response = await client.SendAsync(request, timeoutToken.Token);
 
-					// Some APIs return a status code like 404 (=Not found) when trying to access a resource which doesn't exist
-					// All other APIs return a status code of 200 (=OK) and add an info/warning in the response body itself
-
 					// Check if the returned status code is within a call-specific array of codes to suppress
 					// These are common errors i.e. when a lyric doesn't exist. Don't log these errors
 					if (suppressedStatusCodes != null && suppressedStatusCodes.Contains((int)response.StatusCode))
@@ -78,7 +76,7 @@ namespace Utils
 					// Response was successful. Read content from response and return content
 					if (response.IsSuccessStatusCode)
 					{
-						// Usually just return a string. But edge cases like viewLyrics module need a byte array
+						// In most cases we return a string. But the viewLyrics module needs a byte array
 						if (returnByteArray)
 						{
 							result = await response.Content.ReadAsByteArrayAsync();
@@ -115,15 +113,19 @@ namespace Utils
 				}
 				catch (TaskCanceledException)
 				{
-					// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
-					// If debugging is enabled in settings, print out the request
-					if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 2)
+					// Don't log failed requests when a custom timeout is set (usually very short and often occuring)
+					if (customTimeout == null)
 					{
-						List<string> errorMsg = new List<string>
+						// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
+						// If debugging is enabled in settings, print out the request
+						if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 2)
+						{
+							List<string> errorMsg = new List<string>
 							{"WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..."};
-						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
-						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
+							Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
+						}
 					}
 
 					break;
