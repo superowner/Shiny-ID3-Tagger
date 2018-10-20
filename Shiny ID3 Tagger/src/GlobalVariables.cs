@@ -108,12 +108,4 @@ namespace GlobalVariables
 			return table;
 		}
 	}
-
-	internal class DataGridViewDoubleBuffered : DataGridView
-	{
-		internal DataGridViewDoubleBuffered()
-		{
-			this.DoubleBuffered = true;
-		}
-	}
 }

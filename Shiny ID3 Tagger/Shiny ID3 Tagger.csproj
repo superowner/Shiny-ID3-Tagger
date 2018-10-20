@@ -139,6 +139,9 @@
     <Compile Include="src\api\GetTagsService\IGetTagsService.cs" />
     <Compile Include="src\api\GetLyricsService\IGetLyricsService.cs" />
     <Compile Include="src\api\GetLyricsService\ViewLyrics.cs" />
+    <Compile Include="src\Form1\DataGridView_DoubleBuffered.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="src\Form1\Form_EnableUI.cs">
       <SubType>Form</SubType>
     </Compile>

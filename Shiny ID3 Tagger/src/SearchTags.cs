@@ -168,10 +168,8 @@ namespace Shiny_ID3_Tagger
 
 							foreach (DataRow r in apiResults.Rows)
 							{
-								string albumhit =
-									Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
-								string durationTotal =
-									Utils.IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
+								string albumhit = Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
+								string durationTotal = Utils.IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
 
 								this.dataGridView2.Rows.Add(
 									(this.dataGridView2.Rows.Count + 1).ToString(),
@@ -207,18 +205,19 @@ namespace Shiny_ID3_Tagger
 								}
 							}
 
-							// Color cells green, yellow or red according to Levenshtein and allowedEditPercent setting
+							// Mark changes in datagridView1: green = new value, yellow = minor change, red = big change
+							// Red is according to Levenshtein and allowedEditPercent setting
 							this.DataGridView_MarkChange(row.Index, this.artist1.Index, tagOld.Artist, tagNew.Artist, true);
 							this.DataGridView_MarkChange(row.Index, this.title1.Index, tagOld.Title, tagNew.Title, true);
 							this.DataGridView_MarkChange(row.Index, this.album1.Index, tagOld.Album, tagNew.Album, true);
-							this.DataGridView_MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date, false);
+							this.DataGridView_MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date);
 							this.DataGridView_MarkChange(row.Index, this.genre1.Index, tagOld.Genre, tagNew.Genre, true);
-							this.DataGridView_MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount, false);
-							this.DataGridView_MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber, false);
-							this.DataGridView_MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount, false);
-							this.DataGridView_MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber, false);
-							this.DataGridView_MarkChange(row.Index, this.lyrics1.Index, tagOld.Lyrics, tagNew.Lyrics, false);
-							this.DataGridView_MarkChange(row.Index, this.cover1.Index, tagOld.Cover, tagNew.Cover, false);
+							this.DataGridView_MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount);
+							this.DataGridView_MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber);
+							this.DataGridView_MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount);
+							this.DataGridView_MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber);
+							this.DataGridView_MarkChange(row.Index, this.lyrics1.Index, tagOld.Lyrics, tagNew.Lyrics);
+							this.DataGridView_MarkChange(row.Index, this.cover1.Index, tagOld.Cover, tagNew.Cover);
 
 							sw.Stop();
 							tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
@@ -243,10 +242,8 @@ namespace Shiny_ID3_Tagger
 								allApiDurationTotal ?? string.Empty,
 								string.Empty);
 
-							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index]
-								.ToolTipText = tagNew.Lyrics;
-							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor =
-								Color.Yellow;
+							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index].ToolTipText = tagNew.Lyrics;
+							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor = Color.Yellow;
 							this.dataGridView2.FirstDisplayedScrollingRowIndex = this.dataGridView2.RowCount - 1;
 							this.dataGridView2.ClearSelection();
 						}

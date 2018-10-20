@@ -45,10 +45,12 @@ namespace Shiny_ID3_Tagger
 					this.slowProgressBar.PerformStep();
 					string filepath = (string)row.Cells[this.filepath1.Index].Value;
 
-					// If file is a virtual file (CSV Import), cancel remaining work for this file and continue with next file
-					if ((bool)row.Cells[this.isVirtualFile.Index].Value)
+					// Cancel remaining work for this file and continue with next file, if
+					// - file is a virtual file from CSV Import
+					// - file has no new changes (this is to prevent empty ID3 tags)
+					var test = (bool)row.Cells[this.hasNewValues.Index].Value;
+					if ((bool)row.Cells[this.isVirtualFile.Index].Value || (bool)row.Cells[this.hasNewValues.Index].Value == false)
 					{
-						this.slowProgressBar.PerformStep();
 						continue;
 					}
 
@@ -66,10 +68,6 @@ namespace Shiny_ID3_Tagger
 
 						// Store all existing frames in a container which can be altered freely without actually touching the file
 						TagLib.Id3v2.Tag tagContainer = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
-
-						// TODO: Cancel if no existing ID3 tag AND no results from search were found
-						// TagLib.Id3v2.Tag id3v2 = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, false);
-						// if (id3v2 != null)
 
 						// Set ID3 version to ID3v2.3 which means we have to use UTF16 for all strings (a "4" would mean ID3v2.4 where UTF8 must be used)
 						tagContainer.Version = 3;

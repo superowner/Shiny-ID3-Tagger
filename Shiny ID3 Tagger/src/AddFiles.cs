@@ -216,6 +216,7 @@ namespace Shiny_ID3_Tagger
 									(tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(GlobalVariables.CultEng) : string.Empty,
 									tagFile.Tag.Lyrics ?? string.Empty,
 									tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty,
+									false,
 									false);
 
 								// Add new DataGridViewRow to a fileList which is returned later
