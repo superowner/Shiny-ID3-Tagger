@@ -48,8 +48,7 @@ namespace Shiny_ID3_Tagger
 					// Cancel remaining work for this file and continue with next file, if
 					// - file is a virtual file from CSV Import
 					// - file has no new changes (this is to prevent empty ID3 tags)
-					var test = (bool)row.Cells[this.hasNewValues.Index].Value;
-					if ((bool)row.Cells[this.isVirtualFile.Index].Value || (bool)row.Cells[this.hasNewValues.Index].Value == false)
+					if ((bool)row.Cells[this.isVirtualFile.Index].Value || (bool)row.Cells[this.hasNewValues.Index].EditedFormattedValue == false)
 					{
 						continue;
 					}

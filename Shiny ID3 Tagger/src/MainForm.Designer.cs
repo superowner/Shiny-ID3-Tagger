@@ -895,13 +895,13 @@ namespace Shiny_ID3_Tagger
 			// 
 			// hasNewValues
 			// 
-			this.hasNewValues.FalseValue = "false";
+			this.hasNewValues.FalseValue = "";
 			this.hasNewValues.HeaderText = "Save";
 			this.hasNewValues.MinimumWidth = 25;
 			this.hasNewValues.Name = "hasNewValues";
 			this.hasNewValues.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.hasNewValues.ToolTipText = "Save";
-			this.hasNewValues.TrueValue = "true";
+			this.hasNewValues.TrueValue = "";
 			this.hasNewValues.Width = 25;
 			// 
 			// Form1

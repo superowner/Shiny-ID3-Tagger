@@ -7,3 +7,6 @@ Shiny ID3 Tagger/obj/
 
 # Windows image file caches
 Thumbs.db
+
+# Certificate for code signing
+/Shiny ID3 Tagger/shinyid3tagger.pfx
