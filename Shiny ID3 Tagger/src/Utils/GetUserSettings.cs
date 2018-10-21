@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ReadSettings.cs" company="Shiny ID3 Tagger">
+// <copyright file="GetUserSettings.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -16,7 +16,7 @@ namespace Utils
 
 	internal partial class Utils
 	{
-		internal static void ReadSettings()
+		internal static void GetUserSettings()
 		{
 			// Path for user settings file
 			string settingsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.json";

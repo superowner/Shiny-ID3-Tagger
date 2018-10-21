@@ -37,6 +37,10 @@ namespace Shiny_ID3_Tagger
 			GlobalVariables.TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
+			// Get user settings and credentials
+			Utils.GetUserSettings();
+			Utils.GetUserAccounts();
+
 			// Continue only if user credentials and user settings are present
 			if (User.Accounts != null && User.Settings != null)
 			{
@@ -61,10 +65,6 @@ namespace Shiny_ID3_Tagger
 		{
 			base.OnShown(e);
 
-			// Get user settings and credentials
-			Utils.ReadSettings();
-			Utils.ReadCredentials();
-
 			// Update this program via Github
 			bool result = await Utils.DownloadClientFiles();
 
@@ -72,7 +72,9 @@ namespace Shiny_ID3_Tagger
 			GlobalVariables.ActiveDGV = this.dataGridView1;
 
 			// Read in command line arguments and pass them to main program
+			// First argument is always the path to program executable itself, skip it)
 			string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+
 			this.Form1Shown(args);
 		}
 	}

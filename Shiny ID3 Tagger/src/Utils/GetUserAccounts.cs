@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ReadCredentials.cs" company="Shiny ID3 Tagger">
+// <copyright file="GetUserAccounts.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -18,7 +18,7 @@ namespace Utils
 
 	internal partial class Utils
 	{
-		internal static void ReadCredentials()
+		internal static void GetUserAccounts()
 		{
 			// TODO: Use accounts_plain.json if present, skip decrypting then
 			// Path for user credentials file

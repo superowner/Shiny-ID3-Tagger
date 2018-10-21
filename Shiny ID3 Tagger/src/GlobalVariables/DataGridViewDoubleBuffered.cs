@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DataGridView_DoubleBuffered.cs" company="Shiny ID3 Tagger">
+// <copyright file="DataGridViewDoubleBuffered.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -8,11 +8,7 @@
 
 namespace Shiny_ID3_Tagger
 {
-	using System;
-	using System.Globalization;
 	using System.Windows.Forms;
-	using GlobalVariables;
-	using Utils;
 
 	public class DataGridViewDoubleBuffered : DataGridView
 	{

@@ -142,9 +142,12 @@
     <Compile Include="src\api\GetTagsService\IGetTagsService.cs" />
     <Compile Include="src\api\GetLyricsService\IGetLyricsService.cs" />
     <Compile Include="src\api\GetLyricsService\ViewLyrics.cs" />
-    <Compile Include="src\Form1\DataGridView_DoubleBuffered.cs">
+    <Compile Include="src\GlobalVariables\DataGridViewDoubleBuffered.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="src\GlobalVariables\User.cs" />
+    <Compile Include="src\GlobalVariables\Id3.cs" />
+    <Compile Include="src\GlobalVariables\ApiSessionData.cs" />
     <Compile Include="src\Form1\Form_EnableUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,9 +178,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Form1\DataGridView_CellContentClick.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\Form1\DataGridView_CellDoubleClick.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Form1\DataGridView_CellMouseDown.cs">
@@ -240,12 +240,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Utils\DownloadClientFiles.cs" />
-    <Compile Include="src\Utils\ReadCredentials.cs" />
-    <Compile Include="src\Utils\ReadSettings.cs" />
+    <Compile Include="src\Utils\GetUserAccounts.cs" />
+    <Compile Include="src\Utils\GetUserSettings.cs" />
     <Compile Include="src\Utils\Strip.cs" />
     <Compile Include="src\Utils\ValidateSchema.cs" />
     <Compile Include="src\Utils\WellFormedCsvValue.cs" />
-    <Compile Include="src\GlobalVariables.cs" />
+    <Compile Include="src\GlobalVariables\GlobalVariables.cs" />
     <Compile Include="src\SearchTags.cs">
       <SubType>Form</SubType>
     </Compile>
