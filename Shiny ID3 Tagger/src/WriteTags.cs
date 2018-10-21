@@ -244,13 +244,16 @@ namespace Shiny_ID3_Tagger
 			string newLyrics = (string)row.Cells[this.lyrics1.Index].Value;
 			if (oldLyrics != newLyrics && !string.IsNullOrWhiteSpace(newLyrics))
 			{
-				string lyricsSnippet = string.Join(string.Empty, newLyrics.Take(80));
-				lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
-				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
-				frmUSLT.Text = newLyrics;
+				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16)
+				{
+					Text = newLyrics
+				};
+
 				tagContainer.RemoveFrames("USLT");
 				tagContainer.AddFrame(frmUSLT);
 
+				string lyricsSnippet = string.Join(string.Empty, newLyrics.Take(80));
+				lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
 				this.PrintLogMessage(this.rtbWriteLog, new[] {"Lyrics:   " + lyricsSnippet + "..."});
 			}
 

@@ -25,6 +25,8 @@ namespace Shiny_ID3_Tagger
 					GlobalVariables.ActiveDGV = this.dataGridView2;
 					break;
 			}
+
+			GlobalVariables.ActiveDGV.Select();
 		}
 	}
 }
