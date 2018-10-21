@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DownloadClientFiles.cs" company="Shiny ID3 Tagger">
+// <copyright file="UpdateClient.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -20,25 +20,26 @@ namespace Utils
 
 	internal partial class Utils
 	{
-		internal static async Task<bool> DownloadClientFiles()
+		internal static async Task<bool> UpdateClient()
 		{
-			DateTime? lastCommitDate = null;
-			DateTime? remoteCommitDate = null;
+			DateTimeOffset? localCommitDate = null;
+			DateTimeOffset? remoteCommitDate = null;
 			string lastCommitSha = null;
 			string remoteCommitSha = null;
 
 			// ######################################################################################################################
-			// lastCommit file is automatically created after each compiling
-			// Done via Visual Studio project properties > post build command
-			// 		cd $(SolutionDir)
-			// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)lastCommit.json"
-			// Read command documentation: https://git-scm.com/docs/git-show
+			// Get the commit date when the local program files were created
 			string lastCommitPath = AppDomain.CurrentDomain.BaseDirectory + @"lastCommit.json";
 			string lastCommitSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.schema.json";
 
 			try
 			{
 				// Read content from lastCommit.json
+				// lastCommit file is automatically created after each built run
+				// Done via Visual Studio project properties > post build command
+				// 		cd $(SolutionDir)
+				// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)lastCommit.json"
+				// Read command documentation: https://git-scm.com/docs/git-show
 				string lastCommitJson = File.ReadAllText(lastCommitPath);
 
 				// Validate lastCommit.json. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
@@ -50,9 +51,9 @@ namespace Utils
 				if (lastCommitData != null)
 				{
 					lastCommitSha = (string)lastCommitData.SelectToken("commit");
-					lastCommitDate = (DateTime)lastCommitData.SelectToken("date");
+					localCommitDate = DateTimeOffset.Parse((string)lastCommitData.SelectToken("date"));
 
-					Form1.Instance.Text = Application.ProductName + "     GitHub commit date: " + lastCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+					Form1.Instance.Text = Application.ProductName + "     Client date: " + localCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
 				}
 			}
 			catch (Exception ex)
@@ -67,12 +68,13 @@ namespace Utils
 			}
 
 			// ######################################################################################################################
-			// Issue new cancellation token
-			GlobalVariables.TokenSource = new CancellationTokenSource();
-			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
-
+			// Get the latest commit date from GitHub repository
 			using (HttpClient client = InitiateHttpClient())
 			{
+				// Issue new cancellation token winch does not interfere with the global cancellation token
+				GlobalVariables.TokenSource = new CancellationTokenSource();
+				CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
+
 				// Check if user credentials and user settings are available
 				if (User.Accounts != null && User.Settings != null)
 				{
@@ -95,38 +97,46 @@ namespace Utils
 					}
 				}
 
-				// If local/last commit date is older (last < remote) than remote commit date, then there must be an update available on GitHub
-				if (lastCommitDate.HasValue && remoteCommitDate.HasValue && lastCommitDate < remoteCommitDate)
+			// ######################################################################################################################
+			// If local commit date is older than remote commit date, then there should be a newer GitHub release
+				if (localCommitDate.HasValue && remoteCommitDate.HasValue && localCommitDate < remoteCommitDate)
 				{
+					// Ask user if he want's to update
 					DialogResult dialogResult = MessageBox.Show("Download update now?", "Update available", MessageBoxButtons.YesNo);
 					if (dialogResult == DialogResult.Yes)
 					{
-						using (HttpRequestMessage remoteTreeRequest = new HttpRequestMessage())
+						// Get the URL for the latest release
+						using (HttpRequestMessage latestReleaseRequest = new HttpRequestMessage())
 						{
-							remoteTreeRequest.Headers.Add("Authorization", "token " + (string)User.Accounts["GitHub"]["AccessToken"]);
-							remoteTreeRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
-							remoteTreeRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+							latestReleaseRequest.Headers.Add("Authorization", "token " + (string)User.Accounts["GitHub"]["AccessToken"]);
+							latestReleaseRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
+							latestReleaseRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
 
-							// https://developer.github.com/v3/git/trees/#get-a-tree-recursively
-							// https://stackoverflow.com/questions/7106012/download-a-single-folder-or-directory-from-a-github-repo
-							remoteTreeRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/git/trees/" + remoteCommitSha + "?recursive=1");
+							latestReleaseRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest");
 
-							string remoteTreeContent = await GetResponse(client, remoteTreeRequest, cancelToken);
-							JObject remoteTreeData = DeserializeJson(remoteTreeContent);
+							string latestRelease = await GetResponse(client, latestReleaseRequest, cancelToken);
+							JObject latestReleaseData = DeserializeJson(latestRelease);
 
-							if (remoteTreeData != null)
+							string latestReleaseDownloadUrl = (string)latestReleaseData.SelectToken("assets[0].browser_download_url");
+
+							// Download the release file
+							if (latestReleaseDownloadUrl != null && Utils.IsValidUrl(latestReleaseDownloadUrl))
 							{
-								// TODO: Continue here for downloading files
-								// Use GET CONTENT to download a single file: https://developer.github.com/v3/repos/contents/#get-contents
-								// 		fileRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/contents/Shiny%20ID3%20Tagger/config/accounts.json");
-								// Check if there are any files in "update" folder (maybe from last program start or this one)
-								// If yes, start updater.exe and close main program
+								using (HttpRequestMessage downloadRequest = new HttpRequestMessage())
+								{
+									downloadRequest.Headers.Add("Authorization", "token " + (string)User.Accounts["GitHub"]["AccessToken"]);
+									downloadRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
+									downloadRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
 
-								// UPDATER: Check if main program is closed. wait 5s, close updater if thread is still alive
-								// UPDATER: Loop through all files in update folder and copy file one by one to main folder
-								// UPDATER: Delete update folder
-								// UPDATER: Start main program
-								// UPDATER: Close updater
+									latestReleaseRequest.RequestUri = new Uri(latestReleaseDownloadUrl);
+
+									byte[] downloadData = await GetResponse(client, latestReleaseRequest, cancelToken, returnByteArray: true);
+
+									if (downloadData != null)
+									{
+										File.WriteAllBytes("update.zip", downloadData);
+									}
+								}
 							}
 						}
 					}

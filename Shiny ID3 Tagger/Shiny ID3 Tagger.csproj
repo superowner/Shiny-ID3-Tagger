@@ -239,7 +239,7 @@
     <Compile Include="src\Form1\DataGridView_MarkChange.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Utils\DownloadClientFiles.cs" />
+    <Compile Include="src\Utils\UpdateClient.cs" />
     <Compile Include="src\Utils\GetUserAccounts.cs" />
     <Compile Include="src\Utils\GetUserSettings.cs" />
     <Compile Include="src\Utils\Strip.cs" />

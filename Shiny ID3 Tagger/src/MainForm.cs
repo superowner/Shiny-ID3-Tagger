@@ -30,16 +30,12 @@ namespace Shiny_ID3_Tagger
 			this.InitializeComponent();
 		}
 
-		// Code is executed on all program calls (1,2,3,4....)
+		// Code is executed on all program calls (for example every time it's called via command line)
 		internal async void Form1Shown(string[] args)
 		{
 			// Refresh cancellation token
 			GlobalVariables.TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
-
-			// Get user settings and credentials
-			Utils.GetUserSettings();
-			Utils.GetUserAccounts();
 
 			// Continue only if user credentials and user settings are present
 			if (User.Accounts != null && User.Settings != null)
@@ -60,13 +56,17 @@ namespace Shiny_ID3_Tagger
 			}
 		}
 
-		// Code is only executed on the first program call (1)
+		// Code is only executed once regardless how many times it's called via command line
 		protected async override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);
 
+			// Get user settings and credentials. Needs to be done before UpdateClient
+			Utils.GetUserSettings();
+			Utils.GetUserAccounts();
+
 			// Update this program via Github
-			bool result = await Utils.DownloadClientFiles();
+			bool result = await Utils.UpdateClient();
 
 			// Initialize helper variable to track which dataGridView is currently shown
 			GlobalVariables.ActiveDGV = this.dataGridView1;
