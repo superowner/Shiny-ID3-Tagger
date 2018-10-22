@@ -2,6 +2,8 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 
+using Newtonsoft.Json.Schema;
+
 namespace Shiny_ID3_Tagger.Setting
 {
     using Newtonsoft.Json.Linq;
@@ -19,55 +21,11 @@ namespace Shiny_ID3_Tagger.Setting
         /// <summary>
         /// Default Setting
         /// </summary>
-        private JObject defaultSetting = JObject.FromObject(new
-        {
-            Branch = "develop",
-            DebugLevel = 2,
-            PreferTags = true,
-            RemoveBrackets = true,
-            RemoveFeaturing = true,
-            OverwriteImage = true,
-            AutoSearch = true,
-            AutoCapitalize = true,
-            ThresholdRedValue = 30,
-            MaxImageSize = 500,
-            UserAgent = "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",
-            FilenamePatterns = new[]
-            {
-                "^(\\d+\\s)?(-\\s+)?(?<artist>.*?\\w+)\\s+-\\s+(?<title>\\w+.*)$",
-                "^(\\d+_)?(?<artist>.*?\\w+)_(?<title>\\w+.*)$"
-            },
-            CoverPriority = new[]
-            {
-                "Napster (Rhapsody)",
-                "Discogs",
-                "Qobuz",
-                "Tidal",
-                "Genius",
-                "7digital",
-                "Deezer",
-                "iTunes",
-                "Last.fm",
-                "Spotify",
-                "Gracenote (Sony)",
-                "Amazon",
-                "Musicbrainz",
-                "Netease",
-                "QQ (Tencent)"
-            },
-            LyricsPriority = new[]
-            {
-                "Viewlyrics",
-                "Lololyrics",
-                "Chartlyrics",
-                "Netease",
-                "Xiami"
-            }
-        });
+        protected JSchema DefaultSettingSchemaSchema;
 
-        protected BaseSetting(JObject defaultSetting)
+        protected BaseSetting(JSchema defaultSettingSchema)
         {
-            this.defaultSetting = defaultSetting;
+            this.DefaultSettingSchemaSchema = defaultSettingSchema;
         }
 
         /// <summary>

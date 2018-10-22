@@ -449,5 +449,25 @@ namespace Utils
 			// Return all error messages why validation failed
 			return errorMessages;
 		}
+
+		internal static IList<string> ValidateSchema(string jsonStr, JSchema schema)
+		{
+			// Load JSON
+			JObject json = JObject.Parse(jsonStr);
+
+			// Validate JSON against schema, save errors in errorMessages
+			json.IsValid(schema, out IList<string> errorMessages);
+
+			// If any validation error occurred, throw exception to go into catch clause
+			if (errorMessages.Count > 0)
+			{
+				string allValidationErrors = string.Join("\n          ", (IEnumerable<string>)errorMessages);
+
+				throw new ArgumentException(allValidationErrors);
+			}
+
+			// Return all error messages why validation failed
+			return errorMessages;
+		}
 	}
 }
