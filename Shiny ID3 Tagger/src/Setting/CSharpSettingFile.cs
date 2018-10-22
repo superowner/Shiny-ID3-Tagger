@@ -7,7 +7,7 @@
     {
         private System.Configuration.ApplicationSettingsBase setting;
 
-        public CSharpSettingFile(System.Configuration.ApplicationSettingsBase setting, JObject defaultSetting)
+        public CSharpSettingFile(JObject defaultSetting, System.Configuration.ApplicationSettingsBase setting)
             : base(defaultSetting)
         {
             this.setting = setting ?? throw new ArgumentException(@"Setting Can't be null", nameof(setting));
