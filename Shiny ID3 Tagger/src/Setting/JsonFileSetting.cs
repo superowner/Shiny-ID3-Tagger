@@ -1,18 +1,23 @@
-using Newtonsoft.Json;
-
 namespace Shiny_ID3_Tagger.Setting
 {
     using System;
     using System.IO;
+    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using Newtonsoft.Json.Schema;
 
     public class JsonFileSetting : BaseSetting
     {
-        public JObject CurrentSetting
+        private JObject currentSetting;
+
+        private JObject CurrentSetting
         {
-            get;
-            private set { this.SettingChangedCallback?.Invoke(value); }
+            get => currentSetting;
+            set
+            {
+                currentSetting = value;
+                this.SettingChangedCallback?.Invoke(value);
+            }
         }
 
         private string filePath;
@@ -21,7 +26,6 @@ namespace Shiny_ID3_Tagger.Setting
 
         public JsonFileSetting(JSchema defaultSettingSchema,
                                string filePath,
-                               bool watchForChanges = true,
                                Action<JObject> callback = null)
             : base(defaultSettingSchema)
         {
@@ -41,34 +45,38 @@ namespace Shiny_ID3_Tagger.Setting
             // Create setting file if don't exits
             if (!File.Exists(filePath))
             {
-                // TODO - CREATE FILE IF DON'T EXISTS AND WRITE THE DEFAULT SETTING
+                this.SetSettingFileContent(JObject.Parse(defaultSettingSchema.ToString()));
+            }
+            else
+            {
+                string json = File.ReadAllText(this.filePath);
+                this.CurrentSetting = JObject.Parse(json);
             }
 
-            if (watchForChanges)
-            {
-                // TODO - ADD EVENTS FOR RENAME FOR RETURNING THE NAME TO THE REGULAR NAME
-                Utils.Utils.CreateFileWatcher(filePath, this.OnChanged, this.OnDeleted);
-            }
+            // TODO - ADD EVENTS FOR RENAME FOR RETURNING THE NAME TO THE REGULAR NAME
+            Utils.Utils.CreateFileWatcher(filePath, this.OnChanged, this.OnDeleted);
         }
 
         public override dynamic GetValue(string key)
         {
-            throw new System.NotImplementedException();
+            return CurrentSetting[key];
         }
 
         public override bool SetValue(string key, dynamic value)
         {
-            throw new System.NotImplementedException();
+            CurrentSetting[key] = value;
+            return this.SetSettingFileContent(CurrentSetting);
         }
 
         public override bool RemoveKey(string key)
         {
-            throw new System.NotImplementedException();
+            CurrentSetting.Remove(key);
+            return this.SetSettingFileContent(CurrentSetting);
         }
 
         public override void ResetToDefault()
         {
-            SetSettingFileContent(JObject.Parse(this.DefaultSettingSchemaSchema.ToString()));
+            this.SetSettingFileContent(JObject.Parse(this.DefaultSettingSchemaSchema.ToString()));
         }
 
         /// <summary>
@@ -100,7 +108,7 @@ namespace Shiny_ID3_Tagger.Setting
         {
             if ((e.ChangeType & WatcherChangeTypes.Deleted) != 0)
             {
-                SetSettingFileContent(SetSettingFileContent ?? this.DefaultSettingSchemaSchema);
+                SetSettingFileContent(CurrentSetting ?? this.DefaultSettingSchemaSchema);
             }
         }
 
@@ -108,21 +116,20 @@ namespace Shiny_ID3_Tagger.Setting
         /// Set Setting File data
         /// </summary>
         /// <param name="objectToWrite">Object to write to file</param>
-        private void SetSettingFileContent(JObject objectToWrite)
+        /// <returns>Return the result of writing</returns>
+        private bool SetSettingFileContent(JObject objectToWrite)
         {
-            if (!File.Exists(this.filePath))
+            try
             {
-                File.WriteAllText(this.filePath, objectToWrite.ToString());
-
-                // Write JSON directly to a file
-                using (StreamWriter file = File.CreateText(this.filePath))
-                {
-                    using (JsonTextWriter writer = new JsonTextWriter(file))
-                    {
-                        objectToWrite.WriteTo(writer);
-                    }
-                }
+                File.WriteAllText(this.filePath, JsonConvert.SerializeObject(objectToWrite, Formatting.Indented));
             }
+            catch (Exception e)
+            {
+                // TODO - Print Error in custom console
+                return false;
+            }
+
+            return true;
         }
     }
 }
