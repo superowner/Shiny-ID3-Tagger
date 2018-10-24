@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Checks for updates and downloads newest application files from GitHub</summary>
+// https://developer.github.com/v3/
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -23,9 +24,7 @@ namespace Utils
 		internal static async Task<bool> UpdateClient()
 		{
 			DateTimeOffset? localCommitDate = null;
-			DateTimeOffset? remoteCommitDate = null;
-			string lastCommitSha = null;
-			string remoteCommitSha = null;
+			DateTime? latestReleaseDate = null;
 
 			// ######################################################################################################################
 			// Get the commit date when the local program files were created
@@ -50,7 +49,6 @@ namespace Utils
 
 				if (lastCommitData != null)
 				{
-					lastCommitSha = (string)lastCommitData.SelectToken("commit");
 					localCommitDate = DateTimeOffset.Parse((string)lastCommitData.SelectToken("date"));
 
 					Form1.Instance.Text = Application.ProductName + "     Client date: " + localCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
@@ -68,70 +66,47 @@ namespace Utils
 			}
 
 			// ######################################################################################################################
-			// Get the latest commit date from GitHub repository
+			// Compare local file date with the latest release date on GitHub
 			using (HttpClient client = InitiateHttpClient())
 			{
+				client.DefaultRequestHeaders.Add("Authorization", "token " + (string)User.Accounts["GitHub"]["AccessToken"]);
+				client.DefaultRequestHeaders.Add("User-Agent", (string)User.Settings["UserAgent"]);
+				client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+
 				// Issue new cancellation token winch does not interfere with the global cancellation token
 				GlobalVariables.TokenSource = new CancellationTokenSource();
 				CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
-				// Check if user credentials and user settings are available
-				if (User.Accounts != null && User.Settings != null)
+				// Get the latest release date from GitHub repository
+				using (HttpRequestMessage latestReleaseRequest = new HttpRequestMessage())
 				{
-					using (HttpRequestMessage remoteCommitRequest = new HttpRequestMessage())
+					latestReleaseRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest");
+
+					string latestRelease = await GetResponse(client, latestReleaseRequest, cancelToken);
+					JObject latestReleaseData = DeserializeJson(latestRelease);
+
+					latestReleaseDate = Utils.ConvertStringToDate((string)latestReleaseData.SelectToken("created_at"));
+
+					// ######################################################################################################################
+					// If local file date is older than latest release date, then GitHub has a newer release
+					if (localCommitDate.HasValue && latestReleaseDate.HasValue && localCommitDate > latestReleaseDate)
 					{
-						remoteCommitRequest.Headers.Add("Authorization", "token " + (string)User.Accounts["GitHub"]["AccessToken"]);
-						remoteCommitRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
-						remoteCommitRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-
-						remoteCommitRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/branches/" + (string)User.Settings["Branch"]);
-
-						string remoteCommitContent = await GetResponse(client, remoteCommitRequest, cancelToken);
-						JObject remoteCommitData = DeserializeJson(remoteCommitContent);
-
-						if (remoteCommitData != null)
+						// Ask user if he want's to update the program
+						DialogResult dialogResult = MessageBox.Show("Download update now?", "Update available", MessageBoxButtons.YesNo);
+						if (dialogResult == DialogResult.Yes)
 						{
-							remoteCommitSha = (string)remoteCommitData.SelectToken("commit.sha");
-							remoteCommitDate = (DateTime?)remoteCommitData.SelectToken("commit.commit.author.date");
-						}
-					}
-				}
+							// Download the release file from GitHub
+							string downloadUrl = (string)latestReleaseData.SelectToken("assets[0].browser_download_url");
 
-			// ######################################################################################################################
-			// If local commit date is older than remote commit date, then there should be a newer GitHub release
-				if (localCommitDate.HasValue && remoteCommitDate.HasValue && localCommitDate < remoteCommitDate)
-				{
-					// Ask user if he want's to update
-					DialogResult dialogResult = MessageBox.Show("Download update now?", "Update available", MessageBoxButtons.YesNo);
-					if (dialogResult == DialogResult.Yes)
-					{
-						// Get the URL for the latest release
-						using (HttpRequestMessage latestReleaseRequest = new HttpRequestMessage())
-						{
-							latestReleaseRequest.Headers.Add("Authorization", "token " + (string)User.Accounts["GitHub"]["AccessToken"]);
-							latestReleaseRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
-							latestReleaseRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-
-							latestReleaseRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest");
-
-							string latestRelease = await GetResponse(client, latestReleaseRequest, cancelToken);
-							JObject latestReleaseData = DeserializeJson(latestRelease);
-
-							string latestReleaseDownloadUrl = (string)latestReleaseData.SelectToken("assets[0].browser_download_url");
-
-							// Download the release file
-							if (latestReleaseDownloadUrl != null && Utils.IsValidUrl(latestReleaseDownloadUrl))
+							if (downloadUrl != null && Utils.IsValidUrl(downloadUrl))
 							{
 								using (HttpRequestMessage downloadRequest = new HttpRequestMessage())
 								{
-									downloadRequest.Headers.Add("Authorization", "token " + (string)User.Accounts["GitHub"]["AccessToken"]);
-									downloadRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
-									downloadRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+									downloadRequest.RequestUri = new Uri(downloadUrl);
 
-									latestReleaseRequest.RequestUri = new Uri(latestReleaseDownloadUrl);
+									byte[] downloadData = await GetResponse(client, downloadRequest, cancelToken, returnByteArray: true);
 
-									byte[] downloadData = await GetResponse(client, latestReleaseRequest, cancelToken, returnByteArray: true);
-
+									// Write the file as "update.zip" to program folder
 									if (downloadData != null)
 									{
 										File.WriteAllBytes("update.zip", downloadData);
