@@ -8,6 +8,9 @@
 
 namespace Utils
 {
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
 		internal static int ParseInt(string str, int defaultValue = 0)

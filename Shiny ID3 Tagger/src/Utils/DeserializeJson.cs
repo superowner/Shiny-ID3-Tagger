@@ -3,10 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>
-// Deserialize a JSON string into an object.
-// Also uses some non-default settings for all JSON deserializations. This is helpful for debugging invalid JSON strings
-// </summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -16,13 +12,17 @@ namespace Utils
 	using Newtonsoft.Json.Linq;
 	using Shiny_ID3_Tagger;
 
+	/// <summary>Represents the Utility class which holds various helper functions</summary>
 	internal partial class Utils
 	{
-		internal static JObject DeserializeJson(string content)
+		/// <summary> Deserialize a JSON string to a JSON.NET JObject </summary>
+		/// <param name="jsonStr">The input string which should be deserialized</param>
+		/// <returns>The new JObject holding all the values from content string</returns>
+		internal static JObject DeserializeJson(string jsonStr)
 		{
-			JObject data = null;
+			JObject jsonObj = null;
 
-			if (content != null)
+			if (jsonStr != null)
 			{
 				// Set custom settings for JSON parser
 				JsonSerializerSettings jsonSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
@@ -41,10 +41,10 @@ namespace Utils
 					};
 				}
 
-				data = JsonConvert.DeserializeObject<JObject>(content, jsonSettings);
+				jsonObj = JsonConvert.DeserializeObject<JObject>(jsonStr, jsonSettings);
 			}
 
-			return data;
+			return jsonObj;
 		}
 	}
 }

@@ -12,6 +12,9 @@ namespace Utils
 {
 	using System;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
 		internal static bool IsValidUrl(string stringUri)

@@ -4,7 +4,6 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 // <summary>Executed when program starts. Shows main window</summary>
-// https://social.msdn.microsoft.com/Forums/windows/en-US/43a85553-2b94-4f4e-9db3-498311af4ecd/datagridview-sorting-with-null-values?forum=winforms
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -16,10 +15,11 @@ namespace Shiny_ID3_Tagger
 	using GlobalVariables;
 	using Utils;
 
+	/// <summary>
+	/// The Form1 class contains all methods which the user can interact with
+	/// </summary>
 	public partial class Form1 : Form
 	{
-		public static Form1 Instance;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Form1"/> class.
 		/// The main form which will be shown immediately after program start
@@ -30,7 +30,15 @@ namespace Shiny_ID3_Tagger
 			this.InitializeComponent();
 		}
 
-		// Code is executed on all program calls (for example every time it's called via command line)
+		/// <summary>
+		/// Gets or sets the single instance of the the main form to get public access from other classes like Utils class
+		/// </summary>
+		public static Form1 Instance { get; set; }
+
+		/// <summary>
+		/// Method is executed every time the program is called
+		/// </summary>
+		/// <param name="args">Default parameter which holds event arguments</param>
 		internal async void Form1Shown(string[] args)
 		{
 			// Refresh cancellation token
@@ -56,7 +64,10 @@ namespace Shiny_ID3_Tagger
 			}
 		}
 
-		// Code is only executed once regardless how many times it's called via command line
+		/// <summary>
+		/// Method is executed only once regardless how many times the program is called
+		/// </summary>
+		/// <param name="e">Default parameter which holds event arguments</param>
 		protected async override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);

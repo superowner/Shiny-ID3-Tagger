@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Capitalize a given string according to rules from link below</summary>
 // http://aitech.ac.jp/~ckelly/midi/help/caps.html
 /* #1	The first and last words are always capitalized, and all except the words listed below are capitalized.
  * #2	These are lower-case, unless they are the first word or last word.
@@ -26,6 +25,9 @@ namespace Utils
 	using System.Text.RegularExpressions;
 	using GlobalVariables;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
 		private static string[] lowercase =
@@ -34,6 +36,11 @@ namespace Utils
 			"into", "of", "off", "on", "onto", "out", "over", "to", "up", "with", "as"
 		};
 
+		/// <summary>
+		/// Capitalize a given string according to rules from link above
+		/// </summary>
+		/// <param name="str">The input string which should be capitalized</param>
+		/// <returns>The capitalized string</returns>
 		internal static string Capitalize(string str)
 		{
 			// If string is not empty and user setting "AutoCapitalize" is set to true

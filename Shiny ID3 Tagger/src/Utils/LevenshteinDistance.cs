@@ -10,6 +10,9 @@ namespace Utils
 {
 	using System.Linq;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
 		internal static int LevenshteinDistance(string s, string t)

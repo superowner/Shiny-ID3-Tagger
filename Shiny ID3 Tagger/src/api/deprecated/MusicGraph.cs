@@ -3,15 +3,11 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from MusicGraph API for current track</summary>
-// https://developer.musicgraph.com/api-docs/v2/tracks
-// "limit=1" should not be used, filtering on client side is better
 //-----------------------------------------------------------------------
 
 namespace GetTags
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Net;
@@ -22,9 +18,22 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for MusicGraph API
+	/// </summary>
 	[Obsolete("Website and API service is closed", true)]
 	internal class MusicGraph : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 tags from MusicGraph API
+		/// https://developer.musicgraph.com/api-docs/v2/tracks
+		/// "limit=1" should not be used, filtering on client side is a better
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">TThe input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3 { Service = "Musicgraph" };

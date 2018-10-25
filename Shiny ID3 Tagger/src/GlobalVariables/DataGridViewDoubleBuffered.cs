@@ -3,15 +3,17 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Creates a new class based on dataGridView and enables double buffering for a smoother UI experience</summary>
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
 {
 	using System.Windows.Forms;
 
+	/// <summary>Represents a new class based on System.Windows.Forms.DataGridView</summary>
 	public class DataGridViewDoubleBuffered : DataGridView
 	{
+		/// <summary>Initializes a new instance of the <see cref="DataGridViewDoubleBuffered"/> class
+		/// which has double buffering enabled for a smoother UI experience</summary>
 		public DataGridViewDoubleBuffered()
 		{
 			this.DoubleBuffered = true;

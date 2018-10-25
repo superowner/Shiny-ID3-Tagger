@@ -14,6 +14,9 @@ namespace Utils
 	using GlobalVariables;
 	using Shiny_ID3_Tagger;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
 		internal static bool IsValidMp3(string filepath)

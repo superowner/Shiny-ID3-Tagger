@@ -1,11 +1,8 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GetImageType.cs" company="Shiny ID3 Tagger">
+// <copyright file="IsValidImage.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Checks if a given stream contains a valid image file signature</summary>
-// https://stackoverflow.com/questions/1245567/finding-out-the-contenttype-of-a-image-from-the-byte/34677623#34677623
-// https://www.garykessler.net/library/file_sigs.html
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -15,8 +12,12 @@ namespace Utils
 	using System.IO;
 	using System.Linq;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
+		// https://www.garykessler.net/library/file_sigs.html
 		private static Dictionary<byte[], ImageFormat> imageFormatDecoders = new Dictionary<byte[], ImageFormat>()
 		{
 			{ new byte[] { 0x42, 0x4D }, ImageFormat.Bmp },
@@ -26,6 +27,12 @@ namespace Utils
 			{ new byte[] { 0xff, 0xd8 }, ImageFormat.Jpeg }
 		};
 
+		/// <summary>
+		/// Checks if a given stream contains a valid image file
+		/// https://stackoverflow.com/questions/1245567/finding-out-the-contenttype-of-a-image-from-the-byte/34677623#34677623
+		/// </summary>
+		/// <param name="stream">The input stream to check</param>
+		/// <returns>A boool</returns>
 		internal static bool IsValidImage(MemoryStream stream)
 		{
 			byte[] imageBytes = stream.ToArray();

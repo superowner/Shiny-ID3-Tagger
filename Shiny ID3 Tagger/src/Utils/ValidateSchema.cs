@@ -18,6 +18,9 @@ namespace Utils
 	using Newtonsoft.Json.Linq;
 	using Newtonsoft.Json.Schema;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
 		internal static IList<string> ValidateSchema(string jsonStr, string schemaPath)

@@ -3,7 +3,7 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Executes all API requests. Has a built-in retry handler and error logger</summary>
+// <summary></summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -17,8 +17,21 @@ namespace Utils
 	using GlobalVariables;
 	using Shiny_ID3_Tagger;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
+		/// <summary>
+		/// Sends out all API requests to the web. Has a built-in retry handler and error logger
+		/// </summary>
+		/// <param name="client">The HTTP client for sending and receiving</param>
+		/// <param name="request">The requests which holds the URL, method type, post body and headers</param>
+		/// <param name="cancelToken">The global token for canceling any ongoing request</param>
+		/// <param name="returnByteArray">A bool to indicate if the response should be read as a byte array instead of a string</param>
+		/// <param name="suppressedStatusCodes">A array which holds statuscodes of common errors which can be ignored (not logged as error)</param>
+		/// <param name="customTimeout">A timeout in seconds after a request is automatically canceled. Useful if a certain server has no own timeout</param>
+		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
 		internal static async Task<dynamic> GetResponse(
 			HttpMessageInvoker client,
 			HttpRequestMessage request,

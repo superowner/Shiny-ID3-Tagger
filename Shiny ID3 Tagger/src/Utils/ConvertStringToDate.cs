@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Tries to convert a given string to a dateTime object</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -14,10 +13,15 @@ namespace Utils
 	using GlobalVariables;
 	using Shiny_ID3_Tagger;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
-		// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
-		// MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
+		/// <summary>
+		/// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
+		/// More info on MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
+		/// </summary>
 		internal static readonly string[] DateTimeformats =
 		{
 			"yyyy",
@@ -37,6 +41,9 @@ namespace Utils
 			"dd.MM.yyyy HH:mm:ss",
 		};
 
+		/// <summary>Tries to convert a given string to a dateTime object</summary>
+		/// <param name="dateString">Input string which represents a date. Must match one of the valid formats</param>
+		/// <returns>The DateTime object representing the converted string value</returns>
 		internal static DateTime ConvertStringToDate(string dateString)
 		{
 			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")

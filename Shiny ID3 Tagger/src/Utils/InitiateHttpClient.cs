@@ -3,8 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Create a single HTTP client which is used later for all Web API requests</summary>
-// https://contrivedexample.com/2017/07/01/using-httpclient-as-it-was-intended-because-youre-not/
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -13,15 +11,27 @@ namespace Utils
 	using System.Net;
 	using System.Net.Http;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
+		/// <summary>
+		/// Creates a HTTP client which is used throughout the whole program for all API requests
+		/// https://contrivedexample.com/2017/07/01/using-httpclient-as-it-was-intended-because-youre-not/
+		/// </summary>
+		/// <returns>The HTTP client</returns>
 		internal static HttpClient InitiateHttpClient()
 		{
-			// DEFAULT SETTINGS FOR ALL CONNECTIONS
-			HttpClientHandler handler = new HttpClientHandler();
-			handler.UseCookies = false;										// this setting is needed for netease
-			handler.AutomaticDecompression = DecompressionMethods.GZip
-				| DecompressionMethods.Deflate;								// enable compression (depends on if server supports it)
+			// Defaul settings for all requests
+			// Compression is enabled by default (depends on if server supports it)
+			// "UseCookies = false" is needed for Netease
+			HttpClientHandler handler = new HttpClientHandler
+			{
+				UseCookies = false,
+				AutomaticDecompression = DecompressionMethods.GZip
+				| DecompressionMethods.Deflate
+			};
 
 			HttpClient client = new HttpClient(handler);
 			client.DefaultRequestHeaders.Clear();

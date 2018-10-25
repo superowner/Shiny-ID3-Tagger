@@ -11,6 +11,9 @@ namespace Utils
 	using System.Text.RegularExpressions;
 	using GlobalVariables;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
 		internal static string Strip(string str)

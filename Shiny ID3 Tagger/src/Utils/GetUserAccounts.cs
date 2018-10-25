@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets user credentials for all used APIs from external file</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -16,11 +15,17 @@ namespace Utils
 	using Newtonsoft.Json.Linq;
 	using Shiny_ID3_Tagger;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
+		/// <summary>
+		/// Gets user credentials for all used APIs from external file
+		/// </summary>
+		// TODO: Use accounts_plain.json if present, skip decrypting then
 		internal static void GetUserAccounts()
 		{
-			// TODO: Use accounts_plain.json if present, skip decrypting then
 			// Path for user credentials file
 			string accountsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.json";
 			string accountsSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\accounts.schema.json";

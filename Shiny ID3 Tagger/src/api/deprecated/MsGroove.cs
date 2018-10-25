@@ -3,10 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from Microsoft Groove API for current track</summary>
-// https://apps.dev.microsoft.com/#/appList
-// https://developer.microsoft.com/de-de/dashboard/groove
-// https://docs.microsoft.com/en-us/groove/groove-service-rest-reference/uri-search-content#examples
 //-----------------------------------------------------------------------
 
 namespace GetTags
@@ -22,9 +18,23 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for Microsoft Groove API
+	/// </summary>
 	[Obsolete("API shutdown end of 2017 (https://docs.microsoft.com/en-us/groove/api-overview)", true)]
 	internal class MsGroove : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 tags from Microsoft Groove API
+		/// https://apps.dev.microsoft.com/#/appList
+		/// https://developer.microsoft.com/de-de/dashboard/groove
+		/// https://docs.microsoft.com/en-us/groove/groove-service-rest-reference/uri-search-content#examples
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">TThe input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3 { Service = "Microsoft Groove" };
