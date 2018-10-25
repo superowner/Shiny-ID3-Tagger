@@ -25,7 +25,7 @@ namespace GetLyrics
 	{
 		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Xiami" };
+			Id3 o = new Id3 { Service = "Xiami" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

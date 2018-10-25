@@ -23,7 +23,7 @@ namespace GetTags
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3{ Service = "iTunes" };
+			Id3 o = new Id3 { Service = "iTunes" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

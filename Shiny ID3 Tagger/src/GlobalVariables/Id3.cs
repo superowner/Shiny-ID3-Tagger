@@ -44,7 +44,7 @@ namespace GlobalVariables
 
 		internal static DataTable CreateId3Table()
 		{
-			DataTable table = new DataTable{ Locale = GlobalVariables.CultEng };
+			DataTable table = new DataTable { Locale = GlobalVariables.CultEng };
 			table.Columns.Add("number", typeof(uint));
 			table.Columns.Add("filepath", typeof(string));
 			table.Columns.Add("service", typeof(string));

@@ -34,7 +34,7 @@ namespace GetTags
 		// ###########################################################################
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Amazon" };
+			Id3 o = new Id3 { Service = "Amazon" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -161,7 +161,7 @@ namespace GetTags
 		{
 			string stringToSign = "GET" + "\n" + server + "\n" + "/onca/xml" + "\n" + parameters;
 			byte[] bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
-			HMACSHA256 hmacSha = new HMACSHA256{ Key = Encoding.UTF8.GetBytes((string)User.Accounts["Amazon"]["SecretKey"]) };
+			HMACSHA256 hmacSha = new HMACSHA256 { Key = Encoding.UTF8.GetBytes((string)User.Accounts["Amazon"]["SecretKey"]) };
 			byte[] sigBytes = hmacSha.ComputeHash(bytesToSign);
 			string sigBase64 = Convert.ToBase64String(sigBytes);
 			string sigEncoded = Uri.EscapeDataString(sigBase64);

@@ -89,7 +89,7 @@ namespace Utils
 
 					// ######################################################################################################################
 					// If local file date is older than latest release date, then GitHub has a newer release
-					if (localCommitDate.HasValue && latestReleaseDate.HasValue && localCommitDate > latestReleaseDate)
+					if (localCommitDate.HasValue && latestReleaseDate.HasValue && localCommitDate < latestReleaseDate)
 					{
 						// Ask user if he want's to update the program
 						DialogResult dialogResult = MessageBox.Show("Download update now?", "Update available", MessageBoxButtons.YesNo);

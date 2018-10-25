@@ -57,7 +57,7 @@ namespace Shiny_ID3_Tagger
 
 					// Log message to signal begin of writing
 					string message = string.Format(GlobalVariables.CultEng, "{0,-100}{1}", $"Begin writing of {tagType} tags", "filepath: \"" + filepath + "\"");
-					this.PrintLogMessage(this.rtbWriteLog, new[] {message});
+					this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 
 					// Get all existing frames from current file
 					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
@@ -114,7 +114,7 @@ namespace Shiny_ID3_Tagger
 						if (successWrite)
 						{
 							// Log message to signal end of writing
-							this.PrintLogMessage(this.rtbWriteLog, new[] {"DONE!"});
+							this.PrintLogMessage(this.rtbWriteLog, new[] { "DONE!" });
 
 							foreach (DataGridViewCell cell in row.Cells)
 							{
@@ -124,7 +124,7 @@ namespace Shiny_ID3_Tagger
 						else
 						{
 							// Log message to signal end of writing
-							this.PrintLogMessage(this.rtbWriteLog, new[] {"FAILED!"});
+							this.PrintLogMessage(this.rtbWriteLog, new[] { "FAILED!" });
 						}
 					}
 				}
@@ -151,7 +151,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TPE1");
 				tagContainer.SetTextFrame("TPE1", newArtist);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Artist:   " + newArtist});
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Artist:   " + newArtist });
 			}
 
 			// Title
@@ -162,7 +162,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TIT2");
 				tagContainer.SetTextFrame("TIT2", newTitle);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Title:    " + newTitle});
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Title:    " + newTitle });
 			}
 
 			// Album
@@ -173,7 +173,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TALB");
 				tagContainer.SetTextFrame("TALB", newAlbum);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Album:    " + newAlbum});
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Album:    " + newAlbum });
 			}
 
 			// Genre
@@ -184,7 +184,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TCON");
 				tagContainer.SetTextFrame("TCON", newGenre);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Genre:    " + newGenre});
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Genre:    " + newGenre });
 			}
 
 			// Disc number + disc count
@@ -200,7 +200,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TPOS");
 				tagContainer.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Disc:     " + newDiscnumber + "/" + newDisccount});
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Disc:     " + newDiscnumber + "/" + newDisccount });
 			}
 
 			// Track number + track count
@@ -216,7 +216,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TRCK");
 				tagContainer.SetTextFrame("TRCK", newTrackNumber + "/" + newTrackCount);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Track:    " + newTrackNumber + "/" + newTrackCount});
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Track:    " + newTrackNumber + "/" + newTrackCount });
 			}
 
 			// Date
@@ -234,7 +234,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TIME");
 				tagContainer.SetNumberFrame("TYER", (uint)Utils.ConvertStringToDate(newDate).Year, 0);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Date:     " + newDate});
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Date:     " + newDate });
 			}
 
 			// Lyrics
@@ -254,7 +254,7 @@ namespace Shiny_ID3_Tagger
 
 				string lyricsSnippet = string.Join(string.Empty, newLyrics.Take(80));
 				lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Lyrics:   " + lyricsSnippet + "..."});
+				this.PrintLogMessage(this.rtbWriteLog, new[] { "Lyrics:   " + lyricsSnippet + "..." });
 			}
 
 			return tagContainer;
@@ -312,7 +312,7 @@ namespace Shiny_ID3_Tagger
 							using (Image image = Image.FromStream(streamOrg))
 							{
 								// Resize image according to user setting "MaxImageSize". Always resize and re-encode
-								int longSide = new List<int> {image.Width, image.Height}.Max();
+								int longSide = new List<int> { image.Width, image.Height }.Max();
 								float resizeFactor = new List<float>
 								{
 									(float)User.Settings["MaxImageSize"] / (float)image.Width,
@@ -352,7 +352,7 @@ namespace Shiny_ID3_Tagger
 								};
 
 								// Add cover tag to tag container, this deletes all other existing covers like "BackCover" or "BandLogo"
-								tagContainer.Pictures = new IPicture[] {taglibpicture};
+								tagContainer.Pictures = new IPicture[] { taglibpicture };
 							}
 						}
 						else
@@ -388,7 +388,7 @@ namespace Shiny_ID3_Tagger
 			if (errorMsg == null)
 			{
 				string message = string.Format("Picture:  " + request.RequestUri);
-				this.PrintLogMessage(this.rtbWriteLog, new[] {message});
+				this.PrintLogMessage(this.rtbWriteLog, new[] { message });
 			}
 			else
 			{

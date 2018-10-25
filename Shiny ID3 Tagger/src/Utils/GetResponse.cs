@@ -97,8 +97,7 @@ namespace Utils
 							// If debugging is enabled in settings, print out all request and response properties
 							if ((int)User.Settings["DebugLevel"] >= 2)
 							{
-								List<string> errorMsg = new List<string>
-									{"WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..."};
+								List<string> errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
 								errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
 								Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
@@ -120,8 +119,7 @@ namespace Utils
 						// If debugging is enabled in settings, print out the request
 						if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 2)
 						{
-							List<string> errorMsg = new List<string>
-							{"WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..."};
+							List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
 							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
 							Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
@@ -142,8 +140,7 @@ namespace Utils
 							realError = realError.InnerException;
 						}
 
-						List<string> errorMsg = new List<string>
-							{"ERROR:    An unknown application error occured! Abort..."};
+						List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured! Abort..." };
 						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 						errorMsg.Add("Message:  " + realError.Message.ToString());
 

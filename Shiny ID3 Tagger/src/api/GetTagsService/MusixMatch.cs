@@ -26,7 +26,7 @@ namespace GetTags
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Musixmatch" };
+			Id3 o = new Id3 { Service = "Musixmatch" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
