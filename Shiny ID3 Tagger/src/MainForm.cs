@@ -72,9 +72,9 @@ namespace Shiny_ID3_Tagger
 		{
 			base.OnShown(e);
 
-			// Get user settings and credentials. Needs to be done before UpdateClient
-			Utils.GetUserSettings();
-			Utils.GetUserAccounts();
+			// Get user settings and user accounts. Needs to be done before UpdateClient
+			Utils.ReadConfig(@"config\settings.json", @"config\schemas\settings.schema.json", User.Settings);
+			Utils.ReadConfig(@"config\accounts.json", @"config\schemas\accounts.schema.json", User.Accounts);
 
 			// Update this program via Github
 			await Utils.UpdateClient();

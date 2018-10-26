@@ -22,19 +22,25 @@ namespace Utils
 		{
 			JObject jsonObj = null;
 
+			int debugLevel = 0;
+			if (User.Settings != null)
+			{
+				debugLevel = (int)User.Settings["DebugLevel"];
+			}
+
 			if (jsonStr != null)
 			{
 				// Set custom settings for JSON parser
 				JsonSerializerSettings jsonSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
 
 				// Build a useful error message if JSON parsing fails
-				if ((int)User.Settings["DebugLevel"] >= 2)
+				if ((int)debugLevel >= 2)
 				{
 					jsonSettings.Error += (obj, errorArgs) =>
 					{
 						string[] errorMsg =
 						{
-							"WARNING:  Could not convert response to JSON!",
+							"WARNING:  Could not convert string to JSON!",
 							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
 						};
 						Form1.Instance.RichTextBox_LogMessage(errorMsg);

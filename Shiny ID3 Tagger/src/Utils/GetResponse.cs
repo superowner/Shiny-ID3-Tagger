@@ -63,7 +63,6 @@ namespace Utils
 
 				try
 				{
-					// REVIEW: When Content is already disposed, an error is thrown
 					// Save request content for later reuse when an error occurs or when debugging is enabled
 					if (request.Content != null)
 					{
