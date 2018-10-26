@@ -21,12 +21,13 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Gets user credentials for all used APIs from external file
+		/// Gets user credentials for all used APIs from an external file
 		/// </summary>
-		// TODO: Use accounts_plain.json if present, skip decrypting then
+		// TODO: Use accounts.json in plain text. If reading this file fails, try decrypting first. If this also fails, throw an error
+		// TODO: Merge GetUserAccounts and GetUserSettings into one method
 		internal static void GetUserAccounts()
 		{
-			// Path for user credentials file
+			// Path to user accounts file
 			string accountsConfigPath = AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.json";
 			string accountsSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\accounts.schema.json";
 
@@ -60,15 +61,45 @@ namespace Utils
 					}
 				}
 			}
-			catch (Exception ex)
+			catch (ArgumentException ex)
 			{
-				string[] errorMsg =
+				// Validation failed
+				if ((int)User.Settings["DebugLevel"] >= 1)
+				{
+					string[] errorMsg =
 					{
-					@"ERROR:    Failed to read user credentials! Please close program and fix this first...",
-					"Filepath: " + accountsConfigPath,
-					"Message:  " + ex.Message.TrimEnd('\r', '\n')
-				};
-				Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+						@"ERROR:    Failed to parse user accounts!",
+						"Filepath: " + accountsConfigPath,
+						"Message:  " + ex.Message.TrimEnd('\r', '\n')
+					};
+					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+				}
+			}
+			catch (FileNotFoundException)
+			{
+				// File is not found
+				if ((int)User.Settings["DebugLevel"] >= 1)
+				{
+					string[] errorMsg =
+					{
+						"ERROR:    File not found!",
+						"Filepath: " + accountsConfigPath
+					};
+					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+				}
+			}
+			catch (IOException)
+			{
+				// File has a write lock (i.e. opened in another program)
+				if ((int)User.Settings["DebugLevel"] >= 1)
+				{
+					string[] errorMsg =
+					{
+						"ERROR:    Cannot access file. Already in use!",
+						"Filepath: " + accountsConfigPath
+					};
+					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+				}
 			}
 		}
 	}

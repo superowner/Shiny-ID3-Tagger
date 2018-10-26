@@ -11,6 +11,9 @@ namespace Shiny_ID3_Tagger
 	using System;
 	using System.Windows.Forms;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
 		private void Button_WriteClick(object sender, EventArgs e)

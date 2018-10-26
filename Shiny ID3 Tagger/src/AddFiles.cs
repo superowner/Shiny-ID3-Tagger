@@ -3,9 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Method to run when "Add files" button is clicked</summary>
-// Tips on how to speed up dataGridView rendering: https://10tec.com/articles/why-datagridview-slow.aspx
-// HowTo use Task.Run: https://blog.stephencleary.com/2013/08/taskrun-vs-backgroundworker-round-3.html
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -22,13 +19,21 @@ namespace Shiny_ID3_Tagger
 	using Utils;
 
 	/// <summary>
-	/// Method selects and reads in existing tags and shows them in a dataGridView
+	/// Represents the Form1 class which contains all methods who interacts with the UI
 	/// </summary>
 	public partial class Form1
 	{
-		// ###########################################################################
+		/// <summary>
+		/// Method selects and reads in existing tags and shows them in a dataGridView
+		/// Runs when "Add files" button is clicked
+		/// HowTo use Task.Run: https://blog.stephencleary.com/2013/08/taskrun-vs-backgroundworker-round-3.html
+		/// </summary>
+		/// <param name="newFiles">String list of files to add to dataGridView1</param>
+		/// <param name="cancelToken">Global cancelation token</param>
+		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
 		private async Task<bool> AddFiles(string[] newFiles, CancellationToken cancelToken)
 		{
+			// ###########################################################################
 			// Work starts, disable all buttons to prevent side effects when user clicks them despite an already running task
 			this.Form_EnableUI(false);
 

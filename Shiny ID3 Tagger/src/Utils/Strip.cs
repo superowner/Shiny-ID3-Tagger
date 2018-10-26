@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Removes brackets and unwanted stuff like "feat.". Some weird chars are replaced through better alternatives</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -16,6 +15,12 @@ namespace Utils
 	/// </summary>
 	internal partial class Utils
 	{
+		/// <summary>
+		/// Removes brackets and unwanted stuff like "feat."
+		/// Some unusual chars are replaced through better alternatives
+		/// </summary>
+		/// <param name="str">string to clean/sanitize</param>
+		/// <returns>The cleaned string</returns>
 		internal static string Strip(string str)
 		{
 			if (str != null)

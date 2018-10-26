@@ -16,7 +16,7 @@ namespace Shiny_ID3_Tagger
 	using Utils;
 
 	/// <summary>
-	/// The Form1 class contains all methods which the user can interact with
+	/// Represents the Form1 class which contains all methods who interacts with the UI
 	/// </summary>
 	public partial class Form1 : Form
 	{
@@ -77,7 +77,7 @@ namespace Shiny_ID3_Tagger
 			Utils.GetUserAccounts();
 
 			// Update this program via Github
-			bool result = await Utils.UpdateClient();
+			await Utils.UpdateClient();
 
 			// Initialize helper variable to track which dataGridView is currently shown
 			GlobalVariables.ActiveDGV = this.dataGridView1;

@@ -1,9 +1,8 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="WellFormedCsvValue.cs" company="Shiny ID3 Tagger">
+// <copyright file="SanitizeForCsv.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Handles null values when generating a CSV export. Encloses every value with double quotes</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -13,7 +12,14 @@ namespace Utils
 	/// </summary>
 	internal partial class Utils
 	{
-		internal static string WellFormedCsvValue(object cell)
+		/// <summary>
+		/// Converts a cell value to a string when generating a CSV export
+		/// Treats null values as empty string
+		/// Encloses every value with double quotes
+		/// </summary>
+		/// <param name="cell">dataGridView cell which has to converted to string</param>
+		/// <returns>The resulting string</returns>
+		internal static string SanitizeForCsv(object cell)
 		{
 			string value = cell != null ? cell.ToString() : string.Empty;
 			value = value.Replace("\r\n", "\n");

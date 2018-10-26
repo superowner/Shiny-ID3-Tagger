@@ -26,6 +26,9 @@ namespace Shiny_ID3_Tagger
 	using TagLib.Id3v2;
 	using Utils;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1
 	{
 		// ###########################################################################

@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Outputs a given log message to it's corresponding richTextBox</summary>
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -14,6 +13,9 @@ namespace Shiny_ID3_Tagger
 	using System.Windows.Forms;
 	using GlobalVariables;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1
 	{
 		internal void RichTextBox_PrintErrorMessage(string[] values)
@@ -21,6 +23,11 @@ namespace Shiny_ID3_Tagger
 			this.PrintLogMessage(this.rtbErrorLog, values);
 		}
 
+		/// <summary>
+		/// Outputs a given log message to the passed richTextBox. If no richTextBox is provided, use rtbErrorLog as default
+		/// </summary>
+		/// <param name="richTextBox"></param>
+		/// <param name="values"></param>
 		internal void PrintLogMessage(RichTextBox richTextBox, string[] values)
 		{
 			// When called from a different thread then Form1, switch back to thread which owns Form1

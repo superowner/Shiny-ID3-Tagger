@@ -11,6 +11,9 @@ namespace Shiny_ID3_Tagger
 	using System.Diagnostics;
 	using System.Windows.Forms;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
 		private void RichTextBox_LinkClicked(object sender, LinkClickedEventArgs e)

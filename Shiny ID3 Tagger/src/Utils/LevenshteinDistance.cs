@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Calculates how similar two strings are and outputs how many edits are needed to get from one string to another</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -15,6 +14,13 @@ namespace Utils
 	/// </summary>
 	internal partial class Utils
 	{
+		/// <summary>
+		/// Calculates how similar two strings are using the so called Levenshtein method
+		/// Outputs how many edits are needed to get from one string to another
+		/// </summary>
+		/// <param name="s">First string to compare</param>
+		/// <param name="t">Second string to compare</param>
+		/// <returns>Number of edits as a measurement for similarity</returns>
 		internal static int LevenshteinDistance(string s, string t)
 		{
 			if (s == t)

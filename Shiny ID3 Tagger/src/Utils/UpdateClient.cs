@@ -3,8 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Checks for updates and downloads newest application files from GitHub</summary>
-// https://developer.github.com/v3/
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -24,24 +22,29 @@ namespace Utils
 	/// </summary>
 	internal partial class Utils
 	{
-		internal static async Task<bool> UpdateClient()
+		/// <summary>
+		/// Checks for updates and downloads newest application files from GitHub
+		/// https://developer.github.com/v3/
+		/// lastCommit file is automatically created after each built run
+		/// Done via Visual Studio project properties > post build command
+		/// 		cd $(SolutionDir)
+		/// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)lastCommit.json"
+		/// Read more about GIT commands: https://git-scm.com/docs/git-show
+		/// </summary>
+		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+		internal static async Task UpdateClient()
 		{
 			DateTimeOffset? localCommitDate = null;
 			DateTime? latestReleaseDate = null;
-
-			// ######################################################################################################################
-			// Get the commit date when the local program files were created
+			string downloadUrl = null;
 			string lastCommitPath = AppDomain.CurrentDomain.BaseDirectory + @"lastCommit.json";
 			string lastCommitSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.schema.json";
 
+			// ######################################################################################################################
+			// Get the commit date when the local program files were created
 			try
 			{
 				// Read content from lastCommit.json
-				// lastCommit file is automatically created after each built run
-				// Done via Visual Studio project properties > post build command
-				// 		cd $(SolutionDir)
-				// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)lastCommit.json"
-				// Read command documentation: https://git-scm.com/docs/git-show
 				string lastCommitJson = File.ReadAllText(lastCommitPath);
 
 				// Validate lastCommit.json. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
@@ -90,38 +93,36 @@ namespace Utils
 
 					latestReleaseDate = Utils.ConvertStringToDate((string)latestReleaseData.SelectToken("created_at"));
 
-					// ######################################################################################################################
-					// If local file date is older than latest release date, then GitHub has a newer release
-					if (localCommitDate.HasValue && latestReleaseDate.HasValue && localCommitDate < latestReleaseDate)
+					// URL for latest release file from GitHub
+					downloadUrl = (string)latestReleaseData.SelectToken("assets[0].browser_download_url");
+				}
+
+				// ######################################################################################################################
+				// If local file date is older than latest release date, then GitHub has a newer release
+				if (localCommitDate.HasValue && latestReleaseDate.HasValue && localCommitDate < latestReleaseDate)
+				{
+					// Ask user if he want's to update the program
+					DialogResult dialogResult = MessageBox.Show("Download update now?", "Update available", MessageBoxButtons.YesNo);
+					if (dialogResult == DialogResult.Yes)
 					{
-						// Ask user if he want's to update the program
-						DialogResult dialogResult = MessageBox.Show("Download update now?", "Update available", MessageBoxButtons.YesNo);
-						if (dialogResult == DialogResult.Yes)
+						if (downloadUrl != null && Utils.IsValidUrl(downloadUrl))
 						{
-							// Download the release file from GitHub
-							string downloadUrl = (string)latestReleaseData.SelectToken("assets[0].browser_download_url");
-
-							if (downloadUrl != null && Utils.IsValidUrl(downloadUrl))
+							using (HttpRequestMessage downloadRequest = new HttpRequestMessage())
 							{
-								using (HttpRequestMessage downloadRequest = new HttpRequestMessage())
+								downloadRequest.RequestUri = new Uri(downloadUrl);
+
+								byte[] downloadData = await GetResponse(client, downloadRequest, cancelToken, returnByteArray: true);
+
+								// Write the file as "update.zip" to program folder
+								if (downloadData != null)
 								{
-									downloadRequest.RequestUri = new Uri(downloadUrl);
-
-									byte[] downloadData = await GetResponse(client, downloadRequest, cancelToken, returnByteArray: true);
-
-									// Write the file as "update.zip" to program folder
-									if (downloadData != null)
-									{
-										File.WriteAllBytes("update.zip", downloadData);
-									}
+									File.WriteAllBytes("update.zip", downloadData);
 								}
 							}
 						}
 					}
 				}
 			}
-
-			return false;
 		}
 	}
 }

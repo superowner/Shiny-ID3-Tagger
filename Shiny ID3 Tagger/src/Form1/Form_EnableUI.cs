@@ -8,6 +8,9 @@
 
 namespace Shiny_ID3_Tagger
 {
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1
 	{
 		private void Form_EnableUI(bool enable)

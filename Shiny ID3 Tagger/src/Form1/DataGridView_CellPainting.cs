@@ -13,6 +13,9 @@ namespace Shiny_ID3_Tagger
 	using System.Windows.Forms;
 	using GlobalVariables;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
 		private void DataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)

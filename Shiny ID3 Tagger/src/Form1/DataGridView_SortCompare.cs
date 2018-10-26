@@ -15,6 +15,9 @@ namespace Shiny_ID3_Tagger
 	using GlobalVariables;
 	using Utils;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
 		private void DataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)

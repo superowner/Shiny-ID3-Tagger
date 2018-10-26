@@ -18,6 +18,9 @@ namespace Shiny_ID3_Tagger
 	using GlobalVariables;
 	using Utils;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
 		private void MenuItemClick_ExportTable(object sender, EventArgs e)
@@ -27,12 +30,12 @@ namespace Shiny_ID3_Tagger
 			StringBuilder csvContent = new StringBuilder();
 
 			IEnumerable<DataGridViewColumn> headers = GlobalVariables.ActiveDGV.Columns.Cast<DataGridViewColumn>();
-			csvContent.AppendLine(string.Join(seperator, headers.Select(column => Utils.WellFormedCsvValue(column.HeaderCell.Value)).ToArray()));
+			csvContent.AppendLine(string.Join(seperator, headers.Select(column => Utils.SanitizeForCsv(column.HeaderCell.Value)).ToArray()));
 
 			foreach (DataGridViewRow row in GlobalVariables.ActiveDGV.Rows)
 			{
 				IEnumerable<DataGridViewCell> cells = row.Cells.Cast<DataGridViewCell>();
-				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => Utils.WellFormedCsvValue(cell.Value)).ToArray()));
+				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => Utils.SanitizeForCsv(cell.Value)).ToArray()));
 			}
 
 			// Set dialog properties like filename, overwrite prompt and start folder

@@ -244,7 +244,7 @@
     <Compile Include="src\Utils\GetUserSettings.cs" />
     <Compile Include="src\Utils\Strip.cs" />
     <Compile Include="src\Utils\ValidateSchema.cs" />
-    <Compile Include="src\Utils\WellFormedCsvValue.cs" />
+    <Compile Include="src\Utils\SanitizeForCsv.cs" />
     <Compile Include="src\GlobalVariables\GlobalVariables.cs" />
     <Compile Include="src\SearchTags.cs">
       <SubType>Form</SubType>

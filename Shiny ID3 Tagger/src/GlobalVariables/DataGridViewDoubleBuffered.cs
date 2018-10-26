@@ -12,8 +12,11 @@ namespace Shiny_ID3_Tagger
 	/// <summary>Represents a new class based on System.Windows.Forms.DataGridView</summary>
 	public class DataGridViewDoubleBuffered : DataGridView
 	{
-		/// <summary>Initializes a new instance of the <see cref="DataGridViewDoubleBuffered"/> class
-		/// which has double buffering enabled for a smoother UI experience</summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataGridViewDoubleBuffered"/> class
+		/// which has double buffering enabled for a smoother UI experience
+		/// How to speed up dataGridView rendering: https://10tec.com/articles/why-datagridview-slow.aspx
+		/// </summary>
 		public DataGridViewDoubleBuffered()
 		{
 			this.DoubleBuffered = true;

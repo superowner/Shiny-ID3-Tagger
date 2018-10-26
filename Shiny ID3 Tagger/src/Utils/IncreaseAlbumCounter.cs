@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Checks if current WEB API has returned an album which is also the majority album from all other APIs</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -15,22 +14,30 @@ namespace Utils
 	/// </summary>
 	internal partial class Utils
 	{
+		/// <summary>
+		/// Checks if current API has returned an album which is also the majority album from all other APIs
+		/// If yes, then increase the corresponding entry in GlobalVariables.AlbumHits list
+		/// </summary>
+		/// <param name="service">name of current API</param>
+		/// <param name="apiAlbum">name of album to check</param>
+		/// <param name="majorityAlbum">name of most often returned album name by all other APIs</param>
+		/// <returns>The updated value of albumHits for the specified API</returns>
 		internal static string IncreaseAlbumCounter(string service, string apiAlbum, string majorityAlbum)
 		{
-			if (!GlobalVariables.AlbumHits.ContainsKey(service.ToString()))
+			if (!GlobalVariables.AlbumHits.ContainsKey(service))
 			{
-				GlobalVariables.AlbumHits.Add(service.ToString(), 0);
+				GlobalVariables.AlbumHits.Add(service, 0);
 			}
 
 			if (apiAlbum != null && majorityAlbum != null)
 			{
-				if (Strip(apiAlbum.ToString().ToLowerInvariant()) == Strip(majorityAlbum.ToLowerInvariant()))
+				if (Strip(apiAlbum.ToLowerInvariant()) == Strip(majorityAlbum.ToLowerInvariant()))
 				{
-					GlobalVariables.AlbumHits[service.ToString()] += 1;
+					GlobalVariables.AlbumHits[service] += 1;
 				}
 			}
 
-			string result = GlobalVariables.AlbumHits[service.ToString()].ToString().ToLowerInvariant();
+			string result = GlobalVariables.AlbumHits[service].ToString();
 
 			return result;
 		}

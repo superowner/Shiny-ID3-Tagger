@@ -3,8 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Put green (new value), yellow (minor change)
-// or red (big change) as cell background color in dataGridView1</summary>
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -14,8 +12,21 @@ namespace Shiny_ID3_Tagger
 	using GlobalVariables;
 	using Utils;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1
 	{
+		/// <summary>
+		/// Compares two values and signals changes through background colors in dataGridView1
+		/// If a change is detected, the "Save" checkbox is activated (true)
+		/// Green = new value, Yellow = minor change, Red = big change
+		/// </summary>
+		/// <param name="row">Row to alter</param>
+		/// <param name="col">Column to alter</param>
+		/// <param name="oldValue">Old value</param>
+		/// <param name="newValue">New value</param>
+		/// <param name="signalBigChanges">True or false if major changes should be signalized with red</param>
 		internal void DataGridView_MarkChange(int row, int col, string oldValue, string newValue, bool signalBigChanges = false)
 		{
 			if (!string.IsNullOrWhiteSpace(newValue) && oldValue != newValue)
