@@ -125,7 +125,7 @@ namespace Shiny_ID3_Tagger
 							"ERROR:    Could not read all file tags!",
 							"Message:  " + error.ToString().TrimEnd('\r', '\n')
 						};
-						this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+						this.RichTextBox_LogMessage(errorMsg);
 					}
 				}
 			}

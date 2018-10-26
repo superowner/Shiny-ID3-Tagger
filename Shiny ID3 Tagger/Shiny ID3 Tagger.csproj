@@ -232,7 +232,7 @@
     <Compile Include="src\Utils\IsValidMp3.cs" />
     <Compile Include="src\Utils\IsValidUrl.cs" />
     <Compile Include="src\Utils\LevenshteinDistance.cs" />
-    <Compile Include="src\Form1\RichTextBox_PrintErrorMessage.cs">
+    <Compile Include="src\Form1\RichTextBox_LogMessage.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Utils\BuildLogMessage.cs" />

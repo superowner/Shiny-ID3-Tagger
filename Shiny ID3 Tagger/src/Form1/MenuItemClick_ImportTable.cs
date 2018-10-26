@@ -90,7 +90,7 @@ namespace Shiny_ID3_Tagger
 										"CSV:      " + string.Join(seperator, csvHeaderFields),
 										"Required: " + string.Join(seperator, dgvHeaderFields)
 									};
-									this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+									this.RichTextBox_LogMessage(errorMsg);
 								}
 							}
 						}
@@ -104,7 +104,7 @@ namespace Shiny_ID3_Tagger
 									"ERROR:    Could not parse CSV \"" + fullPath + "\"",
 									"Message:  " + ex.Message.TrimEnd('\r', '\n')
 								};
-								this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+								this.RichTextBox_LogMessage(errorMsg);
 							}
 						}
 					}

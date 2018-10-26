@@ -48,7 +48,7 @@ namespace Utils
 						"ERROR:    Invalid filepath!",
 						"file:     " + filepath
 					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
 
 				return false;
@@ -63,7 +63,7 @@ namespace Utils
 						"ERROR:    File not found!",
 						"file:     " + filepath
 					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
 
 				return false;
@@ -78,7 +78,7 @@ namespace Utils
 						"ERROR:    Cannot access file. Already in use!",
 						"file:     " + filepath
 					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
 
 				return false;
@@ -100,7 +100,7 @@ namespace Utils
 							"ERROR:    Not a valid MP3 file!",
 							"file:     " + filepath
 						};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
 
 				// return false because MP3 file does not contain a valid mp3 header

@@ -72,7 +72,7 @@ namespace Utils
 						"Filepath: " + accountsConfigPath,
 						"Message:  " + ex.Message.TrimEnd('\r', '\n')
 					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
 			}
 			catch (FileNotFoundException)
@@ -85,7 +85,7 @@ namespace Utils
 						"ERROR:    File not found!",
 						"Filepath: " + accountsConfigPath
 					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
 			}
 			catch (IOException)
@@ -98,7 +98,7 @@ namespace Utils
 						"ERROR:    Cannot access file. Already in use!",
 						"Filepath: " + accountsConfigPath
 					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
 			}
 		}

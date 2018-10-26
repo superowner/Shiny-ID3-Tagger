@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RichTextBox_PrintErrorMessage.cs" company="Shiny ID3 Tagger">
+// <copyright file="RichTextBox_LogMessage.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -18,22 +18,33 @@ namespace Shiny_ID3_Tagger
 	/// </summary>
 	public partial class Form1
 	{
-		internal void RichTextBox_PrintErrorMessage(string[] values)
-		{
-			this.PrintLogMessage(this.rtbErrorLog, values);
-		}
-
 		/// <summary>
-		/// Outputs a given log message to the passed richTextBox. If no richTextBox is provided, use rtbErrorLog as default
+		/// Writes a given list of messages to the desired richTextBox
 		/// </summary>
-		/// <param name="richTextBox"></param>
-		/// <param name="values"></param>
-		internal void PrintLogMessage(RichTextBox richTextBox, string[] values)
+		/// <param name="values">List of messages to log</param>
+		/// <param name="messageType">richTextBox to use. Possible values are "Search", "Write" or "Error" (default)</param>
+		internal void RichTextBox_LogMessage(string[] values, string messageType = "Error")
 		{
+			// Set correct richTextBox to use
+			RichTextBox richTextBox = null;
+			switch (messageType)
+			{
+				case "Search":
+					richTextBox = this.rtbSearchLog;
+					break;
+				case "Write":
+					richTextBox = this.rtbWriteLog;
+					break;
+				case "Error":
+				default:
+					richTextBox = this.rtbErrorLog;
+					break;
+			}
+
 			// When called from a different thread then Form1, switch back to thread which owns Form1
 			if (this.InvokeRequired)
 			{
-				this.Invoke(new Action<RichTextBox, string[]>(this.PrintLogMessage), new object[] { richTextBox, values });
+				this.Invoke(new Action<string[], string>(this.RichTextBox_LogMessage), new object[] { richTextBox, values });
 				return;
 			}
 
@@ -52,7 +63,7 @@ namespace Shiny_ID3_Tagger
 				richTextBox.AppendText(message + Environment.NewLine);
 
 				// Switch to error tab if it's an error message
-				if (richTextBox.Name == "rtbErrorLog")
+				if (richTextBox == this.rtbErrorLog)
 				{
 					this.tabControl2.SelectedIndex = 2;
 				}

@@ -33,7 +33,7 @@ namespace Shiny_ID3_Tagger
 					{
 						"ERROR:    Invalid URL found: " + url
 					};
-					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+					this.RichTextBox_LogMessage(errorMsg);
 				}
 			}
 		}

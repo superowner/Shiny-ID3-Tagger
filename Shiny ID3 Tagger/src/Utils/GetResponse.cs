@@ -74,7 +74,7 @@ namespace Utils
 					if ((int)User.Settings["DebugLevel"] >= 3)
 					{
 						List<string> errorMsg = BuildLogMessage(request, requestContent, null);
-						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
+						Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray());
 					}
 
 					response = await client.SendAsync(request, timeoutToken.Token);
@@ -113,7 +113,7 @@ namespace Utils
 								List<string> errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
 								errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
-								Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
+								Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray());
 							}
 
 							// Response was not successful. But it was also not a common error. And user did not press cancel
@@ -135,7 +135,7 @@ namespace Utils
 							List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
 							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 
-							Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
+							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray());
 						}
 					}
 
@@ -157,7 +157,7 @@ namespace Utils
 						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 						errorMsg.Add("Message:  " + realError.Message.ToString());
 
-						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
+						Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray());
 					}
 
 					break;

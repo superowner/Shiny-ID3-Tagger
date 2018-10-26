@@ -68,7 +68,7 @@ namespace Utils
 					"Filepath: " + lastCommitPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n')
 				};
-				Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+				Form1.Instance.RichTextBox_LogMessage(errorMsg);
 			}
 
 			// ######################################################################################################################
