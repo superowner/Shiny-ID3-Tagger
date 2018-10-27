@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// REVIEW: Refactor whole method
 
 namespace Utils
 {
@@ -17,8 +18,9 @@ namespace Utils
 	{
 		/// <summary> Deserialize a JSON string to a JSON.NET JObject </summary>
 		/// <param name="jsonStr">The input string which should be deserialized</param>
+		/// <param name="throwError">True or false (default) if parsing errors should throw an error</param>
 		/// <returns>The new JObject holding all the values from content string</returns>
-		internal static JObject DeserializeJson(string jsonStr)
+		internal static JObject DeserializeJson(string jsonStr, bool throwError = true)
 		{
 			JObject jsonObj = null;
 
@@ -33,20 +35,32 @@ namespace Utils
 				// Set custom settings for JSON parser
 				JsonSerializerSettings jsonSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
 
-				// Build a useful error message if JSON parsing fails
-				if ((int)debugLevel >= 2)
+				if (throwError)
 				{
+					// Build a more useful error message when JSON parsing fails later
+					if ((int)debugLevel >= 2)
+					{
+						jsonSettings.Error += (obj, errorArgs) =>
+						{
+							string[] errorMsg =
+							{
+								"WARNING:  Could not convert string to JSON!",
+								"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
+							};
+							Form1.Instance.RichTextBox_LogMessage(errorMsg);
+						};
+					}
+				}
+				else
+				{
+					// If throwError is set to false, then set error on handled=true. This method doesn't throw errors then
 					jsonSettings.Error += (obj, errorArgs) =>
 					{
-						string[] errorMsg =
-						{
-							"WARNING:  Could not convert string to JSON!",
-							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
-						};
-						Form1.Instance.RichTextBox_LogMessage(errorMsg);
+						errorArgs.ErrorContext.Handled = true;
 					};
 				}
 
+				// Parse JSON
 				jsonObj = JsonConvert.DeserializeObject<JObject>(jsonStr, jsonSettings);
 			}
 

@@ -12,6 +12,7 @@ namespace Utils
 	using System.Security.Cryptography;
 	using System.Text;
 	using GlobalVariables;
+	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using Shiny_ID3_Tagger;
 
@@ -25,8 +26,8 @@ namespace Utils
 		/// </summary>
 		/// <param name="configPath">Path to config file</param>
 		/// <param name="schemaPath">Path to schema file for the config file</param>
-		/// <param name="config">Variable where config should be saved in</param>
-		internal static void ReadConfig(string configPath, string schemaPath, JObject config)
+		/// <returns>The parsed and validated config object</returns>
+		internal static JObject ReadConfig(string configPath, string schemaPath)
 		{
 			// Build path to config file and schema file
 			string fullConfigPath = AppDomain.CurrentDomain.BaseDirectory + configPath;
@@ -37,11 +38,11 @@ namespace Utils
 				// Read config
 				string fileContent = File.ReadAllText(fullConfigPath);
 
-				// Validate config. If any validation errors occurred, ValidateConfig will return an error string
-				string validationResult = ValidateSchema(fileContent, fullSchemaPath);
+				// Parse JSON, don't throw an error so we can try to decrypt it later
+				JObject json = Utils.DeserializeJson(fileContent, false);
 
-				// If the config could not be validated on first try, assume the config file is encrypted
-				if (validationResult != string.Empty)
+				// If first parsing failed, json object stays null. Then we assume the config file is encrypted
+				if (json == null)
 				{
 					// Decrypt config
 					Aes decryptor = Aes.Create();
@@ -50,34 +51,49 @@ namespace Utils
 					ICryptoTransform decryptorTransformer = decryptor.CreateDecryptor(key, iv);
 					byte[] encryptedBytes = Convert.FromBase64String(fileContent);
 					byte[] decryptedBytes = decryptorTransformer.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
-					fileContent = Encoding.UTF8.GetString(decryptedBytes);
+					string decryptedFileContent = Encoding.UTF8.GetString(decryptedBytes);
 
-					// Validate config again
-					validationResult = ValidateSchema(fileContent, fullSchemaPath);
-
-					// If the config could not be validated, throw an exception
-					if (validationResult != string.Empty)
-					{
-						throw new ArgumentException(validationResult);
-					}
+					// Parse JSON again (can throw an ??? Exception)
+					json = Utils.DeserializeJson(decryptedFileContent);
 				}
 
-				// Save config
-				config = JObject.Parse(fileContent);
+				// Validate config (can throw an ArgumentException)
+				ValidateSchema(json, fullSchemaPath);
+
+				// Return config
+				return json;
 			}
-			catch (ArgumentException ex)
+			catch (JsonException ex)
 			{
-				// Validation failed. Malformed config file
+				// Parsing failed. File content is not a valid JSON
 				if ((int)User.Settings["DebugLevel"] >= 1)
 				{
 					string[] errorMsg =
 					{
-						@"ERROR:    Failed to parse user accounts!",
+						@"ERROR:    Failed to parse a config file!",
 						"Filepath: " + fullConfigPath,
 						"Message:  " + ex.Message.TrimEnd('\r', '\n')
 					};
 					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
+
+				return null;
+			}
+			catch (ArgumentException ex)
+			{
+				// Validation failed. JSON could not be validated against its schema
+				if ((int)User.Settings["DebugLevel"] >= 1)
+				{
+					string[] errorMsg =
+					{
+						@"ERROR:    Failed to validate a config file!",
+						"Filepath: " + fullConfigPath,
+						"Message:  " + ex.Message.TrimEnd('\r', '\n')
+					};
+					Form1.Instance.RichTextBox_LogMessage(errorMsg);
+				}
+
+				return null;
 			}
 			catch (FileNotFoundException)
 			{
@@ -91,6 +107,8 @@ namespace Utils
 					};
 					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
+
+				return null;
 			}
 			catch (IOException)
 			{
@@ -104,6 +122,8 @@ namespace Utils
 					};
 					Form1.Instance.RichTextBox_LogMessage(errorMsg);
 				}
+
+				return null;
 			}
 		}
 	}

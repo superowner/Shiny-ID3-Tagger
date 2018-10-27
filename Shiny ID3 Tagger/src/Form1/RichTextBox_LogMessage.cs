@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// TODO: Move debugLevel query inside this method
 
 namespace Shiny_ID3_Tagger
 {

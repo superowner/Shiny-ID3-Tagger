@@ -42,15 +42,16 @@ namespace GetTags
 			sw.Start();
 
 			// ###########################################################################
-			// TODO: Undone
-			var accounts = User.Accounts.GetValue(o.Service, StringComparison.OrdinalIgnoreCase);
-			foreach (var acc in accounts)
+			foreach (var item in User.Accounts[o.Service])
 			{
-				acc["lastUsed"] = 0;
+				if (item["lastUsed"] == null)
+				{
+					item["lastUsed"] = 0;
+				}
 			}
 
 			var account = (from item in User.Accounts[o.Service]
-						   orderby item["lastused"] ascending
+						   orderby item["lastUsed"] ascending
 						   select item).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;
 

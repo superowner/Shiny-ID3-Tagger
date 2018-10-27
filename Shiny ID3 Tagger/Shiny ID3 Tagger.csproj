@@ -265,7 +265,7 @@
     <Compile Include="src\api\GetTagsService\QQ.cs" />
     <Compile Include="src\api\GetTagsService\Spotify.cs" />
     <Compile Include="src\api\GetTagsService\Tidal.cs" />
-    <Compile Include="src\api\GetLyricsService\ChartLyrics.cs" />
+    <Compile Include="src\api\deprecated\ChartLyrics.cs" />
     <Compile Include="src\api\GetLyricsService\LoloLyrics.cs" />
     <Compile Include="src\api\GetLyricsService\Netease.cs" />
     <Compile Include="src\api\GetLyricsService\Xiami.cs" />

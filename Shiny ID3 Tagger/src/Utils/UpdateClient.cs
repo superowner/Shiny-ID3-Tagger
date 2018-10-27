@@ -37,38 +37,16 @@ namespace Utils
 			DateTimeOffset? localCommitDate = null;
 			DateTime? latestReleaseDate = null;
 			string downloadUrl = null;
-			string lastCommitPath = AppDomain.CurrentDomain.BaseDirectory + @"lastCommit.json";
-			string lastCommitSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.schema.json";
 
 			// ######################################################################################################################
 			// Get the commit date when the local program files were created
-			try
+			JObject lastCommit = Utils.ReadConfig(@"lastCommit.json", @"config\schemas\lastCommit.schema.json");
+
+			if (lastCommit != null)
 			{
-				// Read content from lastCommit.json
-				string lastCommitJson = File.ReadAllText(lastCommitPath);
+				localCommitDate = DateTimeOffset.Parse((string)lastCommit.SelectToken("date"));
 
-				// Validate lastCommit.json. If any validation errors occurred, ValidateConfig will throw an exception which is catched later
-				ValidateSchema(lastCommitJson, lastCommitSchemaPath);
-
-				// Save last commit to JObject for later access throughout the program
-				JObject lastCommitData = JObject.Parse(lastCommitJson);
-
-				if (lastCommitData != null)
-				{
-					localCommitDate = DateTimeOffset.Parse((string)lastCommitData.SelectToken("date"));
-
-					Form1.Instance.Text = Application.ProductName + "     Client date: " + localCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
-				}
-			}
-			catch (Exception ex)
-			{
-				string[] errorMsg =
-					{
-					@"ERROR:    Failed to read lastCommit.json! Please close program and fix this first...",
-					"Filepath: " + lastCommitPath,
-					"Message:  " + ex.Message.TrimEnd('\r', '\n')
-				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg);
+				Form1.Instance.Text = Application.ProductName + "     Version: " + localCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
 			}
 
 			// ######################################################################################################################

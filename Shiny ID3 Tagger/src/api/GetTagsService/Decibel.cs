@@ -28,22 +28,23 @@ namespace GetTags
 	{
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 { Service = "Decibel (Quantone Music)" };
+			Id3 o = new Id3 { Service = "Decibel (Quantone music)" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
 
 			// ###########################################################################
-			// TODO: Undone
-			var accounts = User.Accounts.GetValue(o.Service, StringComparison.OrdinalIgnoreCase);
-			foreach (var acc in accounts)
+			foreach (var acc in User.Accounts["Decibel"])
 			{
-				acc["lastUsed"] = 0;
+				if (acc["lastUsed"] == null)
+				{
+					acc["lastUsed"] = 0;
+				}
 			}
 
-			var account = (from item in User.Accounts[o.Service]
-							orderby item["lastused"] ascending
-							select item).FirstOrDefault();
+			var account = (from acc in User.Accounts["Decibel"]
+							orderby acc["lastUsed"] ascending
+							select acc).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;
 
 			string artistEncoded = WebUtility.UrlEncode(artist);

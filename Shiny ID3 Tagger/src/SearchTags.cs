@@ -31,7 +31,6 @@ namespace Shiny_ID3_Tagger
 		private List<IGetLyricsService> lyricsServices = new List<IGetLyricsService>
 		{
 			new GetLyrics.Apiseeds(),
-			new GetLyrics.ChartLyrics(),
 			new GetLyrics.LoloLyrics(),
 			new GetLyrics.Netease(),
 			new GetLyrics.ViewLyrics(),
@@ -143,7 +142,7 @@ namespace Shiny_ID3_Tagger
 								(artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
 								 titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
 							{
-								this.RichTextBox_LogMessage(new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" }, "rtbSearchLog");
+								this.RichTextBox_LogMessage(new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" }, "Search");
 
 								sw.Restart();
 
