@@ -26,6 +26,13 @@ namespace Shiny_ID3_Tagger
 		/// <param name="messageType">richTextBox to use. Possible values are "Search", "Write" or "Error" (default)</param>
 		internal void RichTextBox_LogMessage(string[] values, string messageType = "Error")
 		{
+			// When called from a different thread then Form1, switch back to thread which owns Form1
+			if (this.InvokeRequired)
+			{
+				this.Invoke(new Action<string[], string>(Form1.Instance.RichTextBox_LogMessage), new object[] { values, messageType });
+				return;
+			}
+
 			// Set correct richTextBox to use
 			RichTextBox richTextBox = null;
 			switch (messageType)
@@ -40,13 +47,6 @@ namespace Shiny_ID3_Tagger
 				default:
 					richTextBox = this.rtbErrorLog;
 					break;
-			}
-
-			// When called from a different thread then Form1, switch back to thread which owns Form1
-			if (this.InvokeRequired)
-			{
-				this.Invoke(new Action<string[], string>(this.RichTextBox_LogMessage), new object[] { richTextBox, values });
-				return;
 			}
 
 			// If one value is a multi line string (i.e. HTML body), then split and rejoin each line with enough whitespace to align them

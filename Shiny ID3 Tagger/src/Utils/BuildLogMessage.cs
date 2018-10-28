@@ -28,25 +28,27 @@ namespace Utils
 			List<string> errorMsg = new List<string>
 			{
 				"Request:  " + request.Method + " " + request.RequestUri.OriginalString,
-				"Status:   " + response.ReasonPhrase + ": " + (int)response.StatusCode
 			};
 
+			// Add headers
 			foreach (var element in request.Headers)
 			{
 				errorMsg.Add("Header:   " + element.Key + ": " + string.Join(" ", element.Value));
 			}
 
+			// If post body exists, add it
 			if (!string.IsNullOrEmpty(requestContent))
 			{
 				errorMsg.Add("Body:     " + requestContent);
 				requestContent = string.Empty;
 			}
 
-			// Add response content
-			if (response.Content != null)
+			// if response exists, add it
+			if (response != null)
 			{
 				string responseContent = response.Content.ReadAsStringAsync().Result;
 				errorMsg.Add("Response: " + responseContent);
+				errorMsg.Add("Status:   " + response.ReasonPhrase + ": " + (int)response.StatusCode);
 			}
 
 			return errorMsg;
