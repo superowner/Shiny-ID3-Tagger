@@ -25,7 +25,7 @@ namespace Shiny_ID3_Tagger
 			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
 			// Add new files
-			bool hasNewFiles = await this.AddFiles(null, cancelToken);
+			bool hasNewFiles = await this.CollectFiles(null, cancelToken);
 
 			// Continue with searching if user setting allows it and if new files were added
 			if ((bool)User.Settings["AutoSearch"] && hasNewFiles)

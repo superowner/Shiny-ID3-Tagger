@@ -49,7 +49,7 @@ namespace Shiny_ID3_Tagger
 			if (User.Accounts != null && User.Settings != null)
 			{
 				// Add new files to dataGridView1
-				bool hasNewFiles = await this.AddFiles(args, cancelToken);
+				bool hasNewFiles = await this.CollectFiles(args, cancelToken);
 
 				// Continue only if user setting allows it and if new files were added
 				if ((bool)User.Settings["AutoSearch"] && hasNewFiles)

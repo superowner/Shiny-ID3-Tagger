@@ -3,10 +3,10 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Main method for ID3 tag saving. Loops through all result rows and writes their values as tags it's corresponding file</summary>
-// https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs
+// <summary></summary>
+//
 //-----------------------------------------------------------------------
-// TODO: Remove all "catch (Exception ex)" statements
+// REVIEW: Remove all "catch (Exception ex)" statements
 
 namespace Shiny_ID3_Tagger
 {
@@ -32,7 +32,10 @@ namespace Shiny_ID3_Tagger
 	/// </summary>
 	public partial class Form1
 	{
-		// ###########################################################################
+		/// ###########################################################################
+		/// <summary>
+		/// Main method for ID3 tag saving. Loops through all result rows and writes their values as tags it's corresponding file
+		/// </summary>
 		private async void StartWriting()
 		{
 			this.Form_EnableUI(false);
@@ -140,8 +143,15 @@ namespace Shiny_ID3_Tagger
 			this.Form_EnableUI(true);
 		}
 
-		// ###########################################################################
-		// Overwrite tag values with results from API search
+		/// ###########################################################################
+		/// <summary>
+		/// Overwrite tag values with results from API search
+		/// https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs
+		/// </summary>
+		/// <param name="tagFile"></param>
+		/// <param name="row"></param>
+		/// <param name="tagContainer"></param>
+		/// <returns></returns>
 		private TagLib.Id3v2.Tag AddResultsToTagContainer(
 			TagLib.File tagFile,
 			DataGridViewRow row,
@@ -264,9 +274,20 @@ namespace Shiny_ID3_Tagger
 			return tagContainer;
 		}
 
-		// ###########################################################################
-		// Download and add cover image
-		private async Task<TagLib.Id3v2.Tag> AddCoverToTagContainer(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag tagContainer, HttpClient client)
+		/// ###########################################################################
+		/// <summary>
+		/// Download and add cover image
+		/// </summary>
+		/// <param name="tagFile"></param>
+		/// <param name="row"></param>
+		/// <param name="tagContainer"></param>
+		/// <param name="client"></param>
+		/// <returns></returns>
+		private async Task<TagLib.Id3v2.Tag> AddCoverToTagContainer(
+			TagLib.File tagFile,
+			DataGridViewRow row,
+			TagLib.Id3v2.Tag tagContainer,
+			HttpClient client)
 		{
 			string[] errorMsg = null;
 			string url = (string)row.Cells[this.cover1.Index].Value;
@@ -402,7 +423,14 @@ namespace Shiny_ID3_Tagger
 			return tagContainer;
 		}
 
-		// ###########################################################################
+		/// ###########################################################################
+		/// <summary>
+		/// Tries to write all new tags to the file.
+		/// Can handle file errors with a built-in retry logic
+		/// Maintains original file timestamps (last changed, created)
+		/// </summary>
+		/// <param name="tagFile"></param>
+		/// <returns></returns>
 		private async Task<bool> SaveFile(TagLib.File tagFile)
 		{
 			const int WriteDelay = 50;

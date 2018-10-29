@@ -5,7 +5,6 @@
 // <author>ShinyId3Tagger Team</author>
 // <summary></summary>
 //-----------------------------------------------------------------------
-// TODO: Remove all "catch (Exception ex)" statements
 
 namespace Utils
 {
@@ -134,27 +133,28 @@ namespace Utils
 
 					break;
 				}
-				catch (Exception error)
-				{
-					// An unknown application error occurred. Cancel request immediately and don't try again
-					// Print out all request properties
-					if (!cancelToken.IsCancellationRequested)
-					{
-						Exception realError = error;
-						while (realError.InnerException != null)
-						{
-							realError = realError.InnerException;
-						}
 
-						List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured! Abort..." };
-						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-						errorMsg.Add("Message:  " + realError.Message.ToString());
+				// catch (Exception error)
+				// {
+				// 	// An unknown application error occurred. Cancel request immediately and don't try again
+				// 	// Print out all request properties
+				// 	if (!cancelToken.IsCancellationRequested)
+				// 	{
+				// 		Exception realError = error;
+				// 		while (realError.InnerException != null)
+				// 		{
+				// 			realError = realError.InnerException;
+				// 		}
 
-						Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
-					}
+				// 		List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured! Abort..." };
+				// 		errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+				// 		errorMsg.Add("Message:  " + realError.Message.ToString());
 
-					break;
-				}
+				// 		Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
+				// 	}
+
+				// 	break;
+				// }
 			}
 
 			return result;

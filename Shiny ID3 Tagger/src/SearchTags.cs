@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Code fired when "Search tags" button is clicked. Calls all APIs and presents their results</summary>
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -58,7 +57,12 @@ namespace Shiny_ID3_Tagger
 			new GetTags.Tidal()
 		};
 
-		// ###########################################################################
+		/// ###########################################################################
+		/// <summary>
+		/// Main method to start all search tasks. Shows the results in the dataGridView2
+		/// Runs when "Search tags" button is clicked
+		/// </summary>
+		/// <param name="cancelToken">Global cancellation token</param>
 		private async void StartSearching(CancellationToken cancelToken)
 		{
 			// Prepare visual stuff like disable buttons during work, show two progress bars
@@ -270,58 +274,18 @@ namespace Shiny_ID3_Tagger
 			this.Form_EnableUI(true);
 		}
 
-		// ###########################################################################
-		private async Task<KeyValuePair<string, string>> StartLyricsSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
-		{
-			KeyValuePair<string, string> lyrics = default(KeyValuePair<string, string>);
-			Dictionary<string, string> lyricResults = new Dictionary<string, string>();
-
-			if (tagNew.Artist == null && tagNew.Title == null)
-			{
-				return lyrics;
-			}
-
-			List<Task<Id3>> taskList = this.lyricsServices.Select(service => service.GetLyrics(
-																  client, tagNew, cancelToken)).ToList();
-
-			try
-			{
-				while (taskList.Count > 0)
-				{
-					cancelToken.ThrowIfCancellationRequested();
-
-					Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
-					taskList = tpl.Item1;
-					Id3 r = tpl.Item2;
-
-					lyricResults.Add(r.Service, r.Lyrics);
-				}
-			}
-			catch (OperationCanceledException)
-			{
-				// User pressed Cancel button. Nothing further to do
-			}
-
-			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
-			// "lyricsPriority" setting in settings.json decides what lyrics should be taken if there are multiple sources available
-			foreach (string api in User.Settings["LyricsPriority"])
-			{
-				lyrics = (from kvp in lyricResults
-						  where !string.IsNullOrWhiteSpace(kvp.Value)
-						  where kvp.Key.ToLowerInvariant() == api.ToLowerInvariant()
-						  select kvp).FirstOrDefault();
-
-				if (lyrics.Value != null)
-				{
-					break;
-				}
-			}
-
-			return lyrics;
-		}
-
-		// ###########################################################################
-		private async Task<DataTable> StartId3Search(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
+		/// ###########################################################################
+		/// <summary>
+		/// Method that starts all ID3 API tasks. Collects their results
+		/// </summary>
+		/// <param name="client">Single HTTP client which is used throughout the whole program</param>
+		/// <param name="tagOld"></param>
+		/// <param name="cancelToken">Global cancellation token</param>
+		/// <returns></returns>
+		private async Task<DataTable> StartId3Search(
+			HttpMessageInvoker client,
+			Id3 tagOld,
+			CancellationToken cancelToken)
 		{
 			DataTable apiResults = Id3.CreateId3Table();
 
@@ -380,22 +344,97 @@ namespace Shiny_ID3_Tagger
 			return apiResults;
 		}
 
+		/// ###########################################################################
+		/// <summary>
+		/// Method that starts all lyrics API tasks. Collects their results
+		/// </summary>
+		/// <param name="client">Single HTTP client which is used throughout the whole program</param>
+		/// <param name="tagNew"></param>
+		/// <param name="cancelToken">Global cancellation token</param>
+		/// <returns></returns>
+		private async Task<KeyValuePair<string, string>> StartLyricsSearch(
+			HttpMessageInvoker client,
+			Id3 tagNew,
+			CancellationToken cancelToken)
+		{
+			KeyValuePair<string, string> lyrics = default(KeyValuePair<string, string>);
+			Dictionary<string, string> lyricResults = new Dictionary<string, string>();
+
+			if (tagNew.Artist == null && tagNew.Title == null)
+			{
+				return lyrics;
+			}
+
+			List<Task<Id3>> taskList = this.lyricsServices.Select(service => service.GetLyrics(
+																  client, tagNew, cancelToken)).ToList();
+
+			try
+			{
+				while (taskList.Count > 0)
+				{
+					cancelToken.ThrowIfCancellationRequested();
+
+					Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
+					taskList = tpl.Item1;
+					Id3 r = tpl.Item2;
+
+					lyricResults.Add(r.Service, r.Lyrics);
+				}
+			}
+			catch (OperationCanceledException)
+			{
+				// User pressed Cancel button. Nothing further to do
+			}
+
+			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
+			// "lyricsPriority" setting in settings.json decides what lyrics should be taken if there are multiple sources available
+			foreach (string api in User.Settings["LyricsPriority"])
+			{
+				lyrics = (from kvp in lyricResults
+						  where !string.IsNullOrWhiteSpace(kvp.Value)
+						  where kvp.Key.ToLowerInvariant() == api.ToLowerInvariant()
+						  select kvp).FirstOrDefault();
+
+				if (lyrics.Value != null)
+				{
+					break;
+				}
+			}
+
+			return lyrics;
+		}
+
+		/// <summary>
+		/// Helper method for StartId3Search and StartlyricsSearch methods. Avoids code duplication between those two methods
+		/// </summary>
+		/// <param name="taskList">The old API tasklist which references all current running API tasks</param>
+		/// <returns>Two values with a tuple
+		/// value 1: The new taskList which is one item smaller than before, because one API task finished
+		/// value 2: The result from the finished task
+		/// </returns>
 		private async Task<Tuple<List<Task<Id3>>, Id3>> CollectTaskResults(List<Task<Id3>> taskList)
 		{
-			// ConfigureAwait(false) is used to remove sluggishness in GUI	/ https://www.thomaslevesque.com/2015/11/11/explicitly-switch-to-the-ui-thread-in-an-async-method/
+			// ConfigureAwait(false) is used to remove sluggishness in GUI
+			// https://www.thomaslevesque.com/2015/11/11/explicitly-switch-to-the-ui-thread-in-an-async-method/
 			Task<Id3> finishedTask = await Task.WhenAny(taskList).ConfigureAwait(false);
 			Id3 r = await finishedTask;
 
 			taskList.Remove(finishedTask);
 
-			// Return 2 values with a tuple. First, the new taskList which is one item smaller than before, because one task was finished
-			// Second value is the actual result from that finished task. Hand this value back to the parent thread which updates the GUI
 			return new Tuple<List<Task<Id3>>, Id3>(taskList, r);
 
-			// No need to dispose tasks https://blogs.msdn.microsoft.com/pfxteam/2012/03/25/do-i-need-to-dispose-of-tasks/
+			// No need to dispose tasks
+			// https://blogs.msdn.microsoft.com/pfxteam/2012/03/25/do-i-need-to-dispose-of-tasks/
 		}
 
-		// ###########################################################################
+		/// ###########################################################################
+		/// <summary>
+		/// Determines or calculates the most often named value for each ID3 field from all API results
+		/// Uses tresholds (currently must be named more or equal to three times) to avoid low quality results
+		/// </summary>
+		/// <param name="apiResults"></param>
+		/// <param name="tagNew"></param>
+		/// <returns>The most relevant ID3 tags as "new ID3 tags"</returns>
 		private Id3 CalculateResults(DataTable apiResults, Id3 tagNew)
 		{
 			var majorityAlbumRows = (from row in apiResults.AsEnumerable()

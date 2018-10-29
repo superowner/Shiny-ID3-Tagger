@@ -42,7 +42,7 @@ namespace Shiny_ID3_Tagger
 					string[] folderpath = { dialog.SelectedPath };
 
 					// Add new files
-					bool hasNewFiles = await this.AddFiles(folderpath, cancelToken);
+					bool hasNewFiles = await this.CollectFiles(folderpath, cancelToken);
 
 					// Continue with searching if user setting allows it and if new files were added (new row count != old row count)
 					if ((bool)User.Settings["AutoSearch"] && hasNewFiles)
