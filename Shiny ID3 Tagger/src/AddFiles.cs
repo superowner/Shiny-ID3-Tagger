@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// TODO: Remove all "catch (Exception ex)" statements
 
 namespace Shiny_ID3_Tagger
 {
@@ -118,15 +119,12 @@ namespace Shiny_ID3_Tagger
 				catch (Exception error)
 				{
 					// Error handling when any error occurs during file reading
-					if ((int)User.Settings["DebugLevel"] >= 2)
+					string[] errorMsg =
 					{
-						string[] errorMsg =
-						{
-							"ERROR:    Could not read all file tags!",
-							"Message:  " + error.ToString().TrimEnd('\r', '\n')
-						};
-						Form1.Instance.RichTextBox_LogMessage(errorMsg);
-					}
+						"ERROR:    Could not read all file tags!",
+						"Message:  " + error.ToString().TrimEnd('\r', '\n')
+					};
+					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				}
 			}
 

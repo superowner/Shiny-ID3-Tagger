@@ -41,45 +41,36 @@ namespace Utils
 			catch (ArgumentException)
 			{
 				// If path points for example to a URL instead of a local file
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						"ERROR:    Invalid filepath!",
-						"file:     " + filepath
-					};
-					Form1.Instance.RichTextBox_LogMessage(errorMsg);
-				}
+					"ERROR:    Invalid filepath!",
+					"file:     " + filepath
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return false;
 			}
 			catch (FileNotFoundException)
 			{
 				// If file is not found
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						"ERROR:    File not found!",
-						"file:     " + filepath
-					};
-					Form1.Instance.RichTextBox_LogMessage(errorMsg);
-				}
+					"ERROR:    File not found!",
+					"file:     " + filepath
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return false;
 			}
 			catch (IOException)
 			{
 				// If file has a write lock (i.e. opened in another program)
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						"ERROR:    Cannot access file. Already in use!",
-						"file:     " + filepath
-					};
-					Form1.Instance.RichTextBox_LogMessage(errorMsg);
-				}
+					"ERROR:    Cannot access file. Already in use!",
+					"file:     " + filepath
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return false;
 			}
@@ -93,15 +84,12 @@ namespace Utils
 			else
 			{
 				// Print error message
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-							"ERROR:    Not a valid MP3 file!",
-							"file:     " + filepath
-						};
-					Form1.Instance.RichTextBox_LogMessage(errorMsg);
-				}
+						"ERROR:    Not a valid MP3 file!",
+						"file:     " + filepath
+					};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				// return false because MP3 file does not contain a valid mp3 header
 				return false;

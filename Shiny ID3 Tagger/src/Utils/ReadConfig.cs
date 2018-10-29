@@ -66,62 +66,50 @@ namespace Utils
 			catch (JsonException ex)
 			{
 				// Parsing failed. File content is not a valid JSON
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						@"ERROR:    Failed to parse a config file!",
-						"Filepath: " + fullConfigPath,
-						"Message:  " + ex.Message.TrimEnd('\r', '\n')
-					};
-					Form1.Instance.RichTextBox_LogMessage(errorMsg);
-				}
+					@"ERROR:    Failed to parse a config file!",
+					"Filepath: " + fullConfigPath,
+					"Message:  " + ex.Message.TrimEnd('\r', '\n')
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return null;
 			}
 			catch (ArgumentException ex)
 			{
 				// Validation failed. JSON could not be validated against its schema
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						@"ERROR:    Failed to validate a config file!",
-						"Filepath: " + fullConfigPath,
-						"Message:  " + ex.Message.TrimEnd('\r', '\n')
-					};
-					Form1.Instance.RichTextBox_LogMessage(errorMsg);
-				}
+					@"ERROR:    Failed to validate a config file!",
+					"Filepath: " + fullConfigPath,
+					"Message:  " + ex.Message.TrimEnd('\r', '\n')
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return null;
 			}
 			catch (FileNotFoundException)
 			{
 				// Config file is not found
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						"ERROR:    File not found!",
-						"Filepath: " + fullConfigPath
-					};
-					Form1.Instance.RichTextBox_LogMessage(errorMsg);
-				}
+					"ERROR:    File not found!",
+					"Filepath: " + fullConfigPath
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return null;
 			}
 			catch (IOException)
 			{
 				// Config file has a write lock (i.e. opened in another program)
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						"ERROR:    Cannot access file. Already in use!",
-						"Filepath: " + fullConfigPath
-					};
-					Form1.Instance.RichTextBox_LogMessage(errorMsg);
-				}
+					"ERROR:    Cannot access file. Already in use!",
+					"Filepath: " + fullConfigPath
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return null;
 			}

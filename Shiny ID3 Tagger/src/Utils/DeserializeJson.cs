@@ -38,18 +38,15 @@ namespace Utils
 				if (throwError)
 				{
 					// Build a more useful error message when JSON parsing fails later
-					if ((int)debugLevel >= 2)
+					jsonSettings.Error += (obj, errorArgs) =>
 					{
-						jsonSettings.Error += (obj, errorArgs) =>
+						string[] errorMsg =
 						{
-							string[] errorMsg =
-							{
-								"WARNING:  Could not convert string to JSON!",
-								"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
-							};
-							Form1.Instance.RichTextBox_LogMessage(errorMsg);
+							"WARNING:  Could not convert string to JSON!",
+							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
 						};
-					}
+						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+					};
 				}
 				else
 				{

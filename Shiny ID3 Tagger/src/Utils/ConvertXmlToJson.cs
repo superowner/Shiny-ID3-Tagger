@@ -34,16 +34,13 @@ namespace Utils
 				}
 				catch (XmlException error)
 				{
-					if ((int)User.Settings["DebugLevel"] >= 2)
+					string[] errorMsg =
 					{
-						string[] errorMsg =
-						{
-							"WARNING:  Could not convert XML to JSON!",
-							"String:   " + xmlStr.TrimEnd('\r', '\n'),
-							"Message:  " + error.Message.Trim()
-						};
-						Form1.Instance.RichTextBox_LogMessage(errorMsg);
-					}
+						"WARNING:  Could not convert XML to JSON!",
+						"String:   " + xmlStr.TrimEnd('\r', '\n'),
+						"Message:  " + error.Message.Trim()
+					};
+					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				}
 			}
 
