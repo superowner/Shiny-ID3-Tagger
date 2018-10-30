@@ -28,7 +28,7 @@ namespace Utils
 		/// lastCommit file is automatically created after each built run
 		/// Done via Visual Studio project properties > post build command
 		/// 		cd $(SolutionDir)
-		/// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)lastCommit.json"
+		/// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)config\lastCommit.json"
 		/// Read more about GIT commands: https://git-scm.com/docs/git-show
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
@@ -40,7 +40,7 @@ namespace Utils
 
 			// ######################################################################################################################
 			// Get the commit date when the local program files were created
-			JObject lastCommit = Utils.ReadConfig(@"lastCommit.json", @"config\schemas\lastCommit.schema.json");
+			JObject lastCommit = Utils.ReadConfig(@"config\lastCommit.json", @"config\schemas\lastCommit.schema.json");
 
 			if (lastCommit != null)
 			{

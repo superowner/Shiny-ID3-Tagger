@@ -274,16 +274,16 @@
 		}
 	},
 	"required": [
+		"GitHub"
 		"7digital",
 		"Amazon",
+		"Apiseeds",
 		"Decibel",
 		"Discogs",
 		"Genius",
 		"Gracenote",
 		"Lastfm",
-		"MusicGraph",
 		"Musixmatch",
-		"MsGroove",
 		"Napster",
 		"Qobuz",
 		"Spotify",

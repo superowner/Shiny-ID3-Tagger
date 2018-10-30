@@ -307,6 +307,7 @@
       <Link>README.md</Link>
     </None>
     <None Include="app.config" />
+    <None Include="config\accounts_sample.json" />
     <None Include="config\schemas\accounts.schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -377,6 +378,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(SolutionDir)
-git log -1 --pretty=format:"{"""commit""": """%25%25H""", """date""": """%25%25aD"""}" &gt; "$(TargetDir)lastCommit.json"</PostBuildEvent>
+git log -1 --pretty=format:"{"""commit""": """%25%25H""", """date""": """%25%25aD"""}" &gt; "$(TargetDir)config\lastCommit.json"</PostBuildEvent>
   </PropertyGroup>
 </Project>
