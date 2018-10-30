@@ -65,7 +65,7 @@ namespace Utils
 				}
 			}
 
-			return default(DateTime);
+			return default;
 		}
 	}
 }

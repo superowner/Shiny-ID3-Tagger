@@ -437,7 +437,7 @@ namespace Shiny_ID3_Tagger
 		{
 			const int WriteDelay = 50;
 			const int MaxRetries = 3;
-			DateTime lastWriteTime = default(DateTime);
+			DateTime lastWriteTime = default;
 			string errorMessage = null;
 
 			// Read and backup LastWriteTime

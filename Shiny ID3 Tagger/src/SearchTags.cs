@@ -151,7 +151,7 @@ namespace Shiny_ID3_Tagger
 
 								sw.Restart();
 
-								lyricsNew = default(KeyValuePair<string, string>);
+								lyricsNew = default;
 								tagNew.Artist = artistNew;
 								tagNew.Title = titleNew;
 
@@ -360,7 +360,7 @@ namespace Shiny_ID3_Tagger
 			Id3 tagOld,
 			CancellationToken cancelToken)
 		{
-			KeyValuePair<string, string> lyrics = default(KeyValuePair<string, string>);
+			KeyValuePair<string, string> lyrics = default;
 			Dictionary<string, string> lyricResults = new Dictionary<string, string>();
 
 			if (tagOld.Artist == null && tagOld.Title == null)

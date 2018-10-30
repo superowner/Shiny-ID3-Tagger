@@ -47,6 +47,9 @@ namespace Shiny_ID3_Tagger
 			// Continue only if user credentials and user settings are present
 			if (User.Accounts != null && User.Settings != null)
 			{
+				// Update this program via Github
+				await Utils.UpdateClient();
+
 				// Add new files to dataGridView1
 				bool hasNewFiles = await this.CollectFiles(args, cancelToken);
 
@@ -67,16 +70,13 @@ namespace Shiny_ID3_Tagger
 		/// Method is executed only once regardless how many times the program is called
 		/// </summary>
 		/// <param name="e">Default parameter which holds event arguments</param>
-		protected async override void OnShown(EventArgs e)
+		protected override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);
 
 			// Get user settings and user accounts. Needs to be done before UpdateClient
 			User.Settings = Utils.ReadConfig(@"config\settings.json", @"config\schemas\settings.schema.json");
 			User.Accounts = Utils.ReadConfig(@"config\accounts.json", @"config\schemas\accounts.schema.json");
-
-			// Update this program via Github
-			await Utils.UpdateClient();
 
 			// Initialize helper variable to track which dataGridView is currently shown
 			GlobalVariables.ActiveDGV = this.dataGridView1;
