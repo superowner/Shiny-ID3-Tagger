@@ -274,7 +274,7 @@
 		}
 	},
 	"required": [
-		"GitHub"
+		"GitHub",
 		"7digital",
 		"Amazon",
 		"Apiseeds",
