@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Executes all API requests. Has a built-in retry handler and a logger</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -14,21 +13,35 @@ namespace Utils
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using GlobalNamespace;
 	using GlobalVariables;
+	using Shiny_ID3_Tagger;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
+		/// <summary>
+		/// Sends out all API requests to the web. Has a built-in retry handler and error logger
+		/// </summary>
+		/// <param name="client">The HTTP client for sending and receiving</param>
+		/// <param name="request">The requests which holds the URL, method type, post body and headers</param>
+		/// <param name="cancelToken">The global token for canceling any ongoing request</param>
+		/// <param name="returnByteArray">A bool to indicate if the response should be read as a byte array instead of a string</param>
+		/// <param name="suppressedStatusCodes">A array which holds statuscodes of common errors which can be ignored (not logged as error)</param>
+		/// <param name="customTimeout">A timeout in seconds after a request is automatically canceled. Useful if a certain server has no own timeout</param>
+		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
 		internal static async Task<dynamic> GetResponse(
 			HttpMessageInvoker client,
 			HttpRequestMessage request,
 			CancellationToken cancelToken,
 			bool returnByteArray = false,
-			int[] suppressedStatusCodes = null)
+			int[] suppressedStatusCodes = null,
+			int? customTimeout = null)
 		{
-			const int timeout = 15;
 			const int maxRetries = 3;
 			const int retryDelay = 2;
+			int timeout = customTimeout ?? 15;
 
 			dynamic result = null;
 			HttpResponseMessage response = new HttpResponseMessage();
@@ -49,24 +62,17 @@ namespace Utils
 
 				try
 				{
-					// REVIEW: When Content is already disposed, an error is thrown
-					// Save request content for later reuse when an error occurs or when debugging is enabled
+					// Save request content for later reuse when an error occurs
 					if (request.Content != null)
 					{
 						requestContent = await request.Content.ReadAsStringAsync();
 					}
 
-					// If debugging level is 3 (DEBUG) or higher, print out all requests, not only failed once
-					if ((int)User.Settings["DebugLevel"] >= 3)
-					{
-						List<string> errorMsg = BuildLogMessage(request, requestContent, null);
-						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
-					}
+					// Print out all requests, not only failed once
+					List<string> errorMsg = BuildLogMessage(request, requestContent, null);
+					Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 3);
 
 					response = await client.SendAsync(request, timeoutToken.Token);
-
-					// Some APIs return a status code like 404 (=Not found) when trying to access a resource which doesn't exist
-					// All other APIs return a status code of 200 (=OK) and add an info/warning in the response body itself
 
 					// Check if the returned status code is within a call-specific array of codes to suppress
 					// These are common errors i.e. when a lyric doesn't exist. Don't log these errors
@@ -78,7 +84,7 @@ namespace Utils
 					// Response was successful. Read content from response and return content
 					if (response.IsSuccessStatusCode)
 					{
-						// Usually just return a string. But edge cases like viewLyrics module need a byte array
+						// In most cases we return a string. But the viewLyrics module needs a byte array
 						if (returnByteArray)
 						{
 							result = await response.Content.ReadAsByteArrayAsync();
@@ -96,15 +102,10 @@ namespace Utils
 						// Check if user pressed cancel button. If no, print the error
 						if (!cancelToken.IsCancellationRequested)
 						{
-							// If debugging is enabled in settings, print out all request and response properties
-							if ((int)User.Settings["DebugLevel"] >= 2)
-							{
-								List<string> errorMsg = new List<string>
-									{"WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..."};
-								errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-
-								Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
-							}
+							// Print out all request and response properties
+							errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
+							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
 
 							// Response was not successful. But it was also not a common error. And user did not press cancel
 							// This must be an uncommon error. Continue with our retry logic
@@ -115,41 +116,44 @@ namespace Utils
 				}
 				catch (TaskCanceledException)
 				{
-					// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
-					// If debugging is enabled in settings, print out the request
-					if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 2)
+					// Don't log failed requests when a custom timeout is set (usually very short and often occuring)
+					if (customTimeout == null)
 					{
-						List<string> errorMsg = new List<string>
-							{"WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..."};
-						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-
-						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
-					}
-
-					break;
-				}
-				catch (Exception error)
-				{
-					// An unknown application error occurred. Cancel request immediately and don't try again
-					// If debugging is enabled in settings, print out all request properties
-					if (!cancelToken.IsCancellationRequested && (int)User.Settings["DebugLevel"] >= 1)
-					{
-						Exception realError = error;
-						while (realError.InnerException != null)
+						// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
+						// Print out the request
+						if (!cancelToken.IsCancellationRequested)
 						{
-							realError = realError.InnerException;
+							List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
+							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+
+							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
 						}
-
-						List<string> errorMsg = new List<string>
-							{"ERROR:    An unknown application error occured! Abort..."};
-						errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-						errorMsg.Add("Message:  " + realError.Message.ToString());
-
-						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg.ToArray());
 					}
 
 					break;
 				}
+
+				// catch (Exception error)
+				// {
+				// 	// An unknown application error occurred. Cancel request immediately and don't try again
+				// 	// Print out all request properties
+				// 	if (!cancelToken.IsCancellationRequested)
+				// 	{
+				// 		Exception realError = error;
+				// 		while (realError.InnerException != null)
+				// 		{
+				// 			realError = realError.InnerException;
+				// 		}
+
+				// 		List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured! Abort..." };
+				// 		errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+				// 		errorMsg.Add("Message:  " + realError.Message.ToString());
+
+				// 		Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
+				// 	}
+
+				// 	break;
+				// }
 			}
 
 			return result;

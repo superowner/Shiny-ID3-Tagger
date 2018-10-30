@@ -2,14 +2,14 @@
 	"Branch":  "develop",
 	"DebugLevel": 2,
 	"PreferTags": true,
-	"RemoveBrackets": true,
+	"RemoveVersion": true,
 	"RemoveFeaturing": true,
 	"OverwriteImage": true,
 	"AutoSearch": true,
 	"AutoCapitalize": true,
 	"ThresholdRedValue": 30,
 	"MaxImageSize": 500,
-	"UserAgent": "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",
+	"UserAgent": "Shiny-ID3-Tagger/1.2 (shinyid3tagger@gmail.com)",
 	"FilenamePatterns": [
 		"^(\\d+\\s)?(-\\s+)?(?<artist>.*?\\w+)\\s+-\\s+(?<title>\\w+.*)$",
 		"^(\\d+_)?(?<artist>.*?\\w+)_(?<title>\\w+.*)$"
@@ -32,6 +32,7 @@
 		"QQ (Tencent)"
 	],
 	"LyricsPriority": [
+		"Apiseeds",
 		"Viewlyrics",
 		"Lololyrics",
 		"Chartlyrics",

@@ -3,11 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from Qobuz API for current track</summary>
-// http://www.qobuz.com/account/profile
-// https://github.com/Qobuz/api-documentation
-// https://github.com/Qobuz/api-documentation/blob/master/endpoints/track/search.md
-// No English genre names possible. API returns French genre names
 //-----------------------------------------------------------------------
 
 namespace GetTags
@@ -22,11 +17,38 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for Qobuz API
+	/// </summary>
 	internal class Qobuz : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 data from Qobuz API
+		/// http://www.qobuz.com/account/profile
+		/// https://github.com/Qobuz/api-documentation
+		/// https://github.com/Qobuz/api-documentation/blob/master/endpoints/track/search.md
+		/// No English genre names possible. API returns French genre names
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Qobuz" };
+			Id3 o = new Id3 { Service = "Qobuz" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

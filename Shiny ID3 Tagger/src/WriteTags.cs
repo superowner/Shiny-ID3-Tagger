@@ -3,11 +3,10 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Main method for ID3 tag saving. Loops through all result rows and writes their values as tags it's corresponding file</summary>
-// https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs
 //-----------------------------------------------------------------------
+// REVIEW: Remove all "catch (Exception ex)" statements
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Collections.Generic;
@@ -26,9 +25,16 @@ namespace GlobalNamespace
 	using TagLib.Id3v2;
 	using Utils;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1
 	{
-		// ###########################################################################
+		/// ###########################################################################
+		/// <summary>
+		/// Main method for ID3 tag saving.
+		/// Loops through all result rows and writes their values as tags it's corresponding file
+		/// </summary>
 		private async void StartWriting()
 		{
 			this.Form_EnableUI(false);
@@ -45,10 +51,11 @@ namespace GlobalNamespace
 					this.slowProgressBar.PerformStep();
 					string filepath = (string)row.Cells[this.filepath1.Index].Value;
 
-					// If file is a virtual file (CSV Import), cancel remaining work for this file and continue with next file
-					if ((bool)row.Cells[this.isVirtualFile.Index].Value)
+					// Cancel remaining work for this file and continue with next file, if
+					// - file is a virtual file from CSV Import
+					// - file has no new changes (this is to prevent empty ID3 tags)
+					if ((bool)row.Cells[this.isVirtualFile.Index].Value || (bool)row.Cells[this.hasNewValues.Index].EditedFormattedValue == false)
 					{
-						this.slowProgressBar.PerformStep();
 						continue;
 					}
 
@@ -56,7 +63,7 @@ namespace GlobalNamespace
 
 					// Log message to signal begin of writing
 					string message = string.Format(GlobalVariables.CultEng, "{0,-100}{1}", $"Begin writing of {tagType} tags", "filepath: \"" + filepath + "\"");
-					this.PrintLogMessage(this.rtbWriteLog, new[] {message});
+					Form1.Instance.RichTextBox_LogMessage(new[] { message }, 1, "Write");
 
 					// Get all existing frames from current file
 					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
@@ -66,10 +73,6 @@ namespace GlobalNamespace
 
 						// Store all existing frames in a container which can be altered freely without actually touching the file
 						TagLib.Id3v2.Tag tagContainer = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
-
-						// TODO: Cancel if no existing ID3 tag AND no results from search were found
-						// TagLib.Id3v2.Tag id3v2 = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, false);
-						// if (id3v2 != null)
 
 						// Set ID3 version to ID3v2.3 which means we have to use UTF16 for all strings (a "4" would mean ID3v2.4 where UTF8 must be used)
 						tagContainer.Version = 3;
@@ -117,7 +120,7 @@ namespace GlobalNamespace
 						if (successWrite)
 						{
 							// Log message to signal end of writing
-							this.PrintLogMessage(this.rtbWriteLog, new[] {"DONE!"});
+							Form1.Instance.RichTextBox_LogMessage(new[] { "DONE!" }, 1, "Write");
 
 							foreach (DataGridViewCell cell in row.Cells)
 							{
@@ -127,7 +130,7 @@ namespace GlobalNamespace
 						else
 						{
 							// Log message to signal end of writing
-							this.PrintLogMessage(this.rtbWriteLog, new[] {"FAILED!"});
+							Form1.Instance.RichTextBox_LogMessage(new[] { "FAILED!" }, 1, "Write");
 						}
 					}
 				}
@@ -139,8 +142,16 @@ namespace GlobalNamespace
 			this.Form_EnableUI(true);
 		}
 
-		// ###########################################################################
-		// Overwrite tag values with results from API search
+		/// ###########################################################################
+		/// <summary>
+		/// Overwrite tag values with results from API search
+		/// Runs once per file
+		/// https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs
+		/// </summary>
+		/// <param name="tagFile">The current file to modify</param>
+		/// <param name="row">The dataGridView1 row for this file which is used as data source</param>
+		/// <param name="tagContainer">The already existing tag container</param>
+		/// <returns>The tag container with all newly added ID3 tags</returns>
 		private TagLib.Id3v2.Tag AddResultsToTagContainer(
 			TagLib.File tagFile,
 			DataGridViewRow row,
@@ -154,7 +165,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TPE1");
 				tagContainer.SetTextFrame("TPE1", newArtist);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Artist:   " + newArtist});
+				Form1.Instance.RichTextBox_LogMessage(new[] { "Artist:   " + newArtist }, 1, "Write");
 			}
 
 			// Title
@@ -165,7 +176,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TIT2");
 				tagContainer.SetTextFrame("TIT2", newTitle);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Title:    " + newTitle});
+				Form1.Instance.RichTextBox_LogMessage(new[] { "Title:    " + newTitle }, 1, "Write");
 			}
 
 			// Album
@@ -176,7 +187,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TALB");
 				tagContainer.SetTextFrame("TALB", newAlbum);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Album:    " + newAlbum});
+				Form1.Instance.RichTextBox_LogMessage(new[] { "Album:    " + newAlbum }, 1, "Write");
 			}
 
 			// Genre
@@ -187,7 +198,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TCON");
 				tagContainer.SetTextFrame("TCON", newGenre);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Genre:    " + newGenre});
+				Form1.Instance.RichTextBox_LogMessage(new[] { "Genre:    " + newGenre }, 1, "Write");
 			}
 
 			// Disc number + disc count
@@ -203,7 +214,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TPOS");
 				tagContainer.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Disc:     " + newDiscnumber + "/" + newDisccount});
+				Form1.Instance.RichTextBox_LogMessage(new[] { "Disc:     " + newDiscnumber + "/" + newDisccount }, 1, "Write");
 			}
 
 			// Track number + track count
@@ -219,7 +230,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TRCK");
 				tagContainer.SetTextFrame("TRCK", newTrackNumber + "/" + newTrackCount);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Track:    " + newTrackNumber + "/" + newTrackCount});
+				Form1.Instance.RichTextBox_LogMessage(new[] { "Track:    " + newTrackNumber + "/" + newTrackCount }, 1, "Write");
 			}
 
 			// Date
@@ -237,7 +248,7 @@ namespace GlobalNamespace
 				tagContainer.RemoveFrames("TIME");
 				tagContainer.SetNumberFrame("TYER", (uint)Utils.ConvertStringToDate(newDate).Year, 0);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Date:     " + newDate});
+				Form1.Instance.RichTextBox_LogMessage(new[] { "Date:     " + newDate }, 1, "Write");
 			}
 
 			// Lyrics
@@ -247,22 +258,37 @@ namespace GlobalNamespace
 			string newLyrics = (string)row.Cells[this.lyrics1.Index].Value;
 			if (oldLyrics != newLyrics && !string.IsNullOrWhiteSpace(newLyrics))
 			{
-				string lyricsSnippet = string.Join(string.Empty, newLyrics.Take(80));
-				lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
-				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16);
-				frmUSLT.Text = newLyrics;
+				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16)
+				{
+					Text = newLyrics
+				};
+
 				tagContainer.RemoveFrames("USLT");
 				tagContainer.AddFrame(frmUSLT);
 
-				this.PrintLogMessage(this.rtbWriteLog, new[] {"Lyrics:   " + lyricsSnippet + "..."});
+				string lyricsSnippet = string.Join(string.Empty, newLyrics.Take(80));
+				lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
+				Form1.Instance.RichTextBox_LogMessage(new[] { "Lyrics:   " + lyricsSnippet + "..." }, 1, "Write");
 			}
 
 			return tagContainer;
 		}
 
-		// ###########################################################################
-		// Download and add cover image
-		private async Task<TagLib.Id3v2.Tag> AddCoverToTagContainer(TagLib.File tagFile, DataGridViewRow row, TagLib.Id3v2.Tag tagContainer, HttpClient client)
+		/// ###########################################################################
+		/// <summary>
+		/// Download and add cover image
+		/// Runs once per file
+		/// </summary>
+		/// <param name="tagFile">The current file to modify</param>
+		/// <param name="row">The dataGridView1 row for this file which is used as data source</param>
+		/// <param name="tagContainer">The already existing tag container</param>
+		/// <param name="client">Single HTTP client which is used throughout the whole write process</param>
+		/// <returns>The tag container with the downloaded and newly added cover image</returns>
+		private async Task<TagLib.Id3v2.Tag> AddCoverToTagContainer(
+			TagLib.File tagFile,
+			DataGridViewRow row,
+			TagLib.Id3v2.Tag tagContainer,
+			HttpClient client)
 		{
 			string[] errorMsg = null;
 			string url = (string)row.Cells[this.cover1.Index].Value;
@@ -312,7 +338,7 @@ namespace GlobalNamespace
 							using (Image image = Image.FromStream(streamOrg))
 							{
 								// Resize image according to user setting "MaxImageSize". Always resize and re-encode
-								int longSide = new List<int> {image.Width, image.Height}.Max();
+								int longSide = new List<int> { image.Width, image.Height }.Max();
 								float resizeFactor = new List<float>
 								{
 									(float)User.Settings["MaxImageSize"] / (float)image.Width,
@@ -352,7 +378,7 @@ namespace GlobalNamespace
 								};
 
 								// Add cover tag to tag container, this deletes all other existing covers like "BackCover" or "BandLogo"
-								tagContainer.Pictures = new IPicture[] {taglibpicture};
+								tagContainer.Pictures = new IPicture[] { taglibpicture };
 							}
 						}
 						else
@@ -388,26 +414,31 @@ namespace GlobalNamespace
 			if (errorMsg == null)
 			{
 				string message = string.Format("Picture:  " + request.RequestUri);
-				this.PrintLogMessage(this.rtbWriteLog, new[] {message});
+				Form1.Instance.RichTextBox_LogMessage(new[] { message }, 1, "Write");
 			}
 			else
 			{
-				if ((int)User.Settings["DebugLevel"] >= 1)
-				{
-					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
-				}
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 			}
 
 			return tagContainer;
 		}
 
-		// ###########################################################################
+		/// ###########################################################################
+		/// <summary>
+		/// Write all new ID3 tags to a file with  taglib's "tagFile.Save()" method.
+		/// Can handle file errors with a built-in retry logic
+		/// Maintains original file timestamps (last changed, created)
+		/// Runs once per file
+		/// </summary>
+		/// <param name="tagFile">The file to save (already has the tag container attached)</param>
+		/// <returns>A boolean to indicate if writing the file was successful</returns>
 		private async Task<bool> SaveFile(TagLib.File tagFile)
 		{
 			const int WriteDelay = 50;
 			const int MaxRetries = 3;
 			DateTime lastWriteTime = default(DateTime);
-			string exMessage = null;
+			string errorMessage = null;
 
 			// Read and backup LastWriteTime
 			bool successWrite = false;
@@ -421,7 +452,7 @@ namespace GlobalNamespace
 				}
 				catch (Exception ex)
 				{
-					exMessage = ex.Message;
+					errorMessage = ex.Message;
 					successWrite = false;
 				}
 
@@ -442,7 +473,7 @@ namespace GlobalNamespace
 					}
 					catch (Exception ex)
 					{
-						exMessage = ex.Message;
+						errorMessage = ex.Message;
 						successWrite = false;
 					}
 
@@ -464,7 +495,7 @@ namespace GlobalNamespace
 					}
 					catch (Exception ex)
 					{
-						exMessage = ex.Message;
+						errorMessage = ex.Message;
 						successWrite = false;
 					}
 
@@ -478,9 +509,9 @@ namespace GlobalNamespace
 				{
 					@"ERROR:    Could not write ID3 tags to file!",
 					"File:     " + tagFile.Name,
-					"Message:  " + exMessage
+					"Message:  " + errorMessage
 				};
-				this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 			}
 
 			return successWrite;

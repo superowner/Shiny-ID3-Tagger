@@ -3,48 +3,65 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>
-// Deserialize a JSON string into an object.
-// Also uses some non-default settings for all JSON deserializations. This is helpful for debugging invalid JSON strings
-// </summary>
 //-----------------------------------------------------------------------
+// REVIEW: Refactor whole method
 
 namespace Utils
 {
-	using GlobalNamespace;
 	using GlobalVariables;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
+	using Shiny_ID3_Tagger;
 
+	/// <summary>Represents the Utility class which holds various helper functions</summary>
 	internal partial class Utils
 	{
-		internal static JObject DeserializeJson(string content)
+		/// <summary> Deserialize a JSON string to a JSON.NET JObject </summary>
+		/// <param name="jsonStr">The input string which should be deserialized</param>
+		/// <param name="throwError">True or false (default) if parsing errors should throw an error</param>
+		/// <returns>The new JObject holding all the values from content string</returns>
+		internal static JObject DeserializeJson(string jsonStr, bool throwError = true)
 		{
-			JObject data = null;
+			JObject jsonObj = null;
 
-			if (content != null)
+			int debugLevel = 0;
+			if (User.Settings != null)
+			{
+				debugLevel = (int)User.Settings["DebugLevel"];
+			}
+
+			if (jsonStr != null)
 			{
 				// Set custom settings for JSON parser
 				JsonSerializerSettings jsonSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
 
-				// Build a useful error message if JSON parsing fails
-				if ((int)User.Settings["DebugLevel"] >= 2)
+				if (throwError)
 				{
+					// Build a more useful error message when JSON parsing fails later
 					jsonSettings.Error += (obj, errorArgs) =>
 					{
 						string[] errorMsg =
 						{
-							"WARNING:  Could not convert response to JSON!",
+							"WARNING:  Could not convert string to JSON!",
 							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
 						};
-						Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
+						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+					};
+				}
+				else
+				{
+					// If throwError is set to false, then set error on handled=true. This method doesn't throw errors then
+					jsonSettings.Error += (obj, errorArgs) =>
+					{
+						errorArgs.ErrorContext.Handled = true;
 					};
 				}
 
-				data = JsonConvert.DeserializeObject<JObject>(content, jsonSettings);
+				// Parse JSON
+				jsonObj = JsonConvert.DeserializeObject<JObject>(jsonStr, jsonSettings);
 			}
 
-			return data;
+			return jsonObj;
 		}
 	}
 }

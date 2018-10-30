@@ -3,8 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from Napster API for current track</summary>
-// https://developer.rhapsody.com/api#search
 //-----------------------------------------------------------------------
 
 namespace GetTags
@@ -19,11 +17,35 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for Napster API
+	/// </summary>
 	internal class Napster : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 data from Napster API
+		/// https://developer.rhapsody.com/api#search
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Napster (Rhapsody)" };
+			Id3 o = new Id3 { Service = "Napster (Rhapsody)" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

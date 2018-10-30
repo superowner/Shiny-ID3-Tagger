@@ -3,10 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from Netease API for current track</summary>
-// https://github.com/JounQin/netease-muisc-api/tree/master/api
-// https://github.com/yanunon/NeteaseCloudMusic/wiki/NetEase-cloud-music-analysis-API-%5BEN%5D
-// parameter "type=10" instead of "type=1" filters for albums only. But produces less results. Stick to using "专辑" as post filter
 //-----------------------------------------------------------------------
 
 namespace GetTags
@@ -23,11 +19,37 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for Netease API
+	/// </summary>
 	internal class Netease : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 data from Netease API
+		/// https://github.com/JounQin/netease-muisc-api/tree/master/api
+		/// https://github.com/yanunon/NeteaseCloudMusic/wiki/NetEase-cloud-music-analysis-API-%5BEN%5D
+		/// parameter "type=10" instead of "type=1" filters for albums only. But produces less results. Stick to using "专辑" as post filter
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Netease" };
+			Id3 o = new Id3 { Service = "Netease" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

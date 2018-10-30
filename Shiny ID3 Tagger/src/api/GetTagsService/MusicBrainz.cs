@@ -3,13 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from Musicbrainz API for current track</summary>
-// https://wiki.musicbrainz.org/Development/XML_Web_Service/Version_2
-// https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2/Search
-// https://musicbrainz.org/doc/MusicBrainz_Database
-// limit=1 cannot be used, client side filter is used to sort by release date
-// List of mirror servers: http://www.tranquilbase.org/category/musicbrainz/
-// 1) https://musicbrainz.org		2) http://musicbrainz-mirror.eu:5000	3) http://musicbrainz.fin-alice.de:5000		// 1) https://beta.musicbrainz.org
 //-----------------------------------------------------------------------
 
 namespace GetTags
@@ -18,7 +11,6 @@ namespace GetTags
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
-	using System.Net;
 	using System.Net.Http;
 	using System.Net.Http.Headers;
 	using System.Text.RegularExpressions;
@@ -28,11 +20,40 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for MusicBrainz API
+	/// </summary>
 	internal class MusicBrainz : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 data from MusicBrainz API
+		/// https://wiki.musicbrainz.org/Development/XML_Web_Service/Version_2
+		/// https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2/Search
+		/// https://musicbrainz.org/doc/MusicBrainz_Database
+		/// limit=1 cannot be used, client side filter is used to sort by release date
+		/// List of mirror servers: http://www.tranquilbase.org/category/musicbrainz/
+		/// 1) https://musicbrainz.org		2) http://musicbrainz-mirror.eu:5000	3) http://musicbrainz.fin-alice.de:5000		// 1) https://beta.musicbrainz.org
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Musicbrainz" };
+			Id3 o = new Id3 { Service = "Musicbrainz" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

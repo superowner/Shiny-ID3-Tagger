@@ -3,11 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from Decibel API for current track</summary>
-// https://developer.quantonemusic.com/authentication-v3
-// https://developer.quantonemusic.com/rest-api-v3#classQueryAlbums
-// https://developer.quantonemusic.com/object-documentation
-// titleSearchType=PartialName has poorer results than without
 //-----------------------------------------------------------------------
 
 namespace GetTags
@@ -24,19 +19,54 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for Decibel API
+	/// </summary>
 	internal class Decibel : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 data from Decibel API
+		/// https://developer.quantonemusic.com/authentication-v3
+		/// https://developer.quantonemusic.com/rest-api-v3#classQueryAlbums
+		/// https://developer.quantonemusic.com/object-documentation
+		/// titleSearchType=PartialName has poorer results than without
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 { Service = "Decibel (Quantone Music)" };
+			Id3 o = new Id3 { Service = "Decibel (Quantone music)" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
 
 			// ###########################################################################
-			var account = (from item in User.Accounts["Decibel"]
-							orderby item["lastused"] ascending
-							select item).FirstOrDefault();
+			foreach (var acc in User.Accounts["Decibel"])
+			{
+				if (acc["lastUsed"] == null)
+				{
+					acc["lastUsed"] = 0;
+				}
+			}
+
+			var account = (from acc in User.Accounts["Decibel"]
+							orderby acc["lastUsed"] ascending
+							select acc).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;
 
 			string artistEncoded = WebUtility.UrlEncode(artist);

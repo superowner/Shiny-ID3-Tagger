@@ -3,10 +3,9 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Opens a Ookii folder selection window when using menu item "Add directory"</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Threading;
@@ -14,8 +13,16 @@ namespace GlobalNamespace
 	using GlobalVariables;
 	using Ookii.Dialogs;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Opens a Ookii folder selection window when using menu item "Add directory"
+		/// </summary>
+		/// <param name="sender">The object which has raised the event</param>
+		/// <param name="e">Contains additional information about the event</param>
 		private async void MenuItemClick_AddFolder(object sender, EventArgs e)
 		{
 			// Refresh cancel token
@@ -39,7 +46,7 @@ namespace GlobalNamespace
 					string[] folderpath = { dialog.SelectedPath };
 
 					// Add new files
-					bool hasNewFiles = await this.AddFiles(folderpath, cancelToken);
+					bool hasNewFiles = await this.CollectFiles(folderpath, cancelToken);
 
 					// Continue with searching if user setting allows it and if new files were added (new row count != old row count)
 					if ((bool)User.Settings["AutoSearch"] && hasNewFiles)

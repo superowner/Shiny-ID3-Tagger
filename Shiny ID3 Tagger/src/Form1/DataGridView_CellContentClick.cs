@@ -3,17 +3,24 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Starts browser which is associated with URLs when clicking on them</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System.Diagnostics;
 	using System.Windows.Forms;
 	using Utils;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Starts browser which is associated with URLs when clicking on them
+		/// </summary>
+		/// <param name="sender">The object which has raised the event</param>
+		/// <param name="e">Contains additional information about the event</param>
 		private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dgv = (DataGridView)sender;
@@ -30,7 +37,7 @@ namespace GlobalNamespace
 					{
 						"ERROR:    Invalid URL found: " + url
 					};
-					this.PrintLogMessage(this.rtbErrorLog, errorMsg);
+					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				}
 			}
 		}

@@ -3,11 +3,9 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Executed when program starts. Shows main window</summary>
-// https://social.msdn.microsoft.com/Forums/windows/en-US/43a85553-2b94-4f4e-9db3-498311af4ecd/datagridview-sorting-with-null-values?forum=winforms
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Linq;
@@ -16,10 +14,11 @@ namespace GlobalNamespace
 	using GlobalVariables;
 	using Utils;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
-		public static Form1 Instance;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Form1"/> class.
 		/// The main form which will be shown immediately after program start
@@ -30,7 +29,15 @@ namespace GlobalNamespace
 			this.InitializeComponent();
 		}
 
-		// Code is executed on all program calls (1,2,3,4....)
+		/// <summary>
+		/// Gets or sets the single instance of the the main form to get public access from other classes like Utils class
+		/// </summary>
+		public static Form1 Instance { get; set; }
+
+		/// <summary>
+		/// Method is executed every time the program is called
+		/// </summary>
+		/// <param name="args">Default parameter which holds event arguments</param>
 		internal async void Form1Shown(string[] args)
 		{
 			// Refresh cancellation token
@@ -41,7 +48,7 @@ namespace GlobalNamespace
 			if (User.Accounts != null && User.Settings != null)
 			{
 				// Add new files to dataGridView1
-				bool hasNewFiles = await this.AddFiles(args, cancelToken);
+				bool hasNewFiles = await this.CollectFiles(args, cancelToken);
 
 				// Continue only if user setting allows it and if new files were added
 				if ((bool)User.Settings["AutoSearch"] && hasNewFiles)
@@ -56,23 +63,28 @@ namespace GlobalNamespace
 			}
 		}
 
-		// Code is only executed on the first program call (1)
+		/// <summary>
+		/// Method is executed only once regardless how many times the program is called
+		/// </summary>
+		/// <param name="e">Default parameter which holds event arguments</param>
 		protected async override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);
 
-			// Get user settings and credentials
-			Utils.ReadSettings();
-			Utils.ReadCredentials();
+			// Get user settings and user accounts. Needs to be done before UpdateClient
+			User.Settings = Utils.ReadConfig(@"config\settings.json", @"config\schemas\settings.schema.json");
+			User.Accounts = Utils.ReadConfig(@"config\accounts.json", @"config\schemas\accounts.schema.json");
 
 			// Update this program via Github
-			bool result = await Utils.DownloadClientFiles();
+			await Utils.UpdateClient();
 
 			// Initialize helper variable to track which dataGridView is currently shown
 			GlobalVariables.ActiveDGV = this.dataGridView1;
 
 			// Read in command line arguments and pass them to main program
+			// First argument is always the path to program executable itself, skip it)
 			string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+
 			this.Form1Shown(args);
 		}
 	}

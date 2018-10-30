@@ -2,7 +2,7 @@
 
 using GlobalVariables;
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	partial class Form1
 	{
@@ -86,19 +86,7 @@ namespace GlobalNamespace
 			this.removeLines = new System.Windows.Forms.ToolStripMenuItem();
 			this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
-			this.tabPage5 = new System.Windows.Forms.TabPage();
-			this.fastProgressBar = new System.Windows.Forms.ProgressBar();
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.clearResultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exportTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.importTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.btnCancel = new System.Windows.Forms.Button();
-			this.slowProgressBar = new System.Windows.Forms.ProgressBar();
-			this.dataGridView1 = new DataGridViewDoubleBuffered();
+			this.dataGridView1 = new Shiny_ID3_Tagger.DataGridViewDoubleBuffered();
 			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.filepath1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.artist1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -113,7 +101,9 @@ namespace GlobalNamespace
 			this.lyrics1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.cover1 = new System.Windows.Forms.DataGridViewLinkColumn();
 			this.isVirtualFile = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dataGridView2 = new DataGridViewDoubleBuffered();
+			this.hasNewValues = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.tabPage5 = new System.Windows.Forms.TabPage();
+			this.dataGridView2 = new Shiny_ID3_Tagger.DataGridViewDoubleBuffered();
 			this.number2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.filepath2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.service2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -131,6 +121,17 @@ namespace GlobalNamespace
 			this.duration2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.durationTotal2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.albumhits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.fastProgressBar = new System.Windows.Forms.ProgressBar();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.clearResultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.importTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.btnCancel = new System.Windows.Forms.Button();
+			this.slowProgressBar = new System.Windows.Forms.ProgressBar();
 			this.tabControl2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -138,10 +139,10 @@ namespace GlobalNamespace
 			this.tabControl1.SuspendLayout();
 			this.PopupMenu.SuspendLayout();
 			this.tabPage4.SuspendLayout();
-			this.tabPage5.SuspendLayout();
-			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+			this.tabPage5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnSearch
@@ -314,12 +315,12 @@ namespace GlobalNamespace
             this.removeLines,
             this.showInExplorerToolStripMenuItem});
 			this.PopupMenu.Name = "PopupMenu";
-			this.PopupMenu.Size = new System.Drawing.Size(162, 48);
+			this.PopupMenu.Size = new System.Drawing.Size(181, 70);
 			// 
 			// removeLines
 			// 
 			this.removeLines.Name = "removeLines";
-			this.removeLines.Size = new System.Drawing.Size(161, 22);
+			this.removeLines.Size = new System.Drawing.Size(180, 22);
 			this.removeLines.Text = "Remove";
 			this.removeLines.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.removeLines.ToolTipText = "Removes the selected lines";
@@ -328,7 +329,7 @@ namespace GlobalNamespace
 			// showInExplorerToolStripMenuItem
 			// 
 			this.showInExplorerToolStripMenuItem.Name = "showInExplorerToolStripMenuItem";
-			this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.showInExplorerToolStripMenuItem.Text = "Show in Explorer";
 			this.showInExplorerToolStripMenuItem.Click += new System.EventHandler(this.Popup_ShowExplorerClick);
 			// 
@@ -340,130 +341,8 @@ namespace GlobalNamespace
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Size = new System.Drawing.Size(1638, 615);
 			this.tabPage4.TabIndex = 2;
-			this.tabPage4.Text = "Input Files";
+			this.tabPage4.Text = "Files";
 			this.tabPage4.UseVisualStyleBackColor = true;
-			// 
-			// tabPage5
-			// 
-			this.tabPage5.Controls.Add(this.dataGridView2);
-			this.tabPage5.Location = new System.Drawing.Point(4, 22);
-			this.tabPage5.Name = "tabPage5";
-			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(1638, 615);
-			this.tabPage5.TabIndex = 0;
-			this.tabPage5.Text = "Search Details";
-			this.tabPage5.UseVisualStyleBackColor = true;
-			// 
-			// fastProgressBar
-			// 
-			this.fastProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.fastProgressBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
-			this.fastProgressBar.Location = new System.Drawing.Point(213, 672);
-			this.fastProgressBar.Margin = new System.Windows.Forms.Padding(0);
-			this.fastProgressBar.Name = "fastProgressBar";
-			this.fastProgressBar.Size = new System.Drawing.Size(1258, 10);
-			this.fastProgressBar.Step = 1;
-			this.fastProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-			this.fastProgressBar.TabIndex = 8;
-			this.fastProgressBar.Visible = false;
-			// 
-			// menuStrip1
-			// 
-			this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
-			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
-            this.optionsToolStripMenuItem});
-			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(1656, 24);
-			this.menuStrip1.TabIndex = 9;
-			this.menuStrip1.Text = "menuStrip1";
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openFolderToolStripMenuItem,
-            this.clearResultsToolStripMenuItem});
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
-			this.toolStripMenuItem1.Text = "File";
-			// 
-			// openFolderToolStripMenuItem
-			// 
-			this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-			this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-			this.openFolderToolStripMenuItem.Text = "Add Directory";
-			this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_AddFolder);
-			// 
-			// clearResultsToolStripMenuItem
-			// 
-			this.clearResultsToolStripMenuItem.Name = "clearResultsToolStripMenuItem";
-			this.clearResultsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-			this.clearResultsToolStripMenuItem.Text = "Clear Tables";
-			this.clearResultsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ClearTables);
-			// 
-			// optionsToolStripMenuItem
-			// 
-			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openSettingsToolStripMenuItem,
-            this.exportTableToolStripMenuItem,
-            this.importTableToolStripMenuItem});
-			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-			this.optionsToolStripMenuItem.Text = "Tools";
-			// 
-			// openSettingsToolStripMenuItem
-			// 
-			this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
-			this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-			this.openSettingsToolStripMenuItem.Text = "User Settings";
-			this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_OpenSettings);
-			// 
-			// exportTableToolStripMenuItem
-			// 
-			this.exportTableToolStripMenuItem.Name = "exportTableToolStripMenuItem";
-			this.exportTableToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-			this.exportTableToolStripMenuItem.Text = "Export Table";
-			this.exportTableToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ExportTable);
-			// 
-			// importTableToolStripMenuItem
-			// 
-			this.importTableToolStripMenuItem.Name = "importTableToolStripMenuItem";
-			this.importTableToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-			this.importTableToolStripMenuItem.Text = "Import Table";
-			this.importTableToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ImportTable);
-			// 
-			// btnCancel
-			// 
-			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnCancel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.btnCancel.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnCancel.Location = new System.Drawing.Point(1477, 671);
-			this.btnCancel.Margin = new System.Windows.Forms.Padding(0);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(172, 22);
-			this.btnCancel.TabIndex = 10;
-			this.btnCancel.TabStop = false;
-			this.btnCancel.Text = "Cancel";
-			this.btnCancel.UseVisualStyleBackColor = true;
-			this.btnCancel.Visible = false;
-			this.btnCancel.Click += new System.EventHandler(this.Button_CancelClick);
-			// 
-			// slowProgressBar
-			// 
-			this.slowProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.slowProgressBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
-			this.slowProgressBar.Location = new System.Drawing.Point(213, 681);
-			this.slowProgressBar.Margin = new System.Windows.Forms.Padding(0);
-			this.slowProgressBar.Name = "slowProgressBar";
-			this.slowProgressBar.Size = new System.Drawing.Size(1258, 10);
-			this.slowProgressBar.Step = 1;
-			this.slowProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-			this.slowProgressBar.TabIndex = 11;
-			this.slowProgressBar.Visible = false;
-			this.slowProgressBar.VisibleChanged += new System.EventHandler(this.SlowProgressBar_VisibleChanged);
 			// 
 			// dataGridView1
 			// 
@@ -503,7 +382,8 @@ namespace GlobalNamespace
             this.tracknumber1,
             this.lyrics1,
             this.cover1,
-            this.isVirtualFile});
+            this.isVirtualFile,
+            this.hasNewValues});
 			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
@@ -523,7 +403,6 @@ namespace GlobalNamespace
 			this.dataGridView1.TabIndex = 8;
 			this.dataGridView1.TabStop = false;
 			this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellContentClick);
-			this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellDoubleClick);
 			this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_CellMouseDown);
 			this.dataGridView1.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseEnter);
 			this.dataGridView1.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
@@ -659,11 +538,31 @@ namespace GlobalNamespace
 			this.isVirtualFile.Name = "isVirtualFile";
 			this.isVirtualFile.ReadOnly = true;
 			this.isVirtualFile.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.isVirtualFile.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.isVirtualFile.ToolTipText = "isVirtualFile";
 			this.isVirtualFile.TrueValue = "true";
 			this.isVirtualFile.Visible = false;
 			this.isVirtualFile.Width = 25;
+			// 
+			// hasNewValues
+			// 
+			this.hasNewValues.FalseValue = "";
+			this.hasNewValues.HeaderText = "Save";
+			this.hasNewValues.MinimumWidth = 25;
+			this.hasNewValues.Name = "hasNewValues";
+			this.hasNewValues.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.hasNewValues.ToolTipText = "Save";
+			this.hasNewValues.TrueValue = "";
+			this.hasNewValues.Width = 25;
+			// 
+			// tabPage5
+			// 
+			this.tabPage5.Controls.Add(this.dataGridView2);
+			this.tabPage5.Location = new System.Drawing.Point(4, 22);
+			this.tabPage5.Name = "tabPage5";
+			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage5.Size = new System.Drawing.Size(1638, 615);
+			this.tabPage5.TabIndex = 0;
+			this.tabPage5.Text = "Search Results";
+			this.tabPage5.UseVisualStyleBackColor = true;
 			// 
 			// dataGridView2
 			// 
@@ -727,7 +626,6 @@ namespace GlobalNamespace
 			this.dataGridView2.TabIndex = 9;
 			this.dataGridView2.TabStop = false;
 			this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellContentClick);
-			this.dataGridView2.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellDoubleClick);
 			this.dataGridView2.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_CellMouseDown);
 			this.dataGridView2.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseEnter);
 			this.dataGridView2.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
@@ -893,6 +791,117 @@ namespace GlobalNamespace
 			this.albumhits.ToolTipText = "Album Hits";
 			this.albumhits.Width = 30;
 			// 
+			// fastProgressBar
+			// 
+			this.fastProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.fastProgressBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
+			this.fastProgressBar.Location = new System.Drawing.Point(213, 672);
+			this.fastProgressBar.Margin = new System.Windows.Forms.Padding(0);
+			this.fastProgressBar.Name = "fastProgressBar";
+			this.fastProgressBar.Size = new System.Drawing.Size(1258, 10);
+			this.fastProgressBar.Step = 1;
+			this.fastProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			this.fastProgressBar.TabIndex = 8;
+			this.fastProgressBar.Visible = false;
+			// 
+			// menuStrip1
+			// 
+			this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.optionsToolStripMenuItem});
+			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(1656, 24);
+			this.menuStrip1.TabIndex = 9;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openFolderToolStripMenuItem,
+            this.clearResultsToolStripMenuItem});
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
+			this.toolStripMenuItem1.Text = "File";
+			// 
+			// openFolderToolStripMenuItem
+			// 
+			this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
+			this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+			this.openFolderToolStripMenuItem.Text = "Add Directory";
+			this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_AddFolder);
+			// 
+			// clearResultsToolStripMenuItem
+			// 
+			this.clearResultsToolStripMenuItem.Name = "clearResultsToolStripMenuItem";
+			this.clearResultsToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+			this.clearResultsToolStripMenuItem.Text = "Clear Files + Results";
+			this.clearResultsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ClearTables);
+			// 
+			// optionsToolStripMenuItem
+			// 
+			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openSettingsToolStripMenuItem,
+            this.importTableToolStripMenuItem,
+            this.exportTableToolStripMenuItem});
+			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+			this.optionsToolStripMenuItem.Text = "Tools";
+			// 
+			// openSettingsToolStripMenuItem
+			// 
+			this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
+			this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+			this.openSettingsToolStripMenuItem.Text = "User Settings";
+			this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_OpenSettings);
+			// 
+			// importTableToolStripMenuItem
+			// 
+			this.importTableToolStripMenuItem.Name = "importTableToolStripMenuItem";
+			this.importTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+			this.importTableToolStripMenuItem.Text = "Import Files (CSV)";
+			this.importTableToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ImportTable);
+			// 
+			// exportTableToolStripMenuItem
+			// 
+			this.exportTableToolStripMenuItem.Name = "exportTableToolStripMenuItem";
+			this.exportTableToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+			this.exportTableToolStripMenuItem.Text = "Export Results (CSV)";
+			this.exportTableToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClick_ExportTable);
+			// 
+			// btnCancel
+			// 
+			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnCancel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.btnCancel.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnCancel.Location = new System.Drawing.Point(1477, 671);
+			this.btnCancel.Margin = new System.Windows.Forms.Padding(0);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.Size = new System.Drawing.Size(172, 22);
+			this.btnCancel.TabIndex = 10;
+			this.btnCancel.TabStop = false;
+			this.btnCancel.Text = "Cancel";
+			this.btnCancel.UseVisualStyleBackColor = true;
+			this.btnCancel.Visible = false;
+			this.btnCancel.Click += new System.EventHandler(this.Button_CancelClick);
+			// 
+			// slowProgressBar
+			// 
+			this.slowProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.slowProgressBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(232)))), ((int)(((byte)(255)))));
+			this.slowProgressBar.Location = new System.Drawing.Point(213, 681);
+			this.slowProgressBar.Margin = new System.Windows.Forms.Padding(0);
+			this.slowProgressBar.Name = "slowProgressBar";
+			this.slowProgressBar.Size = new System.Drawing.Size(1258, 10);
+			this.slowProgressBar.Step = 1;
+			this.slowProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			this.slowProgressBar.TabIndex = 11;
+			this.slowProgressBar.Visible = false;
+			this.slowProgressBar.VisibleChanged += new System.EventHandler(this.SlowProgressBar_VisibleChanged);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -926,30 +935,16 @@ namespace GlobalNamespace
 			this.tabControl1.ResumeLayout(false);
 			this.PopupMenu.ResumeLayout(false);
 			this.tabPage4.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.tabPage5.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 		private System.Windows.Forms.ToolStripMenuItem importTableToolStripMenuItem;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn filepath1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn artist1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn title1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn album1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn date1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn genre1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn disccount1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn discnumber1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn trackcount1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn tracknumber1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics1;
-		private System.Windows.Forms.DataGridViewLinkColumn cover1;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn isVirtualFile;
 		private System.Windows.Forms.DataGridViewTextBoxColumn number2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn filepath2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn service2;
@@ -967,5 +962,20 @@ namespace GlobalNamespace
 		private System.Windows.Forms.DataGridViewTextBoxColumn duration2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn durationTotal2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn albumhits;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn filepath1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn artist1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn title1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn album1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn date1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn genre1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn disccount1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn discnumber1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn trackcount1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn tracknumber1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics1;
+		private System.Windows.Forms.DataGridViewLinkColumn cover1;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn isVirtualFile;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn hasNewValues;
 	}
 }

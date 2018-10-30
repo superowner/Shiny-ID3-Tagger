@@ -3,14 +3,11 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Retrieves track lyrics from chartlyrics.com</summary>
-// http://www.chartlyrics.com/api.aspx
 //-----------------------------------------------------------------------
 
 namespace GetLyrics
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Net;
@@ -21,11 +18,23 @@ namespace GetLyrics
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for chartlyrics API
+	/// </summary>
+	[Obsolete("API down for a a couple of days already and maybe dead, last checked 2018-10-27", true)]
 	internal class ChartLyrics : IGetLyricsService
 	{
+		/// <summary>
+		/// Gets lyrics from chartlyrics API
+		/// http://www.chartlyrics.com/api.aspx
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="tagNew">The input artist and song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>The ID3 tag object with the results from this API for lyrics</returns>
 		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Chartlyrics" };
+			Id3 o = new Id3 { Service = "Chartlyrics" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

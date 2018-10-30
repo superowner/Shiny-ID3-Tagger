@@ -3,10 +3,9 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Code fired when "Search tags" button is clicked. Calls all APIs and presents their results</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Collections.Generic;
@@ -23,11 +22,14 @@ namespace GlobalNamespace
 	using GlobalVariables;
 	using Utils;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1
 	{
 		private List<IGetLyricsService> lyricsServices = new List<IGetLyricsService>
 		{
-			new GetLyrics.ChartLyrics(),
+			new GetLyrics.Apiseeds(),
 			new GetLyrics.LoloLyrics(),
 			new GetLyrics.Netease(),
 			new GetLyrics.ViewLyrics(),
@@ -55,7 +57,13 @@ namespace GlobalNamespace
 			new GetTags.Tidal()
 		};
 
-		// ###########################################################################
+		/// ###########################################################################
+		/// <summary>
+		/// Main method to start all API tasks. Shows the results in dataGridView2
+		/// Runs when "Search tags" button is clicked
+		/// Loop which iterates over every file in dataGridView1
+		/// </summary>
+		/// <param name="cancelToken">Global cancellation token</param>
 		private async void StartSearching(CancellationToken cancelToken)
 		{
 			// Prepare visual stuff like disable buttons during work, show two progress bars
@@ -139,7 +147,7 @@ namespace GlobalNamespace
 								(artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
 								 titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
 							{
-								this.PrintLogMessage(this.rtbSearchLog, new[] {"  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\""});
+								Form1.Instance.RichTextBox_LogMessage(new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" }, 1, "Search");
 
 								sw.Restart();
 
@@ -162,15 +170,13 @@ namespace GlobalNamespace
 							if (tagNew.Album != null && lyricsNew.Value != null)
 							{
 								tagNew.Lyrics = lyricsNew.Value;
-								this.PrintLogMessage(this.rtbSearchLog, new[] {"  Lyrics taken from " + lyricsNew.Key});
+								Form1.Instance.RichTextBox_LogMessage(new[] { "  Lyrics taken from " + lyricsNew.Key }, 1, "Search");
 							}
 
 							foreach (DataRow r in apiResults.Rows)
 							{
-								string albumhit =
-									Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
-								string durationTotal =
-									Utils.IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
+								string albumhit = Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
+								string durationTotal = Utils.IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
 
 								this.dataGridView2.Rows.Add(
 									(this.dataGridView2.Rows.Count + 1).ToString(),
@@ -206,18 +212,19 @@ namespace GlobalNamespace
 								}
 							}
 
-							// Color cells green, yellow or red according to Levenshtein and allowedEditPercent setting
+							// Mark changes in datagridView1: green = new value, yellow = minor change, red = big change
+							// Red is according to Levenshtein and allowedEditPercent setting
 							this.DataGridView_MarkChange(row.Index, this.artist1.Index, tagOld.Artist, tagNew.Artist, true);
 							this.DataGridView_MarkChange(row.Index, this.title1.Index, tagOld.Title, tagNew.Title, true);
 							this.DataGridView_MarkChange(row.Index, this.album1.Index, tagOld.Album, tagNew.Album, true);
-							this.DataGridView_MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date, false);
+							this.DataGridView_MarkChange(row.Index, this.date1.Index, tagOld.Date, tagNew.Date);
 							this.DataGridView_MarkChange(row.Index, this.genre1.Index, tagOld.Genre, tagNew.Genre, true);
-							this.DataGridView_MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount, false);
-							this.DataGridView_MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber, false);
-							this.DataGridView_MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount, false);
-							this.DataGridView_MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber, false);
-							this.DataGridView_MarkChange(row.Index, this.lyrics1.Index, tagOld.Lyrics, tagNew.Lyrics, false);
-							this.DataGridView_MarkChange(row.Index, this.cover1.Index, tagOld.Cover, tagNew.Cover, false);
+							this.DataGridView_MarkChange(row.Index, this.disccount1.Index, tagOld.DiscCount, tagNew.DiscCount);
+							this.DataGridView_MarkChange(row.Index, this.discnumber1.Index, tagOld.DiscNumber, tagNew.DiscNumber);
+							this.DataGridView_MarkChange(row.Index, this.trackcount1.Index, tagOld.TrackCount, tagNew.TrackCount);
+							this.DataGridView_MarkChange(row.Index, this.tracknumber1.Index, tagOld.TrackNumber, tagNew.TrackNumber);
+							this.DataGridView_MarkChange(row.Index, this.lyrics1.Index, tagOld.Lyrics, tagNew.Lyrics);
+							this.DataGridView_MarkChange(row.Index, this.cover1.Index, tagOld.Cover, tagNew.Cover);
 
 							sw.Stop();
 							tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
@@ -242,10 +249,8 @@ namespace GlobalNamespace
 								allApiDurationTotal ?? string.Empty,
 								string.Empty);
 
-							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index]
-								.ToolTipText = tagNew.Lyrics;
-							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor =
-								Color.Yellow;
+							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index].ToolTipText = tagNew.Lyrics;
+							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].DefaultCellStyle.BackColor = Color.Yellow;
 							this.dataGridView2.FirstDisplayedScrollingRowIndex = this.dataGridView2.RowCount - 1;
 							this.dataGridView2.ClearSelection();
 						}
@@ -254,7 +259,7 @@ namespace GlobalNamespace
 					}
 				}
 			}
-			catch
+			catch (OperationCanceledException)
 			{
 				// User pressed Cancel button. Nothing further to do
 			}
@@ -263,61 +268,26 @@ namespace GlobalNamespace
 			this.slowProgressBar.Visible = false;
 			this.fastProgressBar.Visible = false;
 
+			// Set focus to the active dataGridView. Needed for keyPress events being fired like space or ESC key
+			GlobalVariables.ActiveDGV.Select();
+
+			// Enable all buttons and menus again
 			this.Form_EnableUI(true);
 		}
 
-		// ###########################################################################
-		private async Task<KeyValuePair<string, string>> StartLyricsSearch(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
-		{
-			KeyValuePair<string, string> lyrics = default(KeyValuePair<string, string>);
-			Dictionary<string, string> lyricResults = new Dictionary<string, string>();
-
-			if (tagNew.Artist == null && tagNew.Title == null)
-			{
-				return lyrics;
-			}
-
-			List<Task<Id3>> taskList = this.lyricsServices.Select(service => service.GetLyrics(
-																  client, tagNew, cancelToken)).ToList();
-
-			try
-			{
-				while (taskList.Count > 0)
-				{
-					cancelToken.ThrowIfCancellationRequested();
-
-					Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
-					taskList = tpl.Item1;
-					Id3 r = tpl.Item2;
-
-					lyricResults.Add(r.Service, r.Lyrics);
-				}
-			}
-			catch (OperationCanceledException)
-			{
-				// User pressed Cancel button. Nothing further to do
-			}
-
-			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
-			// "lyricsPriority" setting in settings.json decides what lyrics should be taken if there are multiple sources available
-			foreach (string api in User.Settings["LyricsPriority"])
-			{
-				lyrics = (from kvp in lyricResults
-						  where !string.IsNullOrWhiteSpace(kvp.Value)
-						  where kvp.Key.ToLowerInvariant() == api.ToLowerInvariant()
-						  select kvp).FirstOrDefault();
-
-				if (lyrics.Value != null)
-				{
-					break;
-				}
-			}
-
-			return lyrics;
-		}
-
-		// ###########################################################################
-		private async Task<DataTable> StartId3Search(HttpMessageInvoker client, Id3 tagOld, CancellationToken cancelToken)
+		/// ###########################################################################
+		/// <summary>
+		/// Helper method that starts all ID3 API tasks. Collects their results
+		/// Called once per file
+		/// </summary>
+		/// <param name="client">Single HTTP client which is used throughout the whole search process</param>
+		/// <param name="tagOld">Old ID3 tags from files, passed on to every API as search parameter</param>
+		/// <param name="cancelToken">Global cancellation token</param>
+		/// <returns>A data table which holds all the results from every ID3 API task</returns>
+		private async Task<DataTable> StartId3Search(
+			HttpMessageInvoker client,
+			Id3 tagOld,
+			CancellationToken cancelToken)
 		{
 			DataTable apiResults = Id3.CreateId3Table();
 
@@ -325,7 +295,7 @@ namespace GlobalNamespace
 			string titleToSearch = Utils.Strip(tagOld.Title);
 
 			string message = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"", -100}{"file: \"" + tagOld.Filepath + "\""}";
-			this.PrintLogMessage(this.rtbSearchLog, new[] {message});
+			Form1.Instance.RichTextBox_LogMessage(new[] { message }, 1, "Search");
 
 			List<Task<Id3>> taskList = this.tagsServices.Select(service =>
 																	 service.GetTags(
@@ -376,22 +346,100 @@ namespace GlobalNamespace
 			return apiResults;
 		}
 
+		/// ###########################################################################
+		/// <summary>
+		/// Helper method that starts all lyrics API tasks. Collects their results
+		/// Called once per file
+		/// </summary>
+		/// <param name="client">Single HTTP client which is used throughout the whole search process</param>
+		/// <param name="tagOld">Old ID3 tags from files, passed on to every API as search parameter</param>
+		/// <param name="cancelToken">Global cancellation token</param>
+		/// <returns>A data table which holds all the results from every lyrics API task</returns>
+		private async Task<KeyValuePair<string, string>> StartLyricsSearch(
+			HttpMessageInvoker client,
+			Id3 tagOld,
+			CancellationToken cancelToken)
+		{
+			KeyValuePair<string, string> lyrics = default(KeyValuePair<string, string>);
+			Dictionary<string, string> lyricResults = new Dictionary<string, string>();
+
+			if (tagOld.Artist == null && tagOld.Title == null)
+			{
+				return lyrics;
+			}
+
+			List<Task<Id3>> taskList = this.lyricsServices.Select(service => service.GetLyrics(
+																  client, tagOld, cancelToken)).ToList();
+
+			try
+			{
+				while (taskList.Count > 0)
+				{
+					cancelToken.ThrowIfCancellationRequested();
+
+					Tuple<List<Task<Id3>>, Id3> tpl = await this.CollectTaskResults(taskList);
+					taskList = tpl.Item1;
+					Id3 r = tpl.Item2;
+
+					lyricResults.Add(r.Service, r.Lyrics);
+				}
+			}
+			catch (OperationCanceledException)
+			{
+				// User pressed Cancel button. Nothing further to do
+			}
+
+			// Netease and Xiami often have poorer lyrics in comparison to Lololyrics and Chartlyrics
+			// "lyricsPriority" setting in settings.json decides what lyrics should be taken if there are multiple sources available
+			foreach (string api in User.Settings["LyricsPriority"])
+			{
+				lyrics = (from kvp in lyricResults
+						  where !string.IsNullOrWhiteSpace(kvp.Value)
+						  where kvp.Key.ToLowerInvariant() == api.ToLowerInvariant()
+						  select kvp).FirstOrDefault();
+
+				if (lyrics.Value != null)
+				{
+					break;
+				}
+			}
+
+			return lyrics;
+		}
+
+		/// <summary>
+		/// Helper method to avoid code duplication between two methods
+		/// Called twice per file. One time for StartId3Search and one time for StartlyricsSearch
+		/// </summary>
+		/// <param name="taskList">The old API tasklist which references all current running API tasks</param>
+		/// <returns>Two values with a tuple
+		/// value 1: The new taskList which is one item smaller than before, because one API task finished
+		/// value 2: The result from the finished task
+		/// </returns>
 		private async Task<Tuple<List<Task<Id3>>, Id3>> CollectTaskResults(List<Task<Id3>> taskList)
 		{
-			// ConfigureAwait(false) is used to remove sluggishness in GUI	/ https://www.thomaslevesque.com/2015/11/11/explicitly-switch-to-the-ui-thread-in-an-async-method/
+			// ConfigureAwait(false) is used to remove sluggishness in GUI
+			// https://www.thomaslevesque.com/2015/11/11/explicitly-switch-to-the-ui-thread-in-an-async-method/
 			Task<Id3> finishedTask = await Task.WhenAny(taskList).ConfigureAwait(false);
 			Id3 r = await finishedTask;
 
 			taskList.Remove(finishedTask);
 
-			// Return 2 values with a tuple. First, the new taskList which is one item smaller than before, because one task was finished
-			// Second value is the actual result from that finished task. Hand this value back to the parent thread which updates the GUI
 			return new Tuple<List<Task<Id3>>, Id3>(taskList, r);
 
-			// No need to dispose tasks https://blogs.msdn.microsoft.com/pfxteam/2012/03/25/do-i-need-to-dispose-of-tasks/
+			// No need to dispose tasks
+			// https://blogs.msdn.microsoft.com/pfxteam/2012/03/25/do-i-need-to-dispose-of-tasks/
 		}
 
-		// ###########################################################################
+		/// ###########################################################################
+		/// <summary>
+		/// Helper method to fill the the missing info/tags in the existing object "tagNew" by calculating the most often named value from all API results
+		/// Uses tresholds to avoid low quality results. Currently must be named more or equal to three times
+		/// Called once per file
+		/// </summary>
+		/// <param name="apiResults">The results from all ID3 API tasks for the current file as calculation basis</param>
+		/// <param name="tagNew">The existing newTag object which will be filled with values</param>
+		/// <returns>The resulting tags as tagNew object</returns>
 		private Id3 CalculateResults(DataTable apiResults, Id3 tagNew)
 		{
 			var majorityAlbumRows = (from row in apiResults.AsEnumerable()
@@ -511,7 +559,7 @@ namespace GlobalNamespace
 
 					if (tagNew.Cover != null)
 					{
-						this.PrintLogMessage(this.rtbSearchLog, new[] {"  Cover taken from " + api});
+						Form1.Instance.RichTextBox_LogMessage(new[] { "  Cover taken from " + api }, 1, "Search");
 						break;
 					}
 				}

@@ -3,11 +3,9 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Imports a CSV file</summary>
-// https://stackoverflow.com/a/3508572/935614
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Globalization;
@@ -16,8 +14,17 @@ namespace GlobalNamespace
 	using GlobalVariables;
 	using Microsoft.VisualBasic.FileIO;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Imports a CSV file to dataGridView1
+		/// https://stackoverflow.com/a/3508572/935614
+		/// </summary>
+		/// <param name="sender">The object which has raised the event</param>
+		/// <param name="e">Contains additional information about the event</param>
 		private void MenuItemClick_ImportTable(object sender, EventArgs e)
 		{
 			// Get current system separator (comma or semicolon) and UTF8 encoder
@@ -78,31 +85,25 @@ namespace GlobalNamespace
 							else
 							{
 								// CSV header row doesn't match datagridView1 headers
-								if ((int)User.Settings["DebugLevel"] >= 2)
+								string[] errorMsg =
 								{
-									string[] errorMsg =
-									{
-										"ERROR:    Could not parse CSV file \"" + fullPath + "\"",
-										"Message:  Header row doesn't match required headers. Look for differences and change them in your CSV file",
-										"CSV:      " + string.Join(seperator, csvHeaderFields),
-										"Required: " + string.Join(seperator, dgvHeaderFields)
-									};
-									this.PrintLogMessage(this.rtbErrorLog, errorMsg);
-								}
+									"ERROR:    Could not parse CSV file \"" + fullPath + "\"",
+									"Message:  Header row doesn't match required headers. Look for differences and change them in your CSV file",
+									"CSV:      " + string.Join(seperator, csvHeaderFields),
+									"Required: " + string.Join(seperator, dgvHeaderFields)
+								};
+								Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 							}
 						}
 						catch (MalformedLineException ex)
 						{
 							// Malformed CSV values somewhere which couldn't be parsed
-							if ((int)User.Settings["DebugLevel"] >= 2)
+							string[] errorMsg =
 							{
-								string[] errorMsg =
-								{
-									"ERROR:    Could not parse CSV \"" + fullPath + "\"",
-									"Message:  " + ex.Message.TrimEnd('\r', '\n')
-								};
-								this.PrintLogMessage(this.rtbErrorLog, errorMsg);
-							}
+								"ERROR:    Could not parse CSV \"" + fullPath + "\"",
+								"Message:  " + ex.Message.TrimEnd('\r', '\n')
+							};
+							Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 						}
 					}
 				}

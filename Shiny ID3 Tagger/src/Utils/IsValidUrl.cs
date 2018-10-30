@@ -3,20 +3,27 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Checks if a given string is a valid URL</summary>
-// https://dotnetfiddle.net/XduN3A				this method still produces some false positives
-// https://mathiasbynens.be/demo/url-regex		RegEx validator pattern comparison
 //-----------------------------------------------------------------------
 
 namespace Utils
 {
 	using System;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
-		internal static bool IsValidUrl(string stringUri)
+		/// <summary>
+		/// Checks if a given string can be interpreted as a valid HTTP or HTTPS URL
+		/// https://dotnetfiddle.net/XduN3A				this method still produces some false positives
+		/// https://mathiasbynens.be/demo/url-regex		RegEx validator pattern comparison
+		/// </summary>
+		/// <param name="str">string to check</param>
+		/// <returns>True or false according to previous check</returns>
+		internal static bool IsValidUrl(string str)
 		{
-			bool result = Uri.TryCreate(stringUri, UriKind.Absolute, out Uri uriResult)
+			bool result = Uri.TryCreate(str, UriKind.Absolute, out Uri uriResult)
 								&& (uriResult.Scheme == Uri.UriSchemeHttp
 								|| uriResult.Scheme == Uri.UriSchemeHttps);
 			return result;

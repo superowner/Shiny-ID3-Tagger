@@ -3,12 +3,9 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Method to run when "Add files" button is clicked</summary>
-// Tips on how to speed up dataGridView rendering: https://10tec.com/articles/why-datagridview-slow.aspx
-// HowTo use Task.Run: https://blog.stephencleary.com/2013/08/taskrun-vs-backgroundworker-round-3.html
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Collections.Generic;
@@ -22,13 +19,22 @@ namespace GlobalNamespace
 	using Utils;
 
 	/// <summary>
-	/// Method selects and reads in existing tags and shows them in a dataGridView
+	/// Represents the Form1 class which contains all methods who interacts with the UI
 	/// </summary>
 	public partial class Form1
 	{
-		// ###########################################################################
-		private async Task<bool> AddFiles(string[] newFiles, CancellationToken cancelToken)
+		/// <summary>
+		/// Method collects and reads in existing ID3 tags
+		/// Shows them in dataGridView1
+		/// Runs when "Add files" button is clicked
+		/// HowTo use Task.Run: https://blog.stephencleary.com/2013/08/taskrun-vs-backgroundworker-round-3.html
+		/// </summary>
+		/// <param name="newFiles">String list of files to add to dataGridView1</param>
+		/// <param name="cancelToken">Global cancelation token</param>
+		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+		private async Task<bool> CollectFiles(string[] newFiles, CancellationToken cancelToken)
 		{
+			// ###########################################################################
 			// Work starts, disable all buttons to prevent side effects when user clicks them despite an already running task
 			this.Form_EnableUI(false);
 
@@ -93,7 +99,7 @@ namespace GlobalNamespace
 				// Prepare the variable used to send progress from worker thread to GUI thread
 				IProgress<int> progress = progressHandler as IProgress<int>;
 
-				// using try/catch and cancellation token is the proper way to cancel a task
+				// Using try/catch and cancellation token is the proper way to cancel a task
 				try
 				{
 					// Start task to collect all file tags
@@ -106,22 +112,29 @@ namespace GlobalNamespace
 					// Add the list of dataGridViewRows to first dataGridView (update UI thread)
 					this.dataGridView1.Rows.AddRange(fileTable.ToArray());
 				}
+				catch (TagLib.CorruptFileException error)
+				{
+					// Error handling when any error occurs during file reading
+					string[] errorMsg =
+					{
+						"ERROR:    Could not read all file tags! File is corrupt",
+						"Message:  " + error.ToString().TrimEnd('\r', '\n')
+					};
+					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+				}
+				catch (TagLib.UnsupportedFormatException error)
+				{
+					// Error handling when any error occurs during file reading
+					string[] errorMsg =
+					{
+						"ERROR:    Could not read all file tags! File or tag format is not supported",
+						"Message:  " + error.ToString().TrimEnd('\r', '\n')
+					};
+					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+				}
 				catch (OperationCanceledException)
 				{
 					// User pressed Cancel button. Nothing further to do
-				}
-				catch (Exception error)
-				{
-					// Error handling when any error occurs during file reading
-					if ((int)User.Settings["DebugLevel"] >= 2)
-					{
-						string[] errorMsg =
-						{
-							"ERROR:    Could not read all file tags!",
-							"Message:  " + error.ToString().TrimEnd('\r', '\n')
-						};
-						this.PrintLogMessage(this.rtbErrorLog, errorMsg);
-					}
 				}
 			}
 
@@ -134,21 +147,34 @@ namespace GlobalNamespace
 			return fileTable.Any();
 		}
 
-		// ###########################################################################
-		// Adds a single file to dataTable with all its present ID3 tags
-		private List<DataGridViewRow> AddFilesToTable(string[] newFiles, HashSet<string> existingFilePaths, DataGridViewRow emptyRow, IProgress<int> progress, CancellationToken cancelToken)
+		/// ###########################################################################
+		/// <summary>
+		/// Adds a single file with all currents ID3 tags to a dataTable
+		/// </summary>
+		/// <param name="newFiles">List of paths of all selected and new files to add</param>
+		/// <param name="existingFiles">List of all already added file paths</param>
+		/// <param name="emptyRow">An empty dataGridViewRow as template from dataGridView1 to avoid access to UI thread from this worker thread</param>
+		/// <param name="progress">Variable is used to report the current progress back to parent thread</param>
+		/// <param name="cancelToken">Global cancellation token</param>
+		/// <returns>A list of dataGridView rows with unique files (old and new ones)</returns>
+		private List<DataGridViewRow> AddFilesToTable(
+			string[] newFiles,
+			HashSet<string> existingFiles,
+			DataGridViewRow emptyRow,
+			IProgress<int> progress,
+			CancellationToken cancelToken)
 		{
 			int counter = 0;
 			List<DataGridViewRow> fileList = new List<DataGridViewRow>();
 
-			// Loop through each file and add it to first dataGridView
+			// Loop through each file and add it to dataGridView1
 			foreach (string filepath in newFiles)
 			{
-				//// Check if user pressed cancel or ESC
+				// Check if user pressed cancel or ESC
 				if (!cancelToken.IsCancellationRequested)
 				{
 					// Check if file wasn't already added earlier
-					if (!existingFilePaths.Contains(filepath))
+					if (!existingFiles.Contains(filepath))
 					{
 						// Check if file is a valid mp3 file
 						if (Utils.IsValidMp3(filepath))
@@ -203,7 +229,7 @@ namespace GlobalNamespace
 								// Use empty string values as fall back when NULL is encountered
 								DataGridViewRow row = (DataGridViewRow)emptyRow.Clone();
 								row.SetValues(
-									(existingFilePaths.Count + counter).ToString(),
+									(existingFiles.Count + counter).ToString(),
 									filepath ?? string.Empty,
 									artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,			// Select the first non-null artist choice, value order in array is important therefore
 									titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,				// Select the first non-null title choice, value order in array is important therefore
@@ -216,6 +242,7 @@ namespace GlobalNamespace
 									(tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(GlobalVariables.CultEng) : string.Empty,
 									tagFile.Tag.Lyrics ?? string.Empty,
 									tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty,
+									false,
 									false);
 
 								// Add new DataGridViewRow to a fileList which is returned later

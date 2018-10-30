@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Checks if a given file is a real MP3 by inspecting first 3 bytes in file header</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -11,16 +10,25 @@ namespace Utils
 	using System;
 	using System.IO;
 	using System.Linq;
-	using GlobalNamespace;
 	using GlobalVariables;
+	using Shiny_ID3_Tagger;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
+		/// <summary>
+		/// Checks if a given file is a MP3 file
+		/// Does this by inspecting first 3 bytes of a file and comparing them with known byte sequences for mp3 files
+		/// </summary>
+		/// <param name="filepath">File to check</param>
+		/// <returns>True or false according to the previous check</returns>
 		internal static bool IsValidMp3(string filepath)
 		{
 			byte[] fileHeader = new byte[3];
-			byte[] mp3HeaderWithTags = { 0x49, 0x44, 0x33 };
-			byte[] mp3HeaderWithoutTags = { 0xff, 0xfb };
+			byte[] mp3HeaderWithTags = { 0x49, 0x44, 0x33 }; // ID3 tags present
+			byte[] mp3HeaderWithoutTags = { 0xff, 0xfb };    // ID3 tags not present but still a mp3 file
 
 			try
 			{
@@ -29,76 +37,61 @@ namespace Utils
 				{
 					binaryReader.Read(fileHeader, 0, 3);
 				}
-
-				// Check for valid mp3 header bytes (ID3 tags present)
-				if (fileHeader.SequenceEqual(mp3HeaderWithTags))
-				{
-					return true;
-				}
-
-				// Check for valid mp3 header bytes (no ID3 tags present)
-				fileHeader = fileHeader.Take(2).ToArray();
-				if (fileHeader.SequenceEqual(mp3HeaderWithoutTags))
-				{
-					return true;
-				}
-
-				// If mp3 file does not contain valid mp3 header bytes, print error message
-				if ((int)User.Settings["DebugLevel"] >= 1)
-				{
-					string[] errorMsg =
-					{
-						"ERROR:    Not a valid MP3 file!",
-						"file:     " + filepath
-					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
-				}
-
-				return false;
 			}
 			catch (ArgumentException)
 			{
-				// If path points to a URL
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				// If path points for example to a URL instead of a local file
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						"ERROR:    Invalid filepath!",
-						"file:     " + filepath
-					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
-				}
+					"ERROR:    Invalid filepath!",
+					"file:     " + filepath
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return false;
 			}
 			catch (FileNotFoundException)
 			{
 				// If file is not found
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						"ERROR:    File not found!",
-						"file:     " + filepath
-					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
-				}
+					"ERROR:    File not found!",
+					"file:     " + filepath
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return false;
 			}
 			catch (IOException)
 			{
 				// If file has a write lock (i.e. opened in another program)
-				if ((int)User.Settings["DebugLevel"] >= 1)
+				string[] errorMsg =
 				{
-					string[] errorMsg =
-					{
-						"ERROR:    Cannot access file. Already in use!",
+					"ERROR:    Cannot access file. Already in use!",
+					"file:     " + filepath
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+
+				return false;
+			}
+
+			// Check for valid mp3 header bytes ( or )
+			if (fileHeader.SequenceEqual(mp3HeaderWithTags) ||
+				fileHeader.Take(2).ToArray().SequenceEqual(mp3HeaderWithoutTags))
+			{
+				return true;
+			}
+			else
+			{
+				// Print error message
+				string[] errorMsg =
+				{
+						"ERROR:    Not a valid MP3 file!",
 						"file:     " + filepath
 					};
-					Form1.Instance.RichTextBox_PrintErrorMessage(errorMsg);
-				}
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
+				// return false because MP3 file does not contain a valid mp3 header
 				return false;
 			}
 		}

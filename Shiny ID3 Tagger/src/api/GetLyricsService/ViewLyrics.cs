@@ -3,12 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Retrieves track lyrics from viewlyrics.com</summary>
-// https://github.com/rikels/LyricsSearch/blob/master/lyrics.py#L88
-// https://github.com/PedroHLC/ViewLyricsOpenSearcher
-// https://github.com/PedroHLC/ViewLyricsOpenSearcher/blob/master/viewlyricsopensearcher.php#L60
-// https://github.com/osdlyrics/osdlyrics/blob/master/lyricsources/viewlyrics/viewlyrics.py
-// LRC format explained: https://wiki.mobileread.com/wiki/LRC
 //-----------------------------------------------------------------------
 
 namespace GetLyrics
@@ -27,11 +21,26 @@ namespace GetLyrics
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for viewlyrics API
+	/// </summary>
 	internal class ViewLyrics : IGetLyricsService
 	{
+		/// <summary>
+		/// Gets lyrics from viewlyrics API
+		/// https://github.com/rikels/LyricsSearch/blob/master/lyrics.py#L88
+		/// https://github.com/PedroHLC/ViewLyricsOpenSearcher
+		/// https://github.com/PedroHLC/ViewLyricsOpenSearcher/blob/master/viewlyricsopensearcher.php#L60
+		/// https://github.com/osdlyrics/osdlyrics/blob/master/lyricsources/viewlyrics/viewlyrics.py
+		/// LRC format explained: https://wiki.mobileread.com/wiki/LRC
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="tagNew">The input artist and song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>The ID3 tag object with the results from this API for lyrics</returns>
 		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Viewlyrics" };
+			Id3 o = new Id3 { Service = "Viewlyrics" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();

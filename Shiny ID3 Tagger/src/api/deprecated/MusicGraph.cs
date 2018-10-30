@@ -3,15 +3,11 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from MusicGraph API for current track</summary>
-// https://developer.musicgraph.com/api-docs/v2/tracks
-// "limit=1" should not be used, filtering on client side is better
 //-----------------------------------------------------------------------
 
 namespace GetTags
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Net;
@@ -22,19 +18,52 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for MusicGraph API
+	/// </summary>
 	[Obsolete("Website and API service is closed", true)]
 	internal class MusicGraph : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 tags from MusicGraph API
+		/// https://developer.musicgraph.com/api-docs/v2/tracks
+		/// "limit=1" should not be used, filtering on client side is a better
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Musicgraph" };
+			Id3 o = new Id3 { Service = "Musicgraph" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
 
 			// ###########################################################################
-			var account = (from item in User.Accounts["MusicGraph"]
-						   orderby item["lastused"] ascending
+			foreach (var item in User.Accounts[o.Service])
+			{
+				if (item["lastUsed"] == null)
+				{
+					item["lastUsed"] = 0;
+				}
+			}
+
+			var account = (from item in User.Accounts[o.Service]
+						   orderby item["lastUsed"] ascending
 						   select item).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;
 

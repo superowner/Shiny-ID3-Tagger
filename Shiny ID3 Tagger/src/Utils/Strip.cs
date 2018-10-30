@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Removes brackets and unwanted stuff like "feat.". Some weird chars are replaced through better alternatives</summary>
 //-----------------------------------------------------------------------
 
 namespace Utils
@@ -11,13 +10,22 @@ namespace Utils
 	using System.Text.RegularExpressions;
 	using GlobalVariables;
 
+	/// <summary>
+	/// Represents the Utility class which holds various helper functions
+	/// </summary>
 	internal partial class Utils
 	{
+		/// <summary>
+		/// Removes brackets and unwanted stuff like "feat."
+		/// Some unusual chars are replaced through better alternatives
+		/// </summary>
+		/// <param name="str">string to clean/sanitize</param>
+		/// <returns>The cleaned string</returns>
 		internal static string Strip(string str)
 		{
 			if (str != null)
 			{
-				if ((bool)User.Settings["RemoveBrackets"])
+				if ((bool)User.Settings["RemoveVersion"])
 				{
 					const string RegExPattern = @"\s[\(\[].*?(version|edition|deluxe|explicit|disc).*?[\)\]]";
 					str = Regex.Replace(str, RegExPattern, string.Empty, RegexOptions.IgnoreCase);
@@ -25,7 +33,7 @@ namespace Utils
 
 				if ((bool)User.Settings["RemoveFeaturing"])
 				{
-					const string RegExPattern = @"\s([\(\[])?\s(feat(\.)?|ft(\.)?|featuring)(.*?[\)\]]|.*)";
+					const string RegExPattern = @"\s[\(\[].*?(feat(\.)? |ft(\.)? |featuring ).*?[\)\]]";
 					str = Regex.Replace(str, RegExPattern, string.Empty, RegexOptions.IgnoreCase);
 				}
 

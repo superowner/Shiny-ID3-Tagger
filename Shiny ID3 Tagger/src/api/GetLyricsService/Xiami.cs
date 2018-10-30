@@ -3,8 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Retrieves track lyrics from xiami.com</summary>
-// #https://github.com/LIU9293/musicAPI/tree/master/src
 //-----------------------------------------------------------------------
 
 namespace GetLyrics
@@ -21,11 +19,22 @@ namespace GetLyrics
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for Xiami API
+	/// </summary>
 	internal class Xiami : IGetLyricsService
 	{
+		/// <summary>
+		/// Gets lyrics from Xiami API
+		/// https://github.com/LIU9293/musicAPI/tree/master/src
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="tagNew">The input artist and song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>The ID3 tag object with the results from this API for lyrics</returns>
 		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "Xiami" };
+			Id3 o = new Id3 { Service = "Xiami" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -51,26 +60,28 @@ namespace GetLyrics
 
 					if (song != null && Utils.IsValidUrl((string)song.SelectToken("lyric")))
 					{
-						HttpRequestMessage lyricRequest = new HttpRequestMessage();
-						lyricRequest.RequestUri = new Uri((string)song.SelectToken("lyric"));
-
-						string lyricsContent = await Utils.GetResponse(client, lyricRequest, cancelToken);
-						string rawLyrics = lyricsContent;
-
-						if (!string.IsNullOrWhiteSpace(rawLyrics))
+						using (HttpRequestMessage lyricRequest = new HttpRequestMessage())
 						{
-							// Sanitize
-							rawLyrics = Regex.Replace(rawLyrics, @"[\r\n]\[x-trans\].*", string.Empty);					// Remove [x-trans] lines (Chinese translation)
-							rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);	// Remove timestamps like [01:01:123] or [01:01]
-							rawLyrics = Regex.Replace(rawLyrics, @".*?[\u4E00-\u9FFF]+.*?[\r\n]", string.Empty);		// Remove lines where Chinese characters are. Most of them are credits like [by: XYZ]
-							rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);								// Remove square brackets [by: XYZ] credits
-							rawLyrics = Regex.Replace(rawLyrics, @"<\d+>", string.Empty);								// Remove angle brackets <123>. No idea for what they are. Example track is "ABBA - Gimme Gimme Gimme"
-							rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));					// Remove leading or ending white space per line
-							rawLyrics = rawLyrics.Trim();																// Remove leading or ending line breaks
+							lyricRequest.RequestUri = new Uri((string)song.SelectToken("lyric"));
 
-							if (rawLyrics.Length > 1)
+							string lyricsContent = await Utils.GetResponse(client, lyricRequest, cancelToken);
+							string rawLyrics = lyricsContent;
+
+							if (!string.IsNullOrWhiteSpace(rawLyrics))
 							{
-								o.Lyrics = rawLyrics;
+								// Sanitize
+								rawLyrics = Regex.Replace(rawLyrics, @"[\r\n]\[x-trans\].*", string.Empty);                 // Remove [x-trans] lines (Chinese translation)
+								rawLyrics = Regex.Replace(rawLyrics, @"\[\d{2}:\d{2}(\.\d{2})?\]([\r\n])?", string.Empty);  // Remove timestamps like [01:01:123] or [01:01]
+								rawLyrics = Regex.Replace(rawLyrics, @".*?[\u4E00-\u9FFF]+.*?[\r\n]", string.Empty);        // Remove lines where Chinese characters are. Most of them are credits like [by: XYZ]
+								rawLyrics = Regex.Replace(rawLyrics, @"\[.*?\]", string.Empty);                             // Remove square brackets [by: XYZ] credits
+								rawLyrics = Regex.Replace(rawLyrics, @"<\d+>", string.Empty);                               // Remove angle brackets <123>. No idea for what they are. Example track is "ABBA - Gimme Gimme Gimme"
+								rawLyrics = string.Join("\n", rawLyrics.Split('\n').Select(s => s.Trim()));                 // Remove leading or ending white space per line
+								rawLyrics = rawLyrics.Trim();                                                               // Remove leading or ending line breaks
+
+								if (rawLyrics.Length > 1)
+								{
+									o.Lyrics = rawLyrics;
+								}
 							}
 						}
 					}

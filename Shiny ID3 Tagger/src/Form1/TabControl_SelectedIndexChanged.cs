@@ -3,17 +3,24 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Helper to set variable "ActiveDGV" accordingly to the active tab (datagridview)</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Windows.Forms;
 	using GlobalVariables;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Set variable "ActiveDGV" accordingly to the active tab (datagridview)
+		/// </summary>
+		/// <param name="sender">The object which has raised the event</param>
+		/// <param name="e">Contains additional information about the event</param>
 		private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			switch (this.tabControl1.SelectedIndex)
@@ -25,6 +32,8 @@ namespace GlobalNamespace
 					GlobalVariables.ActiveDGV = this.dataGridView2;
 					break;
 			}
+
+			GlobalVariables.ActiveDGV.Select();
 		}
 	}
 }

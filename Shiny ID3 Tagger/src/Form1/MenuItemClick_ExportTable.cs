@@ -3,10 +3,9 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Exports a CSV file</summary>
 //-----------------------------------------------------------------------
 
-namespace GlobalNamespace
+namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Collections.Generic;
@@ -18,8 +17,16 @@ namespace GlobalNamespace
 	using GlobalVariables;
 	using Utils;
 
+	/// <summary>
+	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// </summary>
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Exports dataGridView1 as a CSV file
+		/// </summary>
+		/// <param name="sender">The object which has raised the event</param>
+		/// <param name="e">Contains additional information about the event</param>
 		private void MenuItemClick_ExportTable(object sender, EventArgs e)
 		{
 			// Use current system separator (comma or semicolon)
@@ -27,12 +34,12 @@ namespace GlobalNamespace
 			StringBuilder csvContent = new StringBuilder();
 
 			IEnumerable<DataGridViewColumn> headers = GlobalVariables.ActiveDGV.Columns.Cast<DataGridViewColumn>();
-			csvContent.AppendLine(string.Join(seperator, headers.Select(column => Utils.WellFormedCsvValue(column.HeaderCell.Value)).ToArray()));
+			csvContent.AppendLine(string.Join(seperator, headers.Select(column => Utils.SanitizeForCsv(column.HeaderCell.Value)).ToArray()));
 
 			foreach (DataGridViewRow row in GlobalVariables.ActiveDGV.Rows)
 			{
 				IEnumerable<DataGridViewCell> cells = row.Cells.Cast<DataGridViewCell>();
-				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => Utils.WellFormedCsvValue(cell.Value)).ToArray()));
+				csvContent.AppendLine(string.Join(seperator, cells.Select(cell => Utils.SanitizeForCsv(cell.Value)).ToArray()));
 			}
 
 			// Set dialog properties like filename, overwrite prompt and start folder

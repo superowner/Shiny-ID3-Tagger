@@ -3,11 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from qq.com API for current track</summary>
-// http://blog.51cto.com/limeixiong/1969701
-// https://github.com/LIU9293/musicAPI/blob/master/src/qq.js
-// https://github.com/metowolf/TencentMusicApi/blob/master/TencentMusicAPI.php
-// Very bad search results. Already tried it twice to improve it but without any success
 //-----------------------------------------------------------------------
 
 namespace GetTags
@@ -23,11 +18,38 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for QQ API
+	/// </summary>
 	internal class QQ : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 data from QQ API
+		/// http://blog.51cto.com/limeixiong/1969701
+		/// https://github.com/LIU9293/musicAPI/blob/master/src/qq.js
+		/// https://github.com/metowolf/TencentMusicApi/blob/master/TencentMusicAPI.php
+		/// Very bad search results. Already tried it twice to improve it but without any success
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 {Service = "QQ (Tencent)"};
+			Id3 o = new Id3 { Service = "QQ (Tencent)" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
