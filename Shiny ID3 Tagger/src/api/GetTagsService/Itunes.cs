@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Qobuz.cs" company="Shiny ID3 Tagger">
+// <copyright file="Itunes.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -18,16 +18,13 @@ namespace GetTags
 	using Utils;
 
 	/// <summary>
-	/// Class for Qobuz API
+	/// Class for Itunes API
 	/// </summary>
-	internal class Qobuz : IGetTagsService
+	internal class ITunes : IGetTagsService
 	{
 		/// <summary>
-		/// Gets ID3 data from Qobuz API
-		/// http://www.qobuz.com/account/profile
-		/// https://github.com/Qobuz/api-documentation
-		/// https://github.com/Qobuz/api-documentation/blob/master/endpoints/track/search.md
-		/// No English genre names possible. API returns French genre names
+		/// Gets ID3 data from Itunes API
+		/// https://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -48,7 +45,7 @@ namespace GetTags
 		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
-			Id3 o = new Id3 { Service = "Qobuz" };
+			Id3 o = new Id3 { Service = "iTunes" };
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
@@ -58,27 +55,26 @@ namespace GetTags
 
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
-				searchRequest.RequestUri = new Uri("http://www.qobuz.com/api.json/0.2/track/search?limit=1&app_id=" + User.Accounts["Qobuz"]["AppId"] + "&query=" + searchTermEnc);
+				searchRequest.RequestUri = new Uri("http://itunes.apple.com/search?term=" + searchTermEnc + "&media=music&limit=1");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData?.SelectToken("tracks.items[0]") != null)
+				if (searchData?.SelectToken("results") != null)
 				{
-					o.Artist = (string)searchData.SelectToken("tracks.items[0].album.artist.name");
-					o.Title = (string)searchData.SelectToken("tracks.items[0].title");
-					o.Album = (string)searchData.SelectToken("tracks.items[0].album.title");
-					o.Genre = (string)searchData.SelectToken("tracks.items[0].album.genre.name");
-					o.DiscCount = (string)searchData.SelectToken("tracks.items[0].album.media_count");
-					o.DiscNumber = (string)searchData.SelectToken("tracks.items[0].media_number");
-					o.TrackCount = (string)searchData.SelectToken("tracks.items[0].album.tracks_count");
-					o.TrackNumber = (string)searchData.SelectToken("tracks.items[0].track_number");
-					o.Cover = (string)searchData.SelectToken("tracks.items[0].album.image.large");
-
-					string strSeconds = (string)searchData.SelectToken("tracks.items[0].album.released_at");
-					if (long.TryParse(strSeconds, out long seconds))
+					o.Artist = (string)searchData.SelectToken("results[0].artistName");
+					o.Title = (string)searchData.SelectToken("results[0].trackName");
+					o.Album = (string)searchData.SelectToken("results[0].collectionName");
+					o.Date = (string)searchData.SelectToken("results[0].releaseDate");
+					o.Genre = (string)searchData.SelectToken("results[0].primaryGenreName");
+					o.DiscCount = (string)searchData.SelectToken("results[0].discCount");
+					o.DiscNumber = (string)searchData.SelectToken("results[0].discNumber");
+					o.TrackCount = (string)searchData.SelectToken("results[0].trackCount");
+					o.TrackNumber = (string)searchData.SelectToken("results[0].trackNumber");
+					o.Cover = (string)searchData.SelectToken("results[0].artworkUrl100");
+					if (o.Cover != null)
 					{
-						o.Date = GlobalVariables.Epoch.AddSeconds(seconds).ToString();
+						o.Cover = o.Cover.Replace("100x100", "600x600");
 					}
 				}
 			}

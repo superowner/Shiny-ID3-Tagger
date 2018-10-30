@@ -3,10 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Retrieves track lyrics from apiseeds.com</summary>
-// https://apiseeds.com/account/dashboard
-// https://apiseeds.com/documentation/lyrics
-// IMPORTANT: Can only do 20.000 calls per month
 //-----------------------------------------------------------------------
 
 namespace GetLyrics
@@ -36,7 +32,7 @@ namespace GetLyrics
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="tagNew">The input artist and song title to search for</param>
 		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
-		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+		/// <returns>The ID3 tag object with the results from this API for lyrics</returns>
 		public async Task<Id3> GetLyrics(HttpMessageInvoker client, Id3 tagNew, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3 { Service = "Apiseeds" };

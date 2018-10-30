@@ -11,13 +11,13 @@ namespace Utils
 
 	/// <summary>
 	/// Represents the Utility class which holds various helper functions
-	/// https://dotnetfiddle.net/XduN3A				this method still produces some false positives
-	/// https://mathiasbynens.be/demo/url-regex		RegEx validator pattern comparison
 	/// </summary>
 	internal partial class Utils
 	{
 		/// <summary>
 		/// Checks if a given string can be interpreted as a valid HTTP or HTTPS URL
+		/// https://dotnetfiddle.net/XduN3A				this method still produces some false positives
+		/// https://mathiasbynens.be/demo/url-regex		RegEx validator pattern comparison
 		/// </summary>
 		/// <param name="str">string to check</param>
 		/// <returns>True or false according to previous check</returns>

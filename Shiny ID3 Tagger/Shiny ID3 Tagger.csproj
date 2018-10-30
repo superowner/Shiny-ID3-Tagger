@@ -80,6 +80,7 @@
     <DocumentationFile>bin\debug\Shiny ID3 Tagger.xml</DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <OutputPath>bin\debug\</OutputPath>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
@@ -89,6 +90,18 @@
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>shinyid3tagger.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Shiny_ID3_Tagger.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp">
@@ -253,7 +266,7 @@
     <Compile Include="src\api\GetTagsService\Discogs.cs" />
     <Compile Include="src\api\GetTagsService\Genius.cs" />
     <Compile Include="src\api\GetTagsService\Gracenote.cs" />
-    <Compile Include="src\api\GetTagsService\ITunes.cs" />
+    <Compile Include="src\api\GetTagsService\Itunes.cs" />
     <Compile Include="src\api\GetTagsService\LastFm.cs" />
     <Compile Include="src\api\deprecated\MsGroove.cs" />
     <Compile Include="src\api\GetTagsService\MusicBrainz.cs" />
@@ -310,6 +323,7 @@
     <None Include="config\settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Properties\app.manifest" />
     <None Include="resources\keyfile.snk" />
     <None Include="Shiny ID3 Tagger.ruleset" />
     <AdditionalFiles Include="stylecop.json" />

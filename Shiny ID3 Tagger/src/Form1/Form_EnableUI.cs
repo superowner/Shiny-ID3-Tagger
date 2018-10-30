@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Enables or disables UI elements which could potentially interrupt add/search/write methods</summary>
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -13,9 +12,13 @@ namespace Shiny_ID3_Tagger
 	/// </summary>
 	public partial class Form1
 	{
-		private void Form_EnableUI(bool enable)
+		/// <summary>
+		/// Enables or disables UI elements which could potentially interrupt add/search/write methods
+		/// </summary>
+		/// <param name="enabled">Boolean to indicate if UI elements like menu bar or buttons should be active (clickable) or not</param>
+		private void Form_EnableUI(bool enabled)
 		{
-			if (enable)
+			if (enabled)
 			{
 				this.btnAddFiles.Enabled = true;
 				this.btnWrite.Enabled = true;

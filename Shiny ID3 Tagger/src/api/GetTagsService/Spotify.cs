@@ -3,12 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from Spotify API for current track</summary>
-// https://developer.spotify.com/documentation/web-api/reference/search/search/#writing-a-query---guidelines
-// https://github.com/spotify/web-api/issues/140	=> overall results are worse when removing the chars ",:
-// https://github.com/spotify/web-api/issues/409
-// fuzzy search with an appended asterisk (*) is useless since it only applies to a single word. And you can only use a maximum of 2 asterisk per query
-// A search for the following album returns nothing, but returns something as soon as ":, are removed: From "The Hunger Games: Mockingjay, Part 2" Soundtrack
 //-----------------------------------------------------------------------
 
 namespace GetTags
@@ -26,8 +20,36 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for Spotify API
+	/// https://developer.spotify.com/documentation/web-api/reference/search/search/#writing-a-query---guidelines
+	/// https://github.com/spotify/web-api/issues/140	=> overall results are worse when removing the chars ",:
+	/// https://github.com/spotify/web-api/issues/409
+	/// fuzzy search with an appended asterisk (*) is useless since it only applies to a single word. And you can only use a maximum of 2 asterisk per query
+	/// A search for the following album returns nothing, but returns something as soon as ":, are removed: From "The Hunger Games: Mockingjay, Part 2" Soundtrack
+	/// </summary>
 	internal class Spotify : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 data from Spotify API
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3 { Service = "Spotify" };

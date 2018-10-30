@@ -3,10 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from MusixMatch API for current track</summary>
-// https://developer.musixmatch.com/documentation/api-reference/matcher-track-get
-// https://developer.musixmatch.com/documentation/input-parameters
-// Only 1000 hits per day. Since 3 calls per file are needed, you can only search for 333 files a day. That's not much
 //-----------------------------------------------------------------------
 
 namespace GetTags
@@ -22,8 +18,34 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for MusixMatch API
+	/// </summary>
 	internal class MusixMatch : IGetTagsService
 	{
+		/// <summary>
+		/// Gets ID3 data from MusixMatch API
+		/// https://developer.musixmatch.com/documentation/api-reference/matcher-track-get
+		/// https://developer.musixmatch.com/documentation/input-parameters
+		/// Only 1000 hits per day
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3 { Service = "Musixmatch" };

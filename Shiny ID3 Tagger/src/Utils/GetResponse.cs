@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary></summary>
 //-----------------------------------------------------------------------
 
 namespace Utils

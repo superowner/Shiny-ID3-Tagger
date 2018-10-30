@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>De-highlights rows after they aren't selected anymore. Opposing method to "DataGridView_CellMouseEnter"</summary>
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -17,6 +16,11 @@ namespace Shiny_ID3_Tagger
 	/// </summary>
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Un-highlights rows after they aren't selected anymore. Opposing method to "DataGridView_CellMouseEnter"
+		/// </summary>
+		/// <param name="sender">The object which has raised the event</param>
+		/// <param name="e">Contains additional information about the event</param>
 		private void DataGridView_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dgv = (DataGridView)sender;

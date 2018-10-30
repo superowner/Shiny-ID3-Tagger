@@ -59,8 +59,9 @@ namespace Shiny_ID3_Tagger
 
 		/// ###########################################################################
 		/// <summary>
-		/// Main method to start all search tasks. Shows the results in the dataGridView2
+		/// Main method to start all API tasks. Shows the results in dataGridView2
 		/// Runs when "Search tags" button is clicked
+		/// Loop which iterates over every file in dataGridView1
 		/// </summary>
 		/// <param name="cancelToken">Global cancellation token</param>
 		private async void StartSearching(CancellationToken cancelToken)
@@ -276,12 +277,13 @@ namespace Shiny_ID3_Tagger
 
 		/// ###########################################################################
 		/// <summary>
-		/// Method that starts all ID3 API tasks. Collects their results
+		/// Helper method that starts all ID3 API tasks. Collects their results
+		/// Called once per file
 		/// </summary>
-		/// <param name="client">Single HTTP client which is used throughout the whole program</param>
-		/// <param name="tagOld"></param>
+		/// <param name="client">Single HTTP client which is used throughout the whole search process</param>
+		/// <param name="tagOld">Old ID3 tags from files, passed on to every API as search parameter</param>
 		/// <param name="cancelToken">Global cancellation token</param>
-		/// <returns></returns>
+		/// <returns>A data table which holds all the results from every ID3 API task</returns>
 		private async Task<DataTable> StartId3Search(
 			HttpMessageInvoker client,
 			Id3 tagOld,
@@ -346,27 +348,28 @@ namespace Shiny_ID3_Tagger
 
 		/// ###########################################################################
 		/// <summary>
-		/// Method that starts all lyrics API tasks. Collects their results
+		/// Helper method that starts all lyrics API tasks. Collects their results
+		/// Called once per file
 		/// </summary>
-		/// <param name="client">Single HTTP client which is used throughout the whole program</param>
-		/// <param name="tagNew"></param>
+		/// <param name="client">Single HTTP client which is used throughout the whole search process</param>
+		/// <param name="tagOld">Old ID3 tags from files, passed on to every API as search parameter</param>
 		/// <param name="cancelToken">Global cancellation token</param>
-		/// <returns></returns>
+		/// <returns>A data table which holds all the results from every lyrics API task</returns>
 		private async Task<KeyValuePair<string, string>> StartLyricsSearch(
 			HttpMessageInvoker client,
-			Id3 tagNew,
+			Id3 tagOld,
 			CancellationToken cancelToken)
 		{
 			KeyValuePair<string, string> lyrics = default(KeyValuePair<string, string>);
 			Dictionary<string, string> lyricResults = new Dictionary<string, string>();
 
-			if (tagNew.Artist == null && tagNew.Title == null)
+			if (tagOld.Artist == null && tagOld.Title == null)
 			{
 				return lyrics;
 			}
 
 			List<Task<Id3>> taskList = this.lyricsServices.Select(service => service.GetLyrics(
-																  client, tagNew, cancelToken)).ToList();
+																  client, tagOld, cancelToken)).ToList();
 
 			try
 			{
@@ -405,7 +408,8 @@ namespace Shiny_ID3_Tagger
 		}
 
 		/// <summary>
-		/// Helper method for StartId3Search and StartlyricsSearch methods. Avoids code duplication between those two methods
+		/// Helper method to avoid code duplication between two methods
+		/// Called twice per file. One time for StartId3Search and one time for StartlyricsSearch
 		/// </summary>
 		/// <param name="taskList">The old API tasklist which references all current running API tasks</param>
 		/// <returns>Two values with a tuple
@@ -429,12 +433,13 @@ namespace Shiny_ID3_Tagger
 
 		/// ###########################################################################
 		/// <summary>
-		/// Determines or calculates the most often named value for each ID3 field from all API results
-		/// Uses tresholds (currently must be named more or equal to three times) to avoid low quality results
+		/// Helper method to fill the the missing info/tags in the existing object "tagNew" by calculating the most often named value from all API results
+		/// Uses tresholds to avoid low quality results. Currently must be named more or equal to three times
+		/// Called once per file
 		/// </summary>
-		/// <param name="apiResults"></param>
-		/// <param name="tagNew"></param>
-		/// <returns>The most relevant ID3 tags as "new ID3 tags"</returns>
+		/// <param name="apiResults">The results from all ID3 API tasks for the current file as calculation basis</param>
+		/// <param name="tagNew">The existing newTag object which will be filled with values</param>
+		/// <returns>The resulting tags as tagNew object</returns>
 		private Id3 CalculateResults(DataTable apiResults, Id3 tagNew)
 		{
 			var majorityAlbumRows = (from row in apiResults.AsEnumerable()

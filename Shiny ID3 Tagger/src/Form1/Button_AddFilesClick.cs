@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Opens a file selection window when pressing "Add files" button</summary>
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -18,6 +17,11 @@ namespace Shiny_ID3_Tagger
 	/// </summary>
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Opens a file selection window when pressing "Add files" button
+		/// </summary>
+		/// <param name="sender">The object which has raised the event</param>
+		/// <param name="e">Contains additional information about the event</param>
 		private async void Button_AddFilesClick(object sender, EventArgs e)
 		{
 			// Refresh cancel token

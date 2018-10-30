@@ -3,15 +3,8 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Gets ID3 data from Amazon API for current track</summary>
-// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/prod-adv-api-dg.pdf
-// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/rest-signature.html
-// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/LocaleUS.html
-// https://webservices.amazon.com/scratchpad/index.html
-// in addition to .NET 4.0 EscapeDataString		forbidden:	!'()*
-// in addition to .NET 4.0 EscapeDataString		allowed:	-_.~
-// replace after EscapeDataString				!=%21	'=%27	(=%28	)=%29	*=%2A
 //-----------------------------------------------------------------------
+// REVIEW: Since the switch to amazon.de (instead of amazon.com) the matching results were going down by 50%
 
 namespace GetTags
 {
@@ -26,12 +19,41 @@ namespace GetTags
 	using Newtonsoft.Json.Linq;
 	using Utils;
 
+	/// <summary>
+	/// Class for Amazon API
+	/// </summary>
 	internal class Amazon : IGetTagsService
 	{
 		private const int LastRequestTimeout = 1000;
 		private static Stopwatch lastRequestTimer = new Stopwatch();
 
-		// ###########################################################################
+		/// <summary>
+		/// Gets ID3 data from Amazon API
+		/// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/prod-adv-api-dg.pdf
+		/// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/rest-signature.html
+		/// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/LocaleUS.html
+		/// https://webservices.amazon.com/scratchpad/index.html
+		/// in addition to .NET 4.0 EscapeDataString		forbidden:	!'()*
+		/// in addition to .NET 4.0 EscapeDataString		allowed:	-_.~
+		/// replace after EscapeDataString				    !=%21	'=%27	(=%28	)=%29	*=%2A
+		/// </summary>
+		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
+		/// <param name="artist">The input artist to search for</param>
+		/// <param name="title">The input song title to search for</param>
+		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3 { Service = "Amazon" };
@@ -40,7 +62,6 @@ namespace GetTags
 			sw.Start();
 
 			// ###########################################################################
-			// REVIEW: Since the forced switch to amazon.de instead of amazon.com the matches were going down by 50%
 			const string Server = "webservices.amazon.de";
 
 			string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");

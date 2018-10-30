@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Highlights currently selected row/rows</summary>
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -17,6 +16,11 @@ namespace Shiny_ID3_Tagger
 	/// </summary>
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Highlights rows after they are selected. Opposing method to "DataGridView_CellMouseEnter"
+		/// </summary>
+		/// <param name="sender">The object which has raised the event</param>
+		/// <param name="e">Contains additional information about the event</param>
 		private void DataGridView_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dgv = (DataGridView)sender;

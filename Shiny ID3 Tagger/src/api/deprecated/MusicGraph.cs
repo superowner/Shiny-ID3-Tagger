@@ -31,9 +31,21 @@ namespace GetTags
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
-		/// <param name="title">TThe input song title to search for</param>
+		/// <param name="title">The input song title to search for</param>
 		/// <param name="cancelToken">The cancelation token which is passed on to GetResponse method</param>
-		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+		/// <returns>
+		/// The ID3 tag object with the results from this API for:
+		/// 		Artist
+		/// 		Title
+		/// 		Album
+		/// 		Date
+		/// 		Genre
+		/// 		DiscNumber
+		/// 		DiscCount
+		/// 		TrackNumber
+		/// 		TrackCount
+		/// 		Cover URL
+		/// </returns>
 		public async Task<Id3> GetTags(HttpMessageInvoker client, string artist, string title, CancellationToken cancelToken)
 		{
 			Id3 o = new Id3 { Service = "Musicgraph" };

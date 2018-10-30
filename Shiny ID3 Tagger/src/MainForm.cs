@@ -3,7 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Executed when program starts. Shows main window</summary>
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger

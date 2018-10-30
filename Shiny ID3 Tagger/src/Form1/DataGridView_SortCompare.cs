@@ -3,8 +3,6 @@
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
-// <summary>Custom sort rules when sorting datagridview columns. tries to convert string to dates or integers</summary>
-// https://social.msdn.microsoft.com/Forums/windows/en-US/43a85553-2b94-4f4e-9db3-498311af4ecd/datagridview-sorting-with-null-values?forum=winforms
 //-----------------------------------------------------------------------
 
 namespace Shiny_ID3_Tagger
@@ -20,6 +18,12 @@ namespace Shiny_ID3_Tagger
 	/// </summary>
 	public partial class Form1 : Form
 	{
+		/// <summary>
+		/// Custom sort rules when sorting datagridview columns. tries to convert string to dates or integers
+		/// https://social.msdn.microsoft.com/Forums/windows/en-US/43a85553-2b94-4f4e-9db3-498311af4ecd/datagridview-sorting-with-null-values?forum=winforms
+		/// </summary>
+		/// <param name="sender">The object which has raised the event</param>
+		/// <param name="e">Contains additional information about the event</param>
 		private void DataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
 		{
 			// If both values are equal, or both values are null/DBNull. Compare case sensitive
