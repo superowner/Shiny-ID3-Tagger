@@ -84,9 +84,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\release\Shiny ID3 Tagger.xml</DocumentationFile>
     <OutputPath>bin\release\</OutputPath>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>shinyid3tagger.pfx</ManifestKeyFile>
@@ -307,7 +307,9 @@
       <Link>README.md</Link>
     </None>
     <None Include="app.config" />
-    <None Include="config\accounts_sample.json" />
+    <None Include="config\accounts_sample.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="config\schemas\accounts.schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
