@@ -19,7 +19,7 @@ namespace Utils
 		private static string[] lowercase =
 		{
 			"a", "an", "the", "and", "but", "or", "nor", "at", "by", "for", "from", "in",
-			"into", "of", "off", "on", "onto", "out", "over", "to", "up", "with", "as"
+			"into", "of", "off", "on", "onto", "out", "over", "to", "up", "with", "as",
 		};
 
 		/// <summary>

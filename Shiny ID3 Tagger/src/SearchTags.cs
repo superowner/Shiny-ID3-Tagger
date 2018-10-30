@@ -33,7 +33,7 @@ namespace Shiny_ID3_Tagger
 			new GetLyrics.LoloLyrics(),
 			new GetLyrics.Netease(),
 			new GetLyrics.ViewLyrics(),
-			new GetLyrics.Xiami()
+			new GetLyrics.Xiami(),
 		};
 
 		private List<IGetTagsService> tagsServices = new List<IGetTagsService>
@@ -54,7 +54,7 @@ namespace Shiny_ID3_Tagger
 			new GetTags.QQ(),
 			new GetTags.SevenDigital(),
 			new GetTags.Spotify(),
-			new GetTags.Tidal()
+			new GetTags.Tidal(),
 		};
 
 		/// ###########################################################################
@@ -97,7 +97,7 @@ namespace Shiny_ID3_Tagger
 							TrackCount = row.Cells[this.trackcount1.Index].Value.ToString(),
 							TrackNumber = row.Cells[this.tracknumber1.Index].Value.ToString(),
 							Lyrics = row.Cells[this.lyrics1.Index].Value.ToString(),
-							Cover = row.Cells[this.cover1.Index].Value.ToString()
+							Cover = row.Cells[this.cover1.Index].Value.ToString(),
 						};
 
 						bool rowAlreadyExists = (from r in this.dataGridView2.Rows.Cast<DataGridViewRow>()
@@ -112,7 +112,7 @@ namespace Shiny_ID3_Tagger
 							Id3 tagNew = new Id3()
 							{
 								Service = "RESULT",
-								Filepath = tagOld.Filepath
+								Filepath = tagOld.Filepath,
 							};
 
 							Task<DataTable> apiTask = this.StartId3Search(client, tagOld, cancelToken);
@@ -294,7 +294,7 @@ namespace Shiny_ID3_Tagger
 			string artistToSearch = Utils.Strip(tagOld.Artist);
 			string titleToSearch = Utils.Strip(tagOld.Title);
 
-			string message = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"", -100}{"file: \"" + tagOld.Filepath + "\""}";
+			string message = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",-100}{"file: \"" + tagOld.Filepath + "\""}";
 			Form1.Instance.RichTextBox_LogMessage(new[] { message }, 1, "Search");
 
 			List<Task<Id3>> taskList = this.tagsServices.Select(service =>

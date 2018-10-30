@@ -65,7 +65,7 @@ namespace GetTags
 					loginRequest.Content = new FormUrlEncodedContent(new[]
 					{
 						new KeyValuePair<string, string>("username", (string)User.Accounts["Tidal"]["Username"]),
-						new KeyValuePair<string, string>("password", (string)User.Accounts["Tidal"]["Password"])
+						new KeyValuePair<string, string>("password", (string)User.Accounts["Tidal"]["Password"]),
 					});
 
 					string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);

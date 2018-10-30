@@ -70,7 +70,7 @@ namespace Utils
 				{
 					@"ERROR:    Failed to parse a config file!",
 					"Filepath: " + fullConfigPath,
-					"Message:  " + ex.Message.TrimEnd('\r', '\n')
+					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
@@ -83,31 +83,33 @@ namespace Utils
 				{
 					@"ERROR:    Failed to validate a config file!",
 					"Filepath: " + fullConfigPath,
-					"Message:  " + ex.Message.TrimEnd('\r', '\n')
+					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return null;
 			}
-			catch (FileNotFoundException)
+			catch (FileNotFoundException ex)
 			{
 				// Config file is not found
 				string[] errorMsg =
 				{
 					"ERROR:    File not found!",
-					"Filepath: " + fullConfigPath
+					"Filepath: " + fullConfigPath,
+					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				return null;
 			}
-			catch (IOException)
+			catch (IOException ex)
 			{
 				// Config file has a write lock (i.e. opened in another program)
 				string[] errorMsg =
 				{
 					"ERROR:    Cannot access file. Already in use!",
-					"Filepath: " + fullConfigPath
+					"Filepath: " + fullConfigPath,
+					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 

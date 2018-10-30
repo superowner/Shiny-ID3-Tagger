@@ -44,7 +44,7 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    Invalid filepath!",
-					"file:     " + filepath
+					"file:     " + filepath,
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
@@ -56,7 +56,7 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    File not found!",
-					"file:     " + filepath
+					"file:     " + filepath,
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
@@ -68,7 +68,7 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    Cannot access file. Already in use!",
-					"file:     " + filepath
+					"file:     " + filepath,
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
@@ -86,9 +86,9 @@ namespace Utils
 				// Print error message
 				string[] errorMsg =
 				{
-						"ERROR:    Not a valid MP3 file!",
-						"file:     " + filepath
-					};
+					"ERROR:    Not a valid MP3 file!",
+					"file:     " + filepath,
+				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 
 				// return false because MP3 file does not contain a valid mp3 header

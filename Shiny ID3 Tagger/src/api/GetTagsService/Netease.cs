@@ -65,7 +65,7 @@ namespace GetTags
 				searchRequest.Content = new FormUrlEncodedContent(new[]
 					{
 						new KeyValuePair<string, string>("s", searchTermEnc),
-						new KeyValuePair<string, string>("type", "1")
+						new KeyValuePair<string, string>("type", "1"),
 					});
 
 				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);

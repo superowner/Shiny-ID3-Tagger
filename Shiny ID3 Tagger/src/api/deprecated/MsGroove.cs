@@ -68,7 +68,7 @@ namespace GetTags
 						new KeyValuePair<string, string>("grant_type", "client_credentials"),
 						new KeyValuePair<string, string>("client_id", (string)User.Accounts["MsGroove"]["ClientId"]),
 						new KeyValuePair<string, string>("client_secret", (string)User.Accounts["MsGroove"]["ClientSecret"]),
-						new KeyValuePair<string, string>("scope", "app.music.xboxlive.com")
+						new KeyValuePair<string, string>("scope", "app.music.xboxlive.com"),
 					});
 
 					string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);

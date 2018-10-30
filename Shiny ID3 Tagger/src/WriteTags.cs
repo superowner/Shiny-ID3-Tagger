@@ -88,7 +88,7 @@ namespace Shiny_ID3_Tagger
 							"SynchronisedLyricsFrame",
 							"GeneralEncapsulatedObjectFrame",
 							"TermsOfUseFrame",
-							"UrlLinkFrame"
+							"UrlLinkFrame",
 						};
 
 						// Change encoding for all frames/tags to UTF16
@@ -260,7 +260,7 @@ namespace Shiny_ID3_Tagger
 			{
 				UnsynchronisedLyricsFrame frmUSLT = new UnsynchronisedLyricsFrame(string.Empty, "eng", StringType.UTF16)
 				{
-					Text = newLyrics
+					Text = newLyrics,
 				};
 
 				tagContainer.RemoveFrames("USLT");
@@ -342,7 +342,7 @@ namespace Shiny_ID3_Tagger
 								float resizeFactor = new List<float>
 								{
 									(float)User.Settings["MaxImageSize"] / (float)image.Width,
-									(float)User.Settings["MaxImageSize"] / (float)image.Height
+									(float)User.Settings["MaxImageSize"] / (float)image.Height,
 								}.Min();
 
 								Size newSize = new Size((int)Math.Round(image.Width * resizeFactor), (int)Math.Round(image.Height * resizeFactor));
@@ -374,7 +374,7 @@ namespace Shiny_ID3_Tagger
 									MimeType = MediaTypeNames.Image.Jpeg,
 									Type = PictureType.FrontCover,
 									Description = url,
-									TextEncoding = StringType.Latin1 // Strangely, Unicode is not supported for this field
+									TextEncoding = StringType.Latin1,		// Strangely, Unicode is not supported for this field
 								};
 
 								// Add cover tag to tag container, this deletes all other existing covers like "BackCover" or "BandLogo"
@@ -387,7 +387,7 @@ namespace Shiny_ID3_Tagger
 							{
 								"ERROR:    Cover URL does not point to a valid image. File signature did not match any image format!",
 								"URL:      " + url,
-								"type:     " + response.Content.Headers.ContentType.ToString()
+								"type:     " + response.Content.Headers.ContentType.ToString(),
 							};
 						}
 					}
@@ -398,7 +398,7 @@ namespace Shiny_ID3_Tagger
 					{
 						"ERROR:    Cover URL is not reachable!",
 						"URL:      " + url,
-						"Status:   " + response.ReasonPhrase + ": " + (int)response.StatusCode
+						"Status:   " + response.ReasonPhrase + ": " + (int)response.StatusCode,
 					};
 				}
 			}
@@ -407,7 +407,7 @@ namespace Shiny_ID3_Tagger
 				errorMsg = new[]
 				{
 					"ERROR:    Cover URL is not valid URL format!",
-					"URL:      " + url
+					"URL:      " + url,
 				};
 			}
 
@@ -509,7 +509,7 @@ namespace Shiny_ID3_Tagger
 				{
 					@"ERROR:    Could not write ID3 tags to file!",
 					"File:     " + tagFile.Name,
-					"Message:  " + errorMessage
+					"Message:  " + errorMessage,
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 			}

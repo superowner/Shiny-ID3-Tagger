@@ -43,7 +43,7 @@ namespace Utils
 						string[] errorMsg =
 						{
 							"WARNING:  Could not convert string to JSON!",
-							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n')
+							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n'),
 						};
 						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 					};

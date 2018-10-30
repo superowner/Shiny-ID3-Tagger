@@ -44,7 +44,7 @@ namespace Shiny_ID3_Tagger
 				using (OpenFileDialog dialog = new OpenFileDialog()
 				{
 					Filter = "MP3 Files|*.mp3",
-					Multiselect = true
+					Multiselect = true,
 				})
 				{
 					if (GlobalVariables.LastUsedFolder == null)
@@ -118,7 +118,7 @@ namespace Shiny_ID3_Tagger
 					string[] errorMsg =
 					{
 						"ERROR:    Could not read all file tags! File is corrupt",
-						"Message:  " + error.ToString().TrimEnd('\r', '\n')
+						"Message:  " + error.ToString().TrimEnd('\r', '\n'),
 					};
 					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				}
@@ -128,7 +128,7 @@ namespace Shiny_ID3_Tagger
 					string[] errorMsg =
 					{
 						"ERROR:    Could not read all file tags! File or tag format is not supported",
-						"Message:  " + error.ToString().TrimEnd('\r', '\n')
+						"Message:  " + error.ToString().TrimEnd('\r', '\n'),
 					};
 					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				}

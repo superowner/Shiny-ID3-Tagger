@@ -90,7 +90,7 @@ namespace Shiny_ID3_Tagger
 									"ERROR:    Could not parse CSV file \"" + fullPath + "\"",
 									"Message:  Header row doesn't match required headers. Look for differences and change them in your CSV file",
 									"CSV:      " + string.Join(seperator, csvHeaderFields),
-									"Required: " + string.Join(seperator, dgvHeaderFields)
+									"Required: " + string.Join(seperator, dgvHeaderFields),
 								};
 								Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 							}
@@ -101,7 +101,7 @@ namespace Shiny_ID3_Tagger
 							string[] errorMsg =
 							{
 								"ERROR:    Could not parse CSV \"" + fullPath + "\"",
-								"Message:  " + ex.Message.TrimEnd('\r', '\n')
+								"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 							};
 							Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 						}
