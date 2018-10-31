@@ -268,9 +268,6 @@ namespace Shiny_ID3_Tagger
 			this.slowProgressBar.Visible = false;
 			this.fastProgressBar.Visible = false;
 
-			// Set focus to the active dataGridView. Needed for keyPress events being fired like space or ESC key
-			GlobalVariables.ActiveDGV.Select();
-
 			// Enable all buttons and menus again
 			this.Form_EnableUI(true);
 		}
