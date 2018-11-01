@@ -21,11 +21,17 @@ namespace Shiny_ID3_Tagger.Setting
         /// <summary>
         /// Default Setting
         /// </summary>
-        protected JSchema DefaultSettingSchemaSchema;
+        protected JObject DefaultSetting;
 
-        protected BaseSetting(JSchema defaultSettingSchema)
+        /// <summary>
+        /// Default Setting
+        /// </summary>
+        protected JSchema SettingSchema;
+
+        protected BaseSetting(JObject defaultSetting, JSchema schema)
         {
-            this.DefaultSettingSchemaSchema = defaultSettingSchema;
+            this.DefaultSetting = defaultSetting;
+            this.SettingSchema = schema;
         }
 
         /// <summary>

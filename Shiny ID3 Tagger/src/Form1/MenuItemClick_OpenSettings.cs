@@ -6,6 +6,8 @@
 // <summary>Open settings.json file</summary>
 //-----------------------------------------------------------------------
 
+using Shiny_ID3_Tagger.Setting;
+
 namespace GlobalNamespace
 {
 	using System;
@@ -16,8 +18,16 @@ namespace GlobalNamespace
 	{
 		private void MenuItemClick_OpenSettings(object sender, EventArgs e)
 		{
-			string file = AppDomain.CurrentDomain.BaseDirectory + @"\config\settings.json";
-			Process.Start(file);
+            if (this.setting.GetValue("ShowUISetting") is bool && (bool) this.setting.GetValue("ShowUISetting"))
+		    {
+                Setting setting = new Setting();
+                setting.Show();
+		    }
+		    else
+		    {
+		        string file = AppDomain.CurrentDomain.BaseDirectory + @"\config\settings.json";
+		        Process.Start(file);
+            }
 		}
 	}
 }

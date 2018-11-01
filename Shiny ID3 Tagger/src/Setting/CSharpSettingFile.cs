@@ -1,16 +1,15 @@
-﻿using Newtonsoft.Json.Schema;
-
-namespace Shiny_ID3_Tagger.Setting
+﻿namespace Shiny_ID3_Tagger.Setting
 {
     using System;
     using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json.Schema;
 
     public class CSharpSettingFile : BaseSetting
     {
         private System.Configuration.ApplicationSettingsBase setting;
 
-        public CSharpSettingFile(JSchema defaultSettingSchema, System.Configuration.ApplicationSettingsBase setting)
-            : base(defaultSettingSchema)
+        public CSharpSettingFile(JObject defaultSetting, JSchema schema, System.Configuration.ApplicationSettingsBase setting)
+            : base(defaultSetting, schema)
         {
             this.setting = setting ?? throw new ArgumentException(@"Setting Can't be null", nameof(setting));
         }

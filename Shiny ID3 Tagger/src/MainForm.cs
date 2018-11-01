@@ -7,6 +7,10 @@
 // https://social.msdn.microsoft.com/Forums/windows/en-US/43a85553-2b94-4f4e-9db3-498311af4ecd/datagridview-sorting-with-null-values?forum=winforms
 //-----------------------------------------------------------------------
 
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
+using Shiny_ID3_Tagger.Setting;
+
 namespace GlobalNamespace
 {
 	using System;
@@ -20,11 +24,13 @@ namespace GlobalNamespace
 	{
 		public static Form1 Instance;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Form1"/> class.
-		/// The main form which will be shown immediately after program start
-		/// </summary>
-		public Form1()
+	    internal JsonFileSetting setting = new JsonFileSetting(null, JSchema.Parse(Utils.settingsSchemaStr), null, null);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Form1"/> class.
+        /// The main form which will be shown immediately after program start
+        /// </summary>
+        public Form1()
 		{
 			Form1.Instance = this;
 			this.InitializeComponent();
@@ -33,6 +39,7 @@ namespace GlobalNamespace
 		// Code is executed on all program calls (1,2,3,4....)
 		internal async void Form1Shown(string[] args)
 		{
+
 			// Refresh cancellation token
 			GlobalVariables.TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;

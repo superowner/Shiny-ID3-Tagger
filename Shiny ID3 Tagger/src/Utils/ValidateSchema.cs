@@ -11,15 +11,16 @@
 
 namespace Utils
 {
-	using System;
-	using System.Collections.Generic;
-	using Newtonsoft.Json.Linq;
-	using Newtonsoft.Json.Schema;
+    using System;
+    using System.Collections.Generic;
+    using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json.Schema;
 
-	internal partial class Utils
-	{
-		#region schema for accounts.json
-		private static string accountsSchemaStr = @"
+    internal partial class Utils
+    {
+        #region schema for accounts.json
+
+        private static string accountsSchemaStr = @"
 		{
 		  ""definitions"": {},
 		  ""$schema"": ""http://json-schema.org/draft-06/schema#"",
@@ -299,10 +300,13 @@ namespace Utils
 			""Tidal""
 		  ]
 		}";
-		#endregion
 
-		#region schema for settings.json
-		private static string settingsSchemaStr = @"
+        #endregion
+
+        #region schema for settings.json
+
+        // TODO - CHANGE PUBLIC TO PRIVATE
+        public static string settingsSchemaStr = @"
 		{
 		  ""definitions"": {},
 		  ""$schema"": ""http://json-schema.org/draft-06/schema#"",
@@ -317,6 +321,10 @@ namespace Utils
 				""DebugLevel"": {
 				  ""$id"": ""/properties/DebugLevel"",
 				  ""type"": ""integer""
+				},
+				""ShowUISetting"": {
+				  ""$id"": ""/properties/ShowUISetting"",
+				  ""type"": ""boolean""
 				},
 				""PreferTags"": {
 				  ""$id"": ""/properties/PreferTags"",
@@ -400,10 +408,12 @@ namespace Utils
 				""LyricsPriority""
 			  ]
 		}";
-		#endregion
 
-		#region schema for lastCommit.json
-		private static string lastCommitSchemaStr = @"
+        #endregion
+
+        #region schema for lastCommit.json
+
+        private static string lastCommitSchemaStr = @"
 		{
 		  ""definitions"": {},
 		  ""$schema"": ""http://json-schema.org/draft-06/schema#"",
@@ -425,49 +435,50 @@ namespace Utils
 				""date""
 			  ]
 		}";
-		#endregion
 
-		internal static IList<string> ValidateSchema(string jsonStr, string schemaStr)
-		{
-			// Load schema
-			JSchema schema = JSchema.Parse(schemaStr);
+        #endregion
 
-			// Load JSON
-			JObject json = JObject.Parse(jsonStr);
+        internal static IList<string> ValidateSchema(string jsonStr, string schemaStr)
+        {
+            // Load schema
+            JSchema schema = JSchema.Parse(schemaStr);
 
-			// Validate JSON against schema, save errors in errorMessages
-			json.IsValid(schema, out IList<string> errorMessages);
+            // Load JSON
+            JObject json = JObject.Parse(jsonStr);
 
-			// If any validation error occurred, throw exception to go into catch clause
-			if (errorMessages.Count > 0)
-			{
-				string allValidationErrors = string.Join("\n          ", (IEnumerable<string>)errorMessages);
+            // Validate JSON against schema, save errors in errorMessages
+            json.IsValid(schema, out IList<string> errorMessages);
 
-				throw new ArgumentException(allValidationErrors);
-			}
+            // If any validation error occurred, throw exception to go into catch clause
+            if (errorMessages.Count > 0)
+            {
+                string allValidationErrors = string.Join("\n          ", (IEnumerable<string>)errorMessages);
 
-			// Return all error messages why validation failed
-			return errorMessages;
-		}
+                throw new ArgumentException(allValidationErrors);
+            }
 
-		internal static IList<string> ValidateSchema(string jsonStr, JSchema schema)
-		{
-			// Load JSON
-			JObject json = JObject.Parse(jsonStr);
+            // Return all error messages why validation failed
+            return errorMessages;
+        }
 
-			// Validate JSON against schema, save errors in errorMessages
-			json.IsValid(schema, out IList<string> errorMessages);
+        internal static IList<string> ValidateSchema(string jsonStr, JSchema schema)
+        {
+            // Load JSON
+            JObject json = JObject.Parse(jsonStr);
 
-			// If any validation error occurred, throw exception to go into catch clause
-			if (errorMessages.Count > 0)
-			{
-				string allValidationErrors = string.Join("\n          ", (IEnumerable<string>)errorMessages);
+            // Validate JSON against schema, save errors in errorMessages
+            json.IsValid(schema, out IList<string> errorMessages);
 
-				throw new ArgumentException(allValidationErrors);
-			}
+            // If any validation error occurred, throw exception to go into catch clause
+            if (errorMessages.Count > 0)
+            {
+                string allValidationErrors = string.Join("\n          ", (IEnumerable<string>)errorMessages);
 
-			// Return all error messages why validation failed
-			return errorMessages;
-		}
-	}
+                throw new ArgumentException(allValidationErrors);
+            }
+
+            // Return all error messages why validation failed
+            return errorMessages;
+        }
+    }
 }

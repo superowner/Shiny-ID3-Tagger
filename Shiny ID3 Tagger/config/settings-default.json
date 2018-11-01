@@ -9,7 +9,6 @@
 	"AutoCapitalize": true,
 	"ThresholdRedValue": 30,
 	"MaxImageSize": 500,
-	"ShowUISetting": true,
 	"UserAgent": "Shiny ID3 Tagger/1.0 ( shinyid3tagger@gmail.com )",
 	"FilenamePatterns": [
 		"^(\\d+\\s)?(-\\s+)?(?<artist>.*?\\w+)\\s+-\\s+(?<title>\\w+.*)$",

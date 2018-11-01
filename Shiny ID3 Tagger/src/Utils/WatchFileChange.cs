@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace Utils
 {
     using System;
@@ -13,24 +15,16 @@ namespace Utils
         /// <param name="onDeleted">Event of file deleted</param>
         /// <param name="onCreated">Event of file created</param>
         /// <param name="onRenamed">Event of file renamed</param>
-        public static void CreateFileWatcher(string path,
-                                             FileSystemEventHandler onChanged,
-                                             FileSystemEventHandler onDeleted = null,
-                                             FileSystemEventHandler onCreated = null,
-                                             RenamedEventHandler onRenamed = null)
+        public static FileSystemWatcher CreateFileWatcher(string path,
+                                                          FileSystemEventHandler onChanged,
+                                                          FileSystemEventHandler onDeleted = null,
+                                                          FileSystemEventHandler onCreated = null,
+                                                          RenamedEventHandler onRenamed = null)
         {
             // Create a new FileSystemWatcher and set its properties.
-            FileSystemWatcher watcher = new FileSystemWatcher
-            {
-                // Watch the directory of the path
-                Path = Path.GetDirectoryName(path),
-                // Watch only for the wanted file
-                Filter = Path.GetFileName(path),
-                /* Watch for changes in LastAccess and LastWrite times, and
-                   the renaming of files or directories. */
-                NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
-                                                        | NotifyFilters.FileName | NotifyFilters.DirectoryName
-            };
+            FileSystemWatcher watcher = new FileSystemWatcher(Path.GetDirectoryName(path), Path.GetFileName(path));
+
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
 
             // Add event handlers.
             watcher.Changed += onChanged;
@@ -51,6 +45,7 @@ namespace Utils
 
             // Begin watching.
             watcher.EnableRaisingEvents = true;
+            return watcher;
         }
     }
 }
