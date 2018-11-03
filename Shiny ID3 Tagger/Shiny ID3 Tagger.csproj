@@ -90,7 +90,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>shinyid3tagger.pfx</ManifestKeyFile>
+    <ManifestKeyFile>resources\shinyid3tagger.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Shiny_ID3_Tagger.Program</StartupObject>
@@ -332,7 +332,7 @@
     <None Include="resources\keyfile.snk" />
     <None Include="Shiny ID3 Tagger.ruleset" />
     <AdditionalFiles Include="stylecop.json" />
-    <None Include="shinyid3tagger.pfx" />
+    <None Include="resources\shinyid3tagger.pfx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
