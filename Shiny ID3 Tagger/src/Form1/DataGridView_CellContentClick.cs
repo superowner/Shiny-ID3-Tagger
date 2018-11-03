@@ -35,7 +35,7 @@ namespace Shiny_ID3_Tagger
 				{
 					string[] errorMsg =
 					{
-						"ERROR:    Invalid URL found: " + url
+						"ERROR:    Invalid URL found: " + url,
 					};
 					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				}

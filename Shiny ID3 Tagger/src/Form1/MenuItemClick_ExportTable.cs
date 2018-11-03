@@ -48,7 +48,7 @@ namespace Shiny_ID3_Tagger
 				Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
 				FileName = DateTime.Now.ToString("yyMMdd", GlobalVariables.CultEng) + " - Shiny ID3 Tagger Export - " + this.tabControl1.SelectedTab.Text,
 				InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-				OverwritePrompt = true
+				OverwritePrompt = true,
 			})
 			{
 				// Open "Save As" dialog and save a text file (extension is CSV) as UTF8 with BOM encoding

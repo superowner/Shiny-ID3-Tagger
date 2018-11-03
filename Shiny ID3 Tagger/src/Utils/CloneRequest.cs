@@ -24,7 +24,7 @@ namespace Utils
 			HttpRequestMessage backup = new HttpRequestMessage(original.Method, original.RequestUri)
 			{
 				Content = original.Content,
-				Version = original.Version
+				Version = original.Version,
 			};
 
 			foreach (var property in original.Properties)

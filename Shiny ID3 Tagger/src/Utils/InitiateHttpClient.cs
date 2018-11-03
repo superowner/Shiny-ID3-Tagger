@@ -29,8 +29,7 @@ namespace Utils
 			HttpClientHandler handler = new HttpClientHandler
 			{
 				UseCookies = false,
-				AutomaticDecompression = DecompressionMethods.GZip
-				| DecompressionMethods.Deflate
+				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
 			};
 
 			HttpClient client = new HttpClient(handler);

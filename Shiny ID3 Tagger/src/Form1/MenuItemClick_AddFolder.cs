@@ -37,7 +37,7 @@ namespace Shiny_ID3_Tagger
 			// Ookii dialog (3rd party library) looks more like a normal file selection dialog. (windows forms default folder dialog looks ugly)
 			using (VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog()
 			{
-				SelectedPath = GlobalVariables.LastUsedFolder
+				SelectedPath = GlobalVariables.LastUsedFolder,
 			})
 			{
 				if (dialog.ShowDialog() == DialogResult.OK)

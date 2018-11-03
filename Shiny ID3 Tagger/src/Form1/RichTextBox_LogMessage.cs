@@ -37,7 +37,7 @@ namespace Shiny_ID3_Tagger
 				return;
 			}
 
-			if ((int)User.Settings["DebugLevel"] >= messageLevel)
+			if (User.Settings == null || (int)User.Settings["DebugLevel"] >= messageLevel)
 			{
 				// Set correct richTextBox to use
 				RichTextBox richTextBox = null;
