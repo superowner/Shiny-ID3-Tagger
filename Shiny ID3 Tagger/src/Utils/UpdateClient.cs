@@ -35,8 +35,9 @@ namespace Utils
 		internal static async Task UpdateClient()
 		{
 			DateTimeOffset? localCommitDate = null;
-			DateTime? latestReleaseDate = null;
+			DateTimeOffset? latestReleaseDate = null;
 			string downloadUrl = null;
+			int? downloadSize = null;
 
 			// ######################################################################################################################
 			// Get the commit date when the local program files were created
@@ -69,33 +70,50 @@ namespace Utils
 					string latestRelease = await GetResponse(client, latestReleaseRequest, cancelToken);
 					JObject latestReleaseData = DeserializeJson(latestRelease);
 
-					latestReleaseDate = Utils.ConvertStringToDate((string)latestReleaseData.SelectToken("created_at"));
+					latestReleaseDate = DateTimeOffset.Parse((string)latestReleaseData.SelectToken("created_at"));
 
 					// URL for latest release file from GitHub
 					downloadUrl = (string)latestReleaseData.SelectToken("assets[0].browser_download_url");
+					downloadSize = (int)latestReleaseData.SelectToken("assets[0].size");
 				}
 
 				// ######################################################################################################################
 				// If local file date is older than latest release date, then GitHub has a newer release
-				if (localCommitDate.HasValue && latestReleaseDate.HasValue && localCommitDate < latestReleaseDate)
+				// TODO: Switch back to: if (localCommitDate.HasValue && latestReleaseDate.HasValue && localCommitDate < latestReleaseDate)
+				if (downloadUrl != null &&
+					Utils.IsValidUrl(downloadUrl) &&
+					localCommitDate.HasValue &&
+					latestReleaseDate.HasValue &&
+					localCommitDate > latestReleaseDate)
 				{
 					// Ask user if he want's to update the program
-					DialogResult dialogResult = MessageBox.Show("Download update now?", "Update available", MessageBoxButtons.YesNo);
+					DialogResult dialogResult = MessageBox.Show(
+						"Local date: " + localCommitDate.Value.LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "\n" +
+						"Update date: " + latestReleaseDate.Value.LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "\n\n" +
+						"Update now?",
+						"Update available",
+						MessageBoxButtons.YesNo);
 					if (dialogResult == DialogResult.Yes)
 					{
-						if (downloadUrl != null && Utils.IsValidUrl(downloadUrl))
+						using (HttpRequestMessage downloadRequest = new HttpRequestMessage())
 						{
-							using (HttpRequestMessage downloadRequest = new HttpRequestMessage())
-							{
-								downloadRequest.RequestUri = new Uri(downloadUrl);
+							downloadRequest.RequestUri = new Uri(downloadUrl);
 
-								byte[] downloadData = await GetResponse(client, downloadRequest, cancelToken, returnByteArray: true);
+							// Download the release from GitHub
+							byte[] downloadData = await GetResponse(client, downloadRequest, cancelToken, returnByteArray: true);
+
+							if (downloadData != null)
+							{
+								// ######################################################################################################################
+								// TODO: Check if an old update.zip file is present. If yes, delete it
+
+								// Build path to Zip file
+								string fullZipPath = AppDomain.CurrentDomain.BaseDirectory + "update.zip";
 
 								// Write the file as "update.zip" to program folder
-								if (downloadData != null)
-								{
-									File.WriteAllBytes("update.zip", downloadData);
-								}
+								File.WriteAllBytes(fullZipPath, downloadData);
+
+								// TODO: Compare size if file and downloadSize
 							}
 						}
 					}
