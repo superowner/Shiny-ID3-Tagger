@@ -256,6 +256,7 @@
     </Compile>
     <Compile Include="src\Utils\ReadConfig.cs" />
     <Compile Include="src\Utils\Strip.cs" />
+    <Compile Include="src\Utils\UpdateClient.cs" />
     <Compile Include="src\Utils\ValidateSchema.cs" />
     <Compile Include="src\Utils\SanitizeForCsv.cs" />
     <Compile Include="src\GlobalVariables\GlobalVariables.cs" />

@@ -47,6 +47,9 @@ namespace Shiny_ID3_Tagger
 			// Continue only if user credentials and user settings are present
 			if (User.Accounts != null && User.Settings != null)
 			{
+				// Update program files
+				await Utils.UpdateClient();
+
 				// Add new files to dataGridView1
 				bool hasNewFiles = await this.CollectFiles(args, cancelToken);
 

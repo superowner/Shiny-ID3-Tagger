@@ -1,5 +1,4 @@
 {
-	"Branch":  "develop",
 	"DebugLevel": 2,
 	"PreferTags": true,
 	"RemoveVersion": true,
