@@ -254,7 +254,6 @@
     <Compile Include="src\Form1\DataGridView_MarkChange.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Utils\UpdateClient.cs" />
     <Compile Include="src\Utils\ReadConfig.cs" />
     <Compile Include="src\Utils\Strip.cs" />
     <Compile Include="src\Utils\ValidateSchema.cs" />
