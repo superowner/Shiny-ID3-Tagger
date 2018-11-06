@@ -18,9 +18,9 @@ namespace Utils
 		/// <param name="str">String to convert</param>
 		/// <param name="defaultValue">Default value </param>
 		/// <returns>The converted int</returns>
-		internal static int ParseInt(string str, int defaultValue = 0)
+		internal static long ParseLong(string str, long defaultValue = 0)
 		{
-			return int.TryParse(str, out int result) ? result : defaultValue;
+			return long.TryParse(str, out long result) ? result : defaultValue;
 		}
 	}
 }

@@ -51,7 +51,7 @@ namespace Shiny_ID3_Tagger
 				this.Form_EnableUI(false);
 
 				// Update client
-				await Utils.UpdateClient();
+				bool successUpdate = await Utils.UpdateClient();
 
 				// Enable all buttons and menus again
 				this.Form_EnableUI(true);
