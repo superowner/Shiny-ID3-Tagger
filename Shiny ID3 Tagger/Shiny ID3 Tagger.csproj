@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <Import Project="..\common.props" />
   <PropertyGroup>
     <ProjectGuid>{63B68B72-925E-4EDA-AEAF-3B65B3ED3D1D}</ProjectGuid>
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -88,6 +89,7 @@
     <DocumentationFile>bin\release\Shiny ID3 Tagger.xml</DocumentationFile>
     <OutputPath>bin\release\</OutputPath>
     <LangVersion>latest</LangVersion>
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>resources\shinyid3tagger.pfx</ManifestKeyFile>

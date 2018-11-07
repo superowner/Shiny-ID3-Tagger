@@ -2,8 +2,12 @@
 .vs
 
 # Build folder
+bin/
+obj/
 Shiny ID3 Tagger/bin/
 Shiny ID3 Tagger/obj/
+UpdateClient/bin/
+UpdateClient/bin//obj/
 
 # Windows image file caches
 Thumbs.db
