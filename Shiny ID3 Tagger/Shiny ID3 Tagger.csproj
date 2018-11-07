@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
-  <Import Project="..\common.props" />
   <PropertyGroup>
     <ProjectGuid>{63B68B72-925E-4EDA-AEAF-3B65B3ED3D1D}</ProjectGuid>
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -22,7 +21,7 @@
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <IntermediateOutputPath>..\build\obj\$(Configuration)\</IntermediateOutputPath>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -50,17 +49,16 @@
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\build\bin\Debug\</OutputPath>
     <DebugSymbols>True</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <StartAction>Project</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\build\bin\Release\</OutputPath>
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
@@ -79,17 +77,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\debug\Shiny ID3 Tagger.xml</DocumentationFile>
+    <DocumentationFile>..\build\bin\debug\Shiny ID3 Tagger.xml</DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <OutputPath>bin\debug\</OutputPath>
+    <OutputPath>..\build\bin\debug\</OutputPath>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\release\Shiny ID3 Tagger.xml</DocumentationFile>
-    <OutputPath>bin\release\</OutputPath>
+    <DocumentationFile>..\build\bin\release\Shiny ID3 Tagger.xml</DocumentationFile>
+    <OutputPath>..\build\bin\release\</OutputPath>
     <LangVersion>latest</LangVersion>
-    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>resources\shinyid3tagger.pfx</ManifestKeyFile>
@@ -122,7 +119,7 @@
     </Reference>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>resources\packages\Ookii.Dialogs.dll</HintPath>
+      <HintPath>resources\Ookii.Dialogs.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -142,7 +139,7 @@
     </Reference>
     <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>resources\packages\taglib-sharp.dll</HintPath>
+      <HintPath>resources\taglib-sharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -310,12 +307,12 @@
     </None>
     <None Include="app.config" />
     <None Include="config\accounts_sample.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\schemas\accounts.schema.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\schemas\lastCommit.Schema.json">
+    <None Include="config\schemas\lastCommit.schema.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\schemas\settings.schema.json">
@@ -360,19 +357,19 @@
     <None Include="resources\icons\icon_settings.ico" />
     <None Include="resources\icons\icon_write.ico" />
     <None Include="resources\icons\icon_import.ico" />
-    <Content Include="resources\packages\Microsoft.VisualBasic.dll">
+    <Content Include="resources\Microsoft.VisualBasic.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\packages\Newtonsoft.Json.dll">
+    <Content Include="resources\Newtonsoft.Json.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\packages\Newtonsoft.Json.Schema.dll">
+    <Content Include="resources\Newtonsoft.Json.Schema.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\packages\Ookii.Dialogs.dll">
+    <Content Include="resources\Ookii.Dialogs.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\packages\taglib-sharp.dll">
+    <Content Include="resources\taglib-sharp.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
