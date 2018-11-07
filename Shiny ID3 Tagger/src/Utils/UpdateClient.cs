@@ -183,6 +183,11 @@ namespace Utils
 						return false;
 					}
 
+					// TODO: Continue work here
+					// Extract zip file: https://stackoverflow.com/a/21039548/935614
+					// https://docs.microsoft.com/en-us/dotnet/api/system.io.compression.zipfile?redirectedfrom=MSDN&view=netframework-4.7.2#Anchor_6
+					// Use new folder called "Update"
+					// Start ClientUpdater.exe (is a DLL better?)
 					return true;
 				}
 			}
