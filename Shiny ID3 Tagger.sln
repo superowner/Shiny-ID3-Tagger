@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shiny ID3 Tagger", "Shiny ID3 Tagger\Shiny ID3 Tagger.csproj", "{63B68B72-925E-4EDA-AEAF-3B65B3ED3D1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateClient", "UpdateClient\UpdateClient.csproj", "{774DCB5F-7D39-42F4-9035-7420AE4EB4FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "UpdateClient\Updater.csproj", "{774DCB5F-7D39-42F4-9035-7420AE4EB4FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

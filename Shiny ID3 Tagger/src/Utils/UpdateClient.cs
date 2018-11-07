@@ -188,6 +188,9 @@ namespace Utils
 					// https://docs.microsoft.com/en-us/dotnet/api/system.io.compression.zipfile?redirectedfrom=MSDN&view=netframework-4.7.2#Anchor_6
 					// Use new folder called "Update"
 					// Start ClientUpdater.exe (is a DLL better?)
+
+					// https://stackoverflow.com/questions/2366168/run-console-application-from-other-console-app
+
 					return true;
 				}
 			}
