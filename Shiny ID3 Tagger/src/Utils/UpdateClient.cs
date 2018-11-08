@@ -8,7 +8,9 @@
 namespace Utils
 {
 	using System;
+	using System.Diagnostics;
 	using System.IO;
+	using System.IO.Compression;
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
@@ -136,34 +138,12 @@ namespace Utils
 					// Build path to zip file
 					string fullZipPath = AppDomain.CurrentDomain.BaseDirectory + "update.zip";
 
+					// TODO: Continue here
 					// Try to delete old files three times (with a small delay of 50ms between)
-					const int WriteDelay = 50;
-					const int MaxRetries = 3;
-					string errorMessage = null;
-
-					for (int retry = 0; retry < MaxRetries; retry++)
-					{
-						if (File.Exists(fullZipPath))
-						{
-							try
-							{
-								File.Delete(fullZipPath);
-							}
-							catch (Exception ex)
-							{
-								errorMessage = ex.Message;
-								await Task.Delay(WriteDelay);
-							}
-						}
-						else
-						{
-							errorMessage = null;
-							break;
-						}
-					}
+					bool deleted = await SaveDeleteFileOrFolder(fullZipPath);
 
 					// If old update file coulnd't be deleted: Log error message and quit update method
-					if (errorMessage != null)
+					if (deleted == false)
 					{
 						Form1.Instance.RichTextBox_LogMessage(new[] { "Couldn't delete the old update file" }, 2);
 						return false;
@@ -183,16 +163,62 @@ namespace Utils
 						return false;
 					}
 
-					// TODO: Continue work here
-					// Extract zip file: https://stackoverflow.com/a/21039548/935614
-					// https://docs.microsoft.com/en-us/dotnet/api/system.io.compression.zipfile?redirectedfrom=MSDN&view=netframework-4.7.2#Anchor_6
-					// Use new folder called "Update"
-					// Start ClientUpdater.exe (is a DLL better?)
+					string extractPath = AppDomain.CurrentDomain.BaseDirectory + "update";
 
-					// https://stackoverflow.com/questions/2366168/run-console-application-from-other-console-app
+					// TODO: Continue here. Save delete update folder with SaveDeleteFileOrFolder()
+					try
+					{
+						ZipFile.ExtractToDirectory(fullZipPath, extractPath);
+					}
+					catch (Exception ex)
+					{
+						Form1.Instance.RichTextBox_LogMessage(new[] { ex.Message }, 2);
+						return false;
+					}
+
+					//Process.Start("Updater.exe", "Hello you too");
 
 					return true;
 				}
+			}
+		}
+
+		private static async Task<bool> SaveDeleteFileOrFolder(string fullZipPath)
+		{
+			const int WriteDelay = 50;
+			const int MaxRetries = 3;
+			string errorMessage = null;
+
+			for (int retry = 0; retry < MaxRetries; retry++)
+			{
+				if (File.Exists(fullZipPath))
+				{
+					try
+					{
+						File.Delete(fullZipPath);
+					}
+					catch (Exception ex)
+					{
+						errorMessage = ex.Message;
+						await Task.Delay(WriteDelay);
+					}
+				}
+				else
+				{
+					errorMessage = null;
+					break;
+				}
+			}
+
+			if (errorMessage == null)
+			{
+				// No errorMessage => Deletion successfull
+				return true;
+			}
+			else
+			{
+				// Has ErrorMessage => Deletion not successfull
+				return false;
 			}
 		}
 	}
