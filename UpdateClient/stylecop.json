@@ -1,0 +1,14 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+	"settings": {
+		"documentationRules": {
+			"companyName": "Shiny ID3 Tagger",
+			"copyrightText": "Copyright (c) Shiny ID3 Tagger. All rights reserved.",
+			"documentationCulture": "en-US",
+			"headerDecoration": "-----------------------------------------------------------------------"
+		},
+			"layoutRules": {
+				"newlineAtEndOfFile": "require"
+			}
+	}
+}

@@ -39,6 +39,24 @@ namespace Utils
 			DateTimeOffset? localCommitDate = null;
 			DateTimeOffset? latestReleaseDate = null;
 			JObject latestReleaseJson = null;
+			string updateFolder = Path.GetTempPath() + "shiny-id3-tagger-update";
+			string fullZipPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
+
+			// ######################################################################################################################
+			// Clean up old update file and update folder in %temp% folder
+			// If old update file could not be deleted: Quit update method
+			bool isDeleted = await DeleteFileOrFolder(fullZipPath);
+			if (isDeleted == false)
+			{
+				return false;
+			}
+
+			// If old update file could not be deleted: Quit update method
+			isDeleted = await DeleteFileOrFolder(updateFolder);
+			if (isDeleted == false)
+			{
+				return false;
+			}
 
 			// ######################################################################################################################
 			// Get the commit date of the local program files
@@ -130,7 +148,7 @@ namespace Utils
 					// Download the release from GitHub
 					byte[] downloadData = await GetResponse(client, downloadRequest, cancelToken, returnByteArray: true);
 
-					// If new update file coulnd't be downloaded: Log error message and quit update method
+					// If new update file could not be downloaded: Log error message and quit update method
 					if (downloadData == null)
 					{
 						string[] errorMsg = { "ERROR:    Could not download the update file!" };
@@ -139,19 +157,10 @@ namespace Utils
 					}
 
 					// ######################################################################################################################
-					// Delete old update file
-					// If old update file coulnd't be deleted: Log error message and quit update method
-					string fullZipPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
-					bool isDeleted = await DeleteFileOrFolder(fullZipPath);
-					if (isDeleted == false)
-					{
-						return false;
-					}
-
-					// Write the release as "shiny-id3-tagger-update.zip" to temp folder
+					// Write the release file to temp folder
 					File.WriteAllBytes(fullZipPath, downloadData);
 
-					// Compare size of zip file and size on GitHub
+					// Compare size of local zip file and expected download size from GitHub
 					long localFileSize = new FileInfo(fullZipPath).Length;
 					long downloadSize = Utils.ParseLong((string)latestReleaseJson.SelectToken("assets[0].size"));
 
@@ -163,15 +172,7 @@ namespace Utils
 						return false;
 					}
 
-					// Delete old update folder
-					// If old update file coulnd't be deleted: Log error message and quit update method
-					string updateFolder = Path.GetTempPath() + "shiny-id3-tagger-update";
-					isDeleted = await DeleteFileOrFolder(updateFolder);
-					if (isDeleted == false)
-					{
-						return false;
-					}
-
+					// Extract update zip file
 					try
 					{
 						ZipFile.ExtractToDirectory(fullZipPath, updateFolder);
@@ -187,12 +188,27 @@ namespace Utils
 						return false;
 					}
 
+					// If new update file could not be deleted: Quit update method
 					isDeleted = await DeleteFileOrFolder(fullZipPath);
 					if (isDeleted == false)
 					{
 						return false;
 					}
 
+					// TODO: Continue here
+					// https://andreasrohner.at/posts/Programming/C%23/A-platform-independent-way-for-a-C%23-program-to-update-itself/
+					// Check if an old updater process is still running. Close it if yes and recheck
+					// Call Updater.exe in temp folder (= new version) with this path as argument
+					// Exit this process
+					// Updater checks if Shiny Id3 Tagger.exe is not running. Retries 3 times with 1s delay
+					// Updater checks if Shiny Id3 Tagger.exe is present in argument folder
+					// Updater copies all files from temp to program folder. Including itself
+					// Throws an error if file could not be copied
+					// But makes exceptions according to a blacklist
+					// 	- accounts.user.json
+					// 	- settings.user.json
+					// Verify all files size/date is same in temp folder and program folder
+					// Updater starts Shiny Id3 Tagger.exe and closes itself immediatly
 					return true;
 				}
 			}

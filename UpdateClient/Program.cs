@@ -13,17 +13,18 @@ namespace Updater
 	using System.Text;
 	using System.Threading.Tasks;
 
+	/// <summary>
+	/// The Program class is the default class to start a C# program
+	/// </summary>
 	public class Program
 	{
-		static void Main(string[] args)
+		/// <summary>
+		/// Main program which is called first when started
+		/// </summary>
+		/// <param name="args">Passed commandline arguments</param>
+		private static void Main(string[] args)
 		{
 			Console.WriteLine("Hello world");
-			Console.ReadKey();
-		}
-
-		public static void ExchangeFiles()
-		{
-			Console.WriteLine("Exchange files");
 			Console.ReadKey();
 		}
 	}
