@@ -54,7 +54,8 @@ namespace Utils
 			// If local program files commit date could not be found: Log error message and quit update method
 			if (localCommitDate.HasValue == false)
 			{
-				Form1.Instance.RichTextBox_LogMessage(new[] { "Couldn't get date of program files" }, 2);
+				string[] errorMsg = { "ERROR:    Could not get date of program files!" };
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				return false;
 			}
 
@@ -85,7 +86,8 @@ namespace Utils
 				// If local latest release date could not be found: Log error message and quit update method
 				if (latestReleaseDate.HasValue == false)
 				{
-					Form1.Instance.RichTextBox_LogMessage(new[] { "Could not get date of update file" }, 2);
+					string[] errorMsg = { "ERROR:    Could not get date of update file!" };
+					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 					return false;
 				}
 
@@ -118,7 +120,8 @@ namespace Utils
 					// If URL for new update file is not a valid URL (or just empty): Log error message and quit update method
 					if (Utils.IsValidUrl(downloadUrl) == false)
 					{
-						Form1.Instance.RichTextBox_LogMessage(new[] { "Update URL is not a valid URL" }, 2);
+						string[] errorMsg = { "ERROR:    Update URL is not a valid URL!" };
+						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 						return false;
 					}
 
@@ -130,95 +133,68 @@ namespace Utils
 					// If new update file coulnd't be downloaded: Log error message and quit update method
 					if (downloadData == null)
 					{
-						Form1.Instance.RichTextBox_LogMessage(new[] { "Couldn't download the update file" }, 2);
+						string[] errorMsg = { "ERROR:    Could not download the update file!" };
+						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 						return false;
 					}
 
 					// ######################################################################################################################
-					// Build path to zip file
-					string fullZipPath = AppDomain.CurrentDomain.BaseDirectory + "update.zip";
-
-					// TODO: Continue here
-					// Try to delete old files three times (with a small delay of 50ms between)
-					bool deleted = await SaveDeleteFileOrFolder(fullZipPath);
-
+					// Delete old update file
 					// If old update file coulnd't be deleted: Log error message and quit update method
-					if (deleted == false)
+					string fullZipPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
+					bool isDeleted = await DeleteFileOrFolder(fullZipPath);
+					if (isDeleted == false)
 					{
-						Form1.Instance.RichTextBox_LogMessage(new[] { "Couldn't delete the old update file" }, 2);
 						return false;
 					}
 
-					// Write the file as "update.zip" to program folder
+					// Write the release as "shiny-id3-tagger-update.zip" to temp folder
 					File.WriteAllBytes(fullZipPath, downloadData);
 
-					// Compare size if file and downloadSize
-					long downloadSize = Utils.ParseLong((string)latestReleaseJson.SelectToken("assets[0].size"));
+					// Compare size of zip file and size on GitHub
 					long localFileSize = new FileInfo(fullZipPath).Length;
+					long downloadSize = Utils.ParseLong((string)latestReleaseJson.SelectToken("assets[0].size"));
 
 					// If size doesn't match: Log error message and quit update method
 					if (downloadSize != localFileSize)
 					{
-						Form1.Instance.RichTextBox_LogMessage(new[] { "Incorrect size of update file" }, 2);
+						string[] errorMsg = { "ERROR:    Incorrect size of update file!" };
+						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 						return false;
 					}
 
-					string extractPath = AppDomain.CurrentDomain.BaseDirectory + "update";
+					// Delete old update folder
+					// If old update file coulnd't be deleted: Log error message and quit update method
+					string updateFolder = Path.GetTempPath() + "shiny-id3-tagger-update";
+					isDeleted = await DeleteFileOrFolder(updateFolder);
+					if (isDeleted == false)
+					{
+						return false;
+					}
 
-					// TODO: Continue here. Save delete update folder with SaveDeleteFileOrFolder()
 					try
 					{
-						ZipFile.ExtractToDirectory(fullZipPath, extractPath);
+						ZipFile.ExtractToDirectory(fullZipPath, updateFolder);
 					}
 					catch (Exception ex)
 					{
-						Form1.Instance.RichTextBox_LogMessage(new[] { ex.Message }, 2);
+						string[] errorMsg =
+						{
+							"ERROR:    Could not extract update file!",
+							"Message:  " + ex.Message,
+						};
+						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 						return false;
 					}
 
-					//Process.Start("Updater.exe", "Hello you too");
+					isDeleted = await DeleteFileOrFolder(fullZipPath);
+					if (isDeleted == false)
+					{
+						return false;
+					}
 
 					return true;
 				}
-			}
-		}
-
-		private static async Task<bool> SaveDeleteFileOrFolder(string fullZipPath)
-		{
-			const int WriteDelay = 50;
-			const int MaxRetries = 3;
-			string errorMessage = null;
-
-			for (int retry = 0; retry < MaxRetries; retry++)
-			{
-				if (File.Exists(fullZipPath))
-				{
-					try
-					{
-						File.Delete(fullZipPath);
-					}
-					catch (Exception ex)
-					{
-						errorMessage = ex.Message;
-						await Task.Delay(WriteDelay);
-					}
-				}
-				else
-				{
-					errorMessage = null;
-					break;
-				}
-			}
-
-			if (errorMessage == null)
-			{
-				// No errorMessage => Deletion successfull
-				return true;
-			}
-			else
-			{
-				// Has ErrorMessage => Deletion not successfull
-				return false;
 			}
 		}
 	}
