@@ -4,6 +4,8 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Split settings.json in settings.default.json and settings.user.json
+// Split accounts.json in accounts.default.json and accounts.user.json
 
 namespace Utils
 {
@@ -24,8 +26,8 @@ namespace Utils
 		/// <summary>
 		/// Reads a config file from an external file and saves it
 		/// </summary>
-		/// <param name="configPath">Path to config file</param>
-		/// <param name="schemaPath">Path to schema file for the config file</param>
+		/// <param name="configPath">Relative path to config file</param>
+		/// <param name="schemaPath">Relative path to schema file for the config file</param>
 		/// <returns>The parsed and validated config object</returns>
 		internal static JObject ReadConfig(string configPath, string schemaPath)
 		{
@@ -68,7 +70,7 @@ namespace Utils
 				// Parsing failed. File content is not a valid JSON
 				string[] errorMsg =
 				{
-					@"ERROR:    Failed to parse a config file!",
+					"ERROR:    Failed to parse a config file!",
 					"Filepath: " + fullConfigPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
@@ -81,7 +83,7 @@ namespace Utils
 				// Validation failed. JSON could not be validated against its schema
 				string[] errorMsg =
 				{
-					@"ERROR:    Failed to validate a config file!",
+					"ERROR:    Failed to validate a config file!",
 					"Filepath: " + fullConfigPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};

@@ -125,35 +125,12 @@ namespace Utils
 						{
 							List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
 							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-
 							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
 						}
 					}
 
 					break;
 				}
-
-				// catch (Exception error)
-				// {
-				// 	// An unknown application error occurred. Cancel request immediately and don't try again
-				// 	// Print out all request properties
-				// 	if (!cancelToken.IsCancellationRequested)
-				// 	{
-				// 		Exception realError = error;
-				// 		while (realError.InnerException != null)
-				// 		{
-				// 			realError = realError.InnerException;
-				// 		}
-
-				// 		List<string> errorMsg = new List<string> { "ERROR:    An unknown application error occured! Abort..." };
-				// 		errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-				// 		errorMsg.Add("Message:  " + realError.Message.ToString());
-
-				// 		Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
-				// 	}
-
-				// 	break;
-				// }
 			}
 
 			return result;

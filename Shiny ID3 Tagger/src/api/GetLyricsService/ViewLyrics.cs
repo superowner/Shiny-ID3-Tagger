@@ -70,7 +70,7 @@ namespace GetLyrics
 					IJEnumerable<JToken> linkList = searchData.SelectToken("return.fileinfo");
 
 					string lyricsLink = (from item in linkList
-									orderby Utils.ParseInt((string)item.SelectToken("@downloads")) descending
+									orderby Utils.ParseLong((string)item.SelectToken("@downloads")) descending
 									select (string)item.SelectToken("@link")).FirstOrDefault();
 
 					if (lyricsLink != null)
