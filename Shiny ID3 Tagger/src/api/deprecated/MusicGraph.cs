@@ -80,7 +80,7 @@ namespace GetTags
 				if (searchData?.SelectToken("data") != null && searchData.SelectToken("data").Any())
 				{
 					JToken track = (from item in searchData.SelectToken("data")
-									orderby Utils.ParseInt((string)item["release_year"]), Utils.ParseInt((string)item["popularity"]) descending
+									orderby Utils.ParseLong((string)item["release_year"]), Utils.ParseLong((string)item["popularity"]) descending
 									select item)
 								.ToArray()[0];
 

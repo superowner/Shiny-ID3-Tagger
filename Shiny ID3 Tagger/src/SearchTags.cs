@@ -147,7 +147,8 @@ namespace Shiny_ID3_Tagger
 								(artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
 								 titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
 							{
-								Form1.Instance.RichTextBox_LogMessage(new[] { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" }, 1, "Search");
+								string[] searchMsg = { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" };
+								Form1.Instance.RichTextBox_LogMessage(searchMsg, 1, "Search");
 
 								sw.Restart();
 
@@ -170,7 +171,9 @@ namespace Shiny_ID3_Tagger
 							if (tagNew.Album != null && lyricsNew.Value != null)
 							{
 								tagNew.Lyrics = lyricsNew.Value;
-								Form1.Instance.RichTextBox_LogMessage(new[] { "  Lyrics taken from " + lyricsNew.Key }, 1, "Search");
+
+								string[] searchMsg = { "  Lyrics taken from " + lyricsNew.Key };
+								Form1.Instance.RichTextBox_LogMessage(searchMsg, 1, "Search");
 							}
 
 							foreach (DataRow r in apiResults.Rows)
@@ -291,8 +294,8 @@ namespace Shiny_ID3_Tagger
 			string artistToSearch = Utils.Strip(tagOld.Artist);
 			string titleToSearch = Utils.Strip(tagOld.Title);
 
-			string message = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",-100}{"file: \"" + tagOld.Filepath + "\""}";
-			Form1.Instance.RichTextBox_LogMessage(new[] { message }, 1, "Search");
+			string searchMsg = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",-100}{"file: \"" + tagOld.Filepath + "\""}";
+			Form1.Instance.RichTextBox_LogMessage(new[] { searchMsg }, 1, "Search");
 
 			List<Task<Id3>> taskList = this.tagsServices.Select(service =>
 																	 service.GetTags(
@@ -556,7 +559,8 @@ namespace Shiny_ID3_Tagger
 
 					if (tagNew.Cover != null)
 					{
-						Form1.Instance.RichTextBox_LogMessage(new[] { "  Cover taken from " + api }, 1, "Search");
+						string[] searchMsg = { "  Cover taken from " + api };
+						Form1.Instance.RichTextBox_LogMessage(searchMsg, 1, "Search");
 						break;
 					}
 				}

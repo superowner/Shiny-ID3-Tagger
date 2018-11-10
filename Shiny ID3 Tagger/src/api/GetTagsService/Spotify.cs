@@ -127,7 +127,7 @@ namespace GetTags
 									o.TrackCount = (string)albumData.SelectToken("tracks.total");
 									o.Genre = string.Join(", ", albumData.SelectToken("genres"));
 									o.Cover = (string)albumData.SelectToken("images")
-										.OrderBy(obj => Utils.ParseInt((string)obj["height"])).Last()["url"];
+										.OrderBy(obj => Utils.ParseLong((string)obj["height"])).Last()["url"];
 								}
 							}
 						}

@@ -4,7 +4,8 @@
 		"documentationRules": {
 			"companyName": "Shiny ID3 Tagger",
 			"copyrightText": "Copyright (c) Shiny ID3 Tagger. All rights reserved.",
-			"documentationCulture": "en-US"
+			"documentationCulture": "en-US",
+			"headerDecoration": "-----------------------------------------------------------------------"
 		},
 			"layoutRules": {
 				"newlineAtEndOfFile": "require"
