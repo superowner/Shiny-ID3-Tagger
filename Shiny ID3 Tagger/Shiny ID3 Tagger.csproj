@@ -75,7 +75,7 @@
     </ManifestTimestampUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>stylecop.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>
     </DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
@@ -85,7 +85,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>stylecop.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>
     </DocumentationFile>
     <OutputPath>..\build\bin\release\</OutputPath>
@@ -340,7 +340,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\keyfile.snk" />
-    <None Include="Shiny ID3 Tagger.ruleset" />
+    <None Include="stylecop.ruleset" />
     <AdditionalFiles Include="stylecop.json" />
     <None Include="resources\shinyid3tagger.pfx" />
   </ItemGroup>

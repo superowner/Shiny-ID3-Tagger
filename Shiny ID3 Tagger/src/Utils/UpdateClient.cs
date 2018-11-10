@@ -38,7 +38,7 @@ namespace Utils
 		internal static async Task<bool> UpdateClient()
 		{
 			DateTimeOffset? localCommitDate = null;
-			DateTimeOffset? latestReleaseDate = null;
+			DateTime? latestReleaseDate = null;
 			JObject latestReleaseJson = null;
 
 			string zipFullPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
@@ -122,8 +122,8 @@ namespace Utils
 						return false;
 					}
 
-					// "created_at" in JSON is always the same as the corresponding commit date
-					latestReleaseDate = DateTimeOffset.Parse((string)latestReleaseJson.SelectToken("created_at"), GlobalVariables.CultEng.DateTimeFormat);
+					// "created_at" in JSON is always the same as the corresponding commit date. GitHub replies with UTC time
+					latestReleaseDate = (DateTime)latestReleaseJson.SelectToken("created_at");
 
 					// If local latest release date could not be found: Log error message and quit update method
 					if (latestReleaseDate.HasValue == false)
@@ -142,10 +142,11 @@ namespace Utils
 					return false;
 				}
 
+				// TODO: timezone offset is wrongly displayed
 				// Ask user if he want's to update the program: If user didn't press "OK", quit update method
 				DialogResult dialogResult = MessageBox.Show(
-					"Local date: " + localCommitDate.Value.LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "\n" +
-					"Update date: " + latestReleaseDate.Value.LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "\n\n" +
+					"Local date: " + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") + "\n" +
+					"Update date: " + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") + "\n\n" +
 					"Update now?",
 					"Update available",
 					MessageBoxButtons.OKCancel);
