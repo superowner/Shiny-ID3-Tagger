@@ -115,13 +115,13 @@ namespace Shiny_ID3_Tagger
 								Filepath = tagOld.Filepath,
 							};
 
-							Task<DataTable> apiTask = this.StartId3Search(client, tagOld, cancelToken);
+							Task<DataTable> id3SearchTask = this.StartId3Search(client, tagOld, cancelToken);
 							Task<KeyValuePair<string, string>> lyricSearchTask =
 								this.StartLyricsSearch(client, tagOld, cancelToken);
 
-							await Task.WhenAll(apiTask, lyricSearchTask);
+							await Task.WhenAll(id3SearchTask, lyricSearchTask);
 
-							DataTable apiResults = apiTask.Result;
+							DataTable apiResults = id3SearchTask.Result;
 							KeyValuePair<string, string> lyricsNew = lyricSearchTask.Result;
 
 							string artistNew = (from row1 in apiResults.AsEnumerable()
@@ -156,12 +156,12 @@ namespace Shiny_ID3_Tagger
 								tagNew.Artist = artistNew;
 								tagNew.Title = titleNew;
 
-								apiTask = this.StartId3Search(client, tagNew, cancelToken);
+								id3SearchTask = this.StartId3Search(client, tagNew, cancelToken);
 								lyricSearchTask = this.StartLyricsSearch(client, tagNew, cancelToken);
 
-								await Task.WhenAll(apiTask, lyricSearchTask);
+								await Task.WhenAll(id3SearchTask, lyricSearchTask);
 
-								apiResults = apiTask.Result;
+								apiResults = id3SearchTask.Result;
 								lyricsNew = lyricSearchTask.Result;
 							}
 

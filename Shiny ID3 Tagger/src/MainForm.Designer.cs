@@ -24,8 +24,8 @@ namespace Shiny_ID3_Tagger
 		private System.Windows.Forms.TabPage tabPage4;
 		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.ProgressBar fastProgressBar;
-		private DataGridViewDoubleBuffered dataGridView1;
-		private DataGridViewDoubleBuffered dataGridView2;
+		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.DataGridView dataGridView2;
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem openFolderToolStripMenuItem;
@@ -65,12 +65,12 @@ namespace Shiny_ID3_Tagger
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.btnSearch = new System.Windows.Forms.Button();
 			this.btnWrite = new System.Windows.Forms.Button();
 			this.tabControl2 = new System.Windows.Forms.TabControl();
@@ -86,24 +86,9 @@ namespace Shiny_ID3_Tagger
 			this.removeLines = new System.Windows.Forms.ToolStripMenuItem();
 			this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
-			this.dataGridView1 = new Shiny_ID3_Tagger.DataGridViewDoubleBuffered();
-			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.filepath1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.artist1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.title1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.album1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.date1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.genre1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.disccount1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.discnumber1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.trackcount1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.tracknumber1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.lyrics1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cover1 = new System.Windows.Forms.DataGridViewLinkColumn();
-			this.isVirtualFile = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.hasNewValues = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.tabPage5 = new System.Windows.Forms.TabPage();
-			this.dataGridView2 = new Shiny_ID3_Tagger.DataGridViewDoubleBuffered();
+			this.dataGridView2 = new System.Windows.Forms.DataGridView();
 			this.number2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.filepath2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.service2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -132,6 +117,21 @@ namespace Shiny_ID3_Tagger
 			this.exportTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.slowProgressBar = new System.Windows.Forms.ProgressBar();
+			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.filepath1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.artist1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.title1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.album1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.date1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.genre1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.disccount1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.discnumber1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.trackcount1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.tracknumber1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.lyrics1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cover1 = new System.Windows.Forms.DataGridViewLinkColumn();
+			this.isVirtualFile = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.hasNewValues = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.tabControl2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -315,12 +315,12 @@ namespace Shiny_ID3_Tagger
             this.removeLines,
             this.showInExplorerToolStripMenuItem});
 			this.PopupMenu.Name = "PopupMenu";
-			this.PopupMenu.Size = new System.Drawing.Size(181, 70);
+			this.PopupMenu.Size = new System.Drawing.Size(162, 48);
 			// 
 			// removeLines
 			// 
 			this.removeLines.Name = "removeLines";
-			this.removeLines.Size = new System.Drawing.Size(180, 22);
+			this.removeLines.Size = new System.Drawing.Size(161, 22);
 			this.removeLines.Text = "Remove";
 			this.removeLines.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.removeLines.ToolTipText = "Removes the selected lines";
@@ -329,7 +329,7 @@ namespace Shiny_ID3_Tagger
 			// showInExplorerToolStripMenuItem
 			// 
 			this.showInExplorerToolStripMenuItem.Name = "showInExplorerToolStripMenuItem";
-			this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
 			this.showInExplorerToolStripMenuItem.Text = "Show in Explorer";
 			this.showInExplorerToolStripMenuItem.Click += new System.EventHandler(this.Popup_ShowExplorerClick);
 			// 
@@ -410,148 +410,6 @@ namespace Shiny_ID3_Tagger
 			this.dataGridView1.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
 			this.dataGridView1.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.DataGridView_SortCompare);
 			this.dataGridView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridView_KeyPress);
-			// 
-			// Column1
-			// 
-			this.Column1.HeaderText = "#";
-			this.Column1.MinimumWidth = 25;
-			this.Column1.Name = "Column1";
-			this.Column1.ReadOnly = true;
-			this.Column1.ToolTipText = "Number";
-			this.Column1.Width = 25;
-			// 
-			// filepath1
-			// 
-			this.filepath1.HeaderText = "Filepath";
-			this.filepath1.MinimumWidth = 25;
-			this.filepath1.Name = "filepath1";
-			this.filepath1.ReadOnly = true;
-			this.filepath1.ToolTipText = "Filepath";
-			this.filepath1.Width = 370;
-			// 
-			// artist1
-			// 
-			this.artist1.HeaderText = "Artist";
-			this.artist1.MinimumWidth = 25;
-			this.artist1.Name = "artist1";
-			this.artist1.ReadOnly = true;
-			this.artist1.ToolTipText = "Artist";
-			// 
-			// title1
-			// 
-			this.title1.HeaderText = "Title";
-			this.title1.MinimumWidth = 25;
-			this.title1.Name = "title1";
-			this.title1.ReadOnly = true;
-			this.title1.ToolTipText = "Title";
-			// 
-			// album1
-			// 
-			this.album1.HeaderText = "Album";
-			this.album1.MinimumWidth = 25;
-			this.album1.Name = "album1";
-			this.album1.ReadOnly = true;
-			this.album1.ToolTipText = "Album";
-			// 
-			// date1
-			// 
-			this.date1.HeaderText = "Date";
-			this.date1.MinimumWidth = 25;
-			this.date1.Name = "date1";
-			this.date1.ReadOnly = true;
-			this.date1.ToolTipText = "Date";
-			// 
-			// genre1
-			// 
-			this.genre1.HeaderText = "Genre";
-			this.genre1.MinimumWidth = 25;
-			this.genre1.Name = "genre1";
-			this.genre1.ReadOnly = true;
-			this.genre1.ToolTipText = "Genre";
-			// 
-			// disccount1
-			// 
-			this.disccount1.HeaderText = "Disc Count";
-			this.disccount1.MinimumWidth = 25;
-			this.disccount1.Name = "disccount1";
-			this.disccount1.ReadOnly = true;
-			this.disccount1.ToolTipText = "Disc Count";
-			this.disccount1.Width = 30;
-			// 
-			// discnumber1
-			// 
-			this.discnumber1.HeaderText = "Disc Number";
-			this.discnumber1.MinimumWidth = 25;
-			this.discnumber1.Name = "discnumber1";
-			this.discnumber1.ReadOnly = true;
-			this.discnumber1.ToolTipText = "Disc Number";
-			this.discnumber1.Width = 30;
-			// 
-			// trackcount1
-			// 
-			this.trackcount1.HeaderText = "Track Count";
-			this.trackcount1.MinimumWidth = 25;
-			this.trackcount1.Name = "trackcount1";
-			this.trackcount1.ReadOnly = true;
-			this.trackcount1.ToolTipText = "Track Count";
-			this.trackcount1.Width = 30;
-			// 
-			// tracknumber1
-			// 
-			this.tracknumber1.HeaderText = "Track Number";
-			this.tracknumber1.MinimumWidth = 25;
-			this.tracknumber1.Name = "tracknumber1";
-			this.tracknumber1.ReadOnly = true;
-			this.tracknumber1.ToolTipText = "Track Number";
-			this.tracknumber1.Width = 30;
-			// 
-			// lyrics1
-			// 
-			dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.lyrics1.DefaultCellStyle = dataGridViewCellStyle3;
-			this.lyrics1.HeaderText = "Unsynced Lyrics";
-			this.lyrics1.MinimumWidth = 25;
-			this.lyrics1.Name = "lyrics1";
-			this.lyrics1.ReadOnly = true;
-			this.lyrics1.ToolTipText = "Unsynced Lyrics";
-			this.lyrics1.Width = 200;
-			// 
-			// cover1
-			// 
-			this.cover1.ActiveLinkColor = System.Drawing.Color.Black;
-			this.cover1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.cover1.HeaderText = "Cover";
-			this.cover1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-			this.cover1.LinkColor = System.Drawing.Color.Black;
-			this.cover1.MinimumWidth = 25;
-			this.cover1.Name = "cover1";
-			this.cover1.ReadOnly = true;
-			this.cover1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.cover1.ToolTipText = "Cover";
-			this.cover1.VisitedLinkColor = System.Drawing.Color.Black;
-			// 
-			// isVirtualFile
-			// 
-			this.isVirtualFile.FalseValue = "false";
-			this.isVirtualFile.HeaderText = "isVirtualFile";
-			this.isVirtualFile.Name = "isVirtualFile";
-			this.isVirtualFile.ReadOnly = true;
-			this.isVirtualFile.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.isVirtualFile.TrueValue = "true";
-			this.isVirtualFile.Visible = false;
-			this.isVirtualFile.Width = 25;
-			// 
-			// hasNewValues
-			// 
-			this.hasNewValues.FalseValue = "";
-			this.hasNewValues.HeaderText = "Save";
-			this.hasNewValues.MinimumWidth = 25;
-			this.hasNewValues.Name = "hasNewValues";
-			this.hasNewValues.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.hasNewValues.ToolTipText = "Save";
-			this.hasNewValues.TrueValue = "";
-			this.hasNewValues.Width = 25;
 			// 
 			// tabPage5
 			// 
@@ -902,6 +760,148 @@ namespace Shiny_ID3_Tagger
 			this.slowProgressBar.Visible = false;
 			this.slowProgressBar.VisibleChanged += new System.EventHandler(this.SlowProgressBar_VisibleChanged);
 			// 
+			// Column1
+			// 
+			this.Column1.HeaderText = "#";
+			this.Column1.MinimumWidth = 25;
+			this.Column1.Name = "Column1";
+			this.Column1.ReadOnly = true;
+			this.Column1.ToolTipText = "Number";
+			this.Column1.Width = 25;
+			// 
+			// filepath1
+			// 
+			this.filepath1.HeaderText = "Filepath";
+			this.filepath1.MinimumWidth = 25;
+			this.filepath1.Name = "filepath1";
+			this.filepath1.ReadOnly = true;
+			this.filepath1.ToolTipText = "Filepath";
+			this.filepath1.Width = 370;
+			// 
+			// artist1
+			// 
+			this.artist1.HeaderText = "Artist";
+			this.artist1.MinimumWidth = 25;
+			this.artist1.Name = "artist1";
+			this.artist1.ReadOnly = true;
+			this.artist1.ToolTipText = "Artist";
+			// 
+			// title1
+			// 
+			this.title1.HeaderText = "Title";
+			this.title1.MinimumWidth = 25;
+			this.title1.Name = "title1";
+			this.title1.ReadOnly = true;
+			this.title1.ToolTipText = "Title";
+			// 
+			// album1
+			// 
+			this.album1.HeaderText = "Album";
+			this.album1.MinimumWidth = 25;
+			this.album1.Name = "album1";
+			this.album1.ReadOnly = true;
+			this.album1.ToolTipText = "Album";
+			// 
+			// date1
+			// 
+			this.date1.HeaderText = "Date";
+			this.date1.MinimumWidth = 25;
+			this.date1.Name = "date1";
+			this.date1.ReadOnly = true;
+			this.date1.ToolTipText = "Date";
+			// 
+			// genre1
+			// 
+			this.genre1.HeaderText = "Genre";
+			this.genre1.MinimumWidth = 25;
+			this.genre1.Name = "genre1";
+			this.genre1.ReadOnly = true;
+			this.genre1.ToolTipText = "Genre";
+			// 
+			// disccount1
+			// 
+			this.disccount1.HeaderText = "Disc Count";
+			this.disccount1.MinimumWidth = 25;
+			this.disccount1.Name = "disccount1";
+			this.disccount1.ReadOnly = true;
+			this.disccount1.ToolTipText = "Disc Count";
+			this.disccount1.Width = 30;
+			// 
+			// discnumber1
+			// 
+			this.discnumber1.HeaderText = "Disc Number";
+			this.discnumber1.MinimumWidth = 25;
+			this.discnumber1.Name = "discnumber1";
+			this.discnumber1.ReadOnly = true;
+			this.discnumber1.ToolTipText = "Disc Number";
+			this.discnumber1.Width = 30;
+			// 
+			// trackcount1
+			// 
+			this.trackcount1.HeaderText = "Track Count";
+			this.trackcount1.MinimumWidth = 25;
+			this.trackcount1.Name = "trackcount1";
+			this.trackcount1.ReadOnly = true;
+			this.trackcount1.ToolTipText = "Track Count";
+			this.trackcount1.Width = 30;
+			// 
+			// tracknumber1
+			// 
+			this.tracknumber1.HeaderText = "Track Number";
+			this.tracknumber1.MinimumWidth = 25;
+			this.tracknumber1.Name = "tracknumber1";
+			this.tracknumber1.ReadOnly = true;
+			this.tracknumber1.ToolTipText = "Track Number";
+			this.tracknumber1.Width = 30;
+			// 
+			// lyrics1
+			// 
+			dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.lyrics1.DefaultCellStyle = dataGridViewCellStyle3;
+			this.lyrics1.HeaderText = "Unsynced Lyrics";
+			this.lyrics1.MinimumWidth = 25;
+			this.lyrics1.Name = "lyrics1";
+			this.lyrics1.ReadOnly = true;
+			this.lyrics1.ToolTipText = "Unsynced Lyrics";
+			this.lyrics1.Width = 200;
+			// 
+			// cover1
+			// 
+			this.cover1.ActiveLinkColor = System.Drawing.Color.Black;
+			this.cover1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			this.cover1.HeaderText = "Cover";
+			this.cover1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+			this.cover1.LinkColor = System.Drawing.Color.Black;
+			this.cover1.MinimumWidth = 25;
+			this.cover1.Name = "cover1";
+			this.cover1.ReadOnly = true;
+			this.cover1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.cover1.ToolTipText = "Cover";
+			this.cover1.VisitedLinkColor = System.Drawing.Color.Black;
+			// 
+			// isVirtualFile
+			// 
+			this.isVirtualFile.FalseValue = "false";
+			this.isVirtualFile.HeaderText = "isVirtualFile";
+			this.isVirtualFile.Name = "isVirtualFile";
+			this.isVirtualFile.ReadOnly = true;
+			this.isVirtualFile.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.isVirtualFile.TrueValue = "true";
+			this.isVirtualFile.Visible = false;
+			this.isVirtualFile.Width = 25;
+			// 
+			// hasNewValues
+			// 
+			this.hasNewValues.FalseValue = "";
+			this.hasNewValues.HeaderText = "Save";
+			this.hasNewValues.MinimumWidth = 25;
+			this.hasNewValues.Name = "hasNewValues";
+			this.hasNewValues.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.hasNewValues.ToolTipText = "Save";
+			this.hasNewValues.TrueValue = "";
+			this.hasNewValues.Width = 25;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -919,7 +919,6 @@ namespace Shiny_ID3_Tagger
 			this.Controls.Add(this.tabControl2);
 			this.DoubleBuffered = true;
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.Icon = global::Shiny_ID3_Tagger.resources.icon_resources.icon_main;
 			this.KeyPreview = true;
 			this.MainMenuStrip = this.menuStrip1;
 			this.MinimumSize = new System.Drawing.Size(500, 500);

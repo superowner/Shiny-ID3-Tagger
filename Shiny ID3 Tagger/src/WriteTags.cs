@@ -4,7 +4,6 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// REVIEW: Remove all "catch (Exception ex)" statements
 // REVIEW: Is there a better save() method? https://taglib.org/api/classTagLib_1_1MPEG_1_1File.html#acfe8c97e6d551f5bc1f588d3c2bf5bf5
 // 				bool TagLib::MPEG::File::save(int tags, bool stripOthers, int id3v2Version, bool duplicateTags)
 

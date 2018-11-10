@@ -9,6 +9,7 @@ namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Linq;
+	using System.Reflection;
 	using System.Threading;
 	using System.Windows.Forms;
 	using GlobalVariables;
@@ -27,6 +28,9 @@ namespace Shiny_ID3_Tagger
 		{
 			Form1.Instance = this;
 			this.InitializeComponent();
+
+			// Set icon programatically. (Had issues doing it in MainForm design view)
+			this.Icon = Shiny_ID3_Tagger.properties.Resources.icon_main;
 		}
 
 		/// <summary>
@@ -86,6 +90,12 @@ namespace Shiny_ID3_Tagger
 
 			// Initialize helper variable to track which dataGridView is currently shown
 			GlobalVariables.ActiveDGV = this.dataGridView1;
+
+			// Set dataGridView property "DoubleBuffered" to true
+			Type dgvType = this.dataGridView1.GetType();
+			PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+			pi.SetValue(this.dataGridView1, true, null);
+			pi.SetValue(this.dataGridView2, true, null);
 
 			// Read in command line arguments and pass them to main program
 			// First argument is always the path to program executable itself, skip it)

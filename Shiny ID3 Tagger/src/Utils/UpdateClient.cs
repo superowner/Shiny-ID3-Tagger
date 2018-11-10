@@ -136,16 +136,14 @@ namespace Utils
 
 				// ######################################################################################################################
 				// If local file date is equal or newer then release date, then there is now update availale. Quit update method
-				// TODO: Switch back to: localCommitDate >= latestReleaseDate
-				if (localCommitDate < latestReleaseDate)
+				if (localCommitDate >= latestReleaseDate)
 				{
 					return false;
 				}
 
-				// TODO: timezone offset is wrongly displayed
 				// Ask user if he want's to update the program: If user didn't press "OK", quit update method
 				DialogResult dialogResult = MessageBox.Show(
-					"Local date: " + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") + "\n" +
+					"Your version: " + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") + "\n" +
 					"Update date: " + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") + "\n\n" +
 					"Update now?",
 					"Update available",
