@@ -76,16 +76,22 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\build\bin\debug\Shiny ID3 Tagger.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <OutputPath>..\build\bin\debug\</OutputPath>
     <LangVersion>latest</LangVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\build\bin\release\Shiny ID3 Tagger.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <OutputPath>..\build\bin\release\</OutputPath>
     <LangVersion>latest</LangVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>resources\shinyid3tagger.pfx</ManifestKeyFile>

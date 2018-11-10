@@ -11,6 +11,7 @@ namespace Utils
 	using System.Diagnostics;
 	using System.IO;
 	using System.IO.Compression;
+	using System.Linq;
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
@@ -39,13 +40,29 @@ namespace Utils
 			DateTimeOffset? localCommitDate = null;
 			DateTimeOffset? latestReleaseDate = null;
 			JObject latestReleaseJson = null;
-			string updateFolder = Path.GetTempPath() + "shiny-id3-tagger-update";
-			string fullZipPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
+
+			string zipFullPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
+			string updateFolder = Path.GetTempPath() + @"shiny-id3-tagger-update\";
+			string updateProcessName = "Shiny ID3 Tagger Updater";
+			string updateExeFullPath = updateFolder + "Shiny ID3 Tagger Updater.exe";
 
 			// ######################################################################################################################
 			// Clean up old update file and update folder in %temp% folder
+			// Check if an old updater process is still running
+			Process updateProcess = (from process in Process.GetProcessesByName(updateProcessName)
+									 where process.MainModule.FileName == updateExeFullPath
+									 select process).FirstOrDefault();
+
+			// If an old updater is still running: Log error message and quit update method
+			if (updateProcess != null)
+			{
+				string[] errorMsg = { "ERROR:    A previous update is still running!" };
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+				return false;
+			}
+
 			// If old update file could not be deleted: Quit update method
-			bool isDeleted = await DeleteFileOrFolder(fullZipPath);
+			bool isDeleted = await DeleteFileOrFolder(zipFullPath);
 			if (isDeleted == false)
 			{
 				return false;
@@ -64,7 +81,7 @@ namespace Utils
 
 			if (lastCommit != null)
 			{
-				localCommitDate = DateTimeOffset.Parse((string)lastCommit.SelectToken("date"));
+				localCommitDate = DateTimeOffset.Parse((string)lastCommit.SelectToken("date"), GlobalVariables.CultEng.DateTimeFormat);
 
 				Form1.Instance.Text = Application.ProductName + "     Version: " + localCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
 			}
@@ -89,7 +106,7 @@ namespace Utils
 				CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
 				// ######################################################################################################################
-				// Get the latest release date from GitHub repository
+				// Get the latest release info from GitHub repository
 				using (HttpRequestMessage latestReleaseRequest = new HttpRequestMessage())
 				{
 					latestReleaseRequest.RequestUri = new Uri("https://api.github.com/repos/ShinyId3Tagger/Shiny-ID3-Tagger/releases/latest");
@@ -97,16 +114,24 @@ namespace Utils
 					string latestRelease = await GetResponse(client, latestReleaseRequest, cancelToken);
 					latestReleaseJson = DeserializeJson(latestRelease);
 
-					// "created_at" in JSON is always the same as the corresponding commit date
-					latestReleaseDate = DateTimeOffset.Parse((string)latestReleaseJson.SelectToken("created_at"));
-				}
+					// If latest release info could not be downloaded: Log error message and quit update method
+					if (latestReleaseJson == null)
+					{
+						string[] errorMsg = { "ERROR:    Could not get latest update info!" };
+						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						return false;
+					}
 
-				// If local latest release date could not be found: Log error message and quit update method
-				if (latestReleaseDate.HasValue == false)
-				{
-					string[] errorMsg = { "ERROR:    Could not get date of update file!" };
-					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
-					return false;
+					// "created_at" in JSON is always the same as the corresponding commit date
+					latestReleaseDate = DateTimeOffset.Parse((string)latestReleaseJson.SelectToken("created_at"), GlobalVariables.CultEng.DateTimeFormat);
+
+					// If local latest release date could not be found: Log error message and quit update method
+					if (latestReleaseDate.HasValue == false)
+					{
+						string[] errorMsg = { "ERROR:    Could not get date of update file!" };
+						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						return false;
+					}
 				}
 
 				// ######################################################################################################################
@@ -158,10 +183,10 @@ namespace Utils
 
 					// ######################################################################################################################
 					// Write the release file to temp folder
-					File.WriteAllBytes(fullZipPath, downloadData);
+					File.WriteAllBytes(zipFullPath, downloadData);
 
 					// Compare size of local zip file and expected download size from GitHub
-					long localFileSize = new FileInfo(fullZipPath).Length;
+					long localFileSize = new FileInfo(zipFullPath).Length;
 					long downloadSize = Utils.ParseLong((string)latestReleaseJson.SelectToken("assets[0].size"));
 
 					// If size doesn't match: Log error message and quit update method
@@ -175,7 +200,7 @@ namespace Utils
 					// Extract update zip file
 					try
 					{
-						ZipFile.ExtractToDirectory(fullZipPath, updateFolder);
+						ZipFile.ExtractToDirectory(zipFullPath, updateFolder);
 					}
 					catch (Exception ex)
 					{
@@ -189,26 +214,18 @@ namespace Utils
 					}
 
 					// If new update file could not be deleted: Quit update method
-					isDeleted = await DeleteFileOrFolder(fullZipPath);
+					isDeleted = await DeleteFileOrFolder(zipFullPath);
 					if (isDeleted == false)
 					{
 						return false;
 					}
 
-					// TODO: Continue here
-					// https://andreasrohner.at/posts/Programming/C%23/A-platform-independent-way-for-a-C%23-program-to-update-itself/
-					// Check if an old updater process is still running. Close it if yes and recheck
-					// Call Updater.exe in temp folder (= new version) with this path as argument
+					// Call Updater.exe in temp folder (= new updater version) with this path as argument
+					Process.Start(updateExeFullPath, AppDomain.CurrentDomain.BaseDirectory);
+
 					// Exit this process
-					// Updater checks if Shiny Id3 Tagger.exe is not running. Retries 3 times with 1s delay
-					// Updater checks if Shiny Id3 Tagger.exe is present in argument folder
-					// Updater copies all files from temp to program folder. Including itself
-					// Throws an error if file could not be copied
-					// But makes exceptions according to a blacklist
-					// 	- accounts.user.json
-					// 	- settings.user.json
-					// Verify all files size/date is same in temp folder and program folder
-					// Updater starts Shiny Id3 Tagger.exe and closes itself immediatly
+					Environment.Exit(0);
+
 					return true;
 				}
 			}

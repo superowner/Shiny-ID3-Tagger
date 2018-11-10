@@ -26,6 +26,16 @@ namespace Updater
 		{
 			Console.WriteLine("Hello world");
 			Console.ReadKey();
+
+			// Updater checks if Shiny Id3 Tagger.exe is not running. Retries 3 times with 1s delay
+			// Updater checks if Shiny Id3 Tagger.exe is present in argument folder
+			// Updater copies all files from temp to program folder. Including itself
+			// Throws an error if file could not be copied
+			// But makes exceptions according to a blacklist
+			// 	- accounts.user.json
+			// 	- settings.user.json
+			// Verify all files size/date is same in temp folder and program folder
+			// Updater starts Shiny Id3 Tagger.exe and closes itself immediatly
 		}
 	}
 }
