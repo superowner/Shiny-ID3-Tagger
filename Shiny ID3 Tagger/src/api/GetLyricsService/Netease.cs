@@ -52,7 +52,7 @@ namespace GetLyrics
 						new KeyValuePair<string, string>("type", "1"),
 					});
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null)
@@ -72,7 +72,7 @@ namespace GetLyrics
 							lyricsRequest.Headers.Add("referer", "http://music.163.com");
 							lyricsRequest.RequestUri = new Uri("http://music.163.com/api/song/lyric/?id=" + songId + "&lv=-1&kv=-1&tv=-1");
 
-							string lyricsContent = await Utils.GetResponse(client, lyricsRequest, cancelToken);
+							string lyricsContent = await Utils.GetHttpResponse(client, lyricsRequest, cancelToken);
 							JObject lyricsData = Utils.DeserializeJson(lyricsContent);
 
 							if (lyricsData?.SelectToken("lrc.lyric") != null)

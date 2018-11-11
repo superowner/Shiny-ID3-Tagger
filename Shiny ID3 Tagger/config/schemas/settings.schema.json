@@ -24,8 +24,16 @@
 			"$id": "/properties/OverwriteImage",
 			"type": "boolean"
 		},
+		"AutoCollectFiles": {
+			"$id": "/properties/AutoCollectFiles",
+			"type": "boolean"
+		},
 		"AutoSearch": {
 			"$id": "/properties/AutoSearch",
+			"type": "boolean"
+		},
+		"AutoUpdate": {
+			"$id": "/properties/AutoUpdate",
 			"type": "boolean"
 		},
 		"AutoCapitalize": {
@@ -79,7 +87,9 @@
 		"RemoveVersion",
 		"RemoveFeaturing",
 		"OverwriteImage",
+		"AutoCollectFiles",
 		"AutoSearch",
+		"AutoUpdate",
 		"AutoCapitalize",
 		"ThresholdRedValue",
 		"MaxImageSize",

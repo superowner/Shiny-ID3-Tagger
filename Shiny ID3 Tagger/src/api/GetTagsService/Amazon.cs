@@ -96,7 +96,7 @@ namespace GetTags
 					await Task.Delay(50);
 				}
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				lastRequestTimer.Restart();
 
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
@@ -156,7 +156,7 @@ namespace GetTags
 								await Task.Delay(50);
 							}
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 							lastRequestTimer.Restart();
 
 							JObject albumData = Utils.DeserializeJson(Utils.ConvertXmlToJson(albumContent));

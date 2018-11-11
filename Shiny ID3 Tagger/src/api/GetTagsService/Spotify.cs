@@ -75,7 +75,7 @@ namespace GetTags
 					string creditsBase64 = Convert.ToBase64String(creditsBytes);
 					loginRequest.Headers.Add("Authorization", "Basic " + creditsBase64);
 
-					string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);
+					string loginContent = await Utils.GetHttpResponse(client, loginRequest, cancelToken);
 					JObject loginData = Utils.DeserializeJson(loginContent);
 
 					if (loginData?.SelectToken("access_token") != null)
@@ -95,7 +95,7 @@ namespace GetTags
 					searchRequest.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEncoded + "\"+track:\"" + titleEncoded + "\"&type=track&limit=1");
 					searchRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 
-					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+					string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 					JObject searchData = Utils.DeserializeJson(searchContent);
 
 					if (searchData?.SelectToken("tracks.items") != null &&
@@ -117,7 +117,7 @@ namespace GetTags
 								albumRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 								albumRequest.RequestUri = new Uri(albumUrl);
 
-								string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 502 });
+								string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 502 });
 								JObject albumData = Utils.DeserializeJson(albumContent);
 
 								if (albumData != null)
@@ -144,7 +144,7 @@ namespace GetTags
 								artistRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 								artistRequest.RequestUri = new Uri(artistUrl);
 
-								string artistContent = await Utils.GetResponse(client, artistRequest, cancelToken, suppressedStatusCodes: new[] { 502 });
+								string artistContent = await Utils.GetHttpResponse(client, artistRequest, cancelToken, suppressedStatusCodes: new[] { 502 });
 								JObject artistData = Utils.DeserializeJson(artistContent);
 
 								if (artistData?.SelectToken("genres") != null &&

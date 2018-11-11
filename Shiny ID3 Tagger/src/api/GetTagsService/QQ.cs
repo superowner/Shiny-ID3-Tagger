@@ -61,7 +61,7 @@ namespace GetTags
 			{
 				searchRequest.RequestUri = new Uri("http://c.y.qq.com/soso/fcgi-bin/search_cp?w=" + searchTermEnc + "&format=json&p=0&n=100&aggr=1&lossless=1&cr=1");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("data.song.list[0]") != null)
@@ -83,7 +83,7 @@ namespace GetTags
 					{
 						albumRequest.RequestUri = new Uri("http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?format=json&albumid=" + firstSong["albumid"]);
 
-						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData?.SelectToken("data") != null)
@@ -109,7 +109,7 @@ namespace GetTags
 					{
 						trackRequest.RequestUri = new Uri("http://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?format=json&songid=" + firstSong["songid"]);
 
-						string trackContent = await Utils.GetResponse(client, trackRequest, cancelToken);
+						string trackContent = await Utils.GetHttpResponse(client, trackRequest, cancelToken);
 						JObject trackData = Utils.DeserializeJson(trackContent);
 
 						if (trackData?.SelectToken("data") != null)

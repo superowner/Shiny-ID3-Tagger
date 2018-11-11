@@ -61,7 +61,7 @@ namespace GetLyrics
 				searchRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
 				// Retrieve response from server, 4th argument tells GetResponse() to return a byte array rather than a string
-				byte[] response = await Utils.GetResponse(client, searchRequest, cancelToken, true);
+				byte[] response = await Utils.GetHttpResponse(client, searchRequest, cancelToken, true);
 				string searchContent = this.DecodeResponse(response);
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
@@ -79,7 +79,7 @@ namespace GetLyrics
 						{
 							lyricsRequest.RequestUri = new Uri("http://www.viewlyrics.com/" + lyricsLink);
 
-							string lyricsContent = await Utils.GetResponse(client, lyricsRequest, cancelToken);
+							string lyricsContent = await Utils.GetHttpResponse(client, lyricsRequest, cancelToken);
 							string rawLyrics = lyricsContent;
 
 							if (!string.IsNullOrWhiteSpace(rawLyrics))

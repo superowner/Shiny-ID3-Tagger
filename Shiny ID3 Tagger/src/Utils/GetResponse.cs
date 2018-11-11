@@ -31,7 +31,7 @@ namespace Utils
 		/// <param name="suppressedStatusCodes">A array which holds statuscodes of common errors which can be ignored (not logged as error)</param>
 		/// <param name="customTimeout">A timeout in seconds after a request is automatically canceled. Useful if a certain server has no own timeout</param>
 		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-		internal static async Task<dynamic> GetResponse(
+		internal static async Task<dynamic> GetHttpResponse(
 			HttpMessageInvoker client,
 			HttpRequestMessage request,
 			CancellationToken cancelToken,

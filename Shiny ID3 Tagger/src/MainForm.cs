@@ -28,9 +28,6 @@ namespace Shiny_ID3_Tagger
 		{
 			Form1.Instance = this;
 			this.InitializeComponent();
-
-			// Set icon programatically. (Had issues doing it in MainForm design view)
-			this.Icon = Shiny_ID3_Tagger.properties.Resources.icon_main;
 		}
 
 		/// <summary>
@@ -48,31 +45,41 @@ namespace Shiny_ID3_Tagger
 			GlobalVariables.TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
-			// Continue only if user credentials and user settings are present
-			if (User.Accounts != null && User.Settings != null)
-			{
-				// Disable all buttons and menus during client update
-				this.Form_EnableUI(false);
+			// Get user settings and user accounts
+			User.Settings = Utils.ReadConfig(@"config\settings.json", @"config\schemas\settings.schema.json");
+			User.Accounts = Utils.ReadConfig(@"config\accounts.json", @"config\schemas\accounts.schema.json");
 
-				// Update client
-				bool successUpdate = await Utils.UpdateClient();
-
-				// Enable all buttons and menus again
-				this.Form_EnableUI(true);
-
-				// Add new files to dataGridView1
-				bool hasNewFiles = await this.CollectFiles(args, cancelToken);
-
-				// Continue only if user setting allows it and if new files were added
-				if ((bool)User.Settings["AutoSearch"] && hasNewFiles)
-				{
-					this.StartSearching(cancelToken);
-				}
-			}
-			else
+			// If user settings or user accounts are not available: Don't continue, disable UI, let user read error message
+			if (User.Accounts == null || User.Settings == null)
 			{
 				GlobalVariables.TokenSource.Cancel();
 				this.Form_EnableUI(false);
+			}
+			else
+			{
+				// If AutoUpdate is enabled, update client files
+				if ((bool)User.Settings["AutoUpdate"])
+				{
+					bool successDownload = await Utils.DownloadUpdate();
+					if (successDownload)
+					{
+						// Wait for UpdateClient.exe to say it's ready to deploy new program files
+						Utils.StartUpdateClient();
+					}
+				}
+
+				// If AutoCollectFiles is enabled
+				if ((bool)User.Settings["AutoCollectFiles"])
+				{
+					// Add new files to dataGridView1
+					bool hasNewFiles = await this.CollectFiles(args, cancelToken);
+
+					// If new files were added and AutoSearch is enabled, start searching
+					if ((bool)User.Settings["AutoSearch"] && hasNewFiles)
+					{
+						this.StartSearching(cancelToken);
+					}
+				}
 			}
 		}
 
@@ -84,9 +91,8 @@ namespace Shiny_ID3_Tagger
 		{
 			base.OnShown(e);
 
-			// Get user settings and user accounts. Needs to be done before UpdateClient
-			User.Settings = Utils.ReadConfig(@"config\settings.json", @"config\schemas\settings.schema.json");
-			User.Accounts = Utils.ReadConfig(@"config\accounts.json", @"config\schemas\accounts.schema.json");
+			// Set icon programatically. (Had issues doing it in MainForm design view)
+			this.Icon = Shiny_ID3_Tagger.properties.Resources.icon_main;
 
 			// Initialize helper variable to track which dataGridView is currently shown
 			GlobalVariables.ActiveDGV = this.dataGridView1;

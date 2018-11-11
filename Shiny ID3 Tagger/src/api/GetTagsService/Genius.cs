@@ -62,7 +62,7 @@ namespace GetTags
 					"&access_token=" + User.Accounts["Genius"]["AccessToken"] +
 					"&text_format=plain");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("response.hits[0].result.api_path") != null)
@@ -74,7 +74,7 @@ namespace GetTags
 							"?access_token=" + User.Accounts["Genius"]["AccessToken"] +
 							"&text_format=plain");
 
-						string trackContent = await Utils.GetResponse(client, trackRequest, cancelToken);
+						string trackContent = await Utils.GetHttpResponse(client, trackRequest, cancelToken);
 						JObject trackData = Utils.DeserializeJson(trackContent);
 
 						if (trackData != null)
@@ -94,7 +94,7 @@ namespace GetTags
 								{
 									albumRequest.RequestUri = new Uri("https://api.genius.com" + albumPath + "?access_token=" + User.Accounts["Genius"]["AccessToken"] + "&text_format=plain");
 
-									string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+									string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 									JObject albumData = Utils.DeserializeJson(albumContent);
 
 									if (albumData != null)

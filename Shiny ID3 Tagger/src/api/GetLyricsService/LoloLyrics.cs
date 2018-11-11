@@ -47,7 +47,7 @@ namespace GetLyrics
 			{
 				searchRequest.RequestUri = new Uri("http://api.lololyrics.com/0.5/getLyric?artist=" + artistEncoded + "&track=" + titleEncoded + "&rawutf8=1");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
 				if (searchData?.SelectToken("result.response") != null)

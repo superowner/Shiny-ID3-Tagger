@@ -74,7 +74,7 @@ namespace GetTags
 			{
 				searchRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/track/search?api_key=" + (string)account["AppKey"] + "&artist_name=" + artistEncoded + "&title=" + titleEncoded + "&limit=5");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("data") != null && searchData.SelectToken("data").Any())
@@ -98,7 +98,7 @@ namespace GetTags
 						// Musicgraph has a database flaw where many album IDs in track responses point to non-existing album URLs resulting in a 404 "Not found" HTTP error
 						albumRequest.RequestUri = new Uri("http://api.musicgraph.com/api/v2/album/" + (string)track.SelectToken("track_album_id") + "?api_key=" + (string)account["AppKey"]);
 
-						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+						string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData?.SelectToken("data") != null)

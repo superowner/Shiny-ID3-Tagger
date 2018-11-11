@@ -48,7 +48,7 @@ namespace GetLyrics
 				searchRequest.RequestUri = new Uri("http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=" +
 												   artistEncoded + "&song=" + titleEncoded);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404, 500 });
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404, 500 });
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
 				if (searchData?.SelectToken("GetLyricResult.Lyric") != null)

@@ -47,7 +47,7 @@ namespace GetLyrics
 				searchRequest.RequestUri = new Uri("http://api.xiami.com/web?v=2.0&limit=30&r=search/songs&app_key=1&key=" + searchTermEnc);
 				searchRequest.Headers.Add("referer", "http://h.xiami.com/");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null)
@@ -64,7 +64,7 @@ namespace GetLyrics
 						{
 							lyricRequest.RequestUri = new Uri((string)song.SelectToken("lyric"));
 
-							string lyricsContent = await Utils.GetResponse(client, lyricRequest, cancelToken);
+							string lyricsContent = await Utils.GetHttpResponse(client, lyricRequest, cancelToken);
 							string rawLyrics = lyricsContent;
 
 							if (!string.IsNullOrWhiteSpace(rawLyrics))

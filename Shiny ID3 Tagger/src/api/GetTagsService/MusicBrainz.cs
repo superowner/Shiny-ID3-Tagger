@@ -69,7 +69,7 @@ namespace GetTags
 				searchRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 				searchRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("count").ToString() != "0")
@@ -141,7 +141,7 @@ namespace GetTags
 						releasegroupRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 						releasegroupRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/release-group/" + releasegroupid + "?inc=tags+ratings+artists&fmt=json");
 
-						string releaseGroupContent = await Utils.GetResponse(client, releasegroupRequest, cancelToken);
+						string releaseGroupContent = await Utils.GetHttpResponse(client, releasegroupRequest, cancelToken);
 						JObject releaseGroupData = Utils.DeserializeJson(releaseGroupContent);
 
 						if (releaseGroupData != null)
@@ -167,7 +167,7 @@ namespace GetTags
 						coverRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 						coverRequest.RequestUri = new Uri("http://coverartarchive.org/release-group/" + releasegroupid);
 
-						string coverContent = await Utils.GetResponse(client, coverRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+						string coverContent = await Utils.GetHttpResponse(client, coverRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 						JObject coverData = Utils.DeserializeJson(coverContent);
 
 						if (coverData != null)

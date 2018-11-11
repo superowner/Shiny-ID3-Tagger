@@ -68,7 +68,7 @@ namespace GetTags
 						new KeyValuePair<string, string>("password", (string)User.Accounts["Tidal"]["Password"]),
 					});
 
-					string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);
+					string loginContent = await Utils.GetHttpResponse(client, loginRequest, cancelToken);
 					JObject loginData = Utils.DeserializeJson(loginContent);
 
 					if (loginData?.SelectToken("sessionId") != null)
@@ -84,7 +84,7 @@ namespace GetTags
 								new Uri("http://api.tidalhifi.com/v1/users/" + userID + "/subscription");
 							sessionRequest.Headers.Add("X-Tidal-SessionId", ApiSessionData.TiSessionID);
 
-							string sessionContent = await Utils.GetResponse(client, sessionRequest, cancelToken);
+							string sessionContent = await Utils.GetHttpResponse(client, sessionRequest, cancelToken);
 							JObject sessionData = Utils.DeserializeJson(sessionContent);
 
 							if (sessionData != null)
@@ -109,7 +109,7 @@ namespace GetTags
 					searchRequest.RequestUri = new Uri("http://api.tidalhifi.com/v1/search?types=TRACKS&countryCode=" +
 													   ApiSessionData.TiCountryCode + "&query=" + searchTermEnc);
 
-					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+					string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 					JObject searchData = Utils.DeserializeJson(searchContent);
 
 					if (searchData?.SelectToken("tracks.items[0]") != null)
@@ -130,7 +130,7 @@ namespace GetTags
 										(string)searchData.SelectToken("tracks.items[0].album.id") + "?countryCode=" +
 										ApiSessionData.TiCountryCode);
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+							string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 							JObject albumData = Utils.DeserializeJson(albumContent);
 
 							if (albumData != null)

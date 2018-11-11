@@ -78,7 +78,7 @@ namespace GetTags
 						</QUERY>
 					</QUERIES>");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
 				if (searchData?.SelectToken("RESPONSES.RESPONSE.ALBUM") != null)
@@ -135,7 +135,7 @@ namespace GetTags
 									</QUERY>
 								</QUERIES>");
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 							JObject albumData = Utils.DeserializeJson(Utils.ConvertXmlToJson(albumContent));
 
 							if (albumData != null)

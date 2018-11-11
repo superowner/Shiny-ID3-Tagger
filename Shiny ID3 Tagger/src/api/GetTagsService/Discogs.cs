@@ -68,7 +68,7 @@ namespace GetTags
 					"&key=" + User.Accounts["Discogs"]["Key"] +
 					"&secret=" + User.Accounts["Discogs"]["Secret"]);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("results").Any())
@@ -83,7 +83,7 @@ namespace GetTags
 								"?key=" + User.Accounts["Discogs"]["Key"] +
 								"&secret=" + User.Accounts["Discogs"]["Secret"]);
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 							JObject albumData = Utils.DeserializeJson(albumContent);
 
 							if (albumData != null)

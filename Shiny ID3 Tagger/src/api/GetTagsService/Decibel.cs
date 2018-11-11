@@ -78,7 +78,7 @@ namespace GetTags
 				searchRequest.Headers.Add("DecibelAppID", (string)account["AppId"]);
 				searchRequest.Headers.Add("DecibelAppKey", (string)account["AppKey"]);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("Results") != null && searchData?.SelectToken("Results").ToString() != "[]")
@@ -97,7 +97,7 @@ namespace GetTags
 						albumRequest.Headers.Add("DecibelAppID", (string)account["AppId"]);
 						albumRequest.Headers.Add("DecibelAppKey", (string)account["AppKey"]);
 
-						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData?.SelectToken("Results") != null && albumData?.SelectToken("Results").ToString() != "[]")

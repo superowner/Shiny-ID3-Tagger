@@ -68,7 +68,7 @@ namespace GetTags
 						new KeyValuePair<string, string>("type", "1"),
 					});
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("result.songs") != null)

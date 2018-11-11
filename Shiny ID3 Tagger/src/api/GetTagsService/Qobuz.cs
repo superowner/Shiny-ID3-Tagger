@@ -60,7 +60,7 @@ namespace GetTags
 			{
 				searchRequest.RequestUri = new Uri("http://www.qobuz.com/api.json/0.2/track/search?limit=1&app_id=" + User.Accounts["Qobuz"]["AppId"] + "&query=" + searchTermEnc);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("tracks.items[0]") != null)
