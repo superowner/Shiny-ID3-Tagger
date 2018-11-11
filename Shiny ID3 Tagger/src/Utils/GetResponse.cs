@@ -69,8 +69,9 @@ namespace Utils
 					}
 
 					// Print out all requests, not only failed once
-					List<string> errorMsg = BuildLogMessage(request, requestContent, null);
-					Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 3);
+					List<string> debugMsg = new List<string> { "DEBUG:    API request executed" };
+					debugMsg.AddRange(BuildLogMessage(request, requestContent, null));
+					Form1.Instance.RichTextBox_LogMessage(debugMsg.ToArray(), 4);
 
 					response = await client.SendAsync(request, timeoutToken.Token);
 
@@ -103,9 +104,9 @@ namespace Utils
 						if (!cancelToken.IsCancellationRequested)
 						{
 							// Print out all request and response properties
-							errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
-							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
+							debugMsg = new List<string> { "DEBUG:    Response was unsuccessful! " + i + " retries left. Retrying..." };
+							debugMsg.AddRange(BuildLogMessage(request, requestContent, response));
+							Form1.Instance.RichTextBox_LogMessage(debugMsg.ToArray(), 4);
 
 							// Response was not successful. But it was also not a common error. And user did not press cancel
 							// This must be an uncommon error. Continue with our retry logic
@@ -123,9 +124,9 @@ namespace Utils
 						// Print out the request
 						if (!cancelToken.IsCancellationRequested)
 						{
-							List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
-							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
+							List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
+							warningMsg.AddRange(BuildLogMessage(request, requestContent, response));
+							Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
 						}
 					}
 

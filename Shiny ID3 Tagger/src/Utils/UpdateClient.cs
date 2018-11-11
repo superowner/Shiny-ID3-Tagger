@@ -43,8 +43,8 @@ namespace Utils
 
 			string zipFullPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
 			string updateFolder = Path.GetTempPath() + @"shiny-id3-tagger-update\";
-			string updateProcessName = "Shiny ID3 Tagger Updater";
-			string updateExeFullPath = updateFolder + "Shiny ID3 Tagger Updater.exe";
+			string updateProcessName = "UpdateClient";
+			string updateExeFullPath = updateFolder + "UpdateClient.exe";
 
 			// ######################################################################################################################
 			// Clean up old update file and update folder in %temp% folder
@@ -56,8 +56,13 @@ namespace Utils
 			// If an old updater is still running: Log error message and quit update method
 			if (updateProcess != null)
 			{
-				string[] errorMsg = { "ERROR:    A previous update is still running!" };
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+				string[] warningMsg =
+				{
+					"WARNING:  Could not update program!",
+					"Message:  A previous update is still running",
+					"Process:  " + updateProcess.ProcessName,
+				};
+				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 				return false;
 			}
 
@@ -81,16 +86,13 @@ namespace Utils
 
 			if (lastCommit != null)
 			{
+				// The schema already makes sure that a "date" node exists. No additional null check needed
 				localCommitDate = DateTimeOffset.Parse((string)lastCommit.SelectToken("date"), GlobalVariables.CultEng.DateTimeFormat);
 
-				Form1.Instance.Text = Application.ProductName + "     Version: " + localCommitDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
+				Form1.Instance.Text = Application.ProductName + " (Date: " + localCommitDate.Value.ToString("yyyy-MM-dd") + ")";
 			}
-
-			// If local program files commit date could not be found: Log error message and quit update method
-			if (localCommitDate.HasValue == false)
+			else
 			{
-				string[] errorMsg = { "ERROR:    Could not get date of program files!" };
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				return false;
 			}
 
@@ -117,29 +119,39 @@ namespace Utils
 					// If latest release info could not be downloaded: Log error message and quit update method
 					if (latestReleaseJson == null)
 					{
-						string[] errorMsg = { "ERROR:    Could not get latest update info!" };
-						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						string[] warningMsg =
+						{
+							"WARNING:  Could not update program!",
+							"Message:  Failed to get info for latest release from GitHub",
+						};
+						Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 						return false;
 					}
 
-					// "created_at" in JSON is always the same as the corresponding commit date. GitHub replies with UTC time
-					latestReleaseDate = (DateTime)latestReleaseJson.SelectToken("created_at");
+					// "created_at" in JSON refers to the corresponding commit date
+					// GitHub responds with UTC time in ISO 8601 format "yyyy-MM-ddTHH:mm:ssZ"
+					latestReleaseDate = Utils.ConvertStringToDate((string)latestReleaseJson.SelectToken("created_at"));
 
-					// If local latest release date could not be found: Log error message and quit update method
-					if (latestReleaseDate.HasValue == false)
+					// If latest release date could not be found: Log error message and quit update method
+					if (latestReleaseDate == default(DateTime))
 					{
-						string[] errorMsg = { "ERROR:    Could not get date of update file!" };
-						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						string[] warningMsg =
+						{
+							"WARNING:  Could not update program!",
+							"Message:  Failed to get date for latest release from GitHub",
+						};
+						Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 						return false;
 					}
 				}
 
 				// ######################################################################################################################
 				// If local file date is equal or newer then release date, then there is now update availale. Quit update method
-				if (localCommitDate >= latestReleaseDate)
-				{
-					return false;
-				}
+				// TODO: Include this comment section later when UpdateClient is finished
+				// if (localCommitDate >= latestReleaseDate)
+				// {
+				// 	return false;
+				// }
 
 				// Ask user if he want's to update the program: If user didn't press "OK", quit update method
 				DialogResult dialogResult = MessageBox.Show(
@@ -162,8 +174,13 @@ namespace Utils
 					// If URL for new update file is not a valid URL (or just empty): Log error message and quit update method
 					if (Utils.IsValidUrl(downloadUrl) == false)
 					{
-						string[] errorMsg = { "ERROR:    Update URL is not a valid URL!" };
-						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						string[] warningMsg =
+						{
+							"WARNING:  Could not update program!",
+							"Message:  Update URL is not a valid URL",
+							"URL:      " + downloadUrl,
+						};
+						Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 						return false;
 					}
 
@@ -175,8 +192,13 @@ namespace Utils
 					// If new update file could not be downloaded: Log error message and quit update method
 					if (downloadData == null)
 					{
-						string[] errorMsg = { "ERROR:    Could not download the update file!" };
-						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						string[] warningMsg =
+						{
+							"WARNING:  Could not update program!",
+							"Message:  Failed to download update file",
+							"URL:      " + downloadUrl,
+						};
+						Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 						return false;
 					}
 
@@ -191,8 +213,13 @@ namespace Utils
 					// If size doesn't match: Log error message and quit update method
 					if (downloadSize != localFileSize)
 					{
-						string[] errorMsg = { "ERROR:    Incorrect size of update file!" };
-						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						string[] warningMsg =
+						{
+							"WARNING:  Could not update program!",
+							"Message:  Incorrect size of update file: " + downloadSize + " bytes (expected) !=" + localFileSize + " bytes (actual)",
+							"Path:     " + zipFullPath,
+						};
+						Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 						return false;
 					}
 
@@ -203,12 +230,15 @@ namespace Utils
 					}
 					catch (Exception ex)
 					{
-						string[] errorMsg =
+						string[] warningMsg =
 						{
-							"ERROR:    Could not extract update file!",
-							"Message:  " + ex.Message,
+							"WARNING:  Could not update program!",
+							"Message:  Extraction of update file failed",
+							"          " + ex.Message,
+							"Source:   " + zipFullPath,
+							"Target:   " + updateFolder,
 						};
-						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 						return false;
 					}
 
@@ -219,13 +249,28 @@ namespace Utils
 						return false;
 					}
 
-					// Call Updater.exe in temp folder (= new updater version) with this path as argument
-					Process.Start(updateExeFullPath, AppDomain.CurrentDomain.BaseDirectory);
+					if (File.Exists(updateExeFullPath))
+					{
+						// Call UpdateClient.exe in temp folder (= new updater version) with this path as argument
+						Process.Start(updateExeFullPath, AppDomain.CurrentDomain.BaseDirectory);
 
-					// Exit this process
-					Environment.Exit(0);
+						// Exit this programm. UpdateClient will take over from here
+						Environment.Exit(0);
 
-					return true;
+						// This is just to satisfy the compiler. "True" can never be returned
+						return true;
+					}
+					else
+					{
+						string[] warningMsg =
+						{
+							"WARNING:  Could not update program!",
+							"Message:  Required file not found",
+							"Path:     " + updateExeFullPath,
+						};
+						Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+						return false;
+					}
 				}
 			}
 		}

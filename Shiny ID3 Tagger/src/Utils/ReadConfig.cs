@@ -4,8 +4,8 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// Split settings.json in settings.default.json and settings.user.json
-// Split accounts.json in accounts.default.json and accounts.user.json
+// TODO: Split settings.json in settings.default.json and settings.user.json
+// TODO: Split accounts.json in accounts.default.json and accounts.user.json
 
 namespace Utils
 {

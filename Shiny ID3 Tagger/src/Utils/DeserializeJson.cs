@@ -24,28 +24,26 @@ namespace Utils
 		{
 			JObject jsonObj = null;
 
-			int debugLevel = 0;
-			if (User.Settings != null)
-			{
-				debugLevel = (int)User.Settings["DebugLevel"];
-			}
-
 			if (jsonStr != null)
 			{
 				// Set custom settings for JSON parser
-				JsonSerializerSettings jsonSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
+				JsonSerializerSettings jsonSettings = new JsonSerializerSettings
+				{
+					Formatting = Formatting.Indented,
+					DateParseHandling = DateParseHandling.None,
+				};
 
 				if (throwError)
 				{
 					// Build a more useful error message when JSON parsing fails later
 					jsonSettings.Error += (obj, errorArgs) =>
 					{
-						string[] errorMsg =
+						string[] warningMsg =
 						{
 							"WARNING:  Could not convert string to JSON!",
 							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n'),
 						};
-						Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 					};
 				}
 				else

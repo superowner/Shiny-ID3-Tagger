@@ -4,8 +4,8 @@
 	"$id": "https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/settingsSchema.json",
 	"type": "object",
 	"properties": {
-		"DebugLevel": {
-			"$id": "/properties/DebugLevel",
+		"LogLevel": {
+			"$id": "/properties/LogLevel",
 			"type": "integer"
 		},
 		"PreferTags": {
@@ -74,7 +74,7 @@
 	},
 	"additionalProperties": false,
 	"required": [
-		"DebugLevel",
+		"LogLevel",
 		"PreferTags",
 		"RemoveVersion",
 		"RemoveFeaturing",

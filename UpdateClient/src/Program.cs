@@ -5,7 +5,7 @@
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
 
-namespace Updater
+namespace UpdateClient
 {
 	using System;
 	using System.Collections.Generic;
@@ -27,7 +27,6 @@ namespace Updater
 			Console.WriteLine("Hello world");
 			Console.ReadKey();
 
-			// Updater checks if Shiny Id3 Tagger.exe is not running. Retries 3 times with 1s delay
 			// Updater checks if Shiny Id3 Tagger.exe is present in argument folder
 			// Updater copies all files from temp to program folder. Including itself
 			// Throws an error if file could not be copied

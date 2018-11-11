@@ -30,6 +30,8 @@ namespace Utils
 			"yyyy-MM-dd HH",
 			"yyyy-MM-dd HH:mm",
 			"yyyy-MM-dd HH:mm:ss",
+			"yyyy-MM-ddTHH:mm:ssZ",
+			"yyyy-MM-ddTHH:mm:ss.fffZ",
 			"MM/dd/yyyy",
 			"MM/dd/yyyy HH",
 			"MM/dd/yyyy HH:mm",
@@ -60,8 +62,8 @@ namespace Utils
 
 				if (regEx.IsMatch(dateString))
 				{
-					string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
-					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+					string[] warningMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
+					Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 				}
 			}
 
