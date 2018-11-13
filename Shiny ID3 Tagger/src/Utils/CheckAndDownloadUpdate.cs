@@ -28,8 +28,9 @@ namespace Utils
 		/// <summary>
 		/// Checks for updates and downloads newest program files from GitHub
 		/// </summary>
-		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-		internal static async Task<bool> CheckAndDownloadUpdate()
+		/// <param name="showMessages">Sets if the update messages should be printed. Default is true</param>
+		/// <returns>A <see cref="Task"/>Representing the asynchronous operation.</returns>
+		internal static async Task<bool> CheckAndDownloadUpdate(bool showMessages = true)
 		{
 			DateTimeOffset? localCommitDate = null;
 			DateTime? latestReleaseDate = null;
@@ -140,16 +141,20 @@ namespace Utils
 				}
 
 				// ######################################################################################################################
-				// If local file date is equal or newer then release date, then there is no update availale
+				// If local file date is equal or newer then release date, than there is no update availale
 				if (localCommitDate >= latestReleaseDate)
 				{
-					string[] generalMsg =
+					if (showMessages)
+					{
+						string[] generalMsg =
 						{
 							"No newer version found!",
 							"Your version:\t" + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
 							"Newest version:\t" + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
 						};
-					Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Search);
+						Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
+					}
+
 					return false;
 				}
 

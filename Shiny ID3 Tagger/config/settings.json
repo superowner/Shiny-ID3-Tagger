@@ -5,7 +5,7 @@
 	"RemoveFeaturing": true,
 	"OverwriteImage": true,
 	"AutoCollectFiles": false,
-	"AutoSearch": false,
+	"AutoSearch": true,
 	"AutoUpdate": true,
 	"AutoCapitalize": true,
 	"ThresholdRedValue": 30,

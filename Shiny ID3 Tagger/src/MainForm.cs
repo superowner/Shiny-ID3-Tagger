@@ -60,7 +60,7 @@ namespace Shiny_ID3_Tagger
 				// If AutoUpdate is enabled, update client files
 				if ((bool)User.Settings["AutoUpdate"])
 				{
-					bool successDownload = await Utils.CheckAndDownloadUpdate();
+					bool successDownload = await Utils.CheckAndDownloadUpdate(false);
 					if (successDownload)
 					{
 						// Wait for UpdateClient.exe to say it's ready to deploy new program files

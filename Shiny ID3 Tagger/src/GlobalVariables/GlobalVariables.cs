@@ -41,7 +41,7 @@ namespace GlobalVariables
 		/// <summary>
 		/// Enum to decide which richTextBox to use
 		/// </summary>
-		internal enum MessageType
+		internal enum OutputLog
 		{
 			/// <summary>
 			/// Use tab "Search Log" for output
