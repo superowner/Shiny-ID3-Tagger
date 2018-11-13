@@ -91,8 +91,6 @@ namespace Utils
 			// The schema already makes sure that a "date" node exists. No additional null check needed
 			localCommitDate = DateTimeOffset.Parse((string)lastCommit.SelectToken("date"), GlobalVariables.CultEng.DateTimeFormat);
 
-			Form1.Instance.Text = Application.ProductName + " (Date: " + localCommitDate.Value.ToString("yyyy-MM-dd") + ")";
-
 			// ######################################################################################################################
 			using (HttpClient client = InitiateHttpClient())
 			{
@@ -142,12 +140,11 @@ namespace Utils
 				}
 
 				// ######################################################################################################################
-				// UNDONE: Include this comment section later when UpdateClient is finished
-				// If local file date is equal or newer then release date, then there is now update availale
-				// if (localCommitDate >= latestReleaseDate)
-				// {
-				// 	return false;
-				// }
+				// If local file date is equal or newer then release date, then there is no update availale
+				if (localCommitDate >= latestReleaseDate)
+				{
+					return false;
+				}
 
 				// Ask user if he want's to update the program
 				DialogResult dialogResult = MessageBox.Show(

@@ -4,15 +4,17 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// TODO: Implement a way to exit loop after some seconds (in case main app does not shutdown)
+// TODO: Implement a way to signal main app that copying failed
 
 namespace UpdateClient
 {
 	using System;
-	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.IO;
 	using System.IO.Pipes;
 	using System.Linq;
-	using System.Text;
+	using System.Text.RegularExpressions;
 	using System.Threading.Tasks;
 
 	/// <summary>
@@ -26,48 +28,81 @@ namespace UpdateClient
 		/// <param name="args">Passed commandline arguments</param>
 		private static void Main(string[] args)
 		{
-			var client = new NamedPipeClientStream("Shiny_Id3_Tagger_UpdateClient");
+			string regExPattern = "(?<key>.*?) = (?<value>.*)";
+			string mainAppDir = null;
+			string mainAppProcessId = null;
+			string mainAppName = "Shiny ID3 Tagger.exe";
 
+			NamedPipeClientStream client = new NamedPipeClientStream("Shiny_Id3_Tagger_UpdateClient");
 			client.Connect();
 
 			StreamReader reader = new StreamReader(client);
-			StreamWriter writer = new StreamWriter(client);
-
-			// Start to exchange infos betwen main app and updater
-			writer.WriteLine("UpdateClient is running");
-			writer.Flush();
-
-			Console.WriteLine(args[0]);
-			//Console.WriteLine("Shiny ID3 Tagger process ID: " + args[1]);
-
-			while (!reader.EndOfStream)
+			StreamWriter writer = new StreamWriter(client)
 			{
-				var message = reader.ReadLine();
-				Console.WriteLine("Received message: " + message);
+				AutoFlush = true,
+			};
 
-				if (message == "Main app is shutting down")
+			// Send message to main app that we are running. Don't change this string
+			writer.WriteLine("UpdateClient is running");
+
+			while (true)
+			{
+				string message = reader.ReadLine();
+
+				// Parse which message was send
+				if (message != null)
 				{
-					// Updater checks if Shiny Id3 Tagger.exe is present in argument folder
-					Console.WriteLine("Updater checks if Shiny Id3 Tagger.exe is present in argument folder");
+					Match match = Regex.Match(message, regExPattern);
+					if (match.Success)
+					{
+						switch (match.Groups["key"].Value)
+						{
+							case "path":
+								mainAppDir = match.Groups["value"].Value;
+								break;
+							case "id":
+								mainAppProcessId = match.Groups["value"].Value;
+								break;
+						}
+					}
+				}
 
-					// Wait until process ID is not found anymore
-					Console.WriteLine("Wait until process ID is not found anymore");
+				// Check if main app is closed
+				if (mainAppDir != null && mainAppProcessId != null)
+				{
+					int id = int.TryParse(mainAppProcessId, out int result) ? result : 0;
 
-					// Updater copies all files from temp to program folder. Including itself
-					Console.WriteLine("Updater copies all files from temp to program folder. Including itself");
+					Task.Delay(1000);
 
-					// Throws an error if file could not be copied
-					// But makes exceptions according to a blacklist
-					// 	- accounts.user.json
-					// 	- settings.user.json
-					// Verify all files size/date is same in temp folder and program folder
+					Process[] processlist = Process.GetProcesses();
+					Process process = processlist.FirstOrDefault(pr => pr.Id == id);
 
-					// Updater starts Shiny Id3 Tagger.exe and closes itself immediatly
-					Console.WriteLine("Updater starts Shiny Id3 Tagger.exe and closes itself immediatly");
+					if (process == null)
+					{
+						break;
+					}
 				}
 			}
 
-			Console.ReadLine();
+			try
+			{
+				// Updater copies all files from own folder (= temp) to main app folder
+				DirectoryInfo diSource = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+				DirectoryInfo diTarget = new DirectoryInfo(mainAppDir);
+				CopyDirectory.CopyAll(diSource, diTarget);
+
+				// TODO: Continue here
+				// Dont copy this. Pass a blacklist to CopyAll
+				// 	- accounts.user.json
+				// 	- settings.user.json
+				Process.Start(mainAppDir + mainAppName);
+				Environment.Exit(0);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				Console.ReadLine();
+			}
 		}
 	}
 }

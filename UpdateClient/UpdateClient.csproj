@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="properties\AssemblyInfo.cs" />
+    <Compile Include="src\CopyDirectory.cs" />
     <Compile Include="src\Program.cs" />
   </ItemGroup>
   <ItemGroup>

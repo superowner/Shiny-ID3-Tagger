@@ -45,10 +45,10 @@ namespace Utils
 			// UNDONE: Remove this copy command when Updater is finished
 			File.Copy(AppDomain.CurrentDomain.BaseDirectory + "UpdateClient.exe", updateExeFullPath, true);
 
-			// Start UpdateClient.exe in temp folder (= new version from GitHub) with current app folder as argument
-			Process.Start(updateExeFullPath, "-path:\"" + AppDomain.CurrentDomain.BaseDirectory + "\" -id:" + Process.GetCurrentProcess().Id);
+			// Start UpdateClient.exe in temp folder (= new version from GitHub)
+			Process.Start(updateExeFullPath);
 
-			// Set up a named pipe server and listen if UpdateClient responds
+			// Set up a named pipe server and listen if UpdateClient has started
 			Task.Run(() =>
 			{
 				var server = new NamedPipeServerStream("Shiny_Id3_Tagger_UpdateClient");
@@ -56,9 +56,12 @@ namespace Utils
 				server.WaitForConnection();
 
 				StreamReader reader = new StreamReader(server);
-				StreamWriter writer = new StreamWriter(server);
+				StreamWriter writer = new StreamWriter(server)
+				{
+					AutoFlush = true,
+				};
 
-				while (!reader.EndOfStream)
+				while (reader.EndOfStream == false)
 				{
 					var message = reader.ReadLine();
 
@@ -72,10 +75,10 @@ namespace Utils
 					// If UpdateClient responds with the proper string, then reply that this programm is shutting down
 					if (message == "UpdateClient is running")
 					{
-						writer.WriteLine("Main app is shutting down");
-						writer.Flush();
+						writer.WriteLine("path = " + AppDomain.CurrentDomain.BaseDirectory);
+						writer.WriteLine("id = " + Process.GetCurrentProcess().Id);
 
-						//Application.Exit();
+						Application.Exit();
 					}
 				}
 			});
