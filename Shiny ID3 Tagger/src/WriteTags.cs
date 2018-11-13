@@ -63,8 +63,8 @@ namespace Shiny_ID3_Tagger
 					string tagType = "ID3v2.3";
 
 					// Log message to signal begin of writing
-					string[] writeMsg = new[] { $"{"Begin writing of " + tagType + " tags",-100}{"file: \"" + filepath + "\""}" };
-					Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+					string[] generalMsg = new[] { $"{"Begin writing of " + tagType + " tags",-100}{"file: \"" + filepath + "\""}" };
+					Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 
 					// Get all existing frames from current file
 					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
@@ -125,15 +125,14 @@ namespace Shiny_ID3_Tagger
 								cell.Style.BackColor = Color.Empty;
 							}
 
-							writeMsg = new string[]	{ "Writing done!" };
+							generalMsg = new string[]	{ "Writing done!" };
+							Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 						}
 						else
 						{
-							writeMsg = new string[] { "Writing FAILED!" };
+							generalMsg = new string[] { "Writing failed!" };
+							Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 						}
-
-						// Log message to signal end of writing
-						Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
 					}
 				}
 			}
@@ -167,8 +166,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TPE1");
 				tagContainer.SetTextFrame("TPE1", newArtist);
 
-				string[] writeMsg = { "Artist:   " + newArtist };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Artist:   " + newArtist };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 			}
 
 			// Title
@@ -179,8 +178,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TIT2");
 				tagContainer.SetTextFrame("TIT2", newTitle);
 
-				string[] writeMsg = { "Title:    " + newTitle };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Title:    " + newTitle };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 			}
 
 			// Album
@@ -191,8 +190,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TALB");
 				tagContainer.SetTextFrame("TALB", newAlbum);
 
-				string[] writeMsg = { "Album:    " + newAlbum };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Album:    " + newAlbum };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 			}
 
 			// Genre
@@ -203,8 +202,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TCON");
 				tagContainer.SetTextFrame("TCON", newGenre);
 
-				string[] writeMsg = { "Genre:    " + newGenre };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Genre:    " + newGenre };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 			}
 
 			// Disc number + disc count
@@ -220,8 +219,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TPOS");
 				tagContainer.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 
-				string[] writeMsg = { "Disc:     " + newDiscnumber + "/" + newDisccount };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Disc:     " + newDiscnumber + "/" + newDisccount };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 			}
 
 			// Track number + track count
@@ -237,8 +236,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TRCK");
 				tagContainer.SetTextFrame("TRCK", newTrackNumber + "/" + newTrackCount);
 
-				string[] writeMsg = { "Track:    " + newTrackNumber + "/" + newTrackCount };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Track:    " + newTrackNumber + "/" + newTrackCount };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 			}
 
 			// Date
@@ -256,8 +255,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TIME");
 				tagContainer.SetNumberFrame("TYER", (uint)Utils.ConvertStringToDate(newDate).Year, 0);
 
-				string[] writeMsg = { "Date:     " + newDate };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Date:     " + newDate };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 			}
 
 			// Lyrics
@@ -278,8 +277,8 @@ namespace Shiny_ID3_Tagger
 				string lyricsSnippet = string.Join(string.Empty, newLyrics.Take(80)) + "...";
 				lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
 
-				string[] writeMsg = { "Lyrics:   " + lyricsSnippet };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Lyrics:   " + lyricsSnippet };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 			}
 
 			return tagContainer;
@@ -424,8 +423,8 @@ namespace Shiny_ID3_Tagger
 
 			if (errorMsg == null)
 			{
-				string[] writeMsg =	{ "Picture:  " + request.RequestUri	};
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg =	{ "Picture:  " + request.RequestUri	};
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Write);
 			}
 			else
 			{

@@ -29,12 +29,12 @@ namespace Shiny_ID3_Tagger
 		/// 4: General + Error + Warning + Debug (all outgoing API requests, all incoming API responses)
 		/// </param>
 		/// <param name="messageType">richTextBox to use. Possible values are "Search", "Write" or "Error" (default)</param>
-		internal void RichTextBox_LogMessage(string[] values, int messageLevel, string messageType = default)
+		internal void RichTextBox_LogMessage(string[] values, int messageLevel, GlobalVariables.MessageType messageType = GlobalVariables.MessageType.Error)
 		{
 			// When called from a different thread then Form1, switch back to thread which owns Form1
 			if (this.InvokeRequired)
 			{
-				this.Invoke(new Action<string[], int, string>(Form1.Instance.RichTextBox_LogMessage), new object[] { values, messageLevel, messageType });
+				this.Invoke(new Action<string[], int, GlobalVariables.MessageType>(Form1.Instance.RichTextBox_LogMessage), new object[] { values, messageLevel, messageType });
 				return;
 			}
 
@@ -48,15 +48,13 @@ namespace Shiny_ID3_Tagger
 			RichTextBox richTextBox = null;
 			switch (messageType)
 			{
-				case "Search":
+				case GlobalVariables.MessageType.Search:
 					richTextBox = this.rtbSearchLog;
 					break;
-				case "Write":
+				case GlobalVariables.MessageType.Write:
 					richTextBox = this.rtbWriteLog;
 					break;
-				case "Error":
-					richTextBox = this.rtbErrorLog;
-					break;
+				case GlobalVariables.MessageType.Error:
 				default:
 					richTextBox = this.rtbErrorLog;
 					break;

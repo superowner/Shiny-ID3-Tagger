@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DownloadUpdate.cs" company="Shiny ID3 Tagger">
+// <copyright file="CheckAndDownloadUpdate.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -29,7 +29,7 @@ namespace Utils
 		/// Checks for updates and downloads newest program files from GitHub
 		/// </summary>
 		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-		internal static async Task<bool> DownloadUpdate()
+		internal static async Task<bool> CheckAndDownloadUpdate()
 		{
 			DateTimeOffset? localCommitDate = null;
 			DateTime? latestReleaseDate = null;
@@ -143,13 +143,20 @@ namespace Utils
 				// If local file date is equal or newer then release date, then there is no update availale
 				if (localCommitDate >= latestReleaseDate)
 				{
+					string[] generalMsg =
+						{
+							"No newer version found!",
+							"Your version:\t" + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
+							"Newest version:\t" + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
+						};
+					Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.MessageType.Search);
 					return false;
 				}
 
 				// Ask user if he want's to update the program
 				DialogResult dialogResult = MessageBox.Show(
-					"Your version: " + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") + "\n" +
-					"Update date: " + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") + "\n\n" +
+					"Your version:\t" + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") + "\n" +
+					"Newest version:\t" + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") + "\n\n" +
 					"Update now?",
 					"Update available",
 					MessageBoxButtons.OKCancel);
