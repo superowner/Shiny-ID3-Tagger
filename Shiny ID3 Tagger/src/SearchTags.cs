@@ -294,7 +294,6 @@ namespace Shiny_ID3_Tagger
 			string artistToSearch = Utils.Strip(tagOld.Artist);
 			string titleToSearch = Utils.Strip(tagOld.Title);
 
-			// Find a way to debug async methods. If an exception is thrown in an API task, I can't locate which task it is
 			string generalMsg = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",-100}{"file: \"" + tagOld.Filepath + "\""}";
 			Form1.Instance.RichTextBox_LogMessage(new[] { generalMsg }, 1, GlobalVariables.OutputLog.Search);
 

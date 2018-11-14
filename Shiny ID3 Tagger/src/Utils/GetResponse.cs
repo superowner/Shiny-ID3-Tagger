@@ -68,12 +68,13 @@ namespace Utils
 						requestContent = await request.Content.ReadAsStringAsync();
 					}
 
-					// Print out all requests, not only failed once
-					List<string> debugMsg = new List<string> { "DEBUG:    API request executed" };
-					debugMsg.AddRange(BuildLogMessage(request, requestContent, null));
-					Form1.Instance.RichTextBox_LogMessage(debugMsg.ToArray(), 4);
-
+					// The actual request is send here
 					response = await client.SendAsync(request, timeoutToken.Token);
+
+					// Print out all requests including their headers and corresponding response
+					List<string> errorMsg = new List<string> { "DEBUG:    API request executed" };
+					errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+					Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 4);
 
 					// Check if the returned status code is within a call-specific array of codes to suppress
 					// These are common errors i.e. when a lyric doesn't exist. Don't log these errors
@@ -104,9 +105,9 @@ namespace Utils
 						if (!cancelToken.IsCancellationRequested)
 						{
 							// Print out all request and response properties
-							debugMsg = new List<string> { "DEBUG:    Response was unsuccessful! " + i + " retries left. Retrying..." };
-							debugMsg.AddRange(BuildLogMessage(request, requestContent, response));
-							Form1.Instance.RichTextBox_LogMessage(debugMsg.ToArray(), 4);
+							errorMsg = new List<string> { "DEBUG:    Response was unsuccessful! " + i + " retries left. Retrying..." };
+							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 3);
 
 							// Response was not successful. But it was also not a common error. And user did not press cancel
 							// This must be an uncommon error. Continue with our retry logic

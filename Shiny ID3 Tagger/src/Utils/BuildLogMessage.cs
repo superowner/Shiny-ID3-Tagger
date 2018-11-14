@@ -24,16 +24,18 @@ namespace Utils
 		/// <returns>The log message as list of string. Each list element represents a new line</returns>
 		internal static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response)
 		{
-			// Add parameters from request
-			List<string> errorMsg = new List<string>
-			{
-				"Request:  " + request.Method + " " + request.RequestUri.OriginalString,
-			};
+			List<string> errorMsg = new List<string>();
 
-			// Add headers
-			foreach (var element in request.Headers)
+			// If request exists, add all parameters from request
+			if (request != null)
 			{
-				errorMsg.Add("Header:   " + element.Key + ": " + string.Join(" ", element.Value));
+				errorMsg.Add("Request:  " + request.Method + " " + request.RequestUri.OriginalString);
+
+				// Add headers
+				foreach (var element in request.Headers)
+				{
+					errorMsg.Add("Header:   " + element.Key + ": " + string.Join(" ", element.Value));
+				}
 			}
 
 			// If post body exists, add it
@@ -43,12 +45,12 @@ namespace Utils
 				requestContent = string.Empty;
 			}
 
-			// if response exists, add it
+			// If response exists, add it
 			if (response != null)
 			{
 				string responseContent = response.Content.ReadAsStringAsync().Result;
-				errorMsg.Add("Response: " + responseContent);
 				errorMsg.Add("Status:   " + response.ReasonPhrase + ": " + (int)response.StatusCode);
+				errorMsg.Add("Response: " + responseContent);
 			}
 
 			return errorMsg;
