@@ -28,11 +28,11 @@ namespace GetLyrics
 	{
 		/// <summary>
 		/// Gets lyrics from viewlyrics API
-		/// https://github.com/rikels/LyricsSearch/blob/master/lyrics.py#L88
-		/// https://github.com/PedroHLC/ViewLyricsOpenSearcher
-		/// https://github.com/PedroHLC/ViewLyricsOpenSearcher/blob/master/viewlyricsopensearcher.php#L60
-		/// https://github.com/osdlyrics/osdlyrics/blob/master/lyricsources/viewlyrics/viewlyrics.py
-		/// LRC format explained: https://wiki.mobileread.com/wiki/LRC
+		/// LRC format explained: <seealso href="https://wiki.mobileread.com/wiki/LRC"/>
+		/// <seealso href="https://github.com/rikels/LyricsSearch/blob/master/lyrics.py#L88"/>
+		/// <seealso href="https://github.com/PedroHLC/ViewLyricsOpenSearcher"/>
+		/// <seealso href="https://github.com/PedroHLC/ViewLyricsOpenSearcher/blob/master/viewlyricsopensearcher.php#L60"/>
+		/// <seealso href="https://github.com/osdlyrics/osdlyrics/blob/master/lyricsources/viewlyrics/viewlyrics.py"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="tagNew">The input artist and song title to search for</param>

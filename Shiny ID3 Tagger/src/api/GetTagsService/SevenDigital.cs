@@ -25,7 +25,7 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from SevenDigital API
-		/// http://docs.7digital.com/#_release_details_get
+		/// <seealso href="http://docs.7digital.com/#_release_details_get"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>

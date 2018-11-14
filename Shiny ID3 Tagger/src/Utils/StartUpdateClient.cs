@@ -17,7 +17,7 @@ namespace Utils
 
 	/// <summary>
 	/// Represents the Utility class which holds various helper functions
-	/// https://stackoverflow.com/a/13806752/935614
+	/// <seealso href="https://stackoverflow.com/a/13806752/935614"/>
 	/// </summary>
 	internal partial class Utils
 	{
@@ -50,7 +50,7 @@ namespace Utils
 
 			// RECEIVE
 			// Set up a named pipe server and listen if UpdateClient has started
-			var server = new NamedPipeServerStream("UpdateClientToMainApp");
+			NamedPipeServerStream server = new NamedPipeServerStream("UpdateClientToMainApp");
 			server.WaitForConnection();
 
 			StreamReader reader = new StreamReader(server);
@@ -61,7 +61,7 @@ namespace Utils
 
 			while (true)
 			{
-				var message = reader.ReadLine();
+				string message = reader.ReadLine();
 
 				string[] debugMsg =
 				{
@@ -84,9 +84,11 @@ namespace Utils
 
 			StreamWriter writer = new StreamWriter(client);
 
+			Process mainAppProcess = Process.GetCurrentProcess();
+
 			// Reply the path of this exe and the own process ID
-			writer.WriteLine("path = " + AppDomain.CurrentDomain.BaseDirectory);
-			writer.WriteLine("id = " + Process.GetCurrentProcess().Id);
+			writer.WriteLine("path = " + mainAppProcess.MainModule.FileName);
+			writer.WriteLine("id = " + mainAppProcess.Id);
 			writer.Flush();
 
 			Application.Exit();

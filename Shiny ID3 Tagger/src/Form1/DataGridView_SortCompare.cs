@@ -20,7 +20,7 @@ namespace Shiny_ID3_Tagger
 	{
 		/// <summary>
 		/// Custom sort rules when sorting datagridview columns. tries to convert string to dates or integers
-		/// https://social.msdn.microsoft.com/Forums/windows/en-US/43a85553-2b94-4f4e-9db3-498311af4ecd/datagridview-sorting-with-null-values?forum=winforms
+		/// <seealso href="https://social.msdn.microsoft.com/Forums/windows/en-US/43a85553-2b94-4f4e-9db3-498311af4ecd/datagridview-sorting-with-null-values?forum=winforms"/>
 		/// </summary>
 		/// <param name="sender">The object which has raised the event</param>
 		/// <param name="e">Contains additional information about the event</param>

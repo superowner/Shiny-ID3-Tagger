@@ -19,8 +19,8 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
-		/// More info on MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
+		/// Valid date formats for ID3 according to <seealso href="http://id3.org/id3v2.4.0-structure"/>
+		/// More info on MSDN about standard dateTime formats <seealso href="https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx"/>
 		/// </summary>
 		internal static readonly string[] DateTimeformats =
 		{

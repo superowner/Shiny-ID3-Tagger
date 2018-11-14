@@ -26,7 +26,7 @@ namespace GetLyrics
 	{
 		/// <summary>
 		/// Gets lyrics from chartlyrics API
-		/// http://www.chartlyrics.com/api.aspx
+		/// <seealso href="http://www.chartlyrics.com/api.aspx"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="tagNew">The input artist and song title to search for</param>

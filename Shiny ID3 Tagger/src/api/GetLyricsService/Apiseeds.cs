@@ -25,8 +25,8 @@ namespace GetLyrics
 	{
 		/// <summary>
 		/// Gets lyrics from Apiseeds API
-		/// https://apiseeds.com/account/dashboard
-		/// https://apiseeds.com/documentation/lyrics
+		/// <seealso href="https://apiseeds.com/account/dashboard"/>
+		/// <seealso href="https://apiseeds.com/documentation/lyrics"/>
 		/// Warning: Can only do 20.000 calls per month
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>

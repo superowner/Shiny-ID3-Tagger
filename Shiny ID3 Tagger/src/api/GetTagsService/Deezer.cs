@@ -25,9 +25,9 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Deezer API
-		/// http://developers.deezer.com/api/search
-		/// http://developers.deezer.com/api/explorer
-		/// http://developers.deezer.com/api/search/autocomplete
+		/// <seealso href="http://developers.deezer.com/api/search"/>
+		/// <seealso href="http://developers.deezer.com/api/explorer"/>
+		/// <seealso href="http://developers.deezer.com/api/search/autocomplete"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>

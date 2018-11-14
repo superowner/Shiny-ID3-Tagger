@@ -27,6 +27,8 @@ namespace Utils
 	{
 		/// <summary>
 		/// Checks for updates and downloads newest program files from GitHub
+		/// <seealso href="https://developer.github.com/v3/"/>
+		/// <seealso href="https://git-scm.com/docs/git-show"/>
 		/// </summary>
 		/// <param name="showMessages">Sets if the update messages should be printed. Default is true</param>
 		/// <returns>A <see cref="Task"/>Representing the asynchronous operation.</returns>
@@ -79,8 +81,6 @@ namespace Utils
 			// lastCommit file is automatically created after each built run via Visual Studio project properties > post build command
 			// 		cd $(SolutionDir)
 			// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)config\lastCommit.json"
-			// https://developer.github.com/v3/
-			// https://git-scm.com/docs/git-show
 			string configPath = AppDomain.CurrentDomain.BaseDirectory + @"config\lastCommit.json";
 			string configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.schema.json";
 			JObject lastCommit = Utils.ReadConfig(configPath, configSchemaPath);

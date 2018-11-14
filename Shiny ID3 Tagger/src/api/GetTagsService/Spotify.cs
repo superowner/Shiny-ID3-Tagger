@@ -22,9 +22,10 @@ namespace GetTags
 
 	/// <summary>
 	/// Class for Spotify API
-	/// https://developer.spotify.com/documentation/web-api/reference/search/search/#writing-a-query---guidelines
-	/// https://github.com/spotify/web-api/issues/140	=> overall results are worse when removing the chars ",:
-	/// https://github.com/spotify/web-api/issues/409
+	/// <seealso href="https://developer.spotify.com/documentation/web-api/reference/search/search/#writing-a-query---guidelines"/>
+	/// <seealso href="https://github.com/spotify/web-api/issues/140"/>
+	/// <seealso href="https://github.com/spotify/web-api/issues/409"/>
+	/// Overall results are worse when removing the chars ",:
 	/// fuzzy search with an appended asterisk (*) is useless since it only applies to a single word. And you can only use a maximum of 2 asterisk per query
 	/// A search for the following album returns nothing, but returns something as soon as ":, are removed: From "The Hunger Games: Mockingjay, Part 2" Soundtrack
 	/// </summary>
@@ -133,7 +134,8 @@ namespace GetTags
 						}
 
 						// ###########################################################################
-						// "genres" is always empty for track and album lookups. Seems like a general Spotify issue: https://github.com/spotify/web-api/issues/157
+						// "genres" is always empty for track and album lookups. Seems like a general Spotify issue
+						// https://github.com/spotify/web-api/issues/157
 						// Only artist lookups provide sometimes a genre. But they aren't sorted or weighted. Therefore artist genres produce bad results most of the time
 						string artistUrl = (string)searchData.SelectToken("tracks.items[0].artists[0].href");
 

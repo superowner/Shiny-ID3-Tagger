@@ -26,8 +26,8 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 tags from MusicGraph API
-		/// https://developer.musicgraph.com/api-docs/v2/tracks
 		/// "limit=1" should not be used, filtering on client side is a better
+		/// <seealso href="https://developer.musicgraph.com/api-docs/v2/tracks"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -62,7 +62,7 @@ namespace GetTags
 				}
 			}
 
-			var account = (from item in User.Accounts[o.Service]
+			JToken account = (from item in User.Accounts[o.Service]
 						   orderby item["lastUsed"] ascending
 						   select item).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;

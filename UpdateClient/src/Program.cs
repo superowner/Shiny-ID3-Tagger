@@ -30,9 +30,8 @@ namespace UpdateClient
 		private static void Main(string[] args)
 		{
 			string regExPattern = "(?<key>.*?) = (?<value>.*)";
-			string mainAppDir = null;
+			string mainAppFullPath = null;
 			string mainAppProcessId = null;
-			string mainAppName = "Shiny ID3 Tagger.exe";
 
 			// SEND
 			// Set up a named pipe client and send that UpdateClient has started
@@ -47,14 +46,14 @@ namespace UpdateClient
 
 			// RECEIVE
 			// Set up a named pipe server and listen for infos from MainApp
-			var server = new NamedPipeServerStream("MainAppToUpdateClient");
+			NamedPipeServerStream server = new NamedPipeServerStream("MainAppToUpdateClient");
 			server.WaitForConnection();
 
 			StreamReader reader = new StreamReader(server);
 
 			while (true)
 			{
-				var message = reader.ReadLine();
+				string message = reader.ReadLine();
 
 				// Parse which message was send
 				if (message != null)
@@ -65,7 +64,7 @@ namespace UpdateClient
 						switch (match.Groups["key"].Value)
 						{
 							case "path":
-								mainAppDir = match.Groups["value"].Value;
+								mainAppFullPath = match.Groups["value"].Value;
 								break;
 							case "id":
 								mainAppProcessId = match.Groups["value"].Value;
@@ -75,7 +74,7 @@ namespace UpdateClient
 				}
 
 				// Check if main app is closed
-				if (mainAppDir != null && mainAppProcessId != null)
+				if (mainAppFullPath != null && mainAppProcessId != null)
 				{
 					int id = int.TryParse(mainAppProcessId, out int result) ? result : -1;
 
@@ -95,13 +94,13 @@ namespace UpdateClient
 			{
 				// Updater copies all files from own folder (= temp) to main app folder
 				DirectoryInfo diSource = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-				DirectoryInfo diTarget = new DirectoryInfo(mainAppDir);
+				DirectoryInfo diTarget = new DirectoryInfo(Path.GetDirectoryName(mainAppFullPath));
 				CopyDirectory.CopyAll(diSource, diTarget);
 
 				// TODO: Dont copy this. Pass a blacklist to CopyAll
 				// 	- accounts.user.json
 				// 	- settings.user.json
-				Process.Start(mainAppDir + mainAppName);
+				Process.Start(mainAppFullPath);
 				Environment.Exit(0);
 			}
 			catch (Exception ex)

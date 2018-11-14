@@ -25,8 +25,8 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from MusixMatch API
-		/// https://developer.musixmatch.com/documentation/api-reference/matcher-track-get
-		/// https://developer.musixmatch.com/documentation/input-parameters
+		/// <seealso href="https://developer.musixmatch.com/documentation/api-reference/matcher-track-get"/>
+		/// <seealso href="https://developer.musixmatch.com/documentation/input-parameters"/>
 		/// Only 1000 hits per day
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
@@ -62,7 +62,7 @@ namespace GetTags
 				}
 			}
 
-			var account = (from item in User.Accounts[o.Service]
+			JToken account = (from item in User.Accounts[o.Service]
 						   orderby item["lastUsed"] ascending
 						   select item).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;

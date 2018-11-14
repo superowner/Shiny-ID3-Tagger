@@ -26,7 +26,7 @@ namespace GetLyrics
 	{
 		/// <summary>
 		/// Gets lyrics from LoloLyrics API
-		/// http://api.lololyrics.com/
+		/// <seealso href="http://api.lololyrics.com/"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="tagNew">The input artist and song title to search for</param>

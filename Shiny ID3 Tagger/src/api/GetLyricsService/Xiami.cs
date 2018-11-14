@@ -26,7 +26,7 @@ namespace GetLyrics
 	{
 		/// <summary>
 		/// Gets lyrics from Xiami API
-		/// https://github.com/LIU9293/musicAPI/tree/master/src
+		/// <seealso href="https://github.com/LIU9293/musicAPI/tree/master/src"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="tagNew">The input artist and song title to search for</param>

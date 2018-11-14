@@ -24,7 +24,7 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Itunes API
-		/// https://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html
+		/// <seealso href="https://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>

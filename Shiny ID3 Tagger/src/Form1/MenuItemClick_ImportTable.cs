@@ -21,7 +21,7 @@ namespace Shiny_ID3_Tagger
 	{
 		/// <summary>
 		/// Imports a CSV file to dataGridView1
-		/// https://stackoverflow.com/a/3508572/935614
+		/// <seealso href="https://stackoverflow.com/a/3508572/935614"/>
 		/// </summary>
 		/// <param name="sender">The object which has raised the event</param>
 		/// <param name="e">Contains additional information about the event</param>

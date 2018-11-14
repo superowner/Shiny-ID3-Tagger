@@ -25,8 +25,8 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Discogs API
-		/// https://www.discogs.com/developers/#page:database
-		/// http://www.onemusicapi.com/blog/2013/06/12/better-discogs-searching/
+		/// <seealso href="https://www.discogs.com/developers/#page:database"/>
+		/// <seealso href="http://www.onemusicapi.com/blog/2013/06/12/better-discogs-searching/"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>

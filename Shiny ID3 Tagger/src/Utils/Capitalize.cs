@@ -24,7 +24,7 @@ namespace Utils
 
 		/// <summary>
 		/// Capitalize a given string according to rules from link above
-		/// http://aitech.ac.jp/~ckelly/midi/help/caps.html
+		/// <seealso cref="http://aitech.ac.jp/~ckelly/midi/help/caps.html"/>
 		/// #1	The first and last words are always capitalized, and all except the words listed below are capitalized.
 		/// #2	These are lower-case, unless they are the first word or last word.
 		/// 	- articles: a, an, the

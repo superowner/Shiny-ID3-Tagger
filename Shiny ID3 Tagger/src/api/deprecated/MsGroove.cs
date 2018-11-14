@@ -26,9 +26,9 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 tags from Microsoft Groove API
-		/// https://apps.dev.microsoft.com/#/appList
-		/// https://developer.microsoft.com/de-de/dashboard/groove
-		/// https://docs.microsoft.com/en-us/groove/groove-service-rest-reference/uri-search-content#examples
+		/// <seealso href="https://apps.dev.microsoft.com/#/appList"/>
+		/// <seealso href="https://developer.microsoft.com/de-de/dashboard/groove"/>
+		/// <seealso href="https://docs.microsoft.com/en-us/groove/groove-service-rest-reference/uri-search-content#examples"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>

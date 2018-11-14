@@ -24,8 +24,8 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Genius API
-		/// https://genius.com/api-clients
-		/// https://docs.genius.com/#search-h2
+		/// <seealso href="https://genius.com/api-clients"/>
+		/// <seealso href="https://docs.genius.com/#search-h2"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>

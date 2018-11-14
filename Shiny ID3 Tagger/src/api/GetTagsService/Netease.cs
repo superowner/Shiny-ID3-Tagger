@@ -26,8 +26,8 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Netease API
-		/// https://github.com/JounQin/netease-muisc-api/tree/master/api
-		/// https://github.com/yanunon/NeteaseCloudMusic/wiki/NetEase-cloud-music-analysis-API-%5BEN%5D
+		/// <seealso href="https://github.com/JounQin/netease-muisc-api/tree/master/api"/>
+		/// <seealso href="https://github.com/yanunon/NeteaseCloudMusic/wiki/NetEase-cloud-music-analysis-API-%5BEN%5D"/>
 		/// parameter "type=10" instead of "type=1" filters for albums only. But produces less results. Stick to using "专辑" as post filter
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>

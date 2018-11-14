@@ -24,8 +24,8 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from LastFm API
-		/// http://www.last.fm/api/rest
-		/// http://www.last.fm/api/show/track.getInfo
+		/// <seealso href="http://www.last.fm/api/rest"/>
+		/// <seealso href="http://www.last.fm/api/show/track.getInfo"/>
 		/// limit=1 not available for track.getInfo or album.getInfo method
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>

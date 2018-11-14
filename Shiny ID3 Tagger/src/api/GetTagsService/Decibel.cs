@@ -26,9 +26,9 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Decibel API
-		/// https://developer.quantonemusic.com/authentication-v3
-		/// https://developer.quantonemusic.com/rest-api-v3#classQueryAlbums
-		/// https://developer.quantonemusic.com/object-documentation
+		/// <seealso href="https://developer.quantonemusic.com/authentication-v3"/>
+		/// <seealso href="https://developer.quantonemusic.com/rest-api-v3#classQueryAlbums"/>
+		/// <seealso href="https://developer.quantonemusic.com/object-documentation"/>
 		/// titleSearchType=PartialName has poorer results than without
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
@@ -64,7 +64,7 @@ namespace GetTags
 				}
 			}
 
-			var account = (from acc in User.Accounts["Decibel"]
+			JToken account = (from acc in User.Accounts["Decibel"]
 							orderby acc["lastUsed"] ascending
 							select acc).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;

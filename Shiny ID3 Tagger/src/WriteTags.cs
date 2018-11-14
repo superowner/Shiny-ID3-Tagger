@@ -145,7 +145,7 @@ namespace Shiny_ID3_Tagger
 		/// <summary>
 		/// Overwrite tag values with results from API search
 		/// Runs once per file
-		/// https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs
+		/// <seealso href="https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs"/>
 		/// </summary>
 		/// <param name="tagFile">The current file to modify</param>
 		/// <param name="row">The dataGridView1 row for this file which is used as data source</param>
@@ -476,7 +476,7 @@ namespace Shiny_ID3_Tagger
 					try
 					{
 						// Save() method from original taglib project offers more options. But they are not supported in taglib-sharp
-						// bool TagLib::MPEG::File::save(int tags, bool stripOthers, int id3v2Version, bool duplicateTags)
+						// 		bool TagLib::MPEG::File::save(int tags, bool stripOthers, int id3v2Version, bool duplicateTags)
 						// https://taglib.org/api/classTagLib_1_1MPEG_1_1File.html#acfe8c97e6d551f5bc1f588d3c2bf5bf5
 						tagFile.Save();
 						successWrite = true;

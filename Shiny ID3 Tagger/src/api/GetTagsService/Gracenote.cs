@@ -25,9 +25,9 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Gracenote API
-		/// https://developer.gracenote.com/web-api
-		/// https://developer.gracenote.com/sites/default/files/web/html/index.html#PDFs/Music-Web-API-Developers-Guide-o.pdf
-		/// https://developer.gracenote.com/sites/default/files/web/webapi/index.html#music-web-api/Registering%20a%20Device.html#scroll-bookmark-25
+		/// <seealso href="https://developer.gracenote.com/web-api"/>
+		/// <seealso href="https://developer.gracenote.com/sites/default/files/web/html/index.html#PDFs/Music-Web-API-Developers-Guide-o.pdf"/>
+		/// <seealso href="https://developer.gracenote.com/sites/default/files/web/webapi/index.html#music-web-api/Registering%20a%20Device.html#scroll-bookmark-25"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>

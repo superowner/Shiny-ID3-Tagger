@@ -27,7 +27,7 @@ namespace GetLyrics
 	{
 		/// <summary>
 		/// Gets lyrics from Netease API
-		/// https://github.com/JounQin/netease-muisc-api/blob/master/api/lyric.js
+		/// <seealso href="https://github.com/JounQin/netease-muisc-api/blob/master/api/lyric.js"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="tagNew">The input artist and song title to search for</param>

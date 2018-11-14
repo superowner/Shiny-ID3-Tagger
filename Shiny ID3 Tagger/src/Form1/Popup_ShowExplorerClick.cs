@@ -20,7 +20,7 @@ namespace Shiny_ID3_Tagger
 	{
 		/// <summary>
 		/// Open Windows Explorer and navigates to file from active row (Despite multiple rows can be selected, only one row can will be active)
-		/// https://stackoverflow.com/questions/334630/opening-a-folder-in-explorer-and-selecting-a-file
+		/// <seealso href="https://stackoverflow.com/q/334630/935614"/>
 		/// </summary>
 		/// <param name="sender">The object which has raised the event</param>
 		/// <param name="e">Contains additional information about the event</param>

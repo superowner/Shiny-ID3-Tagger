@@ -25,9 +25,9 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from QQ API
-		/// http://blog.51cto.com/limeixiong/1969701
-		/// https://github.com/LIU9293/musicAPI/blob/master/src/qq.js
-		/// https://github.com/metowolf/TencentMusicApi/blob/master/TencentMusicAPI.php
+		/// <seealso href="http://blog.51cto.com/limeixiong/1969701"/>
+		/// <seealso href="https://github.com/LIU9293/musicAPI/blob/master/src/qq.js"/>
+		/// <seealso href="https://github.com/metowolf/TencentMusicApi/blob/master/TencentMusicAPI.php"/>
 		/// Very bad search results. Already tried it twice to improve it but without any success
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>

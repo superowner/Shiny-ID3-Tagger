@@ -27,12 +27,10 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from MusicBrainz API
-		/// https://wiki.musicbrainz.org/Development/XML_Web_Service/Version_2
-		/// https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2/Search
-		/// https://musicbrainz.org/doc/MusicBrainz_Database
+		/// <seealso href="https://wiki.musicbrainz.org/Development/XML_Web_Service/Version_2"/>
+		/// <seealso href="https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2/Search"/>
+		/// <seealso href="https://musicbrainz.org/doc/MusicBrainz_Database"/>
 		/// limit=1 cannot be used, client side filter is used to sort by release date
-		/// List of mirror servers: http://www.tranquilbase.org/category/musicbrainz/
-		/// 1) https://musicbrainz.org		2) http://musicbrainz-mirror.eu:5000	3) http://musicbrainz.fin-alice.de:5000		// 1) https://beta.musicbrainz.org
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
