@@ -33,7 +33,7 @@ namespace Utils
 		internal static async Task<bool> CheckAndDownloadUpdate(bool showMessages = true)
 		{
 			DateTimeOffset? localCommitDate = null;
-			DateTime? latestReleaseDate = null;
+			DateTimeOffset? latestReleaseDate = null;
 			JObject latestReleaseJson = null;
 
 			string zipFullPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
@@ -81,7 +81,9 @@ namespace Utils
 			// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)config\lastCommit.json"
 			// https://developer.github.com/v3/
 			// https://git-scm.com/docs/git-show
-			JObject lastCommit = Utils.ReadConfig(@"config\lastCommit.json", @"config\schemas\lastCommit.schema.json");
+			string configPath = AppDomain.CurrentDomain.BaseDirectory + @"config\lastCommit.json";
+			string configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.schema.json";
+			JObject lastCommit = Utils.ReadConfig(configPath, configSchemaPath);
 
 			// Check if commit date could be read
 			if (lastCommit == null)
@@ -128,7 +130,7 @@ namespace Utils
 					latestReleaseDate = Utils.ConvertStringToDate((string)latestReleaseJson.SelectToken("created_at"));
 
 					// Check if latest release date could be found
-					if (latestReleaseDate == default(DateTime))
+					if (latestReleaseDate == default(DateTimeOffset))
 					{
 						string[] warningMsg =
 						{
@@ -142,21 +144,22 @@ namespace Utils
 
 				// ######################################################################################################################
 				// If local file date is equal or newer then release date, than there is no update availale
-				if (localCommitDate >= latestReleaseDate)
-				{
-					if (showMessages)
-					{
-						string[] generalMsg =
-						{
-							"No newer version found!",
-							"Your version:\t" + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
-							"Newest version:\t" + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
-						};
-						Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
-					}
+				// UNDONE: Include this command when Updater is finished
+				// if (localCommitDate >= latestReleaseDate)
+				// {
+				// 	if (showMessages)
+				// 	{
+				// 		string[] generalMsg =
+				// 		{
+				// 			"No newer version found!",
+				// 			"Your version:\t" + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
+				// 			"Newest version:\t" + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
+				// 		};
+				// 		Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
+				// 	}
 
-					return false;
-				}
+				// 	return false;
+				// }
 
 				// Ask user if he want's to update the program
 				DialogResult dialogResult = MessageBox.Show(

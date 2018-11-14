@@ -46,8 +46,13 @@ namespace Shiny_ID3_Tagger
 			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
 			// Get user settings and user accounts
-			User.Settings = Utils.ReadConfig(@"config\settings.json", @"config\schemas\settings.schema.json");
-			User.Accounts = Utils.ReadConfig(@"config\accounts.json", @"config\schemas\accounts.schema.json");
+			string configPath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.json";
+			string configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\settings.schema.json";
+			User.Settings = Utils.ReadConfig(configPath, configSchemaPath);
+
+			configPath = AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.json";
+			configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\accounts.schema.json";
+			User.Accounts = Utils.ReadConfig(configPath, configSchemaPath);
 
 			// If user settings or user accounts are not available: Don't continue, disable UI, let user read error message
 			if (User.Accounts == null || User.Settings == null)

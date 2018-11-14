@@ -4,7 +4,8 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// TODO: Implement a way to exit loop after some seconds (in case main app does not shutdown)
+// TODO: Find a way to cancel while loop if main app does not shutdown in time
+//       A break after 2 seconds in loop does not work for whatever reason
 // TODO: Implement a way to signal main app that copying failed
 
 namespace UpdateClient
@@ -33,21 +34,27 @@ namespace UpdateClient
 			string mainAppProcessId = null;
 			string mainAppName = "Shiny ID3 Tagger.exe";
 
-			NamedPipeClientStream client = new NamedPipeClientStream("Shiny_Id3_Tagger_UpdateClient");
+			// SEND
+			// Set up a named pipe client and send that UpdateClient has started
+			NamedPipeClientStream client = new NamedPipeClientStream("UpdateClientToMainApp");
 			client.Connect();
 
-			StreamReader reader = new StreamReader(client);
-			StreamWriter writer = new StreamWriter(client)
-			{
-				AutoFlush = true,
-			};
+			StreamWriter writer = new StreamWriter(client);
 
 			// Send message to main app that we are running. Don't change this string
 			writer.WriteLine("UpdateClient is running");
+			writer.Flush();
+
+			// RECEIVE
+			// Set up a named pipe server and listen for infos from MainApp
+			var server = new NamedPipeServerStream("MainAppToUpdateClient");
+			server.WaitForConnection();
+
+			StreamReader reader = new StreamReader(server);
 
 			while (true)
 			{
-				string message = reader.ReadLine();
+				var message = reader.ReadLine();
 
 				// Parse which message was send
 				if (message != null)
@@ -70,7 +77,7 @@ namespace UpdateClient
 				// Check if main app is closed
 				if (mainAppDir != null && mainAppProcessId != null)
 				{
-					int id = int.TryParse(mainAppProcessId, out int result) ? result : 0;
+					int id = int.TryParse(mainAppProcessId, out int result) ? result : -1;
 
 					Task.Delay(1000);
 
@@ -91,8 +98,7 @@ namespace UpdateClient
 				DirectoryInfo diTarget = new DirectoryInfo(mainAppDir);
 				CopyDirectory.CopyAll(diSource, diTarget);
 
-				// TODO: Continue here
-				// Dont copy this. Pass a blacklist to CopyAll
+				// TODO: Dont copy this. Pass a blacklist to CopyAll
 				// 	- accounts.user.json
 				// 	- settings.user.json
 				Process.Start(mainAppDir + mainAppName);

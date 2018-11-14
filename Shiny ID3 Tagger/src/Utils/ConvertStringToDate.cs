@@ -46,11 +46,11 @@ namespace Utils
 		/// <summary>Tries to convert a given string to a dateTime object</summary>
 		/// <param name="dateString">Input string which represents a date. Must match one of the valid formats</param>
 		/// <returns>The DateTime object representing the converted string value</returns>
-		internal static DateTime ConvertStringToDate(string dateString)
+		internal static DateTimeOffset ConvertStringToDate(string dateString)
 		{
 			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
 			{
-				if (DateTime.TryParseExact(dateString, DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime resultDate))
+				if (DateTimeOffset.TryParseExact(dateString, DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTimeOffset resultDate))
 				{
 					return resultDate;
 				}

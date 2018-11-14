@@ -4,8 +4,6 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// REVIEW: Is there a better save() method? https://taglib.org/api/classTagLib_1_1MPEG_1_1File.html#acfe8c97e6d551f5bc1f588d3c2bf5bf5
-// 				bool TagLib::MPEG::File::save(int tags, bool stripOthers, int id3v2Version, bool duplicateTags)
 
 namespace Shiny_ID3_Tagger
 {
@@ -73,7 +71,7 @@ namespace Shiny_ID3_Tagger
 						tagFile.RemoveTags(TagTypes.Id3v1);
 
 						// Store all existing frames in a container which can be altered freely without actually touching the file
-						TagLib.Id3v2.Tag tagContainer = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
+						TagLib.Id3v2.Tag tagContainer = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true) as TagLib.Id3v2.Tag;
 
 						// Set ID3 version to ID3v2.3 which means we have to use UTF16 for all strings (a "4" would mean ID3v2.4 where UTF8 must be used)
 						tagContainer.Version = 3;
@@ -477,6 +475,9 @@ namespace Shiny_ID3_Tagger
 				{
 					try
 					{
+						// Save() method from original taglib project offers more options. But they are not supported in taglib-sharp
+						// bool TagLib::MPEG::File::save(int tags, bool stripOthers, int id3v2Version, bool duplicateTags)
+						// https://taglib.org/api/classTagLib_1_1MPEG_1_1File.html#acfe8c97e6d551f5bc1f588d3c2bf5bf5
 						tagFile.Save();
 						successWrite = true;
 						break;

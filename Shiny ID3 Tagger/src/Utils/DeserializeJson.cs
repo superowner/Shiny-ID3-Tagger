@@ -4,7 +4,6 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// REVIEW: Refactor whole method
 
 namespace Utils
 {
@@ -17,49 +16,52 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary> Deserialize a JSON string to a JSON.NET JObject </summary>
-		/// <param name="jsonStr">The input string which should be deserialized</param>
+		/// <param name="jsonStr">The input string which should be deserialized. If jsonStr = null, then null will be returned</param>
 		/// <param name="throwError">True or false (default) if parsing errors should throw an error</param>
 		/// <returns>The new JObject holding all the values from content string</returns>
 		internal static JObject DeserializeJson(string jsonStr, bool throwError = true)
 		{
-			JObject jsonObj = null;
+			// string.Empty is used to prevent a NullReference exception
+			return JsonConvert.DeserializeObject<JObject>(jsonStr ?? string.Empty, GetJsonDeserializerSettings(throwError));
+		}
 
-			if (jsonStr != null)
+		/// <summary>
+		/// Set custom settings for JSON deserialization
+		/// 1) Intend each child 4 spaces
+		/// 2) Don't convert a date string to date objects. There is a seperat method for that
+		/// <seealso href="https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_Formatting.htm"/>
+		/// <seealso href="https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_DateParseHandling.htm"/>
+		/// <seealso href="https://www.newtonsoft.com/json/help/html/P_Newtonsoft_Json_Serialization_ErrorContext_Handled.htm"/>
+		/// </summary>
+		/// <returns>A JsonSerializerSettings object holding all settings</returns>
+		private static JsonSerializerSettings GetJsonDeserializerSettings(bool throwError)
+		{
+			JsonSerializerSettings jsonSettings = new JsonSerializerSettings
 			{
-				// Set custom settings for JSON parser
-				JsonSerializerSettings jsonSettings = new JsonSerializerSettings
-				{
-					Formatting = Formatting.Indented,
-					DateParseHandling = DateParseHandling.None,
-				};
+				Formatting = Formatting.Indented,
+				DateParseHandling = DateParseHandling.None,
+			};
 
+			jsonSettings.Error += (obj, errorArgs) =>
+			{
 				if (throwError)
 				{
-					// Build a more useful error message when JSON parsing fails later
-					jsonSettings.Error += (obj, errorArgs) =>
+					// Build a more useful error message when JSON parsing fails
+					string[] warningMsg =
 					{
-						string[] warningMsg =
-						{
 							"WARNING:  Could not convert string to JSON!",
 							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n'),
-						};
-						Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 					};
+					Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 				}
 				else
 				{
-					// If throwError is set to false, then set error on handled=true. This method doesn't throw errors then
-					jsonSettings.Error += (obj, errorArgs) =>
-					{
-						errorArgs.ErrorContext.Handled = true;
-					};
+					// Set error on handled=true. DeserializeJson doesn't throw errors then
+					errorArgs.ErrorContext.Handled = true;
 				}
+			};
 
-				// Parse JSON
-				jsonObj = JsonConvert.DeserializeObject<JObject>(jsonStr, jsonSettings);
-			}
-
-			return jsonObj;
+			return jsonSettings;
 		}
 	}
 }
