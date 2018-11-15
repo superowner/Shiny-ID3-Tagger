@@ -1,7 +1,7 @@
 ﻿{
 	"definitions": {},
 	"$schema": "http://json-schema.org/draft-06/schema#",
-	"$id": "http://example.com/example.json",
+	"$id": "https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/accounts.default.json",
 	"type": "object",
 	"properties": {
 		"GitHub": {

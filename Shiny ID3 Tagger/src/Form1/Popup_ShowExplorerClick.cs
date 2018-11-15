@@ -28,7 +28,8 @@ namespace Shiny_ID3_Tagger
 		{
 			if (GlobalVariables.ActiveDGV.CurrentRow != null)
 			{
-				string filePath = GlobalVariables.ActiveDGV.CurrentRow.Cells[this.filepath1.Index].Value.ToString();
+				var cell = GlobalVariables.ActiveDGV.CurrentRow.Cells[this.filepath1.Index];
+				string filePath = cell.Value.ToString();
 
 				if (File.Exists(filePath))
 				{

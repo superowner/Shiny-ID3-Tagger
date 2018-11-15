@@ -1,0 +1,276 @@
+﻿{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"$id": "https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/accounts.user.json",
+	"type": "object",
+	"properties": {
+		"GitHub": {
+			"$id": "/properties/GitHub",
+			"type": "object",
+			"properties": {
+				"AccessToken": {
+					"$id": "/properties/GitHub/properties/AccessToken",
+					"type": "string"
+				}
+			},
+			"required": [
+				"AccessToken"
+			]
+		},
+		"7digital": {
+			"$id": "/properties/7digital",
+			"type": "object",
+			"properties": {
+				"key": {
+					"$id": "/properties/7digital/properties/key",
+					"type": "string"
+				}
+			},
+			"required": [
+				"key"
+			]
+		},
+		"Amazon": {
+			"$id": "/properties/Amazon",
+			"type": "object",
+			"properties": {
+				"AssociateTag": {
+					"$id": "/properties/Amazon/properties/AssociateTag",
+					"type": "string"
+				},
+				"AccessKey": {
+					"$id": "/properties/Amazon/properties/AccessKey",
+					"type": "string"
+				},
+				"SecretKey": {
+					"$id": "/properties/Amazon/properties/SecretKey",
+					"type": "string"
+				}
+			},
+			"required": [
+				"AssociateTag",
+				"AccessKey",
+				"SecretKey"
+			]
+		},
+		"Apiseeds": {
+			"$id": "/properties/Apiseeds",
+			"type": "object",
+			"properties": {
+				"ApiKey": {
+					"$id": "/properties/Apiseeds/properties/ApiKey",
+					"type": "string"
+				}
+			},
+			"required": [
+				"ApiKey"
+			]
+		},
+		"Decibel": {
+			"$id": "/properties/Decibel",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$id": "/properties/Decibel/items",
+				"type": "object",
+				"properties": {
+					"AppId": {
+						"$id": "/properties/Decibel/items/properties/AppId",
+						"type": "string"
+					},
+					"AppKey": {
+						"$id": "/properties/Decibel/items/properties/AppKey",
+						"type": "string"
+					}
+				},
+				"required": [
+					"AppId",
+					"AppKey"
+				]
+			}
+		},
+		"Discogs": {
+			"$id": "/properties/Discogs",
+			"type": "object",
+			"properties": {
+				"Key": {
+					"$id": "/properties/Discogs/properties/Key",
+					"type": "string"
+				},
+				"Secret": {
+					"$id": "/properties/Discogs/properties/Secret",
+					"type": "string"
+				}
+			},
+			"required": [
+				"Key",
+				"Secret"
+			]
+		},
+		"Genius": {
+			"$id": "/properties/Genius",
+			"type": "object",
+			"properties": {
+				"AccessToken": {
+					"$id": "/properties/Genius/properties/AccessToken",
+					"type": "string"
+				}
+			},
+			"required": [
+				"AccessToken"
+			]
+		},
+		"Gracenote": {
+			"$id": "/properties/Gracenote",
+			"type": "object",
+			"properties": {
+				"ClientId": {
+					"$id": "/properties/Gracenote/properties/ClientId",
+					"type": "string"
+				},
+				"UserId": {
+					"$id": "/properties/Gracenote/properties/UserId",
+					"type": "string"
+				}
+			},
+			"required": [
+				"ClientId",
+				"UserId"
+			]
+		},
+		"Lastfm": {
+			"$id": "/properties/Lastfm",
+			"type": "object",
+			"properties": {
+				"ApiKey": {
+					"$id": "/properties/Lastfm/properties/ApiKey",
+					"type": "string"
+				}
+			},
+			"required": [
+				"ApiKey"
+			]
+		},
+		"MusicGraph": {
+			"$id": "/properties/MusicGraph",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$id": "/properties/MusicGraph/items",
+				"type": "object",
+				"properties": {
+					"AppKey": {
+						"$id": "/properties/MusicGraph/items/properties/AppKey",
+						"type": "string"
+					}
+				},
+				"required": [
+					"AppKey"
+				]
+			}
+		},
+		"Musixmatch": {
+			"$id": "/properties/Musixmatch",
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$id": "/properties/Musixmatch/items",
+				"type": "object",
+				"properties": {
+					"ApiKey": {
+						"$id": "/properties/Musixmatch/items/properties/ApiKey",
+						"type": "string"
+					}
+				},
+				"required": [
+					"ApiKey"
+				]
+			}
+		},
+		"MsGroove": {
+			"$id": "/properties/MsGroove",
+			"type": "object",
+			"properties": {
+				"ClientId": {
+					"$id": "/properties/MsGroove/properties/ClientId",
+					"type": "string"
+				},
+				"ClientSecret": {
+					"$id": "/properties/MsGroove/properties/ClientSecret",
+					"type": "string"
+				}
+			},
+			"required": [
+				"ClientId",
+				"ClientSecret"
+			]
+		},
+		"Napster": {
+			"$id": "/properties/Napster",
+			"type": "object",
+			"properties": {
+				"ApiKey": {
+					"$id": "/properties/Napster/properties/ApiKey",
+					"type": "string"
+				}
+			},
+			"required": [
+				"ApiKey"
+			]
+		},
+		"Qobuz": {
+			"$id": "/properties/Qobuz",
+			"type": "object",
+			"properties": {
+				"AppId": {
+					"$id": "/properties/Qobuz/properties/AppId",
+					"type": "string"
+				}
+			},
+			"required": [
+				"AppId"
+			]
+		},
+		"Spotify": {
+			"$id": "/properties/Spotify",
+			"type": "object",
+			"properties": {
+				"ClientId": {
+					"$id": "/properties/Spotify/properties/ClientId",
+					"type": "string"
+				},
+				"ClientSecret": {
+					"$id": "/properties/Spotify/properties/ClientSecret",
+					"type": "string"
+				}
+			},
+			"required": [
+				"ClientId",
+				"ClientSecret"
+			]
+		},
+		"Tidal": {
+			"$id": "/properties/Tidal",
+			"type": "object",
+			"properties": {
+				"Username": {
+					"$id": "/properties/Tidal/properties/Username",
+					"type": "string"
+				},
+				"Password": {
+					"$id": "/properties/Tidal/properties/Password",
+					"type": "string"
+				},
+				"Token": {
+					"$id": "/properties/Tidal/properties/Token",
+					"type": "string"
+				}
+			},
+			"required": [
+				"Username",
+				"Password",
+				"Token"
+			]
+		}
+	}
+}

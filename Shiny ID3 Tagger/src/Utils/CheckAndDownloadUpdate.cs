@@ -38,18 +38,19 @@ namespace Utils
 			DateTimeOffset? latestReleaseDate = null;
 			JObject latestReleaseJson = null;
 
+			string updateProcessName = "UpdateClient";
 			string zipFullPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
 			string updateFolder = Path.GetTempPath() + @"shiny-id3-tagger-update\";
-			string updateProcessName = "UpdateClient";
 			string updateExeFullPath = updateFolder + "UpdateClient.exe";
+			string updateLogFullPath = updateFolder + "update.log";
 
 			// ######################################################################################################################
-			// Get all running updater process
+			// Get running updater process
 			Process oldUpdateProcess = (from process in Process.GetProcessesByName(updateProcessName)
 									 where process.MainModule.FileName == updateExeFullPath
 									 select process).FirstOrDefault();
 
-			// Check if an old updater is still running
+			// Check if a running updater process was found
 			if (oldUpdateProcess != null)
 			{
 				string[] warningMsg =
@@ -62,15 +63,15 @@ namespace Utils
 				return false;
 			}
 
-			// Clean up potential old update file and then check if it's not present anymore
-			bool isDeleted = await DeleteFileOrFolder(zipFullPath);
+			// Clean up old update folders and then check if it's not present anymore
+			bool isDeleted = await DeleteFileOrFolder(updateFolder);
 			if (isDeleted == false)
 			{
 				return false;
 			}
 
-			// Clean up potential old update folders and then check if it's not present anymore
-			isDeleted = await DeleteFileOrFolder(updateFolder);
+			// Clean up old update file and then check if it's not present anymore
+			isDeleted = await DeleteFileOrFolder(zipFullPath);
 			if (isDeleted == false)
 			{
 				return false;
@@ -80,9 +81,9 @@ namespace Utils
 			// Get the commit date of the local program files
 			// lastCommit file is automatically created after each built run via Visual Studio project properties > post build command
 			// 		cd $(SolutionDir)
-			// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)config\lastCommit.json"
+			// 		git log -1 --pretty=format:"{commit: %%H, date: %%cI}" > "$(TargetDir)config\lastCommit.json"
 			string configPath = AppDomain.CurrentDomain.BaseDirectory + @"config\lastCommit.json";
-			string configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.schema.json";
+			string configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.json";
 			JObject lastCommit = Utils.ReadConfig(configPath, configSchemaPath);
 
 			// Check if commit date could be read

@@ -1,9 +1,12 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ValidateSchema.cs" company="Shiny ID3 Tagger">
+// <copyright file="ValidateConfig.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Review: Use $ref and $id to get rid of settings.user.schema. Use settings.default.json as schema then
+// 			The problem is, how can i have one schema with "required" and one without "required"
+// 			https://www.newtonsoft.com/jsonschema/help/html/LoadingSchemas.htm
 
 namespace Utils
 {
@@ -27,7 +30,7 @@ namespace Utils
 		/// </summary>
 		/// <param name="json">The JSON to validate</param>
 		/// <param name="schemaPath">The path to the schema file</param>
-		internal static void ValidateSchema(JObject json, string schemaPath)
+		internal static void ValidateConfig(JObject json, string schemaPath)
 		{
 			// Load schema
 			using (StreamReader schemaFile = File.OpenText(schemaPath))
@@ -42,7 +45,7 @@ namespace Utils
 				// If the config could not be validated, throw an exception
 				if (errorMessages.Count > 0)
 				{
-					string validationResult = string.Join("\n          ", (IEnumerable<string>)errorMessages);
+					string validationResult = string.Join("\n          ", errorMessages);
 
 					throw new ArgumentException(validationResult);
 				}

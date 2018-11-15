@@ -23,7 +23,7 @@ namespace Shiny_ID3_Tagger
 		/// <param name="e">Contains additional information about the event</param>
 		private void MenuItemClick_OpenSettings(object sender, EventArgs e)
 		{
-			string file = AppDomain.CurrentDomain.BaseDirectory + @"\config\settings.json";
+			string file = AppDomain.CurrentDomain.BaseDirectory + @"\config\settings.user.json";
 			Process.Start(file);
 		}
 	}
