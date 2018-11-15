@@ -45,22 +45,10 @@ namespace Shiny_ID3_Tagger
 			GlobalVariables.TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
-			// Get user settings and user accounts
-			string configPath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.json";
-			string configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\settings.schema.json";
-			User.Settings = Utils.ReadConfig(configPath, configSchemaPath);
-
-			configPath = AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.json";
-			configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\accounts.schema.json";
-			User.Accounts = Utils.ReadConfig(configPath, configSchemaPath);
+			bool isSuccessful = Utils.GetSettingsAccounts();
 
 			// If user settings or user accounts are not available: Don't continue, disable UI, let user read error message
-			if (User.Accounts == null || User.Settings == null)
-			{
-				GlobalVariables.TokenSource.Cancel();
-				this.Form_EnableUI(false);
-			}
-			else
+			if (isSuccessful)
 			{
 				// If AutoUpdate is enabled, update client files
 				if ((bool)User.Settings["AutoUpdate"])
@@ -85,6 +73,11 @@ namespace Shiny_ID3_Tagger
 						this.StartSearching(cancelToken);
 					}
 				}
+			}
+			else
+			{
+				GlobalVariables.TokenSource.Cancel();
+				this.Form_EnableUI(false);
 			}
 		}
 

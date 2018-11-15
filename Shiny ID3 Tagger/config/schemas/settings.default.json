@@ -1,7 +1,7 @@
 ﻿{
 	"definitions": {},
 	"$schema": "http://json-schema.org/draft-06/schema#",
-	"$id": "https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/settingsSchema.json",
+	"$id": "https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/settings.default.json",
 	"type": "object",
 	"properties": {
 		"LogLevel": {
@@ -44,11 +44,15 @@
 		},
 		"ThresholdRedValue": {
 			"$id": "/properties/ThresholdRedValue",
-			"type": "integer"
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 100
 		},
 		"MaxImageSize": {
 			"$id": "/properties/MaxImageSize",
-			"type": "integer"
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 9999
 		},
 		"UserAgent": {
 			"$id": "/properties/UserAgent",
@@ -57,7 +61,6 @@
 		"FilenamePatterns": {
 			"$id": "/properties/FilenamePatterns",
 			"type": "array",
-			"uniqueItems": true,
 			"items": {
 				"$id": "/properties/FilenamePatterns/items",
 				"type": "string"
@@ -69,7 +72,24 @@
 			"uniqueItems": true,
 			"items": {
 				"$id": "/properties/CoverPriority/items",
-				"type": "string"
+				"type": "string",
+				"enum": [
+					"Napster (Rhapsody)",
+					"Discogs",
+					"Qobuz",
+					"Tidal",
+					"Genius",
+					"7digital",
+					"Deezer",
+					"iTunes",
+					"Last.fm",
+					"Spotify",
+					"Gracenote (Sony)",
+					"Amazon",
+					"Musicbrainz",
+					"Netease",
+					"QQ (Tencent)"
+				]
 			}
 		},
 		"LyricsPriority": {
@@ -78,7 +98,15 @@
 			"uniqueItems": true,
 			"items": {
 				"$id": "/properties/LyricsPriority/items",
-				"type": "string"
+				"type": "string",
+				"enum": [
+					"Apiseeds",
+					"Viewlyrics",
+					"Lololyrics",
+					"Chartlyrics",
+					"Netease",
+					"Xiami"
+				]
 			}
 		}
 	},

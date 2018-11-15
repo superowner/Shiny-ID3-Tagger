@@ -44,8 +44,7 @@ namespace Utils
 				}
 			}
 
-			string jsonStr = JsonConvert.SerializeXmlNode(xml);
-			return jsonStr;
+			return JsonConvert.SerializeXmlNode(xml);
 		}
 	}
 }

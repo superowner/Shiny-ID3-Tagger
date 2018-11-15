@@ -25,7 +25,7 @@ namespace Shiny_ID3_Tagger
 		/// <param name="messageLevel">Debug level or severity of the message
 		/// 1: General (searching, writing, spelling mistake and so on)
 		/// 2: General + Error (API timeout, Config not readable, JSON malformed and so on)
-		/// 3: General + Error + Warning (all outgoing API requests, all incoming API responses)
+		/// 3: General + Error + Warning (ie. update was not possible)
 		/// 4: General + Error + Warning + Debug (all outgoing API requests, all incoming API responses)
 		/// </param>
 		/// <param name="messageType">richTextBox to use. Possible values are "Search", "Write" or "Error" (default)</param>

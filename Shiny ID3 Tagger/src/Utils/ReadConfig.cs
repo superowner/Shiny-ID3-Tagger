@@ -4,8 +4,6 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// TODO: Split settings.json in settings.default.json and settings.user.json
-// TODO: Split accounts.json in accounts.default.json and accounts.user.json
 
 namespace Utils
 {
@@ -13,7 +11,6 @@ namespace Utils
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
-	using GlobalVariables;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using Shiny_ID3_Tagger;
@@ -56,7 +53,7 @@ namespace Utils
 				}
 
 				// Validate config (can throw an ArgumentException)
-				ValidateSchema(json, schemaPath);
+				ValidateConfig(json, schemaPath);
 
 				// Return config
 				return json;
@@ -81,6 +78,20 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    Failed to validate a config file!",
+					"Config:   " + configPath,
+					"Schema:   " + schemaPath,
+					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
+				};
+				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+
+				return null;
+			}
+			catch (FormatException ex)
+			{
+				// Config file is not a valid decrypted AES256 file
+				string[] errorMsg =
+				{
+					"ERROR:    Failed to deserialize or decrypt a config file!",
 					"Config:   " + configPath,
 					"Schema:   " + schemaPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),

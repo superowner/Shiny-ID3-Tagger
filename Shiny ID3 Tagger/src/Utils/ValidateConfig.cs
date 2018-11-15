@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ValidateSchema.cs" company="Shiny ID3 Tagger">
+// <copyright file="ValidateConfig.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -27,7 +27,7 @@ namespace Utils
 		/// </summary>
 		/// <param name="json">The JSON to validate</param>
 		/// <param name="schemaPath">The path to the schema file</param>
-		internal static void ValidateSchema(JObject json, string schemaPath)
+		internal static void ValidateConfig(JObject json, string schemaPath)
 		{
 			// Load schema
 			using (StreamReader schemaFile = File.OpenText(schemaPath))

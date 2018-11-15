@@ -178,6 +178,8 @@
     <Compile Include="src\SingleInstanceController.cs" />
     <Compile Include="src\Utils\DeleteFileOrFolder.cs" />
     <Compile Include="src\Utils\IsValidImage.cs" />
+    <Compile Include="src\Utils\GetSettingsAccounts.cs" />
+    <Compile Include="src\Utils\IsValidRegex.cs" />
     <Compile Include="src\Utils\StartUpdateClient.cs" />
     <Compile Include="src\Utils\ParseInt.cs" />
     <Compile Include="src\Form1\DataGridView_CellPainting.cs">
@@ -249,7 +251,7 @@
     <Compile Include="src\Utils\ConvertStringToDate.cs" />
     <Compile Include="src\Utils\ConvertXmlToJson.cs" />
     <Compile Include="src\Utils\DeserializeJson.cs" />
-    <Compile Include="src\Utils\GetResponse.cs" />
+    <Compile Include="src\Utils\GetHttpResponse.cs" />
     <Compile Include="src\Form1\MenuItemClick_ExportTable.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -269,7 +271,7 @@
     <Compile Include="src\Utils\ReadConfig.cs" />
     <Compile Include="src\Utils\Strip.cs" />
     <Compile Include="src\Utils\CheckAndDownloadUpdate.cs" />
-    <Compile Include="src\Utils\ValidateSchema.cs" />
+    <Compile Include="src\Utils\ValidateConfig.cs" />
     <Compile Include="src\Utils\SanitizeForCsv.cs" />
     <Compile Include="src\GlobalVariables\GlobalVariables.cs" />
     <Compile Include="src\SearchTags.cs">
@@ -316,23 +318,32 @@
       <Link>README.md</Link>
     </None>
     <None Include="app.config" />
-    <None Include="config\accounts_sample.json">
+    <None Include="config\schemas\accounts.user.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\schemas\accounts.schema.json">
+    <None Include="config\schemas\accounts.default.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\schemas\lastCommit.schema.json">
+    <None Include="config\accounts.user.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\schemas\settings.schema.json">
+    <None Include="config\schemas\lastCommit.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="config\schemas\settings.user.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="config\schemas\settings.default.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="config\settings.user.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="config\accounts.json">
+    <None Include="config\accounts.default.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\settings.json">
+    <None Include="config\settings.default.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\keyfile.snk" />
