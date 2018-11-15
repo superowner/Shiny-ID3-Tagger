@@ -6,7 +6,9 @@
 	"properties": {
 		"LogLevel": {
 			"$id": "/properties/LogLevel",
-			"type": "integer"
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 4
 		},
 		"PreferTags": {
 			"$id": "/properties/PreferTags",

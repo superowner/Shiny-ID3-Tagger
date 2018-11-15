@@ -67,7 +67,7 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    Failed to parse a config file!",
-					"Filepath: " + configPath,
+					"Config:   " + configPath,
 					"Schema:   " + schemaPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
@@ -81,7 +81,7 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    Failed to validate a config file!",
-					"Filepath: " + configPath,
+					"Config:   " + configPath,
 					"Schema:   " + schemaPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
@@ -95,7 +95,7 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    File not found!",
-					"Filepath: " + configPath,
+					"Config:   " + configPath,
 					"Schema:   " + schemaPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
@@ -109,7 +109,7 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    Cannot access file. Already in use!",
-					"Filepath: " + configPath,
+					"Config:   " + configPath,
 					"Schema:   " + schemaPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
