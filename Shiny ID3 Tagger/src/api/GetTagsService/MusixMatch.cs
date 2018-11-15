@@ -25,8 +25,8 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from MusixMatch API
-		/// https://developer.musixmatch.com/documentation/api-reference/matcher-track-get
-		/// https://developer.musixmatch.com/documentation/input-parameters
+		/// <seealso href="https://developer.musixmatch.com/documentation/api-reference/matcher-track-get"/>
+		/// <seealso href="https://developer.musixmatch.com/documentation/input-parameters"/>
 		/// Only 1000 hits per day
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
@@ -62,7 +62,7 @@ namespace GetTags
 				}
 			}
 
-			var account = (from item in User.Accounts[o.Service]
+			JToken account = (from item in User.Accounts[o.Service]
 						   orderby item["lastUsed"] ascending
 						   select item).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;
@@ -74,7 +74,7 @@ namespace GetTags
 			{
 				searchRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist=" + artistEncoded + "&q_track=" + titleEncoded + "&apikey=" + (string)account["ApiKey"]);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("message.body.track") != null)
@@ -91,7 +91,7 @@ namespace GetTags
 					{
 						albumRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.get?album_id=" + albumid + "&apikey=" + (string)account["ApiKey"]);
 
-						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData?.SelectToken("message.body.album") != null)
@@ -109,7 +109,7 @@ namespace GetTags
 					{
 						albumtracksRequest.RequestUri = new Uri("http://api.musixmatch.com/ws/1.1/album.tracks.get?album_id=" + albumid + "&page_size=100&apikey=" + (string)account["ApiKey"]);
 
-						string albumtracksContent = await Utils.GetResponse(client, albumtracksRequest, cancelToken);
+						string albumtracksContent = await Utils.GetHttpResponse(client, albumtracksRequest, cancelToken);
 						JObject albumtracksData = Utils.DeserializeJson(albumtracksContent);
 
 						if (albumtracksData?.SelectToken("message.body.track_list") != null)

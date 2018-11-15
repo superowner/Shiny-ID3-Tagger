@@ -25,8 +25,8 @@ namespace GetLyrics
 	{
 		/// <summary>
 		/// Gets lyrics from Apiseeds API
-		/// https://apiseeds.com/account/dashboard
-		/// https://apiseeds.com/documentation/lyrics
+		/// <seealso href="https://apiseeds.com/account/dashboard"/>
+		/// <seealso href="https://apiseeds.com/documentation/lyrics"/>
 		/// Warning: Can only do 20.000 calls per month
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
@@ -49,7 +49,7 @@ namespace GetLyrics
 				searchRequest.RequestUri = new Uri("https://orion.apiseeds.com/api/music/lyric/" +
 					artistEncoded + "/" + titleEncoded + "?apikey=" + (string)User.Accounts["Apiseeds"]["ApiKey"]);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 }, customTimeout: 2);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 }, customTimeout: 2);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("result.track.text") != null)

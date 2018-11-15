@@ -25,7 +25,7 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from SevenDigital API
-		/// http://docs.7digital.com/#_release_details_get
+		/// <seealso href="http://docs.7digital.com/#_release_details_get"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -63,7 +63,7 @@ namespace GetTags
 				searchRequest.RequestUri = new Uri("http://api.7digital.com/1.2/track/search?q=" + artistEncoded + "+"
 					+ titleEncoded + "&pagesize=10&imageSize=800&usageTypes=download&oauth_consumer_key=" + User.Accounts["7digital"]["key"]);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("searchResults.searchResult[0].track") != null)
@@ -90,7 +90,7 @@ namespace GetTags
 							releaseRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 							releaseRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/details?releaseid=" + releaseId + "&usageTypes=download&oauth_consumer_key=" + User.Accounts["7digital"]["key"]);
 
-							string releaseContent = await Utils.GetResponse(client, releaseRequest, cancelToken);
+							string releaseContent = await Utils.GetHttpResponse(client, releaseRequest, cancelToken);
 							JObject releaseData = Utils.DeserializeJson(releaseContent);
 
 							if (releaseData?.SelectToken("release") != null)
@@ -105,7 +105,7 @@ namespace GetTags
 							tagsRequest.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 							tagsRequest.RequestUri = new Uri("http://api.7digital.com/1.2/release/tags?releaseid=" + releaseId + "&country=US&oauth_consumer_key=" + User.Accounts["7digital"]["key"]);
 
-							string tagsContent = await Utils.GetResponse(client, tagsRequest, cancelToken);
+							string tagsContent = await Utils.GetHttpResponse(client, tagsRequest, cancelToken);
 							JObject tagsData = Utils.DeserializeJson(tagsContent);
 
 							if (tagsData?.SelectToken("tags.tags") != null)

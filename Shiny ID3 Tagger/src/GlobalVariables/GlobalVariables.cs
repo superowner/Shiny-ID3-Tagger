@@ -39,6 +39,27 @@ namespace GlobalVariables
 		internal static readonly Dictionary<string, decimal> TotalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
 
 		/// <summary>
+		/// Enum to decide which richTextBox to use
+		/// </summary>
+		internal enum OutputLog
+		{
+			/// <summary>
+			/// Use tab "Search Log" for output
+			/// </summary>
+			Search,
+
+			/// <summary>
+			/// Use tab "Write Log" for output
+			/// </summary>
+			Write,
+
+			/// <summary>
+			/// Use tab "Error Log" for output
+			/// </summary>
+			Error,
+		}
+
+		/// <summary>
 		/// Gets or sets the currently visible and active dataGridView (is changed via tabs, dataGridView1 is set as initial value in MainForm.cs OnShown() method)
 		/// </summary>
 		internal static DataGridView ActiveDGV { get; set; }

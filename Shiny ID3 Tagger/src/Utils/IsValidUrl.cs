@@ -16,8 +16,8 @@ namespace Utils
 	{
 		/// <summary>
 		/// Checks if a given string can be interpreted as a valid HTTP or HTTPS URL
-		/// https://dotnetfiddle.net/XduN3A				this method still produces some false positives
-		/// https://mathiasbynens.be/demo/url-regex		RegEx validator pattern comparison
+		/// this method still produces some false positives <seealso href="https://dotnetfiddle.net/XduN3A"/>
+		/// RegEx validator pattern comparison <seealso href="https://mathiasbynens.be/demo/url-regex"/>
 		/// </summary>
 		/// <param name="str">string to check</param>
 		/// <returns>True or false according to previous check</returns>

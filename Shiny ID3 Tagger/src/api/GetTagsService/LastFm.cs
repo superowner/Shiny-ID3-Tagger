@@ -24,8 +24,8 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from LastFm API
-		/// http://www.last.fm/api/rest
-		/// http://www.last.fm/api/show/track.getInfo
+		/// <seealso href="http://www.last.fm/api/rest"/>
+		/// <seealso href="http://www.last.fm/api/show/track.getInfo"/>
 		/// limit=1 not available for track.getInfo or album.getInfo method
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
@@ -64,7 +64,7 @@ namespace GetTags
 				searchRequest.Content = new StringContent("method=track.getInfo&artist=" + artistEncoded + "&track=" + titleEncoded +
 					"&api_key=" + User.Accounts["Lastfm"]["ApiKey"] + "&format=json&autocorrect=1");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("track") != null)
@@ -85,7 +85,7 @@ namespace GetTags
 						albumRequest.Headers.ExpectContinue = false;
 						albumRequest.Content = new StringContent("method=album.getInfo&mbid=" + albumId + "&api_key=" + User.Accounts["Lastfm"]["ApiKey"] + "&format=json");
 
-						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData?.SelectToken("album") != null)

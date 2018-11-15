@@ -4,9 +4,11 @@
 	"$id": "https://github.com/ShinyId3Tagger/Shiny-ID3-Tagger/settingsSchema.json",
 	"type": "object",
 	"properties": {
-		"DebugLevel": {
-			"$id": "/properties/DebugLevel",
-			"type": "integer"
+		"LogLevel": {
+			"$id": "/properties/LogLevel",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 4
 		},
 		"PreferTags": {
 			"$id": "/properties/PreferTags",
@@ -24,8 +26,16 @@
 			"$id": "/properties/OverwriteImage",
 			"type": "boolean"
 		},
+		"AutoCollectFiles": {
+			"$id": "/properties/AutoCollectFiles",
+			"type": "boolean"
+		},
 		"AutoSearch": {
 			"$id": "/properties/AutoSearch",
+			"type": "boolean"
+		},
+		"AutoUpdate": {
+			"$id": "/properties/AutoUpdate",
 			"type": "boolean"
 		},
 		"AutoCapitalize": {
@@ -74,12 +84,14 @@
 	},
 	"additionalProperties": false,
 	"required": [
-		"DebugLevel",
+		"LogLevel",
 		"PreferTags",
 		"RemoveVersion",
 		"RemoveFeaturing",
 		"OverwriteImage",
+		"AutoCollectFiles",
 		"AutoSearch",
+		"AutoUpdate",
 		"AutoCapitalize",
 		"ThresholdRedValue",
 		"MaxImageSize",

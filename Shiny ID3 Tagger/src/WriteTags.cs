@@ -4,9 +4,6 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// REVIEW: Remove all "catch (Exception ex)" statements
-// REVIEW: Is there a better save() method? https://taglib.org/api/classTagLib_1_1MPEG_1_1File.html#acfe8c97e6d551f5bc1f588d3c2bf5bf5
-// 				bool TagLib::MPEG::File::save(int tags, bool stripOthers, int id3v2Version, bool duplicateTags)
 
 namespace Shiny_ID3_Tagger
 {
@@ -64,8 +61,8 @@ namespace Shiny_ID3_Tagger
 					string tagType = "ID3v2.3";
 
 					// Log message to signal begin of writing
-					string[] writeMsg = new[] { $"{"Begin writing of " + tagType + " tags",-100}{"file: \"" + filepath + "\""}" };
-					Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+					string[] generalMsg = new[] { $"{"Begin writing of " + tagType + " tags",-100}{"file: \"" + filepath + "\""}" };
+					Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 
 					// Get all existing frames from current file
 					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
@@ -74,7 +71,7 @@ namespace Shiny_ID3_Tagger
 						tagFile.RemoveTags(TagTypes.Id3v1);
 
 						// Store all existing frames in a container which can be altered freely without actually touching the file
-						TagLib.Id3v2.Tag tagContainer = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true);
+						TagLib.Id3v2.Tag tagContainer = (TagLib.Id3v2.Tag)tagFile.GetTag(TagTypes.Id3v2, true) as TagLib.Id3v2.Tag;
 
 						// Set ID3 version to ID3v2.3 which means we have to use UTF16 for all strings (a "4" would mean ID3v2.4 where UTF8 must be used)
 						tagContainer.Version = 3;
@@ -126,15 +123,14 @@ namespace Shiny_ID3_Tagger
 								cell.Style.BackColor = Color.Empty;
 							}
 
-							writeMsg = new string[]	{ "Writing done!" };
+							generalMsg = new string[]	{ "Writing done!" };
+							Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 						}
 						else
 						{
-							writeMsg = new string[] { "Writing FAILED!" };
+							generalMsg = new string[] { "Writing failed!" };
+							Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 						}
-
-						// Log message to signal end of writing
-						Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
 					}
 				}
 			}
@@ -149,7 +145,7 @@ namespace Shiny_ID3_Tagger
 		/// <summary>
 		/// Overwrite tag values with results from API search
 		/// Runs once per file
-		/// https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs
+		/// <seealso href="https://github.com/mono/taglib-sharp/blob/master/src/TagLib/Id3v2/Frame.cs"/>
 		/// </summary>
 		/// <param name="tagFile">The current file to modify</param>
 		/// <param name="row">The dataGridView1 row for this file which is used as data source</param>
@@ -168,8 +164,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TPE1");
 				tagContainer.SetTextFrame("TPE1", newArtist);
 
-				string[] writeMsg = { "Artist:   " + newArtist };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Artist:   " + newArtist };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Title
@@ -180,8 +176,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TIT2");
 				tagContainer.SetTextFrame("TIT2", newTitle);
 
-				string[] writeMsg = { "Title:    " + newTitle };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Title:    " + newTitle };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Album
@@ -192,8 +188,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TALB");
 				tagContainer.SetTextFrame("TALB", newAlbum);
 
-				string[] writeMsg = { "Album:    " + newAlbum };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Album:    " + newAlbum };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Genre
@@ -204,8 +200,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TCON");
 				tagContainer.SetTextFrame("TCON", newGenre);
 
-				string[] writeMsg = { "Genre:    " + newGenre };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Genre:    " + newGenre };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Disc number + disc count
@@ -221,8 +217,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TPOS");
 				tagContainer.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 
-				string[] writeMsg = { "Disc:     " + newDiscnumber + "/" + newDisccount };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Disc:     " + newDiscnumber + "/" + newDisccount };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Track number + track count
@@ -238,8 +234,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TRCK");
 				tagContainer.SetTextFrame("TRCK", newTrackNumber + "/" + newTrackCount);
 
-				string[] writeMsg = { "Track:    " + newTrackNumber + "/" + newTrackCount };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Track:    " + newTrackNumber + "/" + newTrackCount };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Date
@@ -257,8 +253,8 @@ namespace Shiny_ID3_Tagger
 				tagContainer.RemoveFrames("TIME");
 				tagContainer.SetNumberFrame("TYER", (uint)Utils.ConvertStringToDate(newDate).Year, 0);
 
-				string[] writeMsg = { "Date:     " + newDate };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Date:     " + newDate };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Lyrics
@@ -279,8 +275,8 @@ namespace Shiny_ID3_Tagger
 				string lyricsSnippet = string.Join(string.Empty, newLyrics.Take(80)) + "...";
 				lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
 
-				string[] writeMsg = { "Lyrics:   " + lyricsSnippet };
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg = { "Lyrics:   " + lyricsSnippet };
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			return tagContainer;
@@ -425,8 +421,8 @@ namespace Shiny_ID3_Tagger
 
 			if (errorMsg == null)
 			{
-				string[] writeMsg =	{ "Picture:  " + request.RequestUri	};
-				Form1.Instance.RichTextBox_LogMessage(writeMsg, 1, "Write");
+				string[] generalMsg =	{ "Picture:  " + request.RequestUri	};
+				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 			else
 			{
@@ -479,6 +475,9 @@ namespace Shiny_ID3_Tagger
 				{
 					try
 					{
+						// Save() method from original taglib project offers more options. But they are not supported in taglib-sharp
+						// 		bool TagLib::MPEG::File::save(int tags, bool stripOthers, int id3v2Version, bool duplicateTags)
+						// https://taglib.org/api/classTagLib_1_1MPEG_1_1File.html#acfe8c97e6d551f5bc1f588d3c2bf5bf5
 						tagFile.Save();
 						successWrite = true;
 						break;

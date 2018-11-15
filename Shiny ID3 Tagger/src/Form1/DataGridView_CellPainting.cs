@@ -18,7 +18,7 @@ namespace Shiny_ID3_Tagger
 	{
 		/// <summary>
 		/// Draw light blue borders around active row
-		/// https://stackoverflow.com/questions/32154847/how-do-you-draw-a-border-around-a-datagridview-cell-while-its-being-edited/32170212#32170212
+		/// <seealso href="https://stackoverflow.com/a/32170212/935614"/>
 		/// </summary>
 		/// <param name="sender">The object which has raised the event</param>
 		/// <param name="e">Contains additional information about the event</param>

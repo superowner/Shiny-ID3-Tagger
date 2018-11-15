@@ -25,62 +25,66 @@ namespace Shiny_ID3_Tagger
 		/// <param name="messageLevel">Debug level or severity of the message
 		/// 1: General (searching, writing, spelling mistake and so on)
 		/// 2: General + Error (API timeout, Config not readable, JSON malformed and so on)
-		/// 3: General + Error + Debug (all outgoing API requests, all incoming API responses)
+		/// 3: General + Error + Warning (all outgoing API requests, all incoming API responses)
+		/// 4: General + Error + Warning + Debug (all outgoing API requests, all incoming API responses)
 		/// </param>
 		/// <param name="messageType">richTextBox to use. Possible values are "Search", "Write" or "Error" (default)</param>
-		internal void RichTextBox_LogMessage(string[] values, int messageLevel, string messageType = "Error")
+		internal void RichTextBox_LogMessage(string[] values, int messageLevel, GlobalVariables.OutputLog messageType = GlobalVariables.OutputLog.Error)
 		{
 			// When called from a different thread then Form1, switch back to thread which owns Form1
 			if (this.InvokeRequired)
 			{
-				this.Invoke(new Action<string[], int, string>(Form1.Instance.RichTextBox_LogMessage), new object[] { values, messageLevel, messageType });
+				this.Invoke(new Action<string[], int, GlobalVariables.OutputLog>(Form1.Instance.RichTextBox_LogMessage), new object[] { values, messageLevel, messageType });
 				return;
 			}
 
-			if (User.Settings == null || (int)User.Settings["DebugLevel"] >= messageLevel)
+			// If user settings LogLevel is not high enough for the current message, then do nothing and return
+			if (User.Settings != null && (int)User.Settings["LogLevel"] < messageLevel)
 			{
-				// Set correct richTextBox to use
-				RichTextBox richTextBox = null;
-				switch (messageType)
+				return;
+			}
+
+			// Set correct richTextBox to use. Use rtbErrorLog as default fallback
+			RichTextBox richTextBox = null;
+			switch (messageType)
+			{
+				case GlobalVariables.OutputLog.Search:
+					richTextBox = this.rtbSearchLog;
+					break;
+				case GlobalVariables.OutputLog.Write:
+					richTextBox = this.rtbWriteLog;
+					break;
+				case GlobalVariables.OutputLog.Error:
+				default:
+					richTextBox = this.rtbErrorLog;
+					break;
+			}
+
+			// If one value is a multi line string (i.e. HTML body), then split and rejoin each line with enough whitespace to align them
+			values = values.Select(x => string.Join(Environment.NewLine + "               ", x.Split('\n'))).ToArray();
+
+			// Join all lines into one string, add newline and whitespace to align them
+			string message = string.Join(Environment.NewLine + "               ", values);
+
+			try
+			{
+				richTextBox.SelectionColor = Color.Gray;
+				richTextBox.AppendText(DateTime.Now.ToString("HH:mm:ss.fff   ", GlobalVariables.CultEng));
+
+				richTextBox.SelectionColor = Color.Black;
+				richTextBox.AppendText(message + Environment.NewLine);
+
+				// Switch to error tab if it's an error message
+				if (richTextBox == this.rtbErrorLog)
 				{
-					case "Search":
-						richTextBox = this.rtbSearchLog;
-						break;
-					case "Write":
-						richTextBox = this.rtbWriteLog;
-						break;
-					case "Error":
-					default:
-						richTextBox = this.rtbErrorLog;
-						break;
+					this.tabControl2.SelectedIndex = 2;
 				}
 
-				// If one value is a multi line string (i.e. HTML body), then split and rejoin each line with enough whitespace to align them
-				values = values.Select(x => string.Join(Environment.NewLine + "               ", x.Split('\n'))).ToArray();
-
-				// Join all lines into one string, add newline and whitespace to align them
-				string message = string.Join(Environment.NewLine + "               ", values);
-
-				try
-				{
-					richTextBox.SelectionColor = Color.Gray;
-					richTextBox.AppendText(DateTime.Now.ToString("HH:mm:ss.fff   ", GlobalVariables.CultEng));
-
-					richTextBox.SelectionColor = Color.Black;
-					richTextBox.AppendText(message + Environment.NewLine);
-
-					// Switch to error tab if it's an error message
-					if (richTextBox == this.rtbErrorLog)
-					{
-						this.tabControl2.SelectedIndex = 2;
-					}
-
-					richTextBox.ScrollToCaret();
-				}
-				catch (ObjectDisposedException)
-				{
-					// User closed window. Therefore richTextBox is already disposed and not available for output. Nothing more to do here
-				}
+				richTextBox.ScrollToCaret();
+			}
+			catch (ObjectDisposedException)
+			{
+				// User closed window. Therefore richTextBox is already disposed and not available for output. Nothing more to do here
 			}
 		}
 	}

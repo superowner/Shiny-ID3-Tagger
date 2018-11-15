@@ -17,7 +17,10 @@ namespace Utils
 	/// </summary>
 	internal partial class Utils
 	{
-		// https://www.garykessler.net/library/file_sigs.html
+		/// <summary>
+		/// Define all supported image formats
+		/// <seealso href="https://www.garykessler.net/library/file_sigs.html"/>
+		/// </summary>
 		private static Dictionary<byte[], ImageFormat> imageFormatDecoders = new Dictionary<byte[], ImageFormat>()
 		{
 			{ new byte[] { 0x42, 0x4D }, ImageFormat.Bmp },
@@ -29,7 +32,7 @@ namespace Utils
 
 		/// <summary>
 		/// Checks if a given stream contains a valid image file
-		/// https://stackoverflow.com/questions/1245567/finding-out-the-contenttype-of-a-image-from-the-byte/34677623#34677623
+		/// <seealso href="https://stackoverflow.com/a/34677623/935614"/>
 		/// </summary>
 		/// <param name="stream">The input stream to check</param>
 		/// <returns>A boool</returns>

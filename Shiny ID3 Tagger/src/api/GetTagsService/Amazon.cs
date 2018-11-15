@@ -29,13 +29,13 @@ namespace GetTags
 
 		/// <summary>
 		/// Gets ID3 data from Amazon API
-		/// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/prod-adv-api-dg.pdf
-		/// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/rest-signature.html
-		/// https://docs.aws.amazon.com/AWSECommerceService/latest/DG/LocaleUS.html
-		/// https://webservices.amazon.com/scratchpad/index.html
 		/// in addition to .NET 4.0 EscapeDataString		forbidden:	!'()*
 		/// in addition to .NET 4.0 EscapeDataString		allowed:	-_.~
 		/// replace after EscapeDataString				    !=%21	'=%27	(=%28	)=%29	*=%2A
+		/// <seealso href="https://docs.aws.amazon.com/AWSECommerceService/latest/DG/prod-adv-api-dg.pdf"/>
+		/// <seealso href="https://docs.aws.amazon.com/AWSECommerceService/latest/DG/rest-signature.html"/>
+		/// <seealso href="https://docs.aws.amazon.com/AWSECommerceService/latest/DG/LocaleUS.html"/>
+		/// <seealso href="https://webservices.amazon.com/scratchpad/index.html"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -96,7 +96,7 @@ namespace GetTags
 					await Task.Delay(50);
 				}
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				lastRequestTimer.Restart();
 
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
@@ -156,7 +156,7 @@ namespace GetTags
 								await Task.Delay(50);
 							}
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 							lastRequestTimer.Restart();
 
 							JObject albumData = Utils.DeserializeJson(Utils.ConvertXmlToJson(albumContent));

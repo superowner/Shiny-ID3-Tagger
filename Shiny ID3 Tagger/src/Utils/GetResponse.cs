@@ -31,7 +31,7 @@ namespace Utils
 		/// <param name="suppressedStatusCodes">A array which holds statuscodes of common errors which can be ignored (not logged as error)</param>
 		/// <param name="customTimeout">A timeout in seconds after a request is automatically canceled. Useful if a certain server has no own timeout</param>
 		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-		internal static async Task<dynamic> GetResponse(
+		internal static async Task<dynamic> GetHttpResponse(
 			HttpMessageInvoker client,
 			HttpRequestMessage request,
 			CancellationToken cancelToken,
@@ -68,11 +68,13 @@ namespace Utils
 						requestContent = await request.Content.ReadAsStringAsync();
 					}
 
-					// Print out all requests, not only failed once
-					List<string> errorMsg = BuildLogMessage(request, requestContent, null);
-					Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 3);
-
+					// The actual request is send here
 					response = await client.SendAsync(request, timeoutToken.Token);
+
+					// Print out all requests including their headers and corresponding response
+					List<string> errorMsg = new List<string> { "DEBUG:    API request executed" };
+					errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+					Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 4);
 
 					// Check if the returned status code is within a call-specific array of codes to suppress
 					// These are common errors i.e. when a lyric doesn't exist. Don't log these errors
@@ -103,9 +105,9 @@ namespace Utils
 						if (!cancelToken.IsCancellationRequested)
 						{
 							// Print out all request and response properties
-							errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
+							errorMsg = new List<string> { "DEBUG:    Response was unsuccessful! " + i + " retries left. Retrying..." };
 							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
+							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 3);
 
 							// Response was not successful. But it was also not a common error. And user did not press cancel
 							// This must be an uncommon error. Continue with our retry logic
@@ -123,9 +125,9 @@ namespace Utils
 						// Print out the request
 						if (!cancelToken.IsCancellationRequested)
 						{
-							List<string> errorMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
-							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
+							List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
+							warningMsg.AddRange(BuildLogMessage(request, requestContent, response));
+							Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
 						}
 					}
 

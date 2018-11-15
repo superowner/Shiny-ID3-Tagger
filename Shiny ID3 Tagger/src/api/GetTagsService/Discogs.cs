@@ -25,8 +25,8 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Discogs API
-		/// https://www.discogs.com/developers/#page:database
-		/// http://www.onemusicapi.com/blog/2013/06/12/better-discogs-searching/
+		/// <seealso href="https://www.discogs.com/developers/#page:database"/>
+		/// <seealso href="http://www.onemusicapi.com/blog/2013/06/12/better-discogs-searching/"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -68,7 +68,7 @@ namespace GetTags
 					"&key=" + User.Accounts["Discogs"]["Key"] +
 					"&secret=" + User.Accounts["Discogs"]["Secret"]);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null && searchData.SelectToken("results").Any())
@@ -83,7 +83,7 @@ namespace GetTags
 								"?key=" + User.Accounts["Discogs"]["Key"] +
 								"&secret=" + User.Accounts["Discogs"]["Secret"]);
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 							JObject albumData = Utils.DeserializeJson(albumContent);
 
 							if (albumData != null)

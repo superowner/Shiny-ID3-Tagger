@@ -4,8 +4,8 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// Split settings.json in settings.default.json and settings.user.json
-// Split accounts.json in accounts.default.json and accounts.user.json
+// TODO: Split settings.json in settings.default.json and settings.user.json
+// TODO: Split accounts.json in accounts.default.json and accounts.user.json
 
 namespace Utils
 {
@@ -31,14 +31,10 @@ namespace Utils
 		/// <returns>The parsed and validated config object</returns>
 		internal static JObject ReadConfig(string configPath, string schemaPath)
 		{
-			// Build path to config file and schema file
-			string fullConfigPath = AppDomain.CurrentDomain.BaseDirectory + configPath;
-			string fullSchemaPath = AppDomain.CurrentDomain.BaseDirectory + schemaPath;
-
 			try
 			{
 				// Read config
-				string fileContent = File.ReadAllText(fullConfigPath);
+				string fileContent = File.ReadAllText(configPath);
 
 				// Parse JSON, don't throw an error so we can try to decrypt it later
 				JObject json = Utils.DeserializeJson(fileContent, false);
@@ -60,7 +56,7 @@ namespace Utils
 				}
 
 				// Validate config (can throw an ArgumentException)
-				ValidateSchema(json, fullSchemaPath);
+				ValidateSchema(json, schemaPath);
 
 				// Return config
 				return json;
@@ -71,7 +67,8 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    Failed to parse a config file!",
-					"Filepath: " + fullConfigPath,
+					"Config:   " + configPath,
+					"Schema:   " + schemaPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
@@ -84,7 +81,8 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    Failed to validate a config file!",
-					"Filepath: " + fullConfigPath,
+					"Config:   " + configPath,
+					"Schema:   " + schemaPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
@@ -97,7 +95,8 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    File not found!",
-					"Filepath: " + fullConfigPath,
+					"Config:   " + configPath,
+					"Schema:   " + schemaPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
@@ -110,7 +109,8 @@ namespace Utils
 				string[] errorMsg =
 				{
 					"ERROR:    Cannot access file. Already in use!",
-					"Filepath: " + fullConfigPath,
+					"Config:   " + configPath,
+					"Schema:   " + schemaPath,
 					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);

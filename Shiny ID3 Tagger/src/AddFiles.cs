@@ -27,7 +27,7 @@ namespace Shiny_ID3_Tagger
 		/// Method collects and reads in existing ID3 tags
 		/// Shows them in dataGridView1
 		/// Runs when "Add files" button is clicked
-		/// HowTo use Task.Run: https://blog.stephencleary.com/2013/08/taskrun-vs-backgroundworker-round-3.html
+		/// <seealso href="https://blog.stephencleary.com/2013/08/taskrun-vs-backgroundworker-round-3.html"/>
 		/// </summary>
 		/// <param name="newFiles">String list of files to add to dataGridView1</param>
 		/// <param name="cancelToken">Global cancelation token</param>

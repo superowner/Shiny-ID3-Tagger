@@ -75,9 +75,8 @@
     </ManifestTimestampUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>
-    </DocumentationFile>
+    <CodeAnalysisRuleSet>stylecop.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\build\bin\debug\Shiny ID3 Tagger.xml</DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <OutputPath>..\build\bin\debug\</OutputPath>
     <LangVersion>latest</LangVersion>
@@ -85,9 +84,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <CodeAnalysisRuleSet>Shiny ID3 Tagger.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>
-    </DocumentationFile>
+    <CodeAnalysisRuleSet>stylecop.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\build\bin\release\Shiny ID3 Tagger.xml</DocumentationFile>
     <OutputPath>..\build\bin\release\</OutputPath>
     <LangVersion>latest</LangVersion>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -118,21 +116,20 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="Microsoft.VisualBasic">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json.Schema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.Schema.3.0.10\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>resources\Ookii.Dialogs.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Ookii.Dialogs.WindowsForms.1.0\lib\net35\Ookii.Dialogs.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -151,12 +148,15 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>resources\taglib-sharp.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="src\AddFiles.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,8 +166,8 @@
     <Compile Include="src\api\GetTagsService\IGetTagsService.cs" />
     <Compile Include="src\api\GetLyricsService\IGetLyricsService.cs" />
     <Compile Include="src\api\GetLyricsService\ViewLyrics.cs" />
-    <Compile Include="src\GlobalVariables\DataGridViewDoubleBuffered.cs">
-      <SubType>Component</SubType>
+    <Compile Include="src\Form1\MenuItemClick_CheckForUpdates.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\GlobalVariables\User.cs" />
     <Compile Include="src\GlobalVariables\Id3.cs" />
@@ -178,6 +178,7 @@
     <Compile Include="src\SingleInstanceController.cs" />
     <Compile Include="src\Utils\DeleteFileOrFolder.cs" />
     <Compile Include="src\Utils\IsValidImage.cs" />
+    <Compile Include="src\Utils\StartUpdateClient.cs" />
     <Compile Include="src\Utils\ParseInt.cs" />
     <Compile Include="src\Form1\DataGridView_CellPainting.cs">
       <SubType>Form</SubType>
@@ -267,7 +268,7 @@
     </Compile>
     <Compile Include="src\Utils\ReadConfig.cs" />
     <Compile Include="src\Utils\Strip.cs" />
-    <Compile Include="src\Utils\UpdateClient.cs" />
+    <Compile Include="src\Utils\CheckAndDownloadUpdate.cs" />
     <Compile Include="src\Utils\ValidateSchema.cs" />
     <Compile Include="src\Utils\SanitizeForCsv.cs" />
     <Compile Include="src\GlobalVariables\GlobalVariables.cs" />
@@ -306,11 +307,6 @@
     </Compile>
     <Compile Include="src\Program.cs" />
     <Compile Include="properties\AssemblyInfo.cs" />
-    <Compile Include="resources\icon_resources.Designer.cs">
-      <DependentUpon>icon_resources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Encryptor\Test\accounts_plain.json">
@@ -340,7 +336,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\keyfile.snk" />
-    <None Include="Shiny ID3 Tagger.ruleset" />
+    <None Include="stylecop.ruleset" />
     <AdditionalFiles Include="stylecop.json" />
     <None Include="resources\shinyid3tagger.pfx" />
   </ItemGroup>
@@ -352,12 +348,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="resources\icon_resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>icon_resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -372,21 +368,6 @@
     <None Include="resources\icons\icon_write.ico" />
     <None Include="resources\icons\icon_import.ico" />
     <Content Include="resources\icons\icon_main.ico" />
-    <Content Include="resources\Microsoft.VisualBasic.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Newtonsoft.Json.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Newtonsoft.Json.Schema.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Ookii.Dialogs.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\taglib-sharp.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta009\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
@@ -394,7 +375,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>cd $(SolutionDir)
-git log -1 --pretty=format:"{"""commit""": """%25%25H""", """date""": """%25%25aD"""}" &gt; "$(TargetDir)config\lastCommit.json"</PostBuildEvent>
+    <PostBuildEvent>CD $(SolutionDir)
+GIT log -1 --pretty=format:"{"""commit""": """%25%25H""", """date""": """%25%25aD"""}" &gt; "$(TargetDir)config\lastCommit.json"
+MKDIR "$(TargetDir)libs"
+MOVE /Y "$(TargetDir)*.dll" "$(TargetDir)libs"
+MOVE /Y "$(TargetDir)*.xml" "$(TargetDir)libs"
+DEL /Q "$(TargetDir)*.pdb"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -36,7 +36,10 @@ namespace Utils
 			}
 		}
 
-		// Source for function: https://stackoverflow.com/questions/10484833/detecting-bad-utf-8-encoding-list-of-bad-characters-to-sniff
+		/// <summary>
+		/// <seealso href="https://stackoverflow.com/q/10484833/935614"/>
+		/// </summary>
+		/// <returns>A regex with the specified pattern</returns>
 		private static Regex CreateRegex()
 		{
 			const string Specials = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö";
