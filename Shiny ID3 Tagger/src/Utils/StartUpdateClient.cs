@@ -43,7 +43,12 @@ namespace Utils
 			}
 
 			// Start UpdateClient.exe in temp folder (= new version from GitHub)
-			Process.Start(updateExeFullPath);
+			// Process.Start(updateExeFullPath);
+			System.Diagnostics.Process updateClient = new System.Diagnostics.Process();
+			updateClient.StartInfo.FileName = updateExeFullPath;
+			updateClient.StartInfo.UseShellExecute = false;
+			updateClient.StartInfo.CreateNoWindow = true;
+			updateClient.Start();
 
 			// RECEIVE
 			// Set up a named pipe server and listen if UpdateClient has started

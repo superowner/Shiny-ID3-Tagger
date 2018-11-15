@@ -6,7 +6,6 @@
 //-----------------------------------------------------------------------
 // TODO: Find a way to cancel while loop if main app does not shutdown in time
 //       A break after 2 seconds in loop does not work for whatever reason
-// TODO: Implement a way to signal main app that copying failed
 
 namespace UpdateClient
 {
@@ -17,6 +16,7 @@ namespace UpdateClient
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Threading.Tasks;
+	using Utils;
 
 	/// <summary>
 	/// The Program class is the default class to start a C# program
@@ -29,83 +29,109 @@ namespace UpdateClient
 		/// <param name="args">Passed commandline arguments</param>
 		private static void Main(string[] args)
 		{
-			string regExPattern = "(?<key>.*?) = (?<value>.*)";
 			string mainAppFullPath = null;
 			string mainAppProcessId = null;
 
-			// SEND
-			// Set up a named pipe client and send that UpdateClient has started
-			NamedPipeClientStream client = new NamedPipeClientStream("UpdateClientToMainApp");
-			client.Connect();
-
-			StreamWriter writer = new StreamWriter(client);
-
-			// Send message to main app that we are running. Don't change this string
-			writer.WriteLine("UpdateClient is running");
-			writer.Flush();
-
-			// RECEIVE
-			// Set up a named pipe server and listen for infos from MainApp
-			NamedPipeServerStream server = new NamedPipeServerStream("MainAppToUpdateClient");
-			server.WaitForConnection();
-
-			StreamReader reader = new StreamReader(server);
-
-			while (true)
+			try
 			{
-				string message = reader.ReadLine();
+				// Redirect all console output to the file "update.log"
+				FileStream updateLogFileStream = new FileStream(@"C:\Users\nixda\Desktop\update.log", FileMode.Append);
+				StreamWriter updateLogStreamwriter = new StreamWriter(updateLogFileStream) { AutoFlush = true };
+				Console.SetOut(updateLogStreamwriter);
+				Console.SetError(updateLogStreamwriter);
 
-				// Parse which message was send
-				if (message != null)
+				Utils.ConsoleWriteLine("UpdateClient started");
+
+				// SEND MESSAGE TO MAIN APP
+				Utils.ConsoleWriteLine("UpdateClient sets up the named pipe \"UpdateClientToMainApp\"");
+				NamedPipeClientStream client = new NamedPipeClientStream("UpdateClientToMainApp");
+
+				Utils.ConsoleWriteLine("UpdateClient connects to main app");
+				client.Connect();
+
+				StreamWriter writer = new StreamWriter(client);
+
+				Utils.ConsoleWriteLine("UpdateClient send message to main app that UpdateClient is running");
+				writer.WriteLine("UpdateClient is running");
+				writer.Flush();
+
+				// RECEIVE MESSAGE FROM MAIN APP
+				Utils.ConsoleWriteLine("UpdateClient sets up the named pipe \"MainAppToUpdateClient\"");
+				NamedPipeServerStream server = new NamedPipeServerStream("MainAppToUpdateClient");
+
+				Utils.ConsoleWriteLine("UpdateClient waits for main app to connect");
+				server.WaitForConnection();
+
+				StreamReader reader = new StreamReader(server);
+
+				while (true)
 				{
-					Match match = Regex.Match(message, regExPattern);
-					if (match.Success)
+					string message = reader.ReadLine();
+
+					// Parse which message was send
+					if (message != null)
 					{
-						switch (match.Groups["key"].Value)
+						Utils.ConsoleWriteLine("UpdateClient received the message: \"" + message + "\"");
+
+						Match match = Regex.Match(message, "(?<key>.*?) = (?<value>.*)");
+						if (match.Success)
 						{
-							case "path":
-								mainAppFullPath = match.Groups["value"].Value;
-								break;
-							case "id":
-								mainAppProcessId = match.Groups["value"].Value;
-								break;
+							switch (match.Groups["key"].Value)
+							{
+								case "path":
+									mainAppFullPath = match.Groups["value"].Value;
+									Utils.ConsoleWriteLine("Main app full path is: " + mainAppFullPath);
+									break;
+								case "id":
+									mainAppProcessId = match.Groups["value"].Value;
+									Utils.ConsoleWriteLine("Main app process ID is: " + mainAppProcessId);
+									break;
+							}
+						}
+					}
+
+					// Check if main app is closed
+					if (mainAppFullPath != null && mainAppProcessId != null)
+					{
+						int id = int.TryParse(mainAppProcessId, out int result) ? result : -1;
+
+						Task.Delay(1000);
+
+						Utils.ConsoleWriteLine("UpdateClient checks if main app process is closed");
+
+						Process[] processlist = Process.GetProcesses();
+						Process process = processlist.FirstOrDefault(pr => pr.Id == id);
+
+						if (process == null)
+						{
+							break;
 						}
 					}
 				}
 
-				// Check if main app is closed
-				if (mainAppFullPath != null && mainAppProcessId != null)
-				{
-					int id = int.TryParse(mainAppProcessId, out int result) ? result : -1;
+				Utils.ConsoleWriteLine("UpdateClient starts to copy all files from update folder (source) to main app folder (target)");
+				Utils.ConsoleWriteLine("Source folder: \"" + AppDomain.CurrentDomain.BaseDirectory + "\"");
+				Utils.ConsoleWriteLine("Target folder: \"" + Path.GetDirectoryName(mainAppFullPath) + "\"");
 
-					Task.Delay(1000);
-
-					Process[] processlist = Process.GetProcesses();
-					Process process = processlist.FirstOrDefault(pr => pr.Id == id);
-
-					if (process == null)
-					{
-						break;
-					}
-				}
-			}
-
-			try
-			{
-				// Updater copies all files from own folder (= temp) to main app folder
 				DirectoryInfo diSource = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
 				DirectoryInfo diTarget = new DirectoryInfo(Path.GetDirectoryName(mainAppFullPath));
 
 				Utils.CopyDirectory(diSource, diTarget);
+				Utils.ConsoleWriteLine("UpdateClient finished copying");
 
+				Utils.ConsoleWriteLine("UpdateClient starts main app: " + mainAppFullPath);
 				Process.Start(mainAppFullPath);
-				Environment.Exit(0);
+
+				Utils.ConsoleWriteLine("UpdateClient shuts down");
+				Console.WriteLine("SUCCESS");
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
-				Console.ReadLine();
+				Utils.ConsoleWriteLine(ex.Message);
+				Console.WriteLine("FAILED");
 			}
+
+			// Put no code here
 		}
 	}
 }

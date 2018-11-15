@@ -38,18 +38,19 @@ namespace Utils
 			DateTimeOffset? latestReleaseDate = null;
 			JObject latestReleaseJson = null;
 
+			string updateProcessName = "UpdateClient";
 			string zipFullPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
 			string updateFolder = Path.GetTempPath() + @"shiny-id3-tagger-update\";
-			string updateProcessName = "UpdateClient";
 			string updateExeFullPath = updateFolder + "UpdateClient.exe";
+			string updateLogFullPath = updateFolder + "update.log";
 
 			// ######################################################################################################################
-			// Get all running updater process
+			// Get running updater process
 			Process oldUpdateProcess = (from process in Process.GetProcessesByName(updateProcessName)
 									 where process.MainModule.FileName == updateExeFullPath
 									 select process).FirstOrDefault();
 
-			// Check if an old updater is still running
+			// Check if a running updater process was found
 			if (oldUpdateProcess != null)
 			{
 				string[] warningMsg =
@@ -62,15 +63,15 @@ namespace Utils
 				return false;
 			}
 
-			// Clean up potential old update file and then check if it's not present anymore
-			bool isDeleted = await DeleteFileOrFolder(zipFullPath);
+			// Clean up old update folders and then check if it's not present anymore
+			bool isDeleted = await DeleteFileOrFolder(updateFolder);
 			if (isDeleted == false)
 			{
 				return false;
 			}
 
-			// Clean up potential old update folders and then check if it's not present anymore
-			isDeleted = await DeleteFileOrFolder(updateFolder);
+			// Clean up old update file and then check if it's not present anymore
+			isDeleted = await DeleteFileOrFolder(zipFullPath);
 			if (isDeleted == false)
 			{
 				return false;

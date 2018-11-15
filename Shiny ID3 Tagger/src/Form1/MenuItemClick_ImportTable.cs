@@ -49,50 +49,49 @@ namespace Shiny_ID3_Tagger
 						parser.HasFieldsEnclosedInQuotes = true;
 						parser.SetDelimiters(seperator);
 
+						string[] csvHeaderFields = null;
+						string[] dgvHeaderFields = null;
+						int i = 1;
+
 						try
 						{
 							// Check if first line in CSV has same headers as dataGridView1 (column order is important)
-							string[] csvHeaderFields = parser.ReadFields();
-							string[] dgvHeaderFields =
-								this.dataGridView1.Columns.Cast<DataGridViewColumn>()
+							csvHeaderFields = parser.ReadFields();
+							dgvHeaderFields = this.dataGridView1.Columns.Cast<DataGridViewColumn>()
 									.Select(column => column.HeaderText).ToArray<string>();
 
-							if (csvHeaderFields.SequenceEqual(dgvHeaderFields))
+							if (csvHeaderFields.SequenceEqual(dgvHeaderFields) == false)
 							{
-								// Read in CSV line by line until end of file (EOF) is reached, header row is already skipped
-								while (!parser.EndOfData)
-								{
-									// Convert current line as array
-									string[] fields = parser.ReadFields().ToArray();
-
-									// Update "number" with new line number
-									fields[0] = (this.dataGridView1.Rows.Count + 1).ToString(GlobalVariables.CultEng);
-
-									// Check if file was already added
-									bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
-															 where row.Cells[this.filepath1.Index].Value.ToString()
-																	  .ToLowerInvariant() ==
-																   fields[1].ToLowerInvariant()
-															 select row).Any();
-
-									// Check if file is a valid mp3 file
-									if (!rowAlreadyExists)
-									{
-										this.dataGridView1.Rows.Add(fields);
-									}
-								}
+								throw new FormatException("Header row doesn't match the table headers");
 							}
-							else
+
+							// Read in CSV line by line until end of file (EOF) is reached, header row is already skipped
+							while (!parser.EndOfData)
 							{
-								// CSV header row doesn't match datagridView1 headers
-								string[] errorMsg =
+								i++;
+
+								// Convert current line as array
+								string[] fields = parser.ReadFields().ToArray();
+
+								// A valid line needs at least two values. fields[1] is the filename
+								if (fields.Length < 2)
 								{
-									"ERROR:    Could not parse CSV file \"" + fullPath + "\"",
-									"Message:  Header row doesn't match required headers. Look for differences and change them in your CSV file",
-									"CSV:      " + string.Join(seperator, csvHeaderFields),
-									"Required: " + string.Join(seperator, dgvHeaderFields),
-								};
-								Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+									throw new MalformedLineException("No filename found in line " + i + " as second value: \"" + string.Join(seperator, fields) + "\"");
+								}
+
+								// Update "number" with new line number
+								fields[0] = (this.dataGridView1.Rows.Count + 1).ToString(GlobalVariables.CultEng);
+
+								// Check if file was already added
+								bool rowAlreadyExists = (from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
+															where row.Cells[this.filepath1.Index].Value.ToString()
+																	.ToLowerInvariant() == fields[1].ToLowerInvariant()
+															select row).Any();
+
+								if (!rowAlreadyExists)
+								{
+									this.dataGridView1.Rows.Add(fields);
+								}
 							}
 						}
 						catch (MalformedLineException ex)
@@ -100,8 +99,20 @@ namespace Shiny_ID3_Tagger
 							// Malformed CSV values somewhere which couldn't be parsed
 							string[] errorMsg =
 							{
-								"ERROR:    Could not parse CSV \"" + fullPath + "\"",
+								"ERROR:    Could not parse CSV file \"" + fullPath + "\"",
 								"Message:  " + ex.Message.TrimEnd('\r', '\n'),
+							};
+							Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+						}
+						catch (FormatException ex)
+						{
+							// Malformed CSV values somewhere which couldn't be parsed
+							string[] errorMsg =
+							{
+								"ERROR:    Could not parse CSV file \"" + fullPath + "\"",
+								"Message:  " + ex.Message,
+								"CSV:      " + string.Join(seperator, csvHeaderFields),
+								"Required: " + string.Join(seperator, dgvHeaderFields),
 							};
 							Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 						}

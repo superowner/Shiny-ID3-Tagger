@@ -1,27 +1,28 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Utils.cs" company="Shiny ID3 Tagger">
+// <copyright file="CopyDirectory.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
 
-namespace UpdateClient
+namespace Utils
 {
 	using System;
 	using System.IO;
+	using System.Linq;
 
 	/// <summary>
 	/// Represents the Utils class for helper methods
 	/// </summary>
-	internal class Utils
+	internal partial class Utils
 	{
 		/// <summary>
-		/// Blacklist for CopyAll(). These files wont get uddated. Needed to retain user made changes
+		/// Blacklist for CopyDirectory() method. These files wont get copied/uddated so user changes are retained
 		/// </summary>
-		private static readonly string[] BlackList =
+		private static readonly string[] BlackListedFiles =
 		{
-			@"\config\accounts.user.json",
-			@"\config\settings.user.json",
+			AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.user.json",
+			AppDomain.CurrentDomain.BaseDirectory + @"config\settings.user.json",
 		};
 
 		/// <summary>
@@ -29,15 +30,22 @@ namespace UpdateClient
 		/// </summary>
 		/// <param name="source">Full path of source folder</param>
 		/// <param name="target">Full path of target folder</param>
-		public static void CopyDirectory(DirectoryInfo source, DirectoryInfo target)
+		internal static void CopyDirectory(DirectoryInfo source, DirectoryInfo target)
 		{
+			Utils.ConsoleWriteLine(string.Format(@"Copying {0}\", target.FullName));
 			Directory.CreateDirectory(target.FullName);
 
+			// Exclude blacklisted files
+			FileInfo[] filteredFiles = (from file in source.GetFiles()
+										where BlackListedFiles.Contains(file.FullName) == false
+										select file).ToArray();
+
 			// Copy each file into the new directory
-			foreach (FileInfo fi in source.GetFiles())
+			foreach (FileInfo fi in filteredFiles)
 			{
-				Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
+				Utils.ConsoleWriteLine(string.Format(@"Copying {0}\{1}", target.FullName, fi.Name));
 				string targetFullPath = Path.Combine(target.FullName, fi.Name);
+
 				fi.CopyTo(targetFullPath, true);
 			}
 
