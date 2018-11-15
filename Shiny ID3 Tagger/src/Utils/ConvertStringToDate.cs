@@ -19,8 +19,8 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Valid date formats for ID3 according to http://id3.org/id3v2.4.0-structure
-		/// More info on MSDN about standard dateTime formats https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx
+		/// Valid date formats for ID3 according to <seealso href="http://id3.org/id3v2.4.0-structure"/>
+		/// More info on MSDN about standard dateTime formats <seealso href="https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.85).aspx"/>
 		/// </summary>
 		internal static readonly string[] DateTimeformats =
 		{
@@ -30,6 +30,8 @@ namespace Utils
 			"yyyy-MM-dd HH",
 			"yyyy-MM-dd HH:mm",
 			"yyyy-MM-dd HH:mm:ss",
+			"yyyy-MM-ddTHH:mm:ssZ",
+			"yyyy-MM-ddTHH:mm:ss.fffZ",
 			"MM/dd/yyyy",
 			"MM/dd/yyyy HH",
 			"MM/dd/yyyy HH:mm",
@@ -44,11 +46,11 @@ namespace Utils
 		/// <summary>Tries to convert a given string to a dateTime object</summary>
 		/// <param name="dateString">Input string which represents a date. Must match one of the valid formats</param>
 		/// <returns>The DateTime object representing the converted string value</returns>
-		internal static DateTime ConvertStringToDate(string dateString)
+		internal static DateTimeOffset ConvertStringToDate(string dateString)
 		{
 			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
 			{
-				if (DateTime.TryParseExact(dateString, DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime resultDate))
+				if (DateTimeOffset.TryParseExact(dateString, DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTimeOffset resultDate))
 				{
 					return resultDate;
 				}
@@ -60,8 +62,8 @@ namespace Utils
 
 				if (regEx.IsMatch(dateString))
 				{
-					string[] errorMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
-					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+					string[] warningMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
+					Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 				}
 			}
 

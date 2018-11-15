@@ -24,7 +24,7 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Itunes API
-		/// https://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html
+		/// <seealso href="https://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -57,7 +57,7 @@ namespace GetTags
 			{
 				searchRequest.RequestUri = new Uri("http://itunes.apple.com/search?term=" + searchTermEnc + "&media=music&limit=1");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("results") != null)

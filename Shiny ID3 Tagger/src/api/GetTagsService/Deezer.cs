@@ -25,9 +25,9 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Deezer API
-		/// http://developers.deezer.com/api/search
-		/// http://developers.deezer.com/api/explorer
-		/// http://developers.deezer.com/api/search/autocomplete
+		/// <seealso href="http://developers.deezer.com/api/search"/>
+		/// <seealso href="http://developers.deezer.com/api/explorer"/>
+		/// <seealso href="http://developers.deezer.com/api/search/autocomplete"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -61,7 +61,7 @@ namespace GetTags
 			{
 				searchRequest.RequestUri = new Uri("http://api.deezer.com/search?q=artist:\"" + artistEncoded + "\"+track:\"" + titleEncoded + "\"&limit=1&order=RANKING");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("data") != null)
@@ -74,7 +74,7 @@ namespace GetTags
 					{
 						albumRequest.RequestUri = new Uri("http://api.deezer.com/album/" + searchData.SelectToken("data[0].album.id"));
 
-						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData != null)

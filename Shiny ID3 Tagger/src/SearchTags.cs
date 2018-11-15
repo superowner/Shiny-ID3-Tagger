@@ -115,13 +115,13 @@ namespace Shiny_ID3_Tagger
 								Filepath = tagOld.Filepath,
 							};
 
-							Task<DataTable> apiTask = this.StartId3Search(client, tagOld, cancelToken);
+							Task<DataTable> id3SearchTask = this.StartId3Search(client, tagOld, cancelToken);
 							Task<KeyValuePair<string, string>> lyricSearchTask =
 								this.StartLyricsSearch(client, tagOld, cancelToken);
 
-							await Task.WhenAll(apiTask, lyricSearchTask);
+							await Task.WhenAll(id3SearchTask, lyricSearchTask);
 
-							DataTable apiResults = apiTask.Result;
+							DataTable apiResults = id3SearchTask.Result;
 							KeyValuePair<string, string> lyricsNew = lyricSearchTask.Result;
 
 							string artistNew = (from row1 in apiResults.AsEnumerable()
@@ -147,8 +147,8 @@ namespace Shiny_ID3_Tagger
 								(artistNew.ToLowerInvariant() != tagOld.Artist.ToLowerInvariant() ||
 								 titleNew.ToLowerInvariant() != tagOld.Title.ToLowerInvariant()))
 							{
-								string[] searchMsg = { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" };
-								Form1.Instance.RichTextBox_LogMessage(searchMsg, 1, "Search");
+								string[] generalMsg = { "  Spelling mistake detected. New search for: \"" + artistNew + " - " + titleNew + "\"" };
+								Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
 
 								sw.Restart();
 
@@ -156,12 +156,12 @@ namespace Shiny_ID3_Tagger
 								tagNew.Artist = artistNew;
 								tagNew.Title = titleNew;
 
-								apiTask = this.StartId3Search(client, tagNew, cancelToken);
+								id3SearchTask = this.StartId3Search(client, tagNew, cancelToken);
 								lyricSearchTask = this.StartLyricsSearch(client, tagNew, cancelToken);
 
-								await Task.WhenAll(apiTask, lyricSearchTask);
+								await Task.WhenAll(id3SearchTask, lyricSearchTask);
 
-								apiResults = apiTask.Result;
+								apiResults = id3SearchTask.Result;
 								lyricsNew = lyricSearchTask.Result;
 							}
 
@@ -172,8 +172,8 @@ namespace Shiny_ID3_Tagger
 							{
 								tagNew.Lyrics = lyricsNew.Value;
 
-								string[] searchMsg = { "  Lyrics taken from " + lyricsNew.Key };
-								Form1.Instance.RichTextBox_LogMessage(searchMsg, 1, "Search");
+								string[] generalMsg = { "  Lyrics taken from " + lyricsNew.Key };
+								Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
 							}
 
 							foreach (DataRow r in apiResults.Rows)
@@ -294,8 +294,8 @@ namespace Shiny_ID3_Tagger
 			string artistToSearch = Utils.Strip(tagOld.Artist);
 			string titleToSearch = Utils.Strip(tagOld.Title);
 
-			string searchMsg = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",-100}{"file: \"" + tagOld.Filepath + "\""}";
-			Form1.Instance.RichTextBox_LogMessage(new[] { searchMsg }, 1, "Search");
+			string generalMsg = $"{"Search for: \"" + artistToSearch + " - " + titleToSearch + "\"",-100}{"file: \"" + tagOld.Filepath + "\""}";
+			Form1.Instance.RichTextBox_LogMessage(new[] { generalMsg }, 1, GlobalVariables.OutputLog.Search);
 
 			List<Task<Id3>> taskList = this.tagsServices.Select(service =>
 																	 service.GetTags(
@@ -559,8 +559,8 @@ namespace Shiny_ID3_Tagger
 
 					if (tagNew.Cover != null)
 					{
-						string[] searchMsg = { "  Cover taken from " + api };
-						Form1.Instance.RichTextBox_LogMessage(searchMsg, 1, "Search");
+						string[] generalMsg = { "  Cover taken from " + api };
+						Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
 						break;
 					}
 				}

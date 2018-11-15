@@ -26,9 +26,9 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Decibel API
-		/// https://developer.quantonemusic.com/authentication-v3
-		/// https://developer.quantonemusic.com/rest-api-v3#classQueryAlbums
-		/// https://developer.quantonemusic.com/object-documentation
+		/// <seealso href="https://developer.quantonemusic.com/authentication-v3"/>
+		/// <seealso href="https://developer.quantonemusic.com/rest-api-v3#classQueryAlbums"/>
+		/// <seealso href="https://developer.quantonemusic.com/object-documentation"/>
 		/// titleSearchType=PartialName has poorer results than without
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
@@ -64,7 +64,7 @@ namespace GetTags
 				}
 			}
 
-			var account = (from acc in User.Accounts["Decibel"]
+			JToken account = (from acc in User.Accounts["Decibel"]
 							orderby acc["lastUsed"] ascending
 							select acc).FirstOrDefault();
 			account["lastUsed"] = DateTime.Now.Ticks;
@@ -78,7 +78,7 @@ namespace GetTags
 				searchRequest.Headers.Add("DecibelAppID", (string)account["AppId"]);
 				searchRequest.Headers.Add("DecibelAppKey", (string)account["AppKey"]);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("Results") != null && searchData?.SelectToken("Results").ToString() != "[]")
@@ -97,7 +97,7 @@ namespace GetTags
 						albumRequest.Headers.Add("DecibelAppID", (string)account["AppId"]);
 						albumRequest.Headers.Add("DecibelAppKey", (string)account["AppKey"]);
 
-						string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+						string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 						JObject albumData = Utils.DeserializeJson(albumContent);
 
 						if (albumData?.SelectToken("Results") != null && albumData?.SelectToken("Results").ToString() != "[]")

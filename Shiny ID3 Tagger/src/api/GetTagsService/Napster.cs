@@ -24,7 +24,7 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Napster API
-		/// https://developer.rhapsody.com/api#search
+		/// <seealso href="https://developer.rhapsody.com/api#search"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -57,7 +57,7 @@ namespace GetTags
 			{
 				searchRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/search?q=" + searchTermEnc + "&include=genres&type=track&limit=1&apikey=" + User.Accounts["Napster"]["ApiKey"]);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData != null)
@@ -79,7 +79,7 @@ namespace GetTags
 						{
 							albumRequest.RequestUri = new Uri("http://api.rhapsody.com/v2/albums/" + albumId + "?apikey=" + User.Accounts["Napster"]["ApiKey"]);
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken);
+							string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken);
 							JObject albumData = Utils.DeserializeJson(albumContent);
 
 							if (albumData != null)

@@ -22,9 +22,10 @@ namespace GetTags
 
 	/// <summary>
 	/// Class for Spotify API
-	/// https://developer.spotify.com/documentation/web-api/reference/search/search/#writing-a-query---guidelines
-	/// https://github.com/spotify/web-api/issues/140	=> overall results are worse when removing the chars ",:
-	/// https://github.com/spotify/web-api/issues/409
+	/// <seealso href="https://developer.spotify.com/documentation/web-api/reference/search/search/#writing-a-query---guidelines"/>
+	/// <seealso href="https://github.com/spotify/web-api/issues/140"/>
+	/// <seealso href="https://github.com/spotify/web-api/issues/409"/>
+	/// Overall results are worse when removing the chars ",:
 	/// fuzzy search with an appended asterisk (*) is useless since it only applies to a single word. And you can only use a maximum of 2 asterisk per query
 	/// A search for the following album returns nothing, but returns something as soon as ":, are removed: From "The Hunger Games: Mockingjay, Part 2" Soundtrack
 	/// </summary>
@@ -75,7 +76,7 @@ namespace GetTags
 					string creditsBase64 = Convert.ToBase64String(creditsBytes);
 					loginRequest.Headers.Add("Authorization", "Basic " + creditsBase64);
 
-					string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);
+					string loginContent = await Utils.GetHttpResponse(client, loginRequest, cancelToken);
 					JObject loginData = Utils.DeserializeJson(loginContent);
 
 					if (loginData?.SelectToken("access_token") != null)
@@ -95,7 +96,7 @@ namespace GetTags
 					searchRequest.RequestUri = new Uri("https://api.spotify.com/v1/search?q=artist:\"" + artistEncoded + "\"+track:\"" + titleEncoded + "\"&type=track&limit=1");
 					searchRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 
-					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+					string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 					JObject searchData = Utils.DeserializeJson(searchContent);
 
 					if (searchData?.SelectToken("tracks.items") != null &&
@@ -117,7 +118,7 @@ namespace GetTags
 								albumRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 								albumRequest.RequestUri = new Uri(albumUrl);
 
-								string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 502 });
+								string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 502 });
 								JObject albumData = Utils.DeserializeJson(albumContent);
 
 								if (albumData != null)
@@ -133,7 +134,8 @@ namespace GetTags
 						}
 
 						// ###########################################################################
-						// "genres" is always empty for track and album lookups. Seems like a general Spotify issue: https://github.com/spotify/web-api/issues/157
+						// "genres" is always empty for track and album lookups. Seems like a general Spotify issue
+						// https://github.com/spotify/web-api/issues/157
 						// Only artist lookups provide sometimes a genre. But they aren't sorted or weighted. Therefore artist genres produce bad results most of the time
 						string artistUrl = (string)searchData.SelectToken("tracks.items[0].artists[0].href");
 
@@ -144,7 +146,7 @@ namespace GetTags
 								artistRequest.Headers.Add("Authorization", "Bearer " + ApiSessionData.SpAccessToken);
 								artistRequest.RequestUri = new Uri(artistUrl);
 
-								string artistContent = await Utils.GetResponse(client, artistRequest, cancelToken, suppressedStatusCodes: new[] { 502 });
+								string artistContent = await Utils.GetHttpResponse(client, artistRequest, cancelToken, suppressedStatusCodes: new[] { 502 });
 								JObject artistData = Utils.DeserializeJson(artistContent);
 
 								if (artistData?.SelectToken("genres") != null &&

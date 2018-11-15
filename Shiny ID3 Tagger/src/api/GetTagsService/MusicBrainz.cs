@@ -27,12 +27,10 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from MusicBrainz API
-		/// https://wiki.musicbrainz.org/Development/XML_Web_Service/Version_2
-		/// https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2/Search
-		/// https://musicbrainz.org/doc/MusicBrainz_Database
+		/// <seealso href="https://wiki.musicbrainz.org/Development/XML_Web_Service/Version_2"/>
+		/// <seealso href="https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2/Search"/>
+		/// <seealso href="https://musicbrainz.org/doc/MusicBrainz_Database"/>
 		/// limit=1 cannot be used, client side filter is used to sort by release date
-		/// List of mirror servers: http://www.tranquilbase.org/category/musicbrainz/
-		/// 1) https://musicbrainz.org		2) http://musicbrainz-mirror.eu:5000	3) http://musicbrainz.fin-alice.de:5000		// 1) https://beta.musicbrainz.org
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -69,7 +67,7 @@ namespace GetTags
 				searchRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 				searchRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("count").ToString() != "0")
@@ -141,7 +139,7 @@ namespace GetTags
 						releasegroupRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
 						releasegroupRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/release-group/" + releasegroupid + "?inc=tags+ratings+artists&fmt=json");
 
-						string releaseGroupContent = await Utils.GetResponse(client, releasegroupRequest, cancelToken);
+						string releaseGroupContent = await Utils.GetHttpResponse(client, releasegroupRequest, cancelToken);
 						JObject releaseGroupData = Utils.DeserializeJson(releaseGroupContent);
 
 						if (releaseGroupData != null)
@@ -167,7 +165,7 @@ namespace GetTags
 						coverRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 						coverRequest.RequestUri = new Uri("http://coverartarchive.org/release-group/" + releasegroupid);
 
-						string coverContent = await Utils.GetResponse(client, coverRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+						string coverContent = await Utils.GetHttpResponse(client, coverRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 						JObject coverData = Utils.DeserializeJson(coverContent);
 
 						if (coverData != null)

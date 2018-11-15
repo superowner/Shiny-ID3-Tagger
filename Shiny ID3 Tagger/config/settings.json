@@ -1,10 +1,12 @@
 {
-	"DebugLevel": 2,
+	"LogLevel": 3,
 	"PreferTags": true,
 	"RemoveVersion": true,
 	"RemoveFeaturing": true,
 	"OverwriteImage": true,
+	"AutoCollectFiles": true,
 	"AutoSearch": true,
+	"AutoUpdate": false,
 	"AutoCapitalize": true,
 	"ThresholdRedValue": 30,
 	"MaxImageSize": 500,

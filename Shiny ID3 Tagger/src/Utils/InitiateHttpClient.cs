@@ -18,7 +18,7 @@ namespace Utils
 	{
 		/// <summary>
 		/// Creates a HTTP client which is used throughout the whole program for all API requests
-		/// https://contrivedexample.com/2017/07/01/using-httpclient-as-it-was-intended-because-youre-not/
+		/// <seealso href="https://contrivedexample.com/2017/07/01/using-httpclient-as-it-was-intended-because-youre-not/"/>
 		/// </summary>
 		/// <returns>The HTTP client</returns>
 		internal static HttpClient InitiateHttpClient()

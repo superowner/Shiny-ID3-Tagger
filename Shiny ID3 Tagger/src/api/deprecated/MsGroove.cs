@@ -26,9 +26,9 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 tags from Microsoft Groove API
-		/// https://apps.dev.microsoft.com/#/appList
-		/// https://developer.microsoft.com/de-de/dashboard/groove
-		/// https://docs.microsoft.com/en-us/groove/groove-service-rest-reference/uri-search-content#examples
+		/// <seealso href="https://apps.dev.microsoft.com/#/appList"/>
+		/// <seealso href="https://developer.microsoft.com/de-de/dashboard/groove"/>
+		/// <seealso href="https://docs.microsoft.com/en-us/groove/groove-service-rest-reference/uri-search-content#examples"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="artist">The input artist to search for</param>
@@ -71,7 +71,7 @@ namespace GetTags
 						new KeyValuePair<string, string>("scope", "app.music.xboxlive.com"),
 					});
 
-					string loginContent = await Utils.GetResponse(client, loginRequest, cancelToken);
+					string loginContent = await Utils.GetHttpResponse(client, loginRequest, cancelToken);
 					JObject loginData = Utils.DeserializeJson(loginContent);
 
 					if (loginData?.SelectToken("access_token") != null)
@@ -93,7 +93,7 @@ namespace GetTags
 					searchRequest.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 
 					// ###########################################################################
-					string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+					string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 					JObject searchData = Utils.DeserializeJson(searchContent);
 
 					if (searchData?.SelectToken("Tracks.Items") != null)
@@ -114,7 +114,7 @@ namespace GetTags
 							albumRequest.Headers.Add("Authorization", "Bearer " + tokenEncoded);
 							albumRequest.RequestUri = new Uri("https://music.xboxlive.com/1/content/" + (string)searchData.SelectToken("Tracks.Items[0].Album.Id") + "/lookup?contentType=JSON");
 
-							string albumContent = await Utils.GetResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+							string albumContent = await Utils.GetHttpResponse(client, albumRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 							JObject albumData = Utils.DeserializeJson(albumContent);
 
 							if (albumData?.SelectToken("Albums.Items") != null)

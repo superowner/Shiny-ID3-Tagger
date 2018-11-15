@@ -24,9 +24,9 @@ namespace GetTags
 	{
 		/// <summary>
 		/// Gets ID3 data from Qobuz API
-		/// http://www.qobuz.com/account/profile
-		/// https://github.com/Qobuz/api-documentation
-		/// https://github.com/Qobuz/api-documentation/blob/master/endpoints/track/search.md
+		/// <seealso href="http://www.qobuz.com/account/profile"/>
+		/// <seealso href="https://github.com/Qobuz/api-documentation"/>
+		/// <seealso href="https://github.com/Qobuz/api-documentation/blob/master/endpoints/track/search.md"/>
 		/// No English genre names possible. API returns French genre names
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
@@ -60,7 +60,7 @@ namespace GetTags
 			{
 				searchRequest.RequestUri = new Uri("http://www.qobuz.com/api.json/0.2/track/search?limit=1&app_id=" + User.Accounts["Qobuz"]["AppId"] + "&query=" + searchTermEnc);
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken);
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
 				if (searchData?.SelectToken("tracks.items[0]") != null)

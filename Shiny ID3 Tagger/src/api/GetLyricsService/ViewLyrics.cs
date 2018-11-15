@@ -28,11 +28,11 @@ namespace GetLyrics
 	{
 		/// <summary>
 		/// Gets lyrics from viewlyrics API
-		/// https://github.com/rikels/LyricsSearch/blob/master/lyrics.py#L88
-		/// https://github.com/PedroHLC/ViewLyricsOpenSearcher
-		/// https://github.com/PedroHLC/ViewLyricsOpenSearcher/blob/master/viewlyricsopensearcher.php#L60
-		/// https://github.com/osdlyrics/osdlyrics/blob/master/lyricsources/viewlyrics/viewlyrics.py
-		/// LRC format explained: https://wiki.mobileread.com/wiki/LRC
+		/// LRC format explained: <seealso href="https://wiki.mobileread.com/wiki/LRC"/>
+		/// <seealso href="https://github.com/rikels/LyricsSearch/blob/master/lyrics.py#L88"/>
+		/// <seealso href="https://github.com/PedroHLC/ViewLyricsOpenSearcher"/>
+		/// <seealso href="https://github.com/PedroHLC/ViewLyricsOpenSearcher/blob/master/viewlyricsopensearcher.php#L60"/>
+		/// <seealso href="https://github.com/osdlyrics/osdlyrics/blob/master/lyricsources/viewlyrics/viewlyrics.py"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="tagNew">The input artist and song title to search for</param>
@@ -61,7 +61,7 @@ namespace GetLyrics
 				searchRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
 				// Retrieve response from server, 4th argument tells GetResponse() to return a byte array rather than a string
-				byte[] response = await Utils.GetResponse(client, searchRequest, cancelToken, true);
+				byte[] response = await Utils.GetHttpResponse(client, searchRequest, cancelToken, true);
 				string searchContent = this.DecodeResponse(response);
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
@@ -79,7 +79,7 @@ namespace GetLyrics
 						{
 							lyricsRequest.RequestUri = new Uri("http://www.viewlyrics.com/" + lyricsLink);
 
-							string lyricsContent = await Utils.GetResponse(client, lyricsRequest, cancelToken);
+							string lyricsContent = await Utils.GetHttpResponse(client, lyricsRequest, cancelToken);
 							string rawLyrics = lyricsContent;
 
 							if (!string.IsNullOrWhiteSpace(rawLyrics))

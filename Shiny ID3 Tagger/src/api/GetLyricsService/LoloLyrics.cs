@@ -26,7 +26,7 @@ namespace GetLyrics
 	{
 		/// <summary>
 		/// Gets lyrics from LoloLyrics API
-		/// http://api.lololyrics.com/
+		/// <seealso href="http://api.lololyrics.com/"/>
 		/// </summary>
 		/// <param name="client">The HTTP client which is passed on to GetResponse method</param>
 		/// <param name="tagNew">The input artist and song title to search for</param>
@@ -47,7 +47,7 @@ namespace GetLyrics
 			{
 				searchRequest.RequestUri = new Uri("http://api.lololyrics.com/0.5/getLyric?artist=" + artistEncoded + "&track=" + titleEncoded + "&rawutf8=1");
 
-				string searchContent = await Utils.GetResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
+				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken, suppressedStatusCodes: new[] { 404 });
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 
 				if (searchData?.SelectToken("result.response") != null)
