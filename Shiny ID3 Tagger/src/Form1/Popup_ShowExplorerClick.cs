@@ -28,6 +28,7 @@ namespace Shiny_ID3_Tagger
 		{
 			if (GlobalVariables.ActiveDGV.CurrentRow != null)
 			{
+				// TODO: System null exception when using CSV shit values
 				string filePath = GlobalVariables.ActiveDGV.CurrentRow.Cells[this.filepath1.Index].Value.ToString();
 
 				if (File.Exists(filePath))

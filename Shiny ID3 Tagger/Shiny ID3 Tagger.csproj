@@ -177,8 +177,9 @@
     </Compile>
     <Compile Include="src\SingleInstanceController.cs" />
     <Compile Include="src\Utils\DeleteFileOrFolder.cs" />
+    <Compile Include="src\Utils\GetAccounts.cs" />
     <Compile Include="src\Utils\IsValidImage.cs" />
-    <Compile Include="src\Utils\GetSettingsAccounts.cs" />
+    <Compile Include="src\Utils\GetSettings.cs" />
     <Compile Include="src\Utils\IsValidRegex.cs" />
     <Compile Include="src\Utils\StartUpdateClient.cs" />
     <Compile Include="src\Utils\ParseInt.cs" />
@@ -387,7 +388,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>CD $(SolutionDir)
-GIT log -1 --pretty=format:"{"""commit""": """%25%25H""", """date""": """%25%25aD"""}" &gt; "$(TargetDir)config\lastCommit.json"
+GIT log -1 --pretty=format:"{"""commit""": """%25%25H""", """date""": """%25%25cI"""}" &gt; "$(TargetDir)config\lastCommit.json"
 MKDIR "$(TargetDir)libs"
 MOVE /Y "$(TargetDir)*.dll" "$(TargetDir)libs"
 MOVE /Y "$(TargetDir)*.xml" "$(TargetDir)libs"

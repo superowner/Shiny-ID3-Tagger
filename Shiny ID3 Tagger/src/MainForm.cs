@@ -45,10 +45,12 @@ namespace Shiny_ID3_Tagger
 			GlobalVariables.TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
-			bool isSuccessful = Utils.GetSettingsAccounts();
+			// Read in settings and accounts config
+			User.Settings = Utils.GetSettings();
+			User.Accounts = Utils.GetAccounts();
 
 			// If user settings or user accounts are not available: Don't continue, disable UI, let user read error message
-			if (isSuccessful)
+			if (User.Settings != null && User.Accounts != null)
 			{
 				// If AutoUpdate is enabled, update client files
 				if ((bool)User.Settings["AutoUpdate"])

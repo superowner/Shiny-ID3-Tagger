@@ -4,6 +4,9 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Review: Use $ref and $id to get rid of settings.user.schema. Use settings.default.json as schema then
+// 			The problem is, how can i have one schema with "required" and one without "required"
+// 			https://www.newtonsoft.com/jsonschema/help/html/LoadingSchemas.htm
 
 namespace Utils
 {
@@ -42,7 +45,7 @@ namespace Utils
 				// If the config could not be validated, throw an exception
 				if (errorMessages.Count > 0)
 				{
-					string validationResult = string.Join("\n          ", (IEnumerable<string>)errorMessages);
+					string validationResult = string.Join("\n          ", errorMessages);
 
 					throw new ArgumentException(validationResult);
 				}

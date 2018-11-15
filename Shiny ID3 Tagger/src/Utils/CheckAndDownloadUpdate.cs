@@ -80,9 +80,9 @@ namespace Utils
 			// Get the commit date of the local program files
 			// lastCommit file is automatically created after each built run via Visual Studio project properties > post build command
 			// 		cd $(SolutionDir)
-			// 		git log -1 --pretty=format:"{commit: %%H, date: %%ad}" > "$(TargetDir)config\lastCommit.json"
+			// 		git log -1 --pretty=format:"{commit: %%H, date: %%cI}" > "$(TargetDir)config\lastCommit.json"
 			string configPath = AppDomain.CurrentDomain.BaseDirectory + @"config\lastCommit.json";
-			string configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.schema.json";
+			string configSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\lastCommit.json";
 			JObject lastCommit = Utils.ReadConfig(configPath, configSchemaPath);
 
 			// Check if commit date could be read

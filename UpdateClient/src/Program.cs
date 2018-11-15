@@ -95,11 +95,9 @@ namespace UpdateClient
 				// Updater copies all files from own folder (= temp) to main app folder
 				DirectoryInfo diSource = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
 				DirectoryInfo diTarget = new DirectoryInfo(Path.GetDirectoryName(mainAppFullPath));
-				CopyDirectory.CopyAll(diSource, diTarget);
 
-				// TODO: Dont copy this. Pass a blacklist to CopyAll
-				// 	- accounts.user.json
-				// 	- settings.user.json
+				Utils.CopyDirectory(diSource, diTarget);
+
 				Process.Start(mainAppFullPath);
 				Environment.Exit(0);
 			}
