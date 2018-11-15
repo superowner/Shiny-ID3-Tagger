@@ -42,9 +42,6 @@ namespace Utils
 				return;
 			}
 
-			// UNDONE: Remove this copy command when Updater is finished
-			File.Copy(AppDomain.CurrentDomain.BaseDirectory + "UpdateClient.exe", updateExeFullPath, true);
-
 			// Start UpdateClient.exe in temp folder (= new version from GitHub)
 			Process.Start(updateExeFullPath);
 

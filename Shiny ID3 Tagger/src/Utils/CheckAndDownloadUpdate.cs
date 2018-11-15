@@ -144,22 +144,21 @@ namespace Utils
 
 				// ######################################################################################################################
 				// If local file date is equal or newer then release date, than there is no update availale
-				// UNDONE: Include this command when Updater is finished
-				// if (localCommitDate >= latestReleaseDate)
-				// {
-				// 	if (showMessages)
-				// 	{
-				// 		string[] generalMsg =
-				// 		{
-				// 			"No newer version found!",
-				// 			"Your version:\t" + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
-				// 			"Newest version:\t" + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
-				// 		};
-				// 		Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
-				// 	}
+				if (localCommitDate >= latestReleaseDate)
+				{
+					if (showMessages)
+					{
+						string[] generalMsg =
+						{
+				 			"No newer version found!",
+				 			"Your version:\t" + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
+				 			"Newest version:\t" + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
+						};
+						Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
+					}
 
-				// 	return false;
-				// }
+					return false;
+				}
 
 				// Ask user if he want's to update the program
 				DialogResult dialogResult = MessageBox.Show(
