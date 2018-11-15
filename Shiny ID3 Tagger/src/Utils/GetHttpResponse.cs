@@ -105,7 +105,7 @@ namespace Utils
 						if (!cancelToken.IsCancellationRequested)
 						{
 							// Print out all request and response properties
-							errorMsg = new List<string> { "DEBUG:    Response was unsuccessful! " + i + " retries left. Retrying..." };
+							errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
 							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
 							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 3);
 
