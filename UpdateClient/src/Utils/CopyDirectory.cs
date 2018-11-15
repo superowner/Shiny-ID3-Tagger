@@ -23,6 +23,7 @@ namespace Utils
 		{
 			AppDomain.CurrentDomain.BaseDirectory + @"config\accounts.user.json",
 			AppDomain.CurrentDomain.BaseDirectory + @"config\settings.user.json",
+			AppDomain.CurrentDomain.BaseDirectory + @"update.log",
 		};
 
 		/// <summary>
