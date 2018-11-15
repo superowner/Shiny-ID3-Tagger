@@ -54,7 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="properties\AssemblyInfo.cs" />
-    <Compile Include="src\CopyDirectory.cs" />
+    <Compile Include="src\Utils\ConsoleWriteLine.cs" />
+    <Compile Include="src\Utils\CopyDirectory.cs" />
     <Compile Include="src\Program.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,4 +69,11 @@
     <None Include="stylecop.ruleset" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>CD $(SolutionDir)
+MKDIR "$(TargetDir)libs"
+MOVE /Y "$(TargetDir)*.dll" "$(TargetDir)libs"
+MOVE /Y "$(TargetDir)*.xml" "$(TargetDir)libs"
+DEL /Q "$(TargetDir)*.pdb"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

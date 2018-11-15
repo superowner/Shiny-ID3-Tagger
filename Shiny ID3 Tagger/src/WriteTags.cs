@@ -123,7 +123,7 @@ namespace Shiny_ID3_Tagger
 								cell.Style.BackColor = Color.Empty;
 							}
 
-							generalMsg = new string[]	{ "Writing done!" };
+							generalMsg = new string[] { "Writing done!" };
 							Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 						}
 						else

@@ -187,25 +187,28 @@ namespace Shiny_ID3_Tagger
 
 								foreach (string pattern in User.Settings["FilenamePatterns"])
 								{
-									// test each pattern against current filename
-									Match match = Regex.Match(filename, pattern);
-
-									// Stop at first successful match
-									if (match.Success)
+									if (Utils.IsValidRegex(pattern))
 									{
-										// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
-										if ((bool)User.Settings["PreferTags"])
-										{
-											artistChoices[1] = match.Groups["artist"].Value;
-											titleChoices[1] = match.Groups["title"].Value;
-										}
-										else
-										{
-											artistChoices[0] = match.Groups["artist"].Value;
-											titleChoices[0] = match.Groups["title"].Value;
-										}
+										// Test each pattern against current filename
+										Match match = Regex.Match(filename, pattern);
 
-										break;
+										// Stop at first successful match
+										if (match.Success)
+										{
+											// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
+											if ((bool)User.Settings["PreferTags"] == false)
+											{
+												artistChoices[0] = match.Groups["artist"].Value;
+												titleChoices[0] = match.Groups["title"].Value;
+											}
+											else
+											{
+												artistChoices[1] = match.Groups["artist"].Value;
+												titleChoices[1] = match.Groups["title"].Value;
+											}
+
+											break;
+										}
 									}
 								}
 
