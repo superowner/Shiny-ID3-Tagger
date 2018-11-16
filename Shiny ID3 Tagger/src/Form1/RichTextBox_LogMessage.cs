@@ -20,6 +20,7 @@ namespace Shiny_ID3_Tagger
 	{
 		/// <summary>
 		/// Writes a given list of messages to the desired richTextBox
+		/// <seealso href="https://stackoverflow.com/a/1547483/935614"/>
 		/// </summary>
 		/// <param name="values">List of messages to log</param>
 		/// <param name="messageLevel">Debug level or severity of the message
@@ -61,9 +62,13 @@ namespace Shiny_ID3_Tagger
 			}
 
 			// If one value is a multi line string (i.e. HTML body), then split and rejoin each line with enough whitespace to align them
-			values = values.Select(x => string.Join(Environment.NewLine + "               ", x.Split('\n'))).ToArray();
+			values = values.Select(x => string.Join(
+				Environment.NewLine + "               ",
+				x.Split(
+					new[] { "\r\n", "\r", "\n" },
+					StringSplitOptions.None))).ToArray();
 
-			// Join all lines into one string, add newline and whitespace to align them
+			// Join ALL lines into one string, add newline and whitespace to align them
 			string message = string.Join(Environment.NewLine + "               ", values);
 
 			try

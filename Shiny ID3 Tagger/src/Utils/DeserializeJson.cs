@@ -17,11 +17,13 @@ namespace Utils
 	{
 		/// <summary> Deserialize a JSON string to a JSON.NET JObject </summary>
 		/// <param name="jsonStr">The input string which should be deserialized. If jsonStr = null, then null will be returned</param>
+		/// <param name="throwException">If true, then throw  an exception. Otherwise just print a warning (default)</param>
 		/// <returns>The new JObject holding all the values from content string</returns>
-		internal static JObject DeserializeJson(string jsonStr)
+		/// <exception cref="JsonException">If input string is not a valid JSON</exception>
+		internal static JObject DeserializeJson(string jsonStr, bool throwException = false)
 		{
 			// string.Empty is used to prevent a NullReference exception
-			return JsonConvert.DeserializeObject<JObject>(jsonStr ?? string.Empty, GetJsonDeserializerSettings());
+			return JsonConvert.DeserializeObject<JObject>(jsonStr ?? string.Empty, GetJsonDeserializerSettings(jsonStr, throwException));
 		}
 
 		/// <summary>
@@ -33,7 +35,8 @@ namespace Utils
 		/// <seealso href="https://www.newtonsoft.com/json/help/html/P_Newtonsoft_Json_Serialization_ErrorContext_Handled.htm"/>
 		/// </summary>
 		/// <returns>A JsonSerializerSettings object holding all settings</returns>
-		private static JsonSerializerSettings GetJsonDeserializerSettings()
+		/// <exception cref="JsonException">If input string is not a valid JSON</exception>
+		private static JsonSerializerSettings GetJsonDeserializerSettings(string jsonStr, bool throwException)
 		{
 			JsonSerializerSettings jsonSettings = new JsonSerializerSettings
 			{
@@ -43,17 +46,22 @@ namespace Utils
 
 			jsonSettings.Error += (obj, errorArgs) =>
 			{
-				// Set error on handled=true. DeserializeJson should never throw an error
-				// Other methods should expect a null value if parsing failed
-				errorArgs.ErrorContext.Handled = true;
-
-				// Build a more useful error message when JSON parsing fails
-				string[] warningMsg =
+				if (throwException == false)
 				{
-						"WARNING:  Could not convert string to JSON!",
+					// Set error on handled=true. DeserializeJson shall not throw an error
+					// Other methods should expect a null value if parsing failed
+					errorArgs.ErrorContext.Handled = true;
+
+					// Build a more useful error message when JSON parsing fails
+					string[] warningMsg =
+					{
+						"WARNING:  Could not parse JSON!",
 						"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n'),
-				};
-				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+						"JSON:     " + jsonStr,
+					};
+
+					Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+				}
 			};
 
 			return jsonSettings;

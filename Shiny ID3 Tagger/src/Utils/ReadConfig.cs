@@ -74,7 +74,7 @@ namespace Utils
 				}
 
 				// Parse JSON (throws JsonException)
-				JObject json = Utils.DeserializeJson(fileContent);
+				JObject json = Utils.DeserializeJson(fileContent, true);
 
 				// Validate config (throws JSchemaValidationException)
 				ValidateConfig(json, schemaPath);
