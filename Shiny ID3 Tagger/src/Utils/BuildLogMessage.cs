@@ -19,15 +19,16 @@ namespace Utils
 		/// Prepares the message which should be printed out when a HttpRquest failed or debugging is enabled
 		/// </summary>
 		/// <param name="request">request object to get method and status code which may hold information about why a request failed</param>
-		/// <param name="requestContent">request content which may hold a error message about why a request failed</param>
-		/// <param name="response">The returned response will be added to output as once</param>
+		/// <param name="requestContent">request content which may hold an error message about why a request failed</param>
+		/// <param name="response">The returned response</param>
+		/// <param name="result">The result body of the response</param>
 		/// <returns>The log message as list of string. Each list element represents a new line</returns>
-		internal static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response)
+		internal static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response, dynamic result)
 		{
 			List<string> errorMsg = new List<string>();
 
 			// If request exists, add all parameters from request
-			if (request != null)
+			if (request != null && request.RequestUri != null && request.RequestUri.OriginalString != null)
 			{
 				errorMsg.Add("Request:  " + request.Method + " " + request.RequestUri.OriginalString);
 
@@ -38,19 +39,22 @@ namespace Utils
 				}
 			}
 
-			// If post body exists, add it
-			if (!string.IsNullOrEmpty(requestContent))
+			// If request body exists, add it
+			if (requestContent != null)
 			{
 				errorMsg.Add("Body:     " + requestContent);
-				requestContent = string.Empty;
 			}
 
 			// If response exists, add it
 			if (response != null)
 			{
-				string responseContent = response.Content.ReadAsStringAsync().Result;
 				errorMsg.Add("Status:   " + response.ReasonPhrase + ": " + (int)response.StatusCode);
-				errorMsg.Add("Response: " + responseContent);
+			}
+
+			// If response had a string result, add it
+			if (result?.GetType() == typeof(string))
+			{
+				errorMsg.Add("Response: " + result);
 			}
 
 			return errorMsg;

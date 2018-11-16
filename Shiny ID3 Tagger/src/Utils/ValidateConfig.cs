@@ -47,7 +47,7 @@ namespace Utils
 				{
 					string validationResult = string.Join("\n          ", errorMessages);
 
-					throw new ArgumentException(validationResult);
+					throw new JSchemaValidationException(validationResult);
 				}
 			}
 		}

@@ -45,7 +45,12 @@ namespace Utils
 
 			dynamic result = null;
 			HttpResponseMessage response = new HttpResponseMessage();
+
+			// Take a backup copy of original request. Otherwise you can't send a request multiple times
 			HttpRequestMessage requestBackup = CloneRequest(request);
+
+			CancellationTokenSource timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
+			timeoutToken.CancelAfter(TimeSpan.FromSeconds(timeout));
 
 			for (int i = maxRetries; i >= 1; i--)
 			{
@@ -54,26 +59,35 @@ namespace Utils
 					return null;
 				}
 
-				string requestContent = string.Empty;
-				request = CloneRequest(requestBackup);
-
-				CancellationTokenSource timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
-				timeoutToken.CancelAfter(TimeSpan.FromSeconds(timeout));
+				string requestContent = null;
 
 				try
 				{
-					// Save request content for later reuse when an error occurs
+					// Save request content for later (BuildLogMessage needs it)
 					if (request.Content != null)
 					{
 						requestContent = await request.Content.ReadAsStringAsync();
 					}
 
-					// The actual request is send here
+					// Restore original request
+					request = CloneRequest(requestBackup);
+
+					// The actual request is send and the received response is saved
 					response = await client.SendAsync(request, timeoutToken.Token);
+
+					// In most cases return a string. But the viewLyrics module needs a byte array
+					if (returnByteArray)
+					{
+						result = await response.Content.ReadAsByteArrayAsync();
+					}
+					else
+					{
+						result = await response.Content.ReadAsStringAsync();
+					}
 
 					// Print out all requests including their headers and corresponding response
 					List<string> errorMsg = new List<string> { "DEBUG:    API request executed" };
-					errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+					errorMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
 					Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 4);
 
 					// Check if the returned status code is within a call-specific array of codes to suppress
@@ -86,16 +100,6 @@ namespace Utils
 					// Response was successful. Read content from response and return content
 					if (response.IsSuccessStatusCode)
 					{
-						// In most cases we return a string. But the viewLyrics module needs a byte array
-						if (returnByteArray)
-						{
-							result = await response.Content.ReadAsByteArrayAsync();
-						}
-						else
-						{
-							result = await response.Content.ReadAsStringAsync();
-						}
-
 						break;
 					}
 					else
@@ -106,7 +110,7 @@ namespace Utils
 						{
 							// Print out all request and response properties
 							errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
-							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
+							errorMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
 							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 3);
 
 							// Response was not successful. But it was also not a common error. And user did not press cancel
@@ -126,7 +130,7 @@ namespace Utils
 						if (!cancelToken.IsCancellationRequested)
 						{
 							List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
-							warningMsg.AddRange(BuildLogMessage(request, requestContent, response));
+							warningMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
 							Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
 						}
 					}

@@ -65,7 +65,8 @@ namespace GetTags
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
 				searchRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
-				searchRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
+				searchRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/recording?" +
+					Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
 
 				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);

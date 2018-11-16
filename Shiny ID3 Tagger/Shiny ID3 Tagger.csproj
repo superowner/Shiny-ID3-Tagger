@@ -180,6 +180,7 @@
     <Compile Include="src\Utils\GetAccounts.cs" />
     <Compile Include="src\Utils\IsValidImage.cs" />
     <Compile Include="src\Utils\GetSettings.cs" />
+    <Compile Include="src\Utils\IsValidBase64.cs" />
     <Compile Include="src\Utils\IsValidRegex.cs" />
     <Compile Include="src\Utils\StartUpdateClient.cs" />
     <Compile Include="src\Utils\ParseInt.cs" />
