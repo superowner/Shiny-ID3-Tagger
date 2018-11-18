@@ -34,6 +34,7 @@ namespace Shiny_ID3_Tagger
 			new GetLyrics.Netease(),
 			new GetLyrics.ViewLyrics(),
 			new GetLyrics.Xiami(),
+			new GetLyrics.ChartLyrics(),
 		};
 
 		private List<IGetTagsService> tagsServices = new List<IGetTagsService>

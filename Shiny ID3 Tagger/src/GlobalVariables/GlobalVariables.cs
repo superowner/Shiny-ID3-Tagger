@@ -10,8 +10,10 @@ namespace GlobalVariables
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Text.RegularExpressions;
 	using System.Threading;
 	using System.Windows.Forms;
+	using Utils;
 
 	/// <summary>
 	/// Represents a class for global program variables used throughout the whole program and are not API specific
@@ -37,6 +39,11 @@ namespace GlobalVariables
 		/// Gets or sets a list of seconds (one entry per service) to measure how long a service took to respond to API requests
 		/// </summary>
 		internal static readonly Dictionary<string, decimal> TotalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+
+		/// <summary>
+		/// Gets a regex pattern which detects if utf-8 bytes were saved into an iso-8859-1 database
+		/// </summary>
+		internal static readonly string MalformedUtf8Pattern = Utils.CreateRegexToCheckMalformedUtf8();
 
 		/// <summary>
 		/// Enum to decide which richTextBox to use

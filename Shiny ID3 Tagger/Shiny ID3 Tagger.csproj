@@ -249,7 +249,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Utils\Capitalize.cs" />
-    <Compile Include="src\Utils\CheckMalformedUtf8.cs" />
+    <Compile Include="src\Utils\ConvertMalformedUtf8.cs" />
     <Compile Include="src\Utils\CopyRequest.cs" />
     <Compile Include="src\Utils\ConvertStringToDate.cs" />
     <Compile Include="src\Utils\ConvertXmlToJson.cs" />
@@ -263,7 +263,7 @@
     <Compile Include="src\Utils\InitiateHttpClient.cs" />
     <Compile Include="src\Utils\IsValidMp3.cs" />
     <Compile Include="src\Utils\IsValidUrl.cs" />
-    <Compile Include="src\Utils\LevenshteinDistance.cs" />
+    <Compile Include="src\Utils\CalcStringSimilarity.cs" />
     <Compile Include="src\Form1\RichTextBox_LogMessage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -299,7 +299,7 @@
     <Compile Include="src\api\GetTagsService\QQ.cs" />
     <Compile Include="src\api\GetTagsService\Spotify.cs" />
     <Compile Include="src\api\GetTagsService\Tidal.cs" />
-    <Compile Include="src\api\deprecated\ChartLyrics.cs" />
+    <Compile Include="src\api\GetLyricsService\ChartLyrics.cs" />
     <Compile Include="src\api\GetLyricsService\LoloLyrics.cs" />
     <Compile Include="src\api\GetLyricsService\Netease.cs" />
     <Compile Include="src\api\GetLyricsService\Xiami.cs" />

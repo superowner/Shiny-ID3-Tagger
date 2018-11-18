@@ -56,8 +56,9 @@ namespace Utils
 			}
 
 			// If response had a string result, add it
-			if (result?.GetType() == typeof(string))
+			if (result?.GetType() == typeof(string) && response?.Content?.Headers?.ContentLength != null)
 			{
+				errorMsg.Add("Size:     " + response.Content.Headers.ContentLength + " Bytes");
 				errorMsg.Add("Response: " + result);
 			}
 

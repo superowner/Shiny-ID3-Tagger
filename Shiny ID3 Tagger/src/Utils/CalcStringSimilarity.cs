@@ -1,9 +1,10 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="LevenshteinDistance.cs" company="Shiny ID3 Tagger">
+// <copyright file="CalcStringSimilarity.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -17,13 +18,19 @@ namespace Utils
 		/// <summary>
 		/// Calculates how similar two strings are using the so called Levenshtein method
 		/// Outputs how many edits are needed to get from one string to another
+		/// For performance reasons you cannot compare strings longer than 32767 characters
 		/// </summary>
 		/// <param name="s">First string to compare</param>
 		/// <param name="t">Second string to compare</param>
 		/// <returns>Number of edits as a measurement for similarity</returns>
-		internal static int LevenshteinDistance(string s, string t)
+		internal static int CalcStringSimilarity(string s, string t)
 		{
 			if (s == t)
+			{
+				return 0;
+			}
+
+			if (s.Length > short.MaxValue || t.Length > short.MaxValue)
 			{
 				return 0;
 			}
