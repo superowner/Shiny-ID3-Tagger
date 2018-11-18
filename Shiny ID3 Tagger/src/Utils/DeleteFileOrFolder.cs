@@ -23,7 +23,7 @@ namespace Utils
 		/// </summary>
 		/// <param name="fullPath">The path to a file/folder</param>
 		/// <returns>True if deletion was successfull or false if not</returns>
-		private static async Task<bool> DeleteFileOrFolder(string fullPath)
+		internal static async Task<bool> DeleteFileOrFolder(string fullPath)
 		{
 			const int WriteDelay = 50;
 			const int MaxRetries = 3;

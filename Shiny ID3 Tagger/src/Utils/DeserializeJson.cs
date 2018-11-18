@@ -19,7 +19,7 @@ namespace Utils
 		/// <param name="jsonStr">The input string which should be deserialized. If jsonStr = null, then null will be returned</param>
 		/// <param name="throwException">If true, then throw  an exception. Otherwise just print a warning (default)</param>
 		/// <returns>The new JObject holding all the values from content string</returns>
-		/// <exception cref="JsonException">If input string is not a valid JSON</exception>
+		/// <exception cref="JsonException">If input string is not a valid JSON and throwExeption is set to true</exception>
 		internal static JObject DeserializeJson(string jsonStr, bool throwException = false)
 		{
 			// string.Empty is used to prevent a NullReference exception

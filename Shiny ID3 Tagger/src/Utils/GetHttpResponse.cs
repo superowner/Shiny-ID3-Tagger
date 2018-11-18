@@ -42,40 +42,40 @@ namespace Utils
 			const int maxRetries = 3;
 			const int retryDelay = 2;
 			int timeout = customTimeout ?? 15;
-
 			dynamic result = null;
 			HttpResponseMessage response = new HttpResponseMessage();
 
 			// Take a backup copy of original request. Otherwise you can't send a request multiple times
-			HttpRequestMessage requestBackup = CloneRequest(request);
+			HttpRequestMessage requestBackup = CopyRequest(request);
 
+			// Create a timeout token which is linked to global cancelToken
 			CancellationTokenSource timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
 			timeoutToken.CancelAfter(TimeSpan.FromSeconds(timeout));
 
+			// Save request content for later (BuildLogMessage needs it)
+			string requestContent = null;
+			if (request.Content != null)
+			{
+				requestContent = await request.Content.ReadAsStringAsync();
+			}
+
 			for (int i = maxRetries; i >= 1; i--)
 			{
+				// Cancel request and don't try again if user pressed ESC
 				if (cancelToken.IsCancellationRequested)
 				{
-					return null;
+					break;
 				}
-
-				string requestContent = null;
 
 				try
 				{
-					// Save request content for later (BuildLogMessage needs it)
-					if (request.Content != null)
-					{
-						requestContent = await request.Content.ReadAsStringAsync();
-					}
+					// Restore original request before each loop otherwise the request cannot be executed more than one time
+					request = CopyRequest(requestBackup);
 
-					// Restore original request
-					request = CloneRequest(requestBackup);
-
-					// The actual request is send and the received response is saved
+					// Send request and save response
 					response = await client.SendAsync(request, timeoutToken.Token);
 
-					// In most cases return a string. But the viewLyrics module needs a byte array
+					// Read response as string. So far only the viewLyrics module needs a byte array
 					if (returnByteArray)
 					{
 						result = await response.Content.ReadAsByteArrayAsync();
@@ -85,55 +85,55 @@ namespace Utils
 						result = await response.Content.ReadAsStringAsync();
 					}
 
-					// Print out all requests including their headers and corresponding response
-					List<string> errorMsg = new List<string> { "DEBUG:    API request executed" };
-					errorMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
-					Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 4);
+					// Print request parameters and headers (after request and potential exception)
+					List<string> debugMsg = new List<string> { "DEBUG:    API request was send" };
+					debugMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
+					Form1.Instance.RichTextBox_LogMessage(debugMsg.ToArray(), 4);
 
-					// Check if the returned status code is within a call-specific array of codes to suppress
-					// These are common errors i.e. when a lyric doesn't exist. Don't log these errors
+					// Cancel request and don't try again if the status code should be suppressed
+					// These statuscodes are very common i.e. when a network resource doesn't exist
 					if (suppressedStatusCodes != null && suppressedStatusCodes.Contains((int)response.StatusCode))
 					{
 						break;
 					}
 
-					// Response was successful. Read content from response and return content
+					// Cancel request and don't try again if response was successful
 					if (response.IsSuccessStatusCode)
 					{
 						break;
 					}
-					else
-					{
-						// Response was not successful. But it was also not a common error
-						// Check if user pressed cancel button. If no, print the error
-						if (!cancelToken.IsCancellationRequested)
-						{
-							// Print out all request and response properties
-							errorMsg = new List<string> { "WARNING:  Response was unsuccessful! " + i + " retries left. Retrying..." };
-							errorMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
-							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 3);
 
-							// Response was not successful. But it was also not a common error. And user did not press cancel
-							// This must be an uncommon error. Continue with our retry logic
-							// But wait a bit before trying it again to give server some time to eventually recover
-							await Task.Delay(retryDelay * 1000);
-						}
-					}
+					// If we reach this, that means the request was unsuccessful. Retry the request
+					// Print out all request and response properties
+					debugMsg = new List<string> { "WARNING:  Request was unsuccessful! " + i + " retries left. Retrying..." };
+					debugMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
+					Form1.Instance.RichTextBox_LogMessage(debugMsg.ToArray(), 3);
+
+					// Wait some time before retrying to give server time to recover
+					await Task.Delay(retryDelay * 1000);
 				}
 				catch (TaskCanceledException)
 				{
+					// Request timed out. Server took too long to respond. Cancel request and don't try again
+
 					// Don't log failed requests when a custom timeout is set (usually very short and often occuring)
-					if (customTimeout == null)
+					// User pressing ESC causes a TaskCanceledException too. Don't log then
+					if (customTimeout == null && !cancelToken.IsCancellationRequested)
 					{
-						// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
-						// Print out the request
-						if (!cancelToken.IsCancellationRequested)
-						{
-							List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
-							warningMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
-							Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
-						}
+						List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond!" };
+						warningMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
+						Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
 					}
+
+					break;
+				}
+				catch (HttpRequestException ex)
+				{
+					// Request failed. A common error is when network connection is down. Cancel request immediately and don't try again
+					List<string> warningMsg = new List<string> { "WARNING:  Server could not be reached!" };
+					warningMsg.AddRange(BuildLogMessage(request, requestContent, response, result));
+					warningMsg.AddRange(new[] { ex.Message });
+					Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
 
 					break;
 				}

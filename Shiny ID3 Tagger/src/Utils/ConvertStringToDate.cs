@@ -50,7 +50,12 @@ namespace Utils
 		{
 			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
 			{
-				if (DateTimeOffset.TryParseExact(dateString, DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTimeOffset resultDate))
+				if (DateTimeOffset.TryParseExact(
+					dateString,
+					DateTimeformats,
+					GlobalVariables.CultEng,
+					DateTimeStyles.None,
+					out DateTimeOffset resultDate))
 				{
 					return resultDate;
 				}

@@ -23,7 +23,7 @@ namespace Shiny_ID3_Tagger
 		/// <param name="e">Contains additional information about the event</param>
 		private async void MenuItemClick_CheckForUpdates(object sender, EventArgs e)
 		{
-			bool successDownload = await Utils.CheckAndDownloadUpdate();
+			bool successDownload = await CheckAndDownloadUpdate();
 			if (successDownload)
 			{
 				// Wait for UpdateClient.exe to say it's ready to deploy new program files

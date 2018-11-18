@@ -4,10 +4,12 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Net.Http;
 
 	/// <summary>
@@ -28,14 +30,16 @@ namespace Utils
 			List<string> errorMsg = new List<string>();
 
 			// If request exists, add all parameters from request
-			if (request != null && request.RequestUri != null && request.RequestUri.OriginalString != null)
+			if (request?.RequestUri?.OriginalString != null)
 			{
 				errorMsg.Add("Request:  " + request.Method + " " + request.RequestUri.OriginalString);
 
 				// Add headers
 				foreach (var element in request.Headers)
 				{
-					errorMsg.Add("Header:   " + element.Key + ": " + string.Join(" ", element.Value));
+					string elementKey = element.Key ?? string.Empty;
+					string elemenValue = string.Join(", ", element.Value.Where(s => !string.IsNullOrEmpty(s))) ?? string.Empty;
+					errorMsg.Add("Header:   " + elementKey + ": " + elemenValue);
 				}
 			}
 
