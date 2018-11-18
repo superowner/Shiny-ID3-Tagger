@@ -45,7 +45,6 @@ namespace Shiny_ID3_Tagger
 				DateTimeOffset? latestReleaseDate = null;
 				JObject latestReleaseJson = null;
 				Process oldUpdateProcess = null;
-				string ownDirectory = null;
 
 				string updateProcessName = "UpdateClient";
 				string zipFullPath = Path.GetTempPath() + "shiny-id3-tagger-update.zip";
@@ -55,8 +54,6 @@ namespace Shiny_ID3_Tagger
 
 				// ######################################################################################################################
 				// Try to get running updater process. Can throw multiple exceptions
-				ownDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
 				oldUpdateProcess = (from process in Process.GetProcessesByName(updateProcessName)
 									where process.MainModule.FileName == updateExeFullPath
 									select process).FirstOrDefault();
@@ -86,8 +83,8 @@ namespace Shiny_ID3_Tagger
 				// lastCommit file is automatically created after each built run via Visual Studio project properties > post build command
 				// 		cd $(SolutionDir)
 				// 		git log -1 --pretty=format:"{commit: %%H, date: %%cI}" > "$(TargetDir)config\lastCommit.json"
-				string configPath = ownDirectory + @"config\lastCommit.json";
-				string configSchemaPath = ownDirectory + @"config\schemas\lastCommit.json";
+				string configPath = GlobalVariables.AppDir + @"config\lastCommit.json";
+				string configSchemaPath = GlobalVariables.AppDir + @"config\schemas\lastCommit.json";
 				JObject lastCommit = Utils.ReadConfig(configPath, configSchemaPath);
 
 				// Check if commit date exists

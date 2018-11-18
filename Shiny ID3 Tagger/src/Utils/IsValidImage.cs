@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -38,18 +39,23 @@ namespace Utils
 		/// <returns>A boool</returns>
 		internal static bool IsValidImage(MemoryStream stream)
 		{
+			// Prevents exception "ArgumentNullException"
+			if (stream == null)
+			{
+				return false;
+			}
+
 			byte[] imageBytes = stream.ToArray();
-			bool isImage = false;
 
 			foreach (var imageType in imageFormatDecoders)
 			{
 				if (imageType.Key.SequenceEqual(imageBytes.Take(imageType.Key.Length)))
 				{
-					isImage = true;
+					return true;
 				}
 			}
 
-			return isImage;
+			return false;
 		}
 	}
 }

@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -48,7 +49,18 @@ namespace Utils
 		/// <returns>The DateTime object representing the converted string value</returns>
 		internal static DateTimeOffset ConvertStringToDate(string dateString)
 		{
-			if (!string.IsNullOrWhiteSpace(dateString) && dateString != "0")
+			// Prevents exception "ArgumentNullException"
+			if (dateString == null)
+			{
+				return default;
+			}
+
+			// Catches possible exceptions
+			// - ArgumentException
+			// - ArgumentNullException
+			// - ArgumentOutOfRangeException
+			// - RegexMatchTimeoutException
+			try
 			{
 				if (DateTimeOffset.TryParseExact(
 					dateString,
@@ -60,19 +72,23 @@ namespace Utils
 					return resultDate;
 				}
 
-				// Handle edge cases where API database' date fields are filled with default values like "0000" or "0000-00-00"
+				// Handle edge cases where API database' date fields are filled with default values like "0", "0000", "0-0-0" or "0000-00-00"
 				// They can not be converted to a date but we don't wanna log an error since this is too common
-				// RegEx tests if dateString contains anything which is not zero, dot or dash
-				Regex regEx = new Regex(@"[^\.\-0]+");
+				// RegEx tests if dateString contains any character which is not dot (\.), dash (\-), zero (0) or whitespace (\s)
+				Regex regEx = new Regex(@"[^\.\-0\s]+", RegexOptions.None, TimeSpan.FromMilliseconds(100));
 
 				if (regEx.IsMatch(dateString))
 				{
 					string[] warningMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
 					Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 				}
-			}
 
-			return default;
+				return default;
+			}
+			catch (Exception)
+			{
+				return default;
+			}
 		}
 	}
 }

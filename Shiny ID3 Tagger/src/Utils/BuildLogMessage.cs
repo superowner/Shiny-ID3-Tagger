@@ -23,9 +23,9 @@ namespace Utils
 		/// <param name="request">request object to get method and status code which may hold information about why a request failed</param>
 		/// <param name="requestContent">request content which may hold an error message about why a request failed</param>
 		/// <param name="response">The returned response</param>
-		/// <param name="result">The result body of the response</param>
+		/// <param name="responseContent">The result body of the response</param>
 		/// <returns>The log message as list of string. Each list element represents a new line</returns>
-		internal static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response, dynamic result)
+		internal static List<string> BuildLogMessage(HttpRequestMessage request, string requestContent, HttpResponseMessage response, dynamic responseContent)
 		{
 			List<string> errorMsg = new List<string>();
 
@@ -56,10 +56,10 @@ namespace Utils
 			}
 
 			// If response had a string result, add it
-			if (result?.GetType() == typeof(string) && response?.Content?.Headers?.ContentLength != null)
+			if (responseContent?.GetType() == typeof(string) && response?.Content?.Headers?.ContentLength != null)
 			{
 				errorMsg.Add("Size:     " + response.Content.Headers.ContentLength + " Bytes");
-				errorMsg.Add("Response: " + result);
+				errorMsg.Add("Response: " + responseContent);
 			}
 
 			return errorMsg;

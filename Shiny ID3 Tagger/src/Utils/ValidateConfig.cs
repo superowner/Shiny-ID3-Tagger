@@ -7,6 +7,7 @@
 // Review: Use $ref and $id to get rid of settings.user.schema. Use settings.default.json as schema then
 // 			The problem is, how can i have one schema with "required" and one without "required"
 // 			https://www.newtonsoft.com/jsonschema/help/html/LoadingSchemas.htm
+// TODO: Handle schemaPath=null
 
 namespace Utils
 {

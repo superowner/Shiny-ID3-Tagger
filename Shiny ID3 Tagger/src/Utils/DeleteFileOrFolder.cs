@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -70,7 +71,7 @@ namespace Utils
 						}
 					}
 
-					if (!Directory.Exists(fullPath) && !File.Exists(fullPath))
+					if (Directory.Exists(fullPath) == false && File.Exists(fullPath) == false)
 					{
 						isDeleted = true;
 						break;

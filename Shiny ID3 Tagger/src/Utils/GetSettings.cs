@@ -4,10 +4,12 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
 	using System;
+	using GlobalVariables;
 	using Newtonsoft.Json.Linq;
 
 	/// <summary>
@@ -16,21 +18,22 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Sets the variable User.settings
-		/// Uses default settings first and then applies user settings onto them
+		/// Reads settings.default.json and settings.user.json
+		/// Sets the variable User.Settings by merging both configs together
+		/// User settings take precedence over values in default settings
 		/// <seealso href="https://stackoverflow.com/a/27502360/935614"/>
 		/// </summary>
 		/// <returns>The User.Settings object</returns>
 		internal static JObject GetSettings()
 		{
 			// Read in default settings
-			string settingsDefaultPath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.default.json";
-			string settingsDefaultSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\settings.default.json";
+			string settingsDefaultPath = GlobalVariables.AppDir + @"config\settings.default.json";
+			string settingsDefaultSchemaPath = GlobalVariables.AppDir + @"config\schemas\settings.default.json";
 			JObject settingsDefault = Utils.ReadConfig(settingsDefaultPath, settingsDefaultSchemaPath);
 
 			// Read in user settings
-			string settingsUserPath = AppDomain.CurrentDomain.BaseDirectory + @"config\settings.user.json";
-			string settingsUserSchemaPath = AppDomain.CurrentDomain.BaseDirectory + @"config\schemas\settings.user.json";
+			string settingsUserPath = GlobalVariables.AppDir + @"config\settings.user.json";
+			string settingsUserSchemaPath = GlobalVariables.AppDir + @"config\schemas\settings.user.json";
 			JObject settingsUser = Utils.ReadConfig(settingsUserPath, settingsUserSchemaPath);
 
 			if (settingsDefault != null && settingsUser != null)

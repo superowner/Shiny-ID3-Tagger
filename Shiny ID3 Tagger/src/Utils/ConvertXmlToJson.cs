@@ -4,11 +4,11 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
 	using System.Xml;
-	using GlobalVariables;
 	using Newtonsoft.Json;
 	using Shiny_ID3_Tagger;
 
@@ -26,7 +26,7 @@ namespace Utils
 		{
 			XmlDocument xml = new XmlDocument();
 
-			if (!string.IsNullOrWhiteSpace(xmlStr))
+			if (string.IsNullOrWhiteSpace(xmlStr) == false)
 			{
 				try
 				{
@@ -44,7 +44,7 @@ namespace Utils
 				}
 			}
 
-			return JsonConvert.SerializeXmlNode(xml);
+			return JsonConvert.SerializeXmlNode(xml, Newtonsoft.Json.Formatting.Indented);
 		}
 	}
 }

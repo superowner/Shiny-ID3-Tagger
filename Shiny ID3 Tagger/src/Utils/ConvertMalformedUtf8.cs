@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -20,6 +21,7 @@ namespace Utils
 	{
 		/// <summary>
 		/// Checks and converts a string to UTF-8. Most occuring case is when an API saved a UTF-8 string as latin-1 in their database
+		/// This method is only used by chartlyrics API. And malformed UTF-8 strings are very rare
 		/// </summary>
 		/// <param name="str">Input string</param>
 		/// <returns>The corrected string in UTF-8 encoding</returns>
@@ -31,22 +33,16 @@ namespace Utils
 				return str;
 			}
 
-			// Catches multiple exceptions like
-			// - RegexMatchTimeoutException
+			// Catches possible exceptions
+			// - ArgumentException
+			// - ArgumentNullException
 			// - ArgumentOutOfRangeException
+			// - RegexMatchTimeoutException
 			// - OverflowException
 			// - EncoderFallbackException
-			// - ArgumentNullException
 			try
 			{
-				bool isMatch = Regex.IsMatch(str, GlobalVariables.MalformedUtf8Pattern, RegexOptions.None, TimeSpan.FromMilliseconds(100D));
-
-				if (isMatch == false)
-				{
-					return str;
-				}
-
-				Regex regExObj = new Regex(GlobalVariables.MalformedUtf8Pattern);
+				Regex regExObj = new Regex(GlobalVariables.MalformedUtf8Pattern, RegexOptions.None, TimeSpan.FromMilliseconds(100D));
 				Match matchObj = regExObj.Match(str);
 
 				if (matchObj.Success)

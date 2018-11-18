@@ -42,7 +42,7 @@ namespace Utils
 		{
 			string outputStr = originalStr;
 
-			// If string is not empty and user setting "AutoCapitalize" is set to true
+			// If string is not null/empty and user setting "AutoCapitalize" is set to true
 			if ((bool)User.Settings["AutoCapitalize"] && string.IsNullOrWhiteSpace(originalStr) == false)
 			{
 				// Use RegEx to extract all words from str. Use custom word separators

@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -17,14 +18,39 @@ namespace Utils
 	{
 		/// <summary>
 		/// Checks if a given string can be interpreted as a base64 string
-		/// An empty string is not valid pattern
 		/// </summary>
 		/// <param name="str">String to check</param>
 		/// <returns>True if string is a valid base64 string</returns>
 		internal static bool IsValidBase64(string str)
 		{
+			// Prevents exception "ArgumentNullException"
+			if (str == null)
+			{
+				return false;
+			}
+
 			str = str.Trim();
-			return (str.Length % 4 == 0) && Regex.IsMatch(str, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None);
+
+			// The length of a base64 string is always a multiple of 4
+			if (str.Length % 4 != 0)
+			{
+				return false;
+			}
+
+			// Catches possible exceptions
+			// - ArgumentException
+			// - ArgumentNullException
+			// - ArgumentOutOfRangeException
+			// - RegexMatchTimeoutException
+			// - OverflowException
+			try
+			{
+				return Regex.IsMatch(str, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None, TimeSpan.FromMilliseconds(100));
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 		}
 	}
 }

@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -11,7 +12,7 @@ namespace Utils
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
-	using Newtonsoft.Json;
+	using Exceptions;
 	using Newtonsoft.Json.Linq;
 	using Newtonsoft.Json.Schema;
 	using Shiny_ID3_Tagger;
@@ -39,86 +40,79 @@ namespace Utils
 
 			try
 			{
-				// Read config
-				fileContent = File.ReadAllText(configPath);
-			}
-			catch (Exception ex)
-			{
-				// Config file has a write lock (i.e. opened in another program)
-				string[] errorMsg =
+				// Catches possible exceptions
+				// - ArgumentException
+				// - ArgumentNullException
+				// - PathTooLongException
+				// - DirectoryNotFoundException
+				// - IOException
+				// - UnauthorizedAccessException
+				// - FileNotFoundException
+				// - NotSupportedException
+				// - SystemException
+				// - System.Security.SecurityException
+				try
 				{
-					"ERROR:    Cannot open or access file!",
-					"Config:   " + configPath,
-					"Schema:   " + schemaPath,
-					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
-				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
-
-				return null;
-			}
-
-			// FileContent cannot be null from here on
-			try
-			{
-				// If it's a valid base64 string, then it's probably an encrypted config
-				if (IsValidBase64(fileContent))
+					// Try to read config file content
+					fileContent = File.ReadAllText(configPath);
+				}
+				catch (Exception ex)
 				{
-					// Decrypt config before trying to parse JSON
-					Aes decryptor = Aes.Create();
-					ICryptoTransform decryptorTransformer = decryptor.CreateDecryptor(AlgorythmKey, InitializationVector);
-
-					// Converts base64 string to normal string (can throw FormatException)
-					byte[] encryptedBytes = Convert.FromBase64String(fileContent);
-					byte[] decryptedBytes = decryptorTransformer.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
-					fileContent = Encoding.UTF8.GetString(decryptedBytes);
+					throw new ReadConfigException("File not found or inaccessible!", ex);
 				}
 
-				// Parse JSON (throws JsonException)
-				JObject json = Utils.DeserializeJson(fileContent, true);
+				try
+				{
+					// If it's a valid base64 string, then it's probably an encrypted config
+					// FileContent cannot be null since ReadAllText() was successful
+					if (IsValidBase64(fileContent))
+					{
+						// Decrypt config before trying to parse JSON
+						Aes decryptor = Aes.Create();
+						ICryptoTransform decryptorTransformer = decryptor.CreateDecryptor(AlgorythmKey, InitializationVector);
 
-				// Validate config (throws JSchemaValidationException)
-				ValidateConfig(json, schemaPath);
+						// Converts base64 string to normal string (can throw FormatException)
+						byte[] encryptedBytes = Convert.FromBase64String(fileContent);
+						byte[] decryptedBytes = decryptorTransformer.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+						fileContent = Encoding.UTF8.GetString(decryptedBytes);
+					}
 
-				// Return config
-				return json;
+					// Parse JSON
+					JObject json = Utils.DeserializeJson(fileContent);
+
+					// If File content was not a valid JSON
+					if (json == null)
+					{
+						throw new ReadConfigException("Failed to parse a config file!", new ArgumentNullException(nameof(json)));
+					}
+
+					// Validate config (throws JSchemaValidationException)
+					ValidateConfig(json, schemaPath);
+
+					// Return config
+					return json;
+				}
+				catch (FormatException ex)
+				{
+					throw new ReadConfigException("Failed to decrypt a config file. File content is not a valid base64 string!", ex);
+				}
+				catch (JSchemaValidationException ex)
+				{
+					throw new ReadConfigException("Failed to validate a config file against its schema!", ex);
+				}
+				catch (OverflowException ex)
+				{
+					throw new ReadConfigException("Failed to decrypt a config file. File too big!", ex);
+				}
 			}
-			catch (FormatException ex)
+			catch (ReadConfigException ex)
 			{
-				// Config file is not a valid decrypted AES256 file
 				string[] errorMsg =
 				{
-					"ERROR:    Failed to deserialize or decrypt a config file!",
+					"ERROR:    " + ex.Message,
 					"Config:   " + configPath,
 					"Schema:   " + schemaPath,
-					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
-				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
-
-				return null;
-			}
-			catch (JsonException ex)
-			{
-				// Parsing failed. File content is not a valid JSON
-				string[] errorMsg =
-				{
-					"ERROR:    Failed to parse a config file!",
-					"Config:   " + configPath,
-					"Schema:   " + schemaPath,
-					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
-				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
-
-				return null;
-			}
-			catch (JSchemaValidationException ex)
-			{
-				// Validation failed. JSON could not be validated against its schema
-				string[] errorMsg =
-				{
-					"ERROR:    Failed to validate a config file!",
-					"Config:   " + configPath,
-					"Schema:   " + schemaPath,
-					"Message:  " + ex.Message.TrimEnd('\r', '\n'),
+					"Message:  " + ex.InnerException.Message,
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
 

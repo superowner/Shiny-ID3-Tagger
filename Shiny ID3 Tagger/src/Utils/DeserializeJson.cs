@@ -4,10 +4,10 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
-	using GlobalVariables;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using Shiny_ID3_Tagger;
@@ -15,15 +15,21 @@ namespace Utils
 	/// <summary>Represents the Utility class which holds various helper functions</summary>
 	internal partial class Utils
 	{
-		/// <summary> Deserialize a JSON string to a JSON.NET JObject </summary>
-		/// <param name="jsonStr">The input string which should be deserialized. If jsonStr = null, then null will be returned</param>
-		/// <param name="throwException">If true, then throw  an exception. Otherwise just print a warning (default)</param>
+		/// <summary> Deserialize a JSON string to a JSON.NET JObject.
+		/// Returns NULL is parsing failed
+		/// <seealso href="https://stackoverflow.com/a/26264889/935614"/>
+		/// </summary>
+		/// <param name="jsonStr">The input string which should be deserialized</param>
 		/// <returns>The new JObject holding all the values from content string</returns>
-		/// <exception cref="JsonException">If input string is not a valid JSON and throwExeption is set to true</exception>
-		internal static JObject DeserializeJson(string jsonStr, bool throwException = false)
+		internal static JObject DeserializeJson(string jsonStr)
 		{
-			// string.Empty is used to prevent a NullReference exception
-			return JsonConvert.DeserializeObject<JObject>(jsonStr ?? string.Empty, GetJsonDeserializerSettings(jsonStr, throwException));
+			// Prevents exception "ArgumentNullException"
+			if (jsonStr == null)
+			{
+				return null;
+			}
+
+			return JsonConvert.DeserializeObject<JObject>(jsonStr, GetJsonDeserializerSettings(jsonStr));
 		}
 
 		/// <summary>
@@ -35,8 +41,7 @@ namespace Utils
 		/// <seealso href="https://www.newtonsoft.com/json/help/html/P_Newtonsoft_Json_Serialization_ErrorContext_Handled.htm"/>
 		/// </summary>
 		/// <returns>A JsonSerializerSettings object holding all settings</returns>
-		/// <exception cref="JsonException">If input string is not a valid JSON</exception>
-		private static JsonSerializerSettings GetJsonDeserializerSettings(string jsonStr, bool throwException)
+		private static JsonSerializerSettings GetJsonDeserializerSettings(string jsonStr)
 		{
 			JsonSerializerSettings jsonSettings = new JsonSerializerSettings
 			{
@@ -46,22 +51,19 @@ namespace Utils
 
 			jsonSettings.Error += (obj, errorArgs) =>
 			{
-				if (throwException == false)
+				// Set error on handled=true. DeserializeJson should never throw an error
+				// Caller should expect null value if parsing fails
+				errorArgs.ErrorContext.Handled = true;
+
+				// Build a more useful error message when JSON parsing fails
+				string[] warningMsg =
 				{
-					// Set error on handled=true. DeserializeJson shall not throw an error
-					// Other methods should expect a null value if parsing failed
-					errorArgs.ErrorContext.Handled = true;
+					"WARNING:  Could not parse JSON!",
+					"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n'),
+					"JSON:     " + jsonStr,
+				};
 
-					// Build a more useful error message when JSON parsing fails
-					string[] warningMsg =
-					{
-						"WARNING:  Could not parse JSON!",
-						"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n'),
-						"JSON:     " + jsonStr,
-					};
-
-					Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
-				}
+				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 			};
 
 			return jsonSettings;

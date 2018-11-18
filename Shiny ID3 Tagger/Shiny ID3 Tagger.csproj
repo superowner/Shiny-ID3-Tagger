@@ -166,6 +166,7 @@
     <Compile Include="src\api\GetTagsService\IGetTagsService.cs" />
     <Compile Include="src\api\GetLyricsService\IGetLyricsService.cs" />
     <Compile Include="src\api\GetLyricsService\ViewLyrics.cs" />
+    <Compile Include="src\Exceptions\ReadConfigException.cs" />
     <Compile Include="src\Exceptions\UpdateClientException.cs" />
     <Compile Include="src\Form1\MenuItemClick_CheckForUpdates.cs">
       <SubType>Form</SubType>

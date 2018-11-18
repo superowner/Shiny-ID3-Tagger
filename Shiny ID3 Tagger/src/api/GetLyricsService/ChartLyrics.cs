@@ -21,7 +21,6 @@ namespace GetLyrics
 	/// <summary>
 	/// Class for chartlyrics API
 	/// </summary>
-	//[Obsolete("API down for a a couple of days already and maybe dead, last checked 2018-10-27", true)]
 	internal class ChartLyrics : IGetLyricsService
 	{
 		/// <summary>

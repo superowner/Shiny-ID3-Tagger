@@ -71,7 +71,7 @@ namespace GetTags
 				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData?.SelectToken("count").ToString() != "0")
+				if (searchData != null && searchData.SelectToken("count").ToString() != "0")
 				{
 					// Currently the next lines are only for finding the best album release out of a long list
 					//  1) Take only those recordings which have a rating above 90

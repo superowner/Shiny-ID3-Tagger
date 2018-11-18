@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -21,6 +22,11 @@ namespace Utils
 		/// <returns>The exact copy of the original request</returns>
 		internal static HttpRequestMessage CopyRequest(HttpRequestMessage original)
 		{
+			if (original == null)
+			{
+				return null;
+			}
+
 			HttpRequestMessage backup = new HttpRequestMessage(original.Method, original.RequestUri)
 			{
 				Content = original.Content,

@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -17,7 +18,7 @@ namespace Utils
 	{
 		/// <summary>
 		/// Checks if a given string can be interpreted as a valid RegEx pattern.
-		/// An empty string is not valid pattern
+		/// User settings allow to define custom regex pattern which must be checked first
 		/// </summary>
 		/// <param name="pattern">Pattern string to check</param>
 		/// <returns>True if pattern is a valid Regex pattern</returns>
@@ -28,16 +29,20 @@ namespace Utils
 				return false;
 			}
 
+			// Catches possible exceptions
+			// - ArgumentException
+			// - ArgumentNullException
+			// - ArgumentOutOfRangeException
+			// - RegexMatchTimeoutException
+			// - OverflowException
 			try
 			{
-				Regex.Match(string.Empty, pattern);
+				return Regex.IsMatch(string.Empty, pattern, RegexOptions.None, TimeSpan.FromMilliseconds(100));
 			}
-			catch (ArgumentException)
+			catch (Exception)
 			{
 				return false;
 			}
-
-			return true;
 		}
 	}
 }
