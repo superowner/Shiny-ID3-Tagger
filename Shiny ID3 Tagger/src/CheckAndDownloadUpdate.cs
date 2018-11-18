@@ -96,9 +96,10 @@ namespace Shiny_ID3_Tagger
 					throw new UpdateClientException("Could not find date of the local program files");
 				}
 
+				// Try to parse local date (ISO 8601 format: yyyy-MM-ddTHH:mm:ss.FFFK)
 				if (DateTimeOffset.TryParseExact(
 					(string)lastCommit.SelectToken("date"),
-					"yyyy-MM-ddTHH:mm:ssZ",
+					"yyyy-MM-ddTHH:mm:ss.FFFK",
 					GlobalVariables.CultEng,
 					DateTimeStyles.None,
 					out DateTimeOffset result) == false)
