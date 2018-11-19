@@ -10,6 +10,7 @@ namespace GlobalVariables
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.IO;
 	using System.Text.RegularExpressions;
 	using System.Threading;
 	using System.Windows.Forms;
@@ -49,6 +50,11 @@ namespace GlobalVariables
 		/// Main application directory
 		/// </summary>
 		internal static readonly string AppDir = AppDomain.CurrentDomain.BaseDirectory;
+
+		/// <summary>
+		/// Temp directory
+		/// </summary>
+		internal static readonly string TempDir = Path.GetTempPath();
 
 		/// <summary>
 		/// Enum to decide which richTextBox to use when printing warnings, errors, general or debug messages

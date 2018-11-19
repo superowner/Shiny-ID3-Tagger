@@ -80,13 +80,13 @@ namespace Utils
 					// Parse JSON
 					JObject json = Utils.DeserializeJson(fileContent);
 
-					// If File content was not a valid JSON
+					// If file content was not a valid JSON
 					if (json == null)
 					{
-						throw new ReadConfigException("Failed to parse a config file!", new ArgumentNullException(nameof(json)));
+						throw new ReadConfigException("Failed to read a config file!", new ArgumentNullException(nameof(json)));
 					}
 
-					// Validate config (throws JSchemaValidationException)
+					// Validate config (throws JSchemaValidationException or ReadConfigException)
 					ValidateConfig(json, schemaPath);
 
 					// Return config

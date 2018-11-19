@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -21,7 +22,7 @@ namespace Utils
 		/// <returns>The resulting string</returns>
 		internal static string SanitizeForCsv(object cell)
 		{
-			string value = cell != null ? cell.ToString() : string.Empty;
+			string value = cell == null ? string.Empty : cell.ToString();
 			value = value.Replace("\r\n", "\n");
 			value = value.Replace("\"", "\"\"");
 			value = "\"" + value + "\"";

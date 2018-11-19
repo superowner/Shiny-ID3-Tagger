@@ -7,13 +7,14 @@
 // Review: Use $ref and $id to get rid of settings.user.schema. Use settings.default.json as schema then
 // 			The problem is, how can i have one schema with "required" and one without "required"
 // 			https://www.newtonsoft.com/jsonschema/help/html/LoadingSchemas.htm
-// TODO: Handle schemaPath=null
+// TODO: Schema validation failure are still handled badly
 
 namespace Utils
 {
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using Exceptions;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using Newtonsoft.Json.Schema;
@@ -33,23 +34,29 @@ namespace Utils
 		/// <param name="schemaPath">The path to the schema file</param>
 		internal static void ValidateConfig(JObject json, string schemaPath)
 		{
-			// Load schema
-			using (StreamReader schemaFile = File.OpenText(schemaPath))
-			using (JsonTextReader schemaReader = new JsonTextReader(schemaFile))
+			try
 			{
-				// Load schema
-				JSchema schema = JSchema.Load(schemaReader);
-
-				// Validate JSON against schema, save errors in errorMessages list
-				json.IsValid(schema, out IList<string> errorMessages);
-
-				// If the config could not be validated, throw an exception
-				if (errorMessages.Count > 0)
+				using (StreamReader schemaFile = File.OpenText(schemaPath))
+				using (JsonTextReader schemaReader = new JsonTextReader(schemaFile))
 				{
-					string validationResult = string.Join("\n          ", errorMessages);
+					// Read schema
+					JSchema schema = JSchema.Load(schemaReader);
 
-					throw new JSchemaValidationException(validationResult);
+					// Validate JSON against schema, save errors in errorMessages list
+					json.IsValid(schema, out IList<string> errorMessages);
+
+					// If the config could not be validated, throw an exception
+					if (errorMessages.Count > 0)
+					{
+						string validationResult = string.Join("\n          ", errorMessages);
+
+						throw new JSchemaValidationException(validationResult);
+					}
 				}
+			}
+			catch (Exception ex)
+			{
+				throw new ReadConfigException("Could not read schema!", ex);
 			}
 		}
 	}
