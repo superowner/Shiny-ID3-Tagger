@@ -7,7 +7,6 @@
 // Review: Use $ref and $id to get rid of settings.user.schema. Use settings.default.json as schema then
 // 			The problem is, how can i have one schema with "required" and one without "required"
 // 			https://www.newtonsoft.com/jsonschema/help/html/LoadingSchemas.htm
-// TODO: Schema validation failure are still handled badly
 
 namespace Utils
 {
@@ -32,7 +31,8 @@ namespace Utils
 		/// </summary>
 		/// <param name="json">The JSON to validate</param>
 		/// <param name="schemaPath">The path to the schema file</param>
-		internal static void ValidateConfig(JObject json, string schemaPath)
+		/// <returns>A tuple with a bool and a list of strings</returns>
+		internal static List<string> ValidateConfig(JObject json, string schemaPath)
 		{
 			try
 			{
@@ -45,18 +45,12 @@ namespace Utils
 					// Validate JSON against schema, save errors in errorMessages list
 					json.IsValid(schema, out IList<string> errorMessages);
 
-					// If the config could not be validated, throw an exception
-					if (errorMessages.Count > 0)
-					{
-						string validationResult = string.Join("\n          ", errorMessages);
-
-						throw new JSchemaValidationException(validationResult);
-					}
+					return (List<string>)errorMessages;
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				throw new ReadConfigException("Could not read schema!", ex);
+				return new List<string> { "hey" };
 			}
 		}
 	}

@@ -5,9 +5,12 @@
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
 // Reviewed and checked if all possible exceptions are prevented or handled
+// TODO: Examine why only the first JSON parsing error is printed out. It should print out all errors if there are more than 1
+// TODO: Throws an error if JArray is read. It always expects JObject. Us try and catch JsonException
 
 namespace Utils
 {
+	using System.Collections.Generic;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using Shiny_ID3_Tagger;
@@ -16,7 +19,10 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary> Deserialize a JSON string to a JSON.NET JObject.
-		/// Returns NULL is parsing failed
+		/// Returns NULL if parsing failed
+		/// <seealso href="https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_Formatting.htm"/>
+		/// <seealso href="https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_DateParseHandling.htm"/>
+		/// <seealso href="https://www.newtonsoft.com/json/help/html/P_Newtonsoft_Json_Serialization_ErrorContext_Handled.htm"/>
 		/// <seealso href="https://stackoverflow.com/a/26264889/935614"/>
 		/// </summary>
 		/// <param name="jsonStr">The input string which should be deserialized</param>
@@ -29,44 +35,41 @@ namespace Utils
 				return null;
 			}
 
-			return JsonConvert.DeserializeObject<JObject>(jsonStr, GetJsonDeserializerSettings(jsonStr));
-		}
+			List<string> errorMessages = new List<string>();
 
-		/// <summary>
-		/// Set custom settings for JSON deserialization
-		/// 1) Intend each child 4 spaces
-		/// 2) Don't convert a date string to date objects. There is a seperat method for that
-		/// <seealso href="https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_Formatting.htm"/>
-		/// <seealso href="https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_DateParseHandling.htm"/>
-		/// <seealso href="https://www.newtonsoft.com/json/help/html/P_Newtonsoft_Json_Serialization_ErrorContext_Handled.htm"/>
-		/// </summary>
-		/// <returns>A JsonSerializerSettings object holding all settings</returns>
-		private static JsonSerializerSettings GetJsonDeserializerSettings(string jsonStr)
-		{
+			// Set up custom deserialize settings
+			// 1) Intend each child 4 spaces
+			// 2) Don't convert a date string to date objects. There is a seperat method for that
+			// 3) Set error on handled=true. DeserializeJson should not throw an exception
 			JsonSerializerSettings jsonSettings = new JsonSerializerSettings
 			{
 				Formatting = Formatting.Indented,
 				DateParseHandling = DateParseHandling.None,
+				Error = (obj, errorArgs) =>
+				{
+					errorMessages.Add(errorArgs.ErrorContext.Error.Message);
+					errorArgs.ErrorContext.Handled = true;
+				},
 			};
 
-			jsonSettings.Error += (obj, errorArgs) =>
-			{
-				// Set error on handled=true. DeserializeJson should never throw an error
-				// Caller should expect null value if parsing fails
-				errorArgs.ErrorContext.Handled = true;
+			// Deserialize JSON
+			JObject json = JsonConvert.DeserializeObject<JObject>(jsonStr, jsonSettings);
 
+			// Check if errors occured
+			if (errorMessages.Count > 0)
+			{
 				// Build a more useful error message when JSON parsing fails
 				string[] warningMsg =
 				{
 					"WARNING:  Could not parse JSON!",
-					"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n'),
+					"Message:  " + string.Join("\n          ", errorMessages),
 					"JSON:     " + jsonStr,
 				};
 
 				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
-			};
+			}
 
-			return jsonSettings;
+			return json;
 		}
 	}
 }

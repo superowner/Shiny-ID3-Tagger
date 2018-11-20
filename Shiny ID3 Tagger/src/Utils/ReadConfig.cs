@@ -9,6 +9,7 @@
 namespace Utils
 {
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
@@ -83,11 +84,19 @@ namespace Utils
 					// If file content was not a valid JSON
 					if (json == null)
 					{
-						throw new ReadConfigException("Failed to read a config file!", new ArgumentNullException(nameof(json)));
+						throw new ReadConfigException("Failed to parse a config file!");
 					}
 
-					// Validate config (throws JSchemaValidationException or ReadConfigException)
-					ValidateConfig(json, schemaPath);
+					// Validate config (returns a list of errors
+					List<string> errorMessages = ValidateConfig(json, schemaPath);
+
+					// If the config could not be validated, throw an exception
+					if (errorMessages.Count > 0)
+					{
+						string innerExceptionMessage = string.Join("\n          ", errorMessages);
+
+						throw new ReadConfigException("Failed to validate a config file against its schema!", new ArgumentException(innerExceptionMessage));
+					}
 
 					// Return config
 					return json;
@@ -96,10 +105,6 @@ namespace Utils
 				{
 					throw new ReadConfigException("Failed to decrypt a config file. File content is not a valid base64 string!", ex);
 				}
-				catch (JSchemaValidationException ex)
-				{
-					throw new ReadConfigException("Failed to validate a config file against its schema!", ex);
-				}
 				catch (OverflowException ex)
 				{
 					throw new ReadConfigException("Failed to decrypt a config file. File too big!", ex);
@@ -107,14 +112,19 @@ namespace Utils
 			}
 			catch (ReadConfigException ex)
 			{
-				string[] errorMsg =
+				List<string> errorMsg = new List<string>
 				{
 					"ERROR:    " + ex.Message,
 					"Config:   " + configPath,
 					"Schema:   " + schemaPath,
-					"Message:  " + ex.InnerException.Message,
 				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+
+				if (ex.InnerException != null)
+				{
+					errorMsg.AddRange(new[] { "Message:  " + ex.InnerException.Message });
+				}
+
+				Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
 
 				return null;
 			}
