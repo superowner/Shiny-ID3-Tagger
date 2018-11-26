@@ -4,9 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// Review: Use $ref and $id to get rid of settings.user.schema. Use settings.default.json as schema then
-// 			The problem is, how can i have one schema with "required" and one without "required"
-// 			https://www.newtonsoft.com/jsonschema/help/html/LoadingSchemas.htm
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -24,14 +22,15 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Validates a given JSON against a predefined schema and throws an error of it fails
+		/// Validates a given JSON against a predefined schema and returns a list of errors of it fails
 		/// Quick overview on how schemas work:	<seealso href="https://spacetelescope.github.io/understanding-json-schema/basics.html"/>
 		/// Generate schema from existing JSON with real values: <seealso href="https://jsonschema.net/#/"/>
-		/// JSON.net schema documentation:<seealso href="https://www.newtonsoft.com/json/help/html/JTokenIsValidWithMessages.htm"/>
+		/// JSON schema validator: <seealso href="https://www.jsonschemavalidator.net/"/>
+		/// JSON.net schema documentation: <seealso href="https://www.newtonsoft.com/json/help/html/JTokenIsValidWithMessages.htm"/>
 		/// </summary>
 		/// <param name="json">The JSON to validate</param>
 		/// <param name="schemaPath">The path to the schema file</param>
-		/// <returns>A tuple with a bool and a list of strings</returns>
+		/// <returns>A list of error messages as strings</returns>
 		internal static List<string> ValidateConfig(JObject json, string schemaPath)
 		{
 			try
@@ -48,9 +47,9 @@ namespace Utils
 					return (List<string>)errorMessages;
 				}
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				return new List<string> { "hey" };
+				return new List<string> { ex.Message };
 			}
 		}
 	}

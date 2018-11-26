@@ -5,8 +5,6 @@
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
 // Reviewed and checked if all possible exceptions are prevented or handled
-// TODO: Examine why only the first JSON parsing error is printed out. It should print out all errors if there are more than 1
-// TODO: Throws an error if JArray is read. It always expects JObject. Us try and catch JsonException
 
 namespace Utils
 {
@@ -53,12 +51,11 @@ namespace Utils
 			};
 
 			// Deserialize JSON
-			JObject json = JsonConvert.DeserializeObject<JObject>(jsonStr, jsonSettings);
+			dynamic json = JsonConvert.DeserializeObject<JContainer>(jsonStr, jsonSettings);
 
 			// Check if errors occured
 			if (errorMessages.Count > 0)
 			{
-				// Build a more useful error message when JSON parsing fails
 				string[] warningMsg =
 				{
 					"WARNING:  Could not parse JSON!",
@@ -69,7 +66,23 @@ namespace Utils
 				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
 			}
 
-			return json;
+			// If response was an array, just take the first element. But print a warning
+			if (json is JArray)
+			{
+				string[] warningMsg =
+				{
+					"WARNING:  Could not parse JSON!",
+					"Message:  JSON was of type array, but expected a single object",
+					"          Taking the first element as default",
+					"JSON:     " + jsonStr,
+				};
+
+				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+
+				json = json.First;
+			}
+
+			return (JObject)json;
 		}
 	}
 }
