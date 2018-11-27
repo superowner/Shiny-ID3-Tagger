@@ -10,6 +10,7 @@ namespace Shiny_ID3_Tagger
 	using System;
 	using System.Diagnostics;
 	using System.Windows.Forms;
+	using GlobalVariables;
 
 	/// <summary>
 	/// Represents the Form1 class which contains all methods who interacts with the UI
@@ -23,7 +24,7 @@ namespace Shiny_ID3_Tagger
 		/// <param name="e">Contains additional information about the event</param>
 		private void MenuItemClick_OpenSettings(object sender, EventArgs e)
 		{
-			string file = AppDomain.CurrentDomain.BaseDirectory + @"\config\settings.user.json";
+			string file = GlobalVariables.AppDir + @"\config\settings.user.json";
 			Process.Start(file);
 		}
 	}

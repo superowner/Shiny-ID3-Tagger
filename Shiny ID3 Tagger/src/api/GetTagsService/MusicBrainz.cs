@@ -65,12 +65,13 @@ namespace GetTags
 			using (HttpRequestMessage searchRequest = new HttpRequestMessage())
 			{
 				searchRequest.Headers.Add("User-Agent", (string)User.Settings["UserAgent"]);
-				searchRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/recording?" + Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
+				searchRequest.RequestUri = new Uri("http://musicbrainz.org/ws/2/recording?" +
+					Uri.EscapeUriString("query=artist:(" + artistClean + ") AND recording:(" + titleClean + ") AND status:official AND type:album&limit=10&fmt=json"));
 
 				string searchContent = await Utils.GetHttpResponse(client, searchRequest, cancelToken);
 				JObject searchData = Utils.DeserializeJson(searchContent);
 
-				if (searchData?.SelectToken("count").ToString() != "0")
+				if (searchData != null && searchData.SelectToken("count").ToString() != "0")
 				{
 					// Currently the next lines are only for finding the best album release out of a long list
 					//  1) Take only those recordings which have a rating above 90

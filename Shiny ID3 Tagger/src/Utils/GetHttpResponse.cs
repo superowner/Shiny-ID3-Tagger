@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -29,7 +30,7 @@ namespace Utils
 		/// <param name="cancelToken">The global token for canceling any ongoing request</param>
 		/// <param name="returnByteArray">A bool to indicate if the response should be read as a byte array instead of a string</param>
 		/// <param name="suppressedStatusCodes">A array which holds statuscodes of common errors which can be ignored (not logged as error)</param>
-		/// <param name="customTimeout">A timeout in seconds after a request is automatically canceled. Useful if a certain server has no own timeout</param>
+		/// <param name="customTimeoutMs">A timeout in seconds after a request is automatically canceled. Useful if a certain server has no own timeout</param>
 		/// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
 		internal static async Task<dynamic> GetHttpResponse(
 			HttpMessageInvoker client,
@@ -37,105 +38,143 @@ namespace Utils
 			CancellationToken cancelToken,
 			bool returnByteArray = false,
 			int[] suppressedStatusCodes = null,
-			int? customTimeout = null)
+			int? customTimeoutMs = null)
 		{
 			const int maxRetries = 3;
-			const int retryDelay = 2;
-			int timeout = customTimeout ?? 15;
-
-			dynamic result = null;
+			const int retryDelayMs = 2000;
+			dynamic responseContent = null;
+			string requestContent = null;
+			int defaultTimeoutMs = 15000;
 			HttpResponseMessage response = new HttpResponseMessage();
-			HttpRequestMessage requestBackup = CloneRequest(request);
+			CancellationTokenSource timeoutToken = null;
+
+			// Prevent ArgumentNullException
+			if (client == null || request == null || cancelToken == null)
+			{
+				return null;
+			}
+
+			// Catches possible exceptions
+			// - ArgumentException
+			// - ArgumentNullException
+			// - ArgumentOutOfRangeException
+			// - ObjectDisposedException
+			try
+			{
+				// Create a timeout token which is linked to global cancelToken
+				timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
+				timeoutToken.CancelAfter(customTimeoutMs ?? defaultTimeoutMs);
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+
+			// Take a backup copy of original request. Otherwise you can't send a request multiple times
+			HttpRequestMessage requestBackup = CopyRequest(request);
+
+			// If a post request has a body, save it for later (BuildLogMessage needs it)
+			if (request.Content != null)
+			{
+				requestContent = await request.Content.ReadAsStringAsync();
+			}
 
 			for (int i = maxRetries; i >= 1; i--)
 			{
+				// Cancel request and don't try again if user pressed ESC
 				if (cancelToken.IsCancellationRequested)
 				{
-					return null;
+					break;
 				}
 
-				string requestContent = string.Empty;
-				request = CloneRequest(requestBackup);
-
-				CancellationTokenSource timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
-				timeoutToken.CancelAfter(TimeSpan.FromSeconds(timeout));
-
+				// Catches possible exceptions
+				// - TaskCanceledException
+				// - HttpRequestException
+				// - ObjectDisposedException
 				try
 				{
-					// Save request content for later reuse when an error occurs
-					if (request.Content != null)
-					{
-						requestContent = await request.Content.ReadAsStringAsync();
-					}
+					// Restore original request before each loop otherwise the request cannot be executed more than one time
+					request = CopyRequest(requestBackup);
 
-					// The actual request is send here
+					// Send request and save response
 					response = await client.SendAsync(request, timeoutToken.Token);
 
-					// Print out all requests including their headers and corresponding response
-					List<string> errorMsg = new List<string> { "DEBUG:    API request executed" };
-					errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-					Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 4);
-
-					// Check if the returned status code is within a call-specific array of codes to suppress
-					// These are common errors i.e. when a lyric doesn't exist. Don't log these errors
-					if (suppressedStatusCodes != null && suppressedStatusCodes.Contains((int)response.StatusCode))
+					// Read response as string. So far only the viewLyrics module needs a byte array
+					if (returnByteArray)
 					{
-						break;
-					}
-
-					// Response was successful. Read content from response and return content
-					if (response.IsSuccessStatusCode)
-					{
-						// In most cases we return a string. But the viewLyrics module needs a byte array
-						if (returnByteArray)
-						{
-							result = await response.Content.ReadAsByteArrayAsync();
-						}
-						else
-						{
-							result = await response.Content.ReadAsStringAsync();
-						}
-
-						break;
+						responseContent = await response.Content.ReadAsByteArrayAsync();
 					}
 					else
 					{
-						// Response was not successful. But it was also not a common error
-						// Check if user pressed cancel button. If no, print the error
-						if (!cancelToken.IsCancellationRequested)
-						{
-							// Print out all request and response properties
-							errorMsg = new List<string> { "DEBUG:    Response was unsuccessful! " + i + " retries left. Retrying..." };
-							errorMsg.AddRange(BuildLogMessage(request, requestContent, response));
-							Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 3);
-
-							// Response was not successful. But it was also not a common error. And user did not press cancel
-							// This must be an uncommon error. Continue with our retry logic
-							// But wait a bit before trying it again to give server some time to eventually recover
-							await Task.Delay(retryDelay * 1000);
-						}
+						responseContent = await response.Content.ReadAsStringAsync();
 					}
-				}
-				catch (TaskCanceledException)
-				{
-					// Don't log failed requests when a custom timeout is set (usually very short and often occuring)
-					if (customTimeout == null)
+
+					// Print request parameters and headers (after request and potential exception)
+					List<string> debugMsg = new List<string> { "DEBUG:    API request was send" };
+					debugMsg.AddRange(BuildLogMessage(request, requestContent, response, responseContent));
+					Form1.Instance.RichTextBox_LogMessage(debugMsg.ToArray(), 4);
+
+					// Cancel request and don't try again if the status code should be suppressed
+					// These statuscodes are very common i.e. when a network resource doesn't exist
+					// Return null because very often you get a HTTP body instead of valid JSON which later shows a JSON parsing warning
+					if (suppressedStatusCodes != null && suppressedStatusCodes.Contains((int)response.StatusCode))
 					{
-						// Request timed out. Server took too long to respond. Cancel request immediately and don't try again
-						// Print out the request
-						if (!cancelToken.IsCancellationRequested)
+						return null;
+					}
+
+					// A result was found. Cancel request and don't try again if response was successful
+					if (response.IsSuccessStatusCode)
+					{
+						return responseContent;
+					}
+
+					// If we reach this point, that means the request was unsuccessful. Retry the request
+					// Print out all request and response properties as a warning
+					List<string> warningMsg = new List<string> { "WARNING:  Request was unsuccessful! " + i + " retries left. Retrying..." };
+					warningMsg.AddRange(BuildLogMessage(request, requestContent, response, responseContent));
+					Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
+
+					// Wait some time before retrying to give server time to recover
+					await Task.Delay(retryDelayMs);
+				}
+				catch (TaskCanceledException ex)
+				{
+					// Request timed out. Server took too long to respond. Cancel request and don't try again
+
+					// User pressing ESC causes a TaskCanceledException too. Don't log then
+					if (cancelToken.IsCancellationRequested == false)
+					{
+						// Also don't log failed requests when a custom timeout shorter than default timeout is set
+						if (customTimeoutMs == null ||
+							(customTimeoutMs != null && customTimeoutMs > defaultTimeoutMs))
 						{
-							List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + timeout + " seconds to respond! Abort..." };
-							warningMsg.AddRange(BuildLogMessage(request, requestContent, response));
+							List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + customTimeoutMs ?? defaultTimeoutMs + " milliseconds to respond!" };
+							warningMsg.AddRange(BuildLogMessage(request, requestContent, response, responseContent));
+							warningMsg.AddRange(new[] { "Message:  " + ex.Message });
 							Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
 						}
 					}
 
 					break;
 				}
+				catch (HttpRequestException ex)
+				{
+					// Request failed. A common error is when network connection is down. Cancel request immediately and don't try again
+					List<string> warningMsg = new List<string> { "WARNING:  Server could not be reached!" };
+					warningMsg.AddRange(BuildLogMessage(request, requestContent, response, responseContent));
+					warningMsg.AddRange(new[] { "Message:  " + ex.Message });
+					Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
+
+					break;
+				}
+				catch (ObjectDisposedException)
+				{
+					// Usually this exception occurs when trying to access timeoutToken.Token while the source was already disposed by pressing eSC
+					break;
+				}
 			}
 
-			return result;
+			return responseContent;
 		}
 	}
 }

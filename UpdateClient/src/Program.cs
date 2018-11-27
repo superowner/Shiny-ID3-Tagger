@@ -35,7 +35,7 @@ namespace UpdateClient
 			try
 			{
 				// Redirect all console output to the file "update.log"
-				FileStream updateLogFileStream = new FileStream(@"C:\Users\nixda\Desktop\update.log", FileMode.Append);
+				FileStream updateLogFileStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "update.log", FileMode.Append);
 				StreamWriter updateLogStreamwriter = new StreamWriter(updateLogFileStream) { AutoFlush = true };
 				Console.SetOut(updateLogStreamwriter);
 				Console.SetError(updateLogStreamwriter);

@@ -10,8 +10,11 @@ namespace GlobalVariables
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.IO;
+	using System.Text.RegularExpressions;
 	using System.Threading;
 	using System.Windows.Forms;
+	using Utils;
 
 	/// <summary>
 	/// Represents a class for global program variables used throughout the whole program and are not API specific
@@ -31,7 +34,7 @@ namespace GlobalVariables
 		/// <summary>
 		/// Gets or sets a list of counters (one entry per service) to keep track how many correct albums were found
 		/// </summary>
-		internal static readonly Dictionary<string, int> AlbumHits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+		internal static readonly Dictionary<string, int> AlbumCounter = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
 		/// <summary>
 		/// Gets or sets a list of seconds (one entry per service) to measure how long a service took to respond to API requests
@@ -39,7 +42,22 @@ namespace GlobalVariables
 		internal static readonly Dictionary<string, decimal> TotalDuration = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
 
 		/// <summary>
-		/// Enum to decide which richTextBox to use
+		/// Gets a regex pattern which detects if utf-8 bytes were saved into an iso-8859-1 database
+		/// </summary>
+		internal static readonly string MalformedUtf8Pattern = Utils.CreateRegexToCheckMalformedUtf8();
+
+		/// <summary>
+		/// Main application directory
+		/// </summary>
+		internal static readonly string AppDir = AppDomain.CurrentDomain.BaseDirectory;
+
+		/// <summary>
+		/// Temp directory
+		/// </summary>
+		internal static readonly string TempDir = Path.GetTempPath();
+
+		/// <summary>
+		/// Enum to decide which richTextBox to use when printing warnings, errors, general or debug messages
 		/// </summary>
 		internal enum OutputLog
 		{

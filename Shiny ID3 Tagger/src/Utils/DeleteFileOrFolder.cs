@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -23,7 +24,7 @@ namespace Utils
 		/// </summary>
 		/// <param name="fullPath">The path to a file/folder</param>
 		/// <returns>True if deletion was successfull or false if not</returns>
-		private static async Task<bool> DeleteFileOrFolder(string fullPath)
+		internal static async Task<bool> DeleteFileOrFolder(string fullPath)
 		{
 			const int WriteDelay = 50;
 			const int MaxRetries = 3;
@@ -70,7 +71,7 @@ namespace Utils
 						}
 					}
 
-					if (!Directory.Exists(fullPath) && !File.Exists(fullPath))
+					if (Directory.Exists(fullPath) == false && File.Exists(fullPath) == false)
 					{
 						isDeleted = true;
 						break;

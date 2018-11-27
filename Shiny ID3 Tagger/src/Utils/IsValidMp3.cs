@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -19,59 +20,51 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Checks if a given file is a MP3 file
-		/// Does this by inspecting first 3 bytes of a file and comparing them with known byte sequences for mp3 files
+		/// Checks if a given filepath is a file and also a valid MP3 file
+		/// Does this by inspecting first 3 bytes and comparing them with a known byte sequence
 		/// </summary>
 		/// <param name="filepath">File to check</param>
 		/// <returns>True or false according to the previous check</returns>
 		internal static bool IsValidMp3(string filepath)
 		{
-			byte[] fileHeader = new byte[3];
-			byte[] mp3HeaderWithTags = { 0x49, 0x44, 0x33 }; // ID3 tags present
-			byte[] mp3HeaderWithoutTags = { 0xff, 0xfb };    // ID3 tags not present but still a mp3 file
+			// Prevents exception "ArgumentNullException"
+			if (filepath == null)
+			{
+				return false;
+			}
 
+			byte[] fileHeader = new byte[3];
+			byte[] mp3HeaderWithTags = { 0x49, 0x44, 0x33 }; // MP3 file where ID3 tag is present
+			byte[] mp3HeaderWithoutTags = { 0xff, 0xfb };    // MP3 file where ID3 tag is not present
+
+			// Catches possible exceptions
+			// - ArgumentException
+			// - ArgumentNullException
+			// - ArgumentOutOfRangeException
+			// - PathTooLongException
+			// - UnauthorizedAccessException
+			// - IOException
+			// - DirectoryNotFoundException
+			// - FileNotFoundException
+			// - SystemException
+			// - NotSupportedException
 			try
 			{
-				// Read in first 3 bytes of file
+				// Try to read first 3 bytes of file at filepath
 				using (BinaryReader binaryReader = new BinaryReader(new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 100, true)))
 				{
 					binaryReader.Read(fileHeader, 0, 3);
 				}
 			}
-			catch (ArgumentException)
+			catch (Exception ex)
 			{
-				// If path points for example to a URL instead of a local file
 				string[] errorMsg =
 				{
-					"ERROR:    Invalid filepath!",
-					"file:     " + filepath,
+					"ERROR:    File not found or inaccessible!",
+					"File:     " + filepath,
+					"Message:  " + ex.Message,
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
-
-				return false;
-			}
-			catch (FileNotFoundException)
-			{
-				// If file is not found
-				string[] errorMsg =
-				{
-					"ERROR:    File not found!",
-					"file:     " + filepath,
-				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
-
-				return false;
-			}
-			catch (IOException)
-			{
-				// If file has a write lock (i.e. opened in another program)
-				string[] errorMsg =
-				{
-					"ERROR:    Cannot access file. Already in use!",
-					"file:     " + filepath,
-				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
-
 				return false;
 			}
 
@@ -83,15 +76,12 @@ namespace Utils
 			}
 			else
 			{
-				// Print error message
 				string[] errorMsg =
 				{
 					"ERROR:    Not a valid MP3 file!",
 					"file:     " + filepath,
 				};
 				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
-
-				// return false because MP3 file does not contain a valid mp3 header
 				return false;
 			}
 		}

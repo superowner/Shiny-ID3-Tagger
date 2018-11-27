@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// TODO: Renew licence. Community plan is free
 
 namespace GetTags
 {

@@ -61,7 +61,7 @@ namespace GetLyrics
 				searchRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
 				// Retrieve response from server, 4th argument tells GetResponse() to return a byte array rather than a string
-				byte[] response = await Utils.GetHttpResponse(client, searchRequest, cancelToken, true);
+				byte[] response = await Utils.GetHttpResponse(client, searchRequest, cancelToken, returnByteArray: true);
 				string searchContent = this.DecodeResponse(response);
 				JObject searchData = Utils.DeserializeJson(Utils.ConvertXmlToJson(searchContent));
 

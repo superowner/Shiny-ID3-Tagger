@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -35,8 +36,7 @@ namespace Utils
 			HttpClient client = new HttpClient(handler);
 			client.DefaultRequestHeaders.Clear();
 			client.DefaultRequestHeaders.ConnectionClose = false;			// Will attempt to keep connections open which makes more efficient use of the client.
-			client.DefaultRequestHeaders.Connection.Add("Keep-Alive");		// Will attempt to keep connections open which makes more efficient use of the client.
-			client.Timeout = TimeSpan.FromSeconds(15);						// Musicbrainz has 15s timeout in response header. Don't know if this setting is needed
+			client.DefaultRequestHeaders.Connection.Add("Keep-Alive");      // Will attempt to keep connections open which makes more efficient use of the client.
 			client.MaxResponseContentBufferSize = 256000000;
 			ServicePointManager.DefaultConnectionLimit = 24;				// Not sure if it's needed since this limit applies to connections per remote host (per API), not in total per client
 

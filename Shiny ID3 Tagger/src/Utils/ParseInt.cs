@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -13,14 +14,14 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Parses a given string to an integer.Returns 0 if a NULL value is passed
+		/// Parses a given string to an integer.
+		/// Returns 0 if a NULL value is passed
 		/// </summary>
 		/// <param name="str">String to convert</param>
-		/// <param name="defaultValue">Default value </param>
 		/// <returns>The converted int</returns>
-		internal static long ParseLong(string str, long defaultValue = 0)
+		internal static long ParseLong(string str)
 		{
-			return long.TryParse(str, out long result) ? result : defaultValue;
+			return long.TryParse(str, out long result) ? result : 0;
 		}
 	}
 }

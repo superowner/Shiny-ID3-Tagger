@@ -34,6 +34,7 @@ namespace Shiny_ID3_Tagger
 			new GetLyrics.Netease(),
 			new GetLyrics.ViewLyrics(),
 			new GetLyrics.Xiami(),
+			new GetLyrics.ChartLyrics(),
 		};
 
 		private List<IGetTagsService> tagsServices = new List<IGetTagsService>
@@ -178,8 +179,11 @@ namespace Shiny_ID3_Tagger
 
 							foreach (DataRow r in apiResults.Rows)
 							{
-								string albumhit = Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
-								string durationTotal = Utils.IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
+								Utils.IncreaseAlbumCounter(r["service"].ToString(), r["album"].ToString(), tagNew.Album);
+								int albumCounter = GlobalVariables.AlbumCounter[r["service"].ToString()];
+
+								Utils.IncreaseTotalDuration(r["service"].ToString(), r["duration"].ToString());
+								decimal totalDuration = GlobalVariables.TotalDuration[r["service"].ToString()];
 
 								this.dataGridView2.Rows.Add(
 									(this.dataGridView2.Rows.Count + 1).ToString(),
@@ -197,8 +201,8 @@ namespace Shiny_ID3_Tagger
 									r["lyrics"] ?? string.Empty,
 									r["cover"] ?? string.Empty,
 									r["duration"] ?? string.Empty,
-									durationTotal ?? string.Empty,
-									albumhit ?? string.Empty);
+									totalDuration.ToString(),
+									albumCounter.ToString());
 
 								// Set row foreground color to gray if current row album doesn't match most frequent album
 								if (tagNew.Album == null ||
@@ -231,7 +235,10 @@ namespace Shiny_ID3_Tagger
 
 							sw.Stop();
 							tagNew.Duration = string.Format("{0:s\\,f}", sw.Elapsed);
-							string allApiDurationTotal = Utils.IncreaseTotalDuration(tagNew.Service, tagNew.Duration);
+
+							// Calculate duration for "RESULT" (this is all API and lyrics tasks for one file)
+							Utils.IncreaseTotalDuration(tagNew.Service, tagNew.Duration);
+							decimal allApiDurationTotal = GlobalVariables.TotalDuration[tagNew.Service];
 
 							this.dataGridView2.Rows.Add(
 								(this.dataGridView2.Rows.Count + 1).ToString(),
@@ -248,8 +255,8 @@ namespace Shiny_ID3_Tagger
 								tagNew.TrackNumber ?? string.Empty,
 								tagNew.Lyrics ?? string.Empty,
 								tagNew.Cover ?? string.Empty,
-								tagNew.Duration ?? string.Empty,
-								allApiDurationTotal ?? string.Empty,
+								tagNew.Duration,
+								allApiDurationTotal.ToString(),
 								string.Empty);
 
 							this.dataGridView2.Rows[this.dataGridView2.RowCount - 1].Cells[this.lyrics2.Index].ToolTipText = tagNew.Lyrics;

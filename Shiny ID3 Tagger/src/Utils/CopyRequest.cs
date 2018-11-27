@@ -1,9 +1,10 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CloneRequest.cs" company="Shiny ID3 Tagger">
+// <copyright file="CopyRequest.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -19,8 +20,13 @@ namespace Utils
 		/// </summary>
 		/// <param name="original">Original request object which should be duplicated</param>
 		/// <returns>The exact copy of the original request</returns>
-		internal static HttpRequestMessage CloneRequest(HttpRequestMessage original)
+		internal static HttpRequestMessage CopyRequest(HttpRequestMessage original)
 		{
+			if (original == null)
+			{
+				return null;
+			}
+
 			HttpRequestMessage backup = new HttpRequestMessage(original.Method, original.RequestUri)
 			{
 				Content = original.Content,

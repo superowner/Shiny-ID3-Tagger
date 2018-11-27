@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IsValidRegex.cs" company="Shiny ID3 Tagger">
+// <copyright file="IsValidBase64.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -17,14 +17,22 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Checks if a given string can be interpreted as a valid RegEx pattern.
-		/// User settings allow to define custom regex pattern which must be checked first
+		/// Checks if a given string can be interpreted as a base64 string
 		/// </summary>
-		/// <param name="pattern">Pattern string to check</param>
-		/// <returns>True if pattern is a valid Regex pattern</returns>
-		internal static bool IsValidRegex(string pattern)
+		/// <param name="str">String to check</param>
+		/// <returns>True if string is a valid base64 string</returns>
+		internal static bool IsValidBase64(string str)
 		{
-			if (string.IsNullOrWhiteSpace(pattern))
+			// Prevents exception "ArgumentNullException"
+			if (str == null)
+			{
+				return false;
+			}
+
+			str = str.Trim();
+
+			// The length of a base64 string is always a multiple of 4
+			if (str.Length % 4 != 0)
 			{
 				return false;
 			}
@@ -37,7 +45,7 @@ namespace Utils
 			// - OverflowException
 			try
 			{
-				return Regex.IsMatch(string.Empty, pattern, RegexOptions.None, TimeSpan.FromMilliseconds(100));
+				return Regex.IsMatch(str, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None, TimeSpan.FromMilliseconds(100));
 			}
 			catch (Exception)
 			{

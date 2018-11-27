@@ -21,7 +21,6 @@ namespace GetLyrics
 	/// <summary>
 	/// Class for chartlyrics API
 	/// </summary>
-	[Obsolete("API down for a a couple of days already and maybe dead, last checked 2018-10-27", true)]
 	internal class ChartLyrics : IGetLyricsService
 	{
 		/// <summary>
@@ -63,7 +62,7 @@ namespace GetLyrics
 						string rawLyrics = (string)searchData.SelectToken("GetLyricResult.Lyric");
 
 						// Sanitize lyrics
-						rawLyrics = Utils.CheckMalformedUtf8(rawLyrics); // Checks and converts a string to UTF-8 if needed/possible
+						rawLyrics = Utils.ConvertMalformedUtf8(rawLyrics); // Checks and converts a string to UTF-8 if needed/possible
 						rawLyrics = string.Join(
 							Environment.NewLine,
 							rawLyrics.Split('\n')

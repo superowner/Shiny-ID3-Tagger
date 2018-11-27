@@ -4,15 +4,14 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
-// Review: Use $ref and $id to get rid of settings.user.schema. Use settings.default.json as schema then
-// 			The problem is, how can i have one schema with "required" and one without "required"
-// 			https://www.newtonsoft.com/jsonschema/help/html/LoadingSchemas.htm
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using Exceptions;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using Newtonsoft.Json.Schema;
@@ -23,32 +22,34 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Validates a given JSON against a predefined schema and throws an error of it fails
+		/// Validates a given JSON against a predefined schema and returns a list of errors of it fails
 		/// Quick overview on how schemas work:	<seealso href="https://spacetelescope.github.io/understanding-json-schema/basics.html"/>
 		/// Generate schema from existing JSON with real values: <seealso href="https://jsonschema.net/#/"/>
-		/// JSON.net schema documentation:<seealso href="https://www.newtonsoft.com/json/help/html/JTokenIsValidWithMessages.htm"/>
+		/// JSON schema validator: <seealso href="https://www.jsonschemavalidator.net/"/>
+		/// JSON.net schema documentation: <seealso href="https://www.newtonsoft.com/json/help/html/JTokenIsValidWithMessages.htm"/>
 		/// </summary>
 		/// <param name="json">The JSON to validate</param>
 		/// <param name="schemaPath">The path to the schema file</param>
-		internal static void ValidateConfig(JObject json, string schemaPath)
+		/// <returns>A list of error messages as strings</returns>
+		internal static List<string> ValidateConfig(JObject json, string schemaPath)
 		{
-			// Load schema
-			using (StreamReader schemaFile = File.OpenText(schemaPath))
-			using (JsonTextReader schemaReader = new JsonTextReader(schemaFile))
+			try
 			{
-				// Load schema
-				JSchema schema = JSchema.Load(schemaReader);
-
-				// Validate JSON against schema, save errors in errorMessages list
-				json.IsValid(schema, out IList<string> errorMessages);
-
-				// If the config could not be validated, throw an exception
-				if (errorMessages.Count > 0)
+				using (StreamReader schemaFile = File.OpenText(schemaPath))
+				using (JsonTextReader schemaReader = new JsonTextReader(schemaFile))
 				{
-					string validationResult = string.Join("\n          ", errorMessages);
+					// Read schema
+					JSchema schema = JSchema.Load(schemaReader);
 
-					throw new ArgumentException(validationResult);
+					// Validate JSON against schema, save errors in errorMessages list
+					json.IsValid(schema, out IList<string> errorMessages);
+
+					return (List<string>)errorMessages;
 				}
+			}
+			catch (Exception ex)
+			{
+				return new List<string> { ex.Message };
 			}
 		}
 	}

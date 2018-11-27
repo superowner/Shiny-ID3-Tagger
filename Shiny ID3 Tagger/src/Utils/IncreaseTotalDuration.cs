@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -15,25 +16,34 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Increases the total duration list after an API task finished its job
+		/// Increases the total duration for a given API when the current search task finished
 		/// </summary>
 		/// <param name="service">name of current API for which the total duration should be increased</param>
 		/// <param name="duration">duration to add</param>
-		/// <returns>The updated value of the total duration for the specified API</returns>
-		internal static string IncreaseTotalDuration(string service, string duration)
+		internal static void IncreaseTotalDuration(string service, string duration)
 		{
-			decimal.TryParse(duration, out decimal durationAsDecimal);
+			// Prevents exception "ArgumentNullException"
+			if (service == null)
+			{
+				return;
+			}
 
-			if (!GlobalVariables.TotalDuration.ContainsKey(service))
+			// Add new entry to list (Initilize)
+			if (GlobalVariables.TotalDuration.ContainsKey(service) == false)
 			{
 				GlobalVariables.TotalDuration.Add(service, 0);
 			}
 
-			GlobalVariables.TotalDuration[service] = GlobalVariables.TotalDuration[service] + durationAsDecimal;
+			// Prevents exception "ArgumentNullException"
+			if (duration == null)
+			{
+				return;
+			}
 
-			string result = GlobalVariables.TotalDuration[service].ToString();
-
-			return result;
+			if (decimal.TryParse(duration, out decimal durationAsDecimal))
+			{
+				GlobalVariables.TotalDuration[service] += durationAsDecimal;
+			}
 		}
 	}
 }

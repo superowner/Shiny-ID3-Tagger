@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
@@ -15,31 +16,37 @@ namespace Utils
 	internal partial class Utils
 	{
 		/// <summary>
-		/// Checks if current API has returned an album which is also the majority album from all other APIs
-		/// If yes, then increase the corresponding entry in GlobalVariables.AlbumHits list
+		/// Increase the albumCounter for a given service,
+		/// if current API request has returned an album which is also the majority album from all other APIs
 		/// </summary>
-		/// <param name="service">name of current API</param>
-		/// <param name="apiAlbum">name of album to check</param>
-		/// <param name="majorityAlbum">name of most often returned album name by all other APIs</param>
-		/// <returns>The updated value of albumHits for the specified API</returns>
-		internal static string IncreaseAlbumCounter(string service, string apiAlbum, string majorityAlbum)
+		/// <param name="service">name of current API service</param>
+		/// <param name="apiAlbum">name of album of current API service which will be checked</param>
+		/// <param name="majorityAlbum">name of most often named album name from all other APIs</param>
+		internal static void IncreaseAlbumCounter(string service, string apiAlbum, string majorityAlbum)
 		{
-			if (!GlobalVariables.AlbumHits.ContainsKey(service))
+			// Prevents exception "ArgumentNullException"
+			if (service == null)
 			{
-				GlobalVariables.AlbumHits.Add(service, 0);
+				return;
 			}
 
-			if (apiAlbum != null && majorityAlbum != null)
+			// Add new entry to list (Initilize)
+			if (GlobalVariables.AlbumCounter.ContainsKey(service) == false)
 			{
-				if (Strip(apiAlbum.ToLowerInvariant()) == Strip(majorityAlbum.ToLowerInvariant()))
-				{
-					GlobalVariables.AlbumHits[service] += 1;
-				}
+				GlobalVariables.AlbumCounter.Add(service, 0);
 			}
 
-			string result = GlobalVariables.AlbumHits[service].ToString();
+			// Prevents exception "ArgumentNullException"
+			if (apiAlbum == null || majorityAlbum == null)
+			{
+				return;
+			}
 
-			return result;
+			// Increase counter by 1
+			if (Strip(apiAlbum.ToLowerInvariant()) == Strip(majorityAlbum.ToLowerInvariant()))
+			{
+				GlobalVariables.AlbumCounter[service] += 1;
+			}
 		}
 	}
 }

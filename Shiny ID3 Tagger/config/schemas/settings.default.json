@@ -5,73 +5,57 @@
 	"type": "object",
 	"properties": {
 		"LogLevel": {
-			"$id": "/properties/LogLevel",
 			"type": "integer",
 			"minimum": 0,
 			"maximum": 4
 		},
 		"PreferTags": {
-			"$id": "/properties/PreferTags",
 			"type": "boolean"
 		},
 		"RemoveVersion": {
-			"$id": "/properties/RemoveVersion",
 			"type": "boolean"
 		},
 		"RemoveFeaturing": {
-			"$id": "/properties/RemoveFeaturing",
 			"type": "boolean"
 		},
 		"OverwriteImage": {
-			"$id": "/properties/OverwriteImage",
 			"type": "boolean"
 		},
 		"AutoCollectFiles": {
-			"$id": "/properties/AutoCollectFiles",
 			"type": "boolean"
 		},
 		"AutoSearch": {
-			"$id": "/properties/AutoSearch",
 			"type": "boolean"
 		},
 		"AutoUpdate": {
-			"$id": "/properties/AutoUpdate",
 			"type": "boolean"
 		},
 		"AutoCapitalize": {
-			"$id": "/properties/AutoCapitalize",
 			"type": "boolean"
 		},
 		"ThresholdRedValue": {
-			"$id": "/properties/ThresholdRedValue",
 			"type": "integer",
 			"minimum": 0,
 			"maximum": 100
 		},
 		"MaxImageSize": {
-			"$id": "/properties/MaxImageSize",
 			"type": "integer",
 			"minimum": 1,
 			"maximum": 9999
 		},
 		"UserAgent": {
-			"$id": "/properties/UserAgent",
 			"type": "string"
 		},
 		"FilenamePatterns": {
-			"$id": "/properties/FilenamePatterns",
 			"type": "array",
 			"items": {
-				"$id": "/properties/FilenamePatterns/items",
 				"type": "string"
 			}
 		},
 		"CoverPriority": {
-			"$id": "/properties/CoverPriority",
 			"type": "array",
 			"uniqueItems": true,
 			"items": {
-				"$id": "/properties/CoverPriority/items",
 				"type": "string",
 				"enum": [
 					"Napster (Rhapsody)",
@@ -93,11 +77,9 @@
 			}
 		},
 		"LyricsPriority": {
-			"$id": "/properties/LyricsPriority",
 			"type": "array",
 			"uniqueItems": true,
 			"items": {
-				"$id": "/properties/LyricsPriority/items",
 				"type": "string",
 				"enum": [
 					"Apiseeds",

@@ -24,7 +24,7 @@ namespace Shiny_ID3_Tagger
 		private void MenuItemClick_ClearTables(object sender, EventArgs e)
 		{
 			GlobalVariables.TokenSource.Cancel();
-			GlobalVariables.AlbumHits.Clear();
+			GlobalVariables.AlbumCounter.Clear();
 			GlobalVariables.ActiveDGV.Refresh();
 
 			this.rtbSearchLog.Clear();

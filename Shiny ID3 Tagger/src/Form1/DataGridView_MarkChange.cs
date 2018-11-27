@@ -45,7 +45,7 @@ namespace Shiny_ID3_Tagger
 						this.dataGridView1[col, row].ToolTipText = oldValue;
 
 						long allowedEdits = oldValue.Length * (int)User.Settings["ThresholdRedValue"] / 100;
-						if (signalBigChanges && (Utils.LevenshteinDistance(oldValue, newValue) > allowedEdits))
+						if (signalBigChanges && (Utils.CalcStringSimilarity(oldValue, newValue) > allowedEdits))
 						{
 							this.dataGridView1[col, row].Style.BackColor = Color.Red;
 							this.dataGridView1[this.hasNewValues.Index, row].Value = true;

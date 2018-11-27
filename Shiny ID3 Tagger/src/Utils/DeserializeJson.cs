@@ -4,10 +4,11 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// Reviewed and checked if all possible exceptions are prevented or handled
 
 namespace Utils
 {
-	using GlobalVariables;
+	using System.Collections.Generic;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using Shiny_ID3_Tagger;
@@ -15,53 +16,73 @@ namespace Utils
 	/// <summary>Represents the Utility class which holds various helper functions</summary>
 	internal partial class Utils
 	{
-		/// <summary> Deserialize a JSON string to a JSON.NET JObject </summary>
-		/// <param name="jsonStr">The input string which should be deserialized. If jsonStr = null, then null will be returned</param>
-		/// <param name="throwError">True or false (default) if parsing errors should throw an error</param>
-		/// <returns>The new JObject holding all the values from content string</returns>
-		internal static JObject DeserializeJson(string jsonStr, bool throwError = true)
-		{
-			// string.Empty is used to prevent a NullReference exception
-			return JsonConvert.DeserializeObject<JObject>(jsonStr ?? string.Empty, GetJsonDeserializerSettings(throwError));
-		}
-
-		/// <summary>
-		/// Set custom settings for JSON deserialization
-		/// 1) Intend each child 4 spaces
-		/// 2) Don't convert a date string to date objects. There is a seperat method for that
+		/// <summary> Deserialize a JSON string to a JSON.NET JObject.
+		/// Returns NULL if parsing failed
 		/// <seealso href="https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_Formatting.htm"/>
 		/// <seealso href="https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_DateParseHandling.htm"/>
 		/// <seealso href="https://www.newtonsoft.com/json/help/html/P_Newtonsoft_Json_Serialization_ErrorContext_Handled.htm"/>
+		/// <seealso href="https://stackoverflow.com/a/26264889/935614"/>
 		/// </summary>
-		/// <returns>A JsonSerializerSettings object holding all settings</returns>
-		private static JsonSerializerSettings GetJsonDeserializerSettings(bool throwError)
+		/// <param name="jsonStr">The input string which should be deserialized</param>
+		/// <returns>The new JObject holding all the values from content string</returns>
+		internal static JObject DeserializeJson(string jsonStr)
 		{
+			// Prevents exception "ArgumentNullException"
+			if (jsonStr == null)
+			{
+				return null;
+			}
+
+			List<string> errorMessages = new List<string>();
+
+			// Set up custom deserialize settings
+			// 1) Intend each child 4 spaces
+			// 2) Don't convert a date string to date objects. There is a seperat method for that
+			// 3) Set error on handled=true. DeserializeJson should not throw an exception
 			JsonSerializerSettings jsonSettings = new JsonSerializerSettings
 			{
 				Formatting = Formatting.Indented,
 				DateParseHandling = DateParseHandling.None,
-			};
-
-			jsonSettings.Error += (obj, errorArgs) =>
-			{
-				if (throwError)
+				Error = (obj, errorArgs) =>
 				{
-					// Build a more useful error message when JSON parsing fails
-					string[] warningMsg =
-					{
-							"WARNING:  Could not convert string to JSON!",
-							"Message:  " + errorArgs.ErrorContext.Error.Message.TrimEnd('\r', '\n'),
-					};
-					Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
-				}
-				else
-				{
-					// Set error on handled=true. DeserializeJson doesn't throw errors then
+					errorMessages.Add(errorArgs.ErrorContext.Error.Message);
 					errorArgs.ErrorContext.Handled = true;
-				}
+				},
 			};
 
-			return jsonSettings;
+			// Deserialize JSON
+			dynamic json = JsonConvert.DeserializeObject<JContainer>(jsonStr, jsonSettings);
+
+			// Check if errors occured
+			if (errorMessages.Count > 0)
+			{
+				string[] warningMsg =
+				{
+					"WARNING:  Could not parse JSON!",
+					"Message:  " + string.Join("\n          ", errorMessages),
+					"JSON:     " + jsonStr,
+				};
+
+				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+			}
+
+			// If response was an array, just take the first element. But print a warning
+			if (json is JArray)
+			{
+				string[] warningMsg =
+				{
+					"WARNING:  Could not parse JSON!",
+					"Message:  JSON was of type array, but expected a single object",
+					"          Taking the first element as default",
+					"JSON:     " + jsonStr,
+				};
+
+				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+
+				json = json.First;
+			}
+
+			return (JObject)json;
 		}
 	}
 }
