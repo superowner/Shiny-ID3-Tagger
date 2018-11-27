@@ -26,7 +26,7 @@ namespace Shiny_ID3_Tagger
 	/// <summary>
 	/// Represents the Utility class which holds various helper functions
 	/// </summary>
-	public partial class Form1
+	public partial class MainForm
 	{
 		/// <summary>
 		/// Checks for updates and downloads newest program files from GitHub
@@ -156,7 +156,7 @@ namespace Shiny_ID3_Tagger
 								"Your version:\t" + localCommitDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
 								"Newest version:\t" + latestReleaseDate.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"),
 							};
-							Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
+							MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Search);
 						}
 
 						return false;
@@ -240,7 +240,7 @@ namespace Shiny_ID3_Tagger
 					"WARNING:  Could not update program!",
 					"Message:  " + ex.Message,
 				};
-				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+				MainForm.Instance.RichTextBox_LogMessage(warningMsg, 3);
 
 				return false;
 			}

@@ -64,7 +64,7 @@ namespace Utils
 					"File:     " + filepath,
 					"Message:  " + ex.Message,
 				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+				MainForm.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				return false;
 			}
 
@@ -81,7 +81,7 @@ namespace Utils
 					"ERROR:    Not a valid MP3 file!",
 					"file:     " + filepath,
 				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+				MainForm.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				return false;
 			}
 		}

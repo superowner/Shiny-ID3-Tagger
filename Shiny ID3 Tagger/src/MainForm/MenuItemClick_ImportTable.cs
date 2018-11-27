@@ -15,9 +15,9 @@ namespace Shiny_ID3_Tagger
 	using Microsoft.VisualBasic.FileIO;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		/// <summary>
 		/// Imports a CSV file to dataGridView1
@@ -102,7 +102,7 @@ namespace Shiny_ID3_Tagger
 								"ERROR:    Could not parse CSV file \"" + fullPath + "\"",
 								"Message:  " + ex.Message.TrimEnd('\r', '\n'),
 							};
-							Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+							MainForm.Instance.RichTextBox_LogMessage(errorMsg, 2);
 						}
 						catch (FormatException ex)
 						{
@@ -114,7 +114,7 @@ namespace Shiny_ID3_Tagger
 								"CSV:      " + string.Join(seperator, csvHeaderFields),
 								"Required: " + string.Join(seperator, dgvHeaderFields),
 							};
-							Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+							MainForm.Instance.RichTextBox_LogMessage(errorMsg, 2);
 						}
 					}
 				}

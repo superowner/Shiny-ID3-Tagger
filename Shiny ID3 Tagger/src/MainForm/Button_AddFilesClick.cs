@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Button_SearchClick.cs" company="Shiny ID3 Tagger">
+// <copyright file="Button_AddFilesClick.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -13,22 +13,29 @@ namespace Shiny_ID3_Tagger
 	using GlobalVariables;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		/// <summary>
-		/// Starts main routine "SearchTags" for querying all APIs
+		/// Opens a file selection window when pressing "Add files" button
 		/// </summary>
 		/// <param name="sender">The object which has raised the event</param>
 		/// <param name="e">Contains additional information about the event</param>
-		private void Button_SearchClick(object sender, EventArgs e)
+		private async void Button_AddFilesClick(object sender, EventArgs e)
 		{
-			// Refresh cancel token which is used for all requests
+			// Refresh cancel token
 			GlobalVariables.TokenSource = new CancellationTokenSource();
 			CancellationToken cancelToken = GlobalVariables.TokenSource.Token;
 
-			this.StartSearching(cancelToken);
+			// Add new files
+			bool hasNewFiles = await this.CollectFiles(null, cancelToken);
+
+			// Continue with searching if user setting allows it and if new files were added
+			if ((bool)User.Settings["AutoSearch"] && hasNewFiles)
+			{
+				this.StartSearching(cancelToken);
+			}
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace Shiny_ID3_Tagger
 		/// </summary>
 		protected override void OnCreateMainForm()
 		{
-			this.MainForm = new Form1();
+			this.MainForm = new MainForm();
 		}
 
 		/// <summary>
@@ -43,9 +43,9 @@ namespace Shiny_ID3_Tagger
 		/// <param name="e">default parameter which holds all command line arguments</param>
 		private void This_StartupNextInstance(object sender, StartupNextInstanceEventArgs e)
 		{
-			Form1 form = this.MainForm as Form1;
+			MainForm form = this.MainForm as MainForm;
 			string[] args = new List<string>(e.CommandLine).Skip(1).ToArray();
-			form.Form1Shown(args);
+			form.MainFormShown(args);
 		}
 	}
 }

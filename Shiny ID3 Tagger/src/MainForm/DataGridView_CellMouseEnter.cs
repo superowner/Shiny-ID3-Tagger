@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="MenuItemClick_CheckForUpdates.cs" company="Shiny ID3 Tagger">
+// <copyright file="DataGridView_CellMouseEnter.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -8,26 +8,25 @@
 namespace Shiny_ID3_Tagger
 {
 	using System;
+	using System.Drawing;
 	using System.Windows.Forms;
-	using Utils;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		/// <summary>
-		/// Start method to update program
+		/// Highlights rows after they are selected. Opposing method to "DataGridView_CellMouseEnter"
 		/// </summary>
 		/// <param name="sender">The object which has raised the event</param>
 		/// <param name="e">Contains additional information about the event</param>
-		private async void MenuItemClick_CheckForUpdates(object sender, EventArgs e)
+		private void DataGridView_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
 		{
-			bool successDownload = await CheckAndDownloadUpdate();
-			if (successDownload)
+			DataGridView dgv = (DataGridView)sender;
+			if (e.RowIndex >= 0)
 			{
-				// Wait for UpdateClient.exe to say it's ready to deploy new program files
-				Utils.StartUpdateClient();
+				dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(229, 243, 255);
 			}
 		}
 	}

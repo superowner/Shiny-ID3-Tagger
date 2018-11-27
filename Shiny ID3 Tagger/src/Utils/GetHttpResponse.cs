@@ -112,7 +112,7 @@ namespace Utils
 					// Print request parameters and headers (after request and potential exception)
 					List<string> debugMsg = new List<string> { "DEBUG:    API request was send" };
 					debugMsg.AddRange(BuildLogMessage(request, requestContent, response, responseContent));
-					Form1.Instance.RichTextBox_LogMessage(debugMsg.ToArray(), 4);
+					MainForm.Instance.RichTextBox_LogMessage(debugMsg.ToArray(), 4);
 
 					// Cancel request and don't try again if the status code should be suppressed
 					// These statuscodes are very common i.e. when a network resource doesn't exist
@@ -132,7 +132,7 @@ namespace Utils
 					// Print out all request and response properties as a warning
 					List<string> warningMsg = new List<string> { "WARNING:  Request was unsuccessful! " + i + " retries left. Retrying..." };
 					warningMsg.AddRange(BuildLogMessage(request, requestContent, response, responseContent));
-					Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
+					MainForm.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
 
 					// Wait some time before retrying to give server time to recover
 					await Task.Delay(retryDelayMs);
@@ -151,7 +151,7 @@ namespace Utils
 							List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + customTimeoutMs ?? defaultTimeoutMs + " milliseconds to respond!" };
 							warningMsg.AddRange(BuildLogMessage(request, requestContent, response, responseContent));
 							warningMsg.AddRange(new[] { "Message:  " + ex.Message });
-							Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
+							MainForm.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
 						}
 					}
 
@@ -163,7 +163,7 @@ namespace Utils
 					List<string> warningMsg = new List<string> { "WARNING:  Server could not be reached!" };
 					warningMsg.AddRange(BuildLogMessage(request, requestContent, response, responseContent));
 					warningMsg.AddRange(new[] { "Message:  " + ex.Message });
-					Form1.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
+					MainForm.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);
 
 					break;
 				}

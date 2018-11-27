@@ -16,30 +16,30 @@ namespace Shiny_ID3_Tagger
 	using Utils;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Form1"/> class.
+		/// Initializes a new instance of the <see cref="MainForm"/> class.
 		/// The main form which will be shown immediately after program start
 		/// </summary>
-		public Form1()
+		public MainForm()
 		{
-			Form1.Instance = this;
+			MainForm.Instance = this;
 			this.InitializeComponent();
 		}
 
 		/// <summary>
 		/// Gets or sets the single instance of the the main form to get public access from other classes like Utils class
 		/// </summary>
-		public static Form1 Instance { get; set; }
+		public static MainForm Instance { get; set; }
 
 		/// <summary>
 		/// Method is executed every time the program is called
 		/// </summary>
 		/// <param name="args">Default parameter which holds event arguments</param>
-		internal async void Form1Shown(string[] args)
+		internal async void MainFormShown(string[] args)
 		{
 			// Refresh cancellation token
 			GlobalVariables.TokenSource = new CancellationTokenSource();
@@ -107,7 +107,7 @@ namespace Shiny_ID3_Tagger
 			// First argument is always the path to program executable itself, skip it)
 			string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();
 
-			this.Form1Shown(args);
+			this.MainFormShown(args);
 		}
 	}
 }

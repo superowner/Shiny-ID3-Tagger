@@ -85,7 +85,7 @@ namespace Utils
 
 			if (isDeleted == false)
 			{
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+				MainForm.Instance.RichTextBox_LogMessage(errorMsg, 2);
 			}
 
 			return isDeleted;

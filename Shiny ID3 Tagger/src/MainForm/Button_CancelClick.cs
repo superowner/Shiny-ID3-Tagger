@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Popup_RemoveClick.cs" company="Shiny ID3 Tagger">
+// <copyright file="Button_CancelClick.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -12,21 +12,19 @@ namespace Shiny_ID3_Tagger
 	using GlobalVariables;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		/// <summary>
-		/// Remove all selected rows from active datagridview when using the context menu "Remove lines"
+		/// Uses the main token source to signalize all running tasks to cancel their work and return to main method
 		/// </summary>
 		/// <param name="sender">The object which has raised the event</param>
 		/// <param name="e">Contains additional information about the event</param>
-		private void Popup_RemoveClick(object sender, EventArgs e)
+		private void Button_CancelClick(object sender, EventArgs e)
 		{
-			foreach (DataGridViewRow row in GlobalVariables.ActiveDGV.SelectedRows)
-			{
-				GlobalVariables.ActiveDGV.Rows.Remove(row);
-			}
+			GlobalVariables.TokenSource.Cancel();
+			this.btnCancel.Visible = false;
 		}
 	}
 }

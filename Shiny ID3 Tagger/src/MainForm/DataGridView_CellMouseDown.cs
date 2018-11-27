@@ -11,9 +11,9 @@ namespace Shiny_ID3_Tagger
 	using System.Windows.Forms;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		/// <summary>
 		/// >Selects a new row if right clicking on a row which is not already selected

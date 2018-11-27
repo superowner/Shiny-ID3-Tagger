@@ -80,7 +80,7 @@ namespace Utils
 				if (regEx.IsMatch(dateString))
 				{
 					string[] warningMsg =	{ "WARNING:  Could not convert \"" + dateString + "\" to a date!" };
-					Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+					MainForm.Instance.RichTextBox_LogMessage(warningMsg, 3);
 				}
 
 				return default;

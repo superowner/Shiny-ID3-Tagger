@@ -168,13 +168,13 @@
     <Compile Include="src\api\GetLyricsService\ViewLyrics.cs" />
     <Compile Include="src\Exceptions\ReadConfigException.cs" />
     <Compile Include="src\Exceptions\UpdateClientException.cs" />
-    <Compile Include="src\Form1\MenuItemClick_CheckForUpdates.cs">
+    <Compile Include="src\MainForm\MenuItemClick_CheckForUpdates.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\GlobalVariables\User.cs" />
     <Compile Include="src\GlobalVariables\Id3.cs" />
     <Compile Include="src\GlobalVariables\ApiSessionData.cs" />
-    <Compile Include="src\Form1\Form_EnableUI.cs">
+    <Compile Include="src\MainForm\Form_EnableUI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\SingleInstanceController.cs" />
@@ -186,67 +186,67 @@
     <Compile Include="src\Utils\IsValidRegex.cs" />
     <Compile Include="src\Utils\StartUpdateClient.cs" />
     <Compile Include="src\Utils\ParseInt.cs" />
-    <Compile Include="src\Form1\DataGridView_CellPainting.cs">
+    <Compile Include="src\MainForm\DataGridView_CellPainting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\Form_KeyDown.cs">
+    <Compile Include="src\MainForm\Form_KeyDown.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\MenuItemClick_AddFolder.cs">
+    <Compile Include="src\MainForm\MenuItemClick_AddFolder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\Button_AddFilesClick.cs">
+    <Compile Include="src\MainForm\Button_AddFilesClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\Button_CancelClick.cs">
+    <Compile Include="src\MainForm\Button_CancelClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\Button_SearchClick.cs">
+    <Compile Include="src\MainForm\Button_SearchClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\Button_WriteClick.cs">
+    <Compile Include="src\MainForm\Button_WriteClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\MenuItemClick_ClearTables.cs">
+    <Compile Include="src\MainForm\MenuItemClick_ClearTables.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\DataGridView_CellContentClick.cs">
+    <Compile Include="src\MainForm\DataGridView_CellContentClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\DataGridView_CellMouseDown.cs">
+    <Compile Include="src\MainForm\DataGridView_CellMouseDown.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\DataGridView_CellMouseEnter.cs">
+    <Compile Include="src\MainForm\DataGridView_CellMouseEnter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\DataGridView_CellMouseLeave.cs">
+    <Compile Include="src\MainForm\DataGridView_CellMouseLeave.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\DataGridView_KeyPress.cs">
+    <Compile Include="src\MainForm\DataGridView_KeyPress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\MenuItemClick_ImportTable.cs">
+    <Compile Include="src\MainForm\MenuItemClick_ImportTable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\MenuItemClick_OpenSettings.cs">
+    <Compile Include="src\MainForm\MenuItemClick_OpenSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\DataGridView_SortCompare.cs">
+    <Compile Include="src\MainForm\DataGridView_SortCompare.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\Popup_ShowExplorerClick.cs">
+    <Compile Include="src\MainForm\Popup_ShowExplorerClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\SlowProgressBar_VisibleChanged.cs">
+    <Compile Include="src\MainForm\SlowProgressBar_VisibleChanged.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\Popup_RemoveClick.cs">
+    <Compile Include="src\MainForm\Popup_RemoveClick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\RichTextBox_LinkClicked.cs">
+    <Compile Include="src\MainForm\RichTextBox_LinkClicked.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\Form1\TabControl_SelectedIndexChanged.cs">
+    <Compile Include="src\MainForm\TabControl_SelectedIndexChanged.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Utils\Capitalize.cs" />
@@ -256,7 +256,7 @@
     <Compile Include="src\Utils\ConvertXmlToJson.cs" />
     <Compile Include="src\Utils\DeserializeJson.cs" />
     <Compile Include="src\Utils\GetHttpResponse.cs" />
-    <Compile Include="src\Form1\MenuItemClick_ExportTable.cs">
+    <Compile Include="src\MainForm\MenuItemClick_ExportTable.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Utils\IncreaseTotalDuration.cs" />
@@ -265,11 +265,11 @@
     <Compile Include="src\Utils\IsValidMp3.cs" />
     <Compile Include="src\Utils\IsValidUrl.cs" />
     <Compile Include="src\Utils\CalcStringSimilarity.cs" />
-    <Compile Include="src\Form1\RichTextBox_LogMessage.cs">
+    <Compile Include="src\MainForm\RichTextBox_LogMessage.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Utils\BuildLogMessage.cs" />
-    <Compile Include="src\Form1\DataGridView_MarkChange.cs">
+    <Compile Include="src\MainForm\DataGridView_MarkChange.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Utils\ReadConfig.cs" />

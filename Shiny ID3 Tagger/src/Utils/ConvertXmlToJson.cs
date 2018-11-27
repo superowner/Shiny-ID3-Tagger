@@ -40,7 +40,7 @@ namespace Utils
 						"String:   " + xmlStr.TrimEnd('\r', '\n'),
 						"Message:  " + error.Message.Trim(),
 					};
-					Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+					MainForm.Instance.RichTextBox_LogMessage(warningMsg, 3);
 				}
 			}
 

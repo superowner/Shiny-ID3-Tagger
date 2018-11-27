@@ -13,9 +13,9 @@ namespace Shiny_ID3_Tagger
 	using Utils;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1
+	public partial class MainForm
 	{
 		/// <summary>
 		/// Compares two values and signals changes through background colors in dataGridView1

@@ -14,9 +14,9 @@ namespace Shiny_ID3_Tagger
 	using GlobalVariables;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		/// <summary>
 		/// Open Windows Explorer and navigates to file from active row (Despite multiple rows can be selected, only one row can will be active)

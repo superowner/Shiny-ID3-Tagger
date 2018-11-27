@@ -14,9 +14,9 @@ namespace Shiny_ID3_Tagger
 	using GlobalVariables;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1
+	public partial class MainForm
 	{
 		/// <summary>
 		/// Writes a given list of messages to the desired richTextBox
@@ -32,10 +32,10 @@ namespace Shiny_ID3_Tagger
 		/// <param name="messageType">richTextBox to use. Possible values are "Search", "Write" or "Error" (default)</param>
 		internal void RichTextBox_LogMessage(string[] values, int messageLevel, GlobalVariables.OutputLog messageType = GlobalVariables.OutputLog.Error)
 		{
-			// When called from a different thread then Form1, switch back to thread which owns Form1
+			// When called from a different thread then MainForm, switch back to thread which owns MainForm
 			if (this.InvokeRequired)
 			{
-				this.Invoke(new Action<string[], int, GlobalVariables.OutputLog>(Form1.Instance.RichTextBox_LogMessage), new object[] { values, messageLevel, messageType });
+				this.Invoke(new Action<string[], int, GlobalVariables.OutputLog>(MainForm.Instance.RichTextBox_LogMessage), new object[] { values, messageLevel, messageType });
 				return;
 			}
 

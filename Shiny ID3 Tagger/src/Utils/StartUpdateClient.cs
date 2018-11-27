@@ -86,7 +86,7 @@ namespace Utils
 							"WARNING:  Could not update program!",
 							"Message:  " + ex.Message,
 				};
-				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+				MainForm.Instance.RichTextBox_LogMessage(warningMsg, 3);
 				return;
 			}
 		}

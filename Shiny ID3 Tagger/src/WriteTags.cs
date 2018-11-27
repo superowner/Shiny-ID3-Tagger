@@ -25,9 +25,9 @@ namespace Shiny_ID3_Tagger
 	using Utils;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1
+	public partial class MainForm
 	{
 		/// ###########################################################################
 		/// <summary>
@@ -62,7 +62,7 @@ namespace Shiny_ID3_Tagger
 
 					// Log message to signal begin of writing
 					string[] generalMsg = new[] { $"{"Begin writing of " + tagType + " tags",-100}{"file: \"" + filepath + "\""}" };
-					Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+					MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 
 					// Get all existing frames from current file
 					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mpeg", ReadStyle.Average))
@@ -124,12 +124,12 @@ namespace Shiny_ID3_Tagger
 							}
 
 							generalMsg = new string[] { "Writing done!" };
-							Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+							MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 						}
 						else
 						{
 							generalMsg = new string[] { "Writing failed!" };
-							Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+							MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 						}
 					}
 				}
@@ -165,7 +165,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.SetTextFrame("TPE1", newArtist);
 
 				string[] generalMsg = { "Artist:   " + newArtist };
-				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+				MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Title
@@ -177,7 +177,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.SetTextFrame("TIT2", newTitle);
 
 				string[] generalMsg = { "Title:    " + newTitle };
-				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+				MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Album
@@ -189,7 +189,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.SetTextFrame("TALB", newAlbum);
 
 				string[] generalMsg = { "Album:    " + newAlbum };
-				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+				MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Genre
@@ -201,7 +201,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.SetTextFrame("TCON", newGenre);
 
 				string[] generalMsg = { "Genre:    " + newGenre };
-				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+				MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Disc number + disc count
@@ -218,7 +218,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.SetTextFrame("TPOS", newDiscnumber + "/" + newDisccount);
 
 				string[] generalMsg = { "Disc:     " + newDiscnumber + "/" + newDisccount };
-				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+				MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Track number + track count
@@ -235,7 +235,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.SetTextFrame("TRCK", newTrackNumber + "/" + newTrackCount);
 
 				string[] generalMsg = { "Track:    " + newTrackNumber + "/" + newTrackCount };
-				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+				MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Date
@@ -254,7 +254,7 @@ namespace Shiny_ID3_Tagger
 				tagContainer.SetNumberFrame("TYER", (uint)Utils.ConvertStringToDate(newDate).Year, 0);
 
 				string[] generalMsg = { "Date:     " + newDate };
-				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+				MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			// Lyrics
@@ -276,7 +276,7 @@ namespace Shiny_ID3_Tagger
 				lyricsSnippet = Regex.Replace(lyricsSnippet, @"\r\n?|\n", " ");
 
 				string[] generalMsg = { "Lyrics:   " + lyricsSnippet };
-				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+				MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 
 			return tagContainer;
@@ -422,11 +422,11 @@ namespace Shiny_ID3_Tagger
 			if (errorMsg == null)
 			{
 				string[] generalMsg =	{ "Picture:  " + request.RequestUri	};
-				Form1.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
+				MainForm.Instance.RichTextBox_LogMessage(generalMsg, 1, GlobalVariables.OutputLog.Write);
 			}
 			else
 			{
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+				MainForm.Instance.RichTextBox_LogMessage(errorMsg, 2);
 			}
 
 			return tagContainer;
@@ -522,7 +522,7 @@ namespace Shiny_ID3_Tagger
 					"File:     " + tagFile.Name,
 					"Message:  " + errorMessage,
 				};
-				Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+				MainForm.Instance.RichTextBox_LogMessage(errorMsg, 2);
 			}
 
 			return successWrite;

@@ -124,7 +124,7 @@ namespace Utils
 					errorMsg.AddRange(new[] { "Message:  " + ex.InnerException.Message });
 				}
 
-				Form1.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
+				MainForm.Instance.RichTextBox_LogMessage(errorMsg.ToArray(), 2);
 
 				return null;
 			}

@@ -12,9 +12,9 @@ namespace Shiny_ID3_Tagger
 	using Utils;
 
 	/// <summary>
-	/// Represents the Form1 class which contains all methods who interacts with the UI
+	/// Represents the MainForm class which contains all methods who interacts with the UI
 	/// </summary>
-	public partial class Form1 : Form
+	public partial class MainForm : Form
 	{
 		/// <summary>
 		/// Starts browser which is associated with URLs when clicking on them
@@ -38,7 +38,7 @@ namespace Shiny_ID3_Tagger
 						"ERROR:    Invalid URL found",
 						"URL:      " + url,
 					};
-					Form1.Instance.RichTextBox_LogMessage(errorMsg, 2);
+					MainForm.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				}
 			}
 		}

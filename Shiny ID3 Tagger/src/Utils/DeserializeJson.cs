@@ -63,7 +63,7 @@ namespace Utils
 					"JSON:     " + jsonStr,
 				};
 
-				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+				MainForm.Instance.RichTextBox_LogMessage(warningMsg, 3);
 			}
 
 			// If response was an array, just take the first element. But print a warning
@@ -77,7 +77,7 @@ namespace Utils
 					"JSON:     " + jsonStr,
 				};
 
-				Form1.Instance.RichTextBox_LogMessage(warningMsg, 3);
+				MainForm.Instance.RichTextBox_LogMessage(warningMsg, 3);
 
 				json = json.First;
 			}
