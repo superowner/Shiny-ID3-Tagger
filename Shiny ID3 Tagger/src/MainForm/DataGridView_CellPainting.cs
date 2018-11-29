@@ -25,7 +25,7 @@ namespace Shiny_ID3_Tagger
 		private void DataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
 		{
 			// Skip column headers
-			if (e.RowIndex > -1)
+			if (e.RowIndex >= 0)
 			{
 				// Pen with color for selected row borders
 				using (Pen selectedPen = new Pen(Color.FromArgb(255, 153, 209, 255), 1))

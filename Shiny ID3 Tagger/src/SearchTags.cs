@@ -87,18 +87,18 @@ namespace Shiny_ID3_Tagger
 
 						Id3 tagOld = new Id3
 						{
-							Filepath = row.Cells[this.filepath1.Index].Value.ToString(),
-							Artist = row.Cells[this.artist1.Index].Value.ToString(),
-							Title = row.Cells[this.title1.Index].Value.ToString(),
-							Album = row.Cells[this.album1.Index].Value.ToString(),
-							Date = row.Cells[this.date1.Index].Value.ToString(),
-							Genre = row.Cells[this.genre1.Index].Value.ToString(),
-							DiscCount = row.Cells[this.disccount1.Index].Value.ToString(),
-							DiscNumber = row.Cells[this.discnumber1.Index].Value.ToString(),
-							TrackCount = row.Cells[this.trackcount1.Index].Value.ToString(),
-							TrackNumber = row.Cells[this.tracknumber1.Index].Value.ToString(),
-							Lyrics = row.Cells[this.lyrics1.Index].Value.ToString(),
-							Cover = row.Cells[this.cover1.Index].Value.ToString(),
+							Filepath = row.Cells[this.filepath1.Index].FormattedValue.ToString(),
+							Artist = row.Cells[this.artist1.Index].FormattedValue.ToString(),
+							Title = row.Cells[this.title1.Index].FormattedValue.ToString(),
+							Album = row.Cells[this.album1.Index].FormattedValue.ToString(),
+							Date = row.Cells[this.date1.Index].FormattedValue.ToString(),
+							Genre = row.Cells[this.genre1.Index].FormattedValue.ToString(),
+							DiscCount = row.Cells[this.disccount1.Index].FormattedValue.ToString(),
+							DiscNumber = row.Cells[this.discnumber1.Index].FormattedValue.ToString(),
+							TrackCount = row.Cells[this.trackcount1.Index].FormattedValue.ToString(),
+							TrackNumber = row.Cells[this.tracknumber1.Index].FormattedValue.ToString(),
+							Lyrics = row.Cells[this.lyrics1.Index].FormattedValue.ToString(),
+							Cover = row.Cells[this.cover1.Index].FormattedValue.ToString(),
 						};
 
 						bool rowAlreadyExists = (from r in this.dataGridView2.Rows.Cast<DataGridViewRow>()

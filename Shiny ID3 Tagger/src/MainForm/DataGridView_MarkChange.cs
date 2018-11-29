@@ -9,6 +9,7 @@ namespace Shiny_ID3_Tagger
 {
 	using System;
 	using System.Drawing;
+	using System.Windows.Forms;
 	using GlobalVariables;
 	using Utils;
 
@@ -33,7 +34,13 @@ namespace Shiny_ID3_Tagger
 			{
 				try
 				{
-					this.dataGridView1[col, row].Value = newValue;
+					DataGridViewCell cell = this.dataGridView1[col, row];
+					cell.Value = newValue;
+
+					if (cell is DataGridViewComboBoxCell cbCell && cbCell.Items.Contains(newValue) == false)
+					{
+						cbCell.Items.Insert(0, newValue);
+					}
 
 					if (string.IsNullOrWhiteSpace(oldValue))
 					{

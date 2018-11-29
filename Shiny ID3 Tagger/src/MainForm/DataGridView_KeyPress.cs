@@ -23,17 +23,17 @@ namespace Shiny_ID3_Tagger
 		/// <param name="e">Contains additional information about the event</param>
 		private void DataGridView_KeyPress(object sender, KeyPressEventArgs e)
 		{
+			DataGridView dgv = (DataGridView)sender;
+
 			// Unselect all selected rows within a dataGridView when ESC is pressed
 			if ((Keys)e.KeyChar == Keys.Escape)
 			{
-				DataGridView dgv = (DataGridView)sender;
 				dgv.ClearSelection();
 			}
 
 			// Toggles the checkboxes for column "Save" when space is pressed AND datagridview1 is active
-			if ((Keys)e.KeyChar == Keys.Space && GlobalVariables.ActiveDGV == this.dataGridView1)
+			if ((Keys)e.KeyChar == Keys.Space && dgv == this.dataGridView1)
 			{
-				DataGridView dgv = (DataGridView)sender;
 				bool checkBoxChanged = false;
 
 				// By default all checkboxes are set to unchecked

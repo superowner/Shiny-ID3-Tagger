@@ -1,3 +1,4 @@
 {
-	"LogLevel": 3
+	"LogLevel": 3,
+	"AutoSearch": false,
 }

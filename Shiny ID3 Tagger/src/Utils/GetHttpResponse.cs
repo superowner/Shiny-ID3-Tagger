@@ -42,9 +42,11 @@ namespace Utils
 		{
 			const int maxRetries = 3;
 			const int retryDelayMs = 2000;
+			const int defaultTimeoutMs = 15000;
+
 			dynamic responseContent = null;
 			string requestContent = null;
-			int defaultTimeoutMs = 15000;
+			int timeoutMs = customTimeoutMs ?? defaultTimeoutMs;
 			HttpResponseMessage response = new HttpResponseMessage();
 			CancellationTokenSource timeoutToken = null;
 
@@ -61,9 +63,9 @@ namespace Utils
 			// - ObjectDisposedException
 			try
 			{
-				// Create a timeout token which is linked to global cancelToken
+				// Create a timeout token which is linked to global cancelation token
 				timeoutToken = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
-				timeoutToken.CancelAfter(customTimeoutMs ?? defaultTimeoutMs);
+				timeoutToken.CancelAfter(timeoutMs);
 			}
 			catch (Exception)
 			{
@@ -144,11 +146,10 @@ namespace Utils
 					// User pressing ESC causes a TaskCanceledException too. Don't log then
 					if (cancelToken.IsCancellationRequested == false)
 					{
-						// Also don't log failed requests when a custom timeout shorter than default timeout is set
-						if (customTimeoutMs == null ||
-							(customTimeoutMs != null && customTimeoutMs > defaultTimeoutMs))
+						// Log timed out requests only when a custom timeout is used and is longer than default timeout
+						if (timeoutMs > defaultTimeoutMs)
 						{
-							List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + customTimeoutMs ?? defaultTimeoutMs + " milliseconds to respond!" };
+							List<string> warningMsg = new List<string> { "WARNING:  Server took longer than " + timeoutMs + " milliseconds to respond!" };
 							warningMsg.AddRange(BuildLogMessage(request, requestContent, response, responseContent));
 							warningMsg.AddRange(new[] { "Message:  " + ex.Message });
 							MainForm.Instance.RichTextBox_LogMessage(warningMsg.ToArray(), 3);

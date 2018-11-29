@@ -51,8 +51,8 @@ namespace Shiny_ID3_Tagger
 			}
 
 			// If both values can be converted to dateTime
-			if (DateTime.TryParseExact((string)e.CellValue1, Utils.DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime outDate1) &&
-				DateTime.TryParseExact((string)e.CellValue2, Utils.DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime outDate2))
+			if (DateTime.TryParseExact(e.CellValue1.ToString(), Utils.DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime outDate1) &&
+				DateTime.TryParseExact(e.CellValue2.ToString(), Utils.DateTimeformats, GlobalVariables.CultEng, DateTimeStyles.None, out DateTime outDate2))
 			{
 				e.SortResult = DateTime.Compare(outDate1, outDate2);
 				e.Handled = true;
@@ -60,16 +60,16 @@ namespace Shiny_ID3_Tagger
 			}
 
 			// If both values can be converted to decimal
-			if (decimal.TryParse((string)e.CellValue1, out decimal outDecimal1) &&
-				decimal.TryParse((string)e.CellValue2, out decimal outDecimal2))
+			if (decimal.TryParse(e.CellValue1.ToString(), out decimal outDecimal1) &&
+				decimal.TryParse(e.CellValue2.ToString(), out decimal outDecimal2))
 			{
 				e.SortResult = decimal.Compare(outDecimal1, outDecimal2);
 				e.Handled = true;
 				return;
 			}
 
-			// Default comparison, probably only string comparisons
-			e.SortResult = ((IComparable)e.CellValue1).CompareTo(e.CellValue2);
+			// Default comparison, simple string comparison
+			e.SortResult = ((IComparable)e.CellValue1.ToString()).CompareTo(e.CellValue2.ToString());
 			e.Handled = true;
 			return;
 		}

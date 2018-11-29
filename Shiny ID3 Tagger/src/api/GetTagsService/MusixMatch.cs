@@ -4,6 +4,7 @@
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
 //-----------------------------------------------------------------------
+// TODO: Renew musixmatch licence
 
 namespace GetTags
 {

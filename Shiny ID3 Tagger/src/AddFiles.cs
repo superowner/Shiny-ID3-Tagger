@@ -83,12 +83,8 @@ namespace Shiny_ID3_Tagger
 				this.slowProgressBar.Value = 0;
 
 				// Gather all existing file paths from first dataGridView for later check if new filePath was already added. (this avoids access to UI in worker)
-				HashSet<string> existingFilePaths = new HashSet<string>(from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
+				HashSet<string> existingFiles = new HashSet<string>(from row in this.dataGridView1.Rows.Cast<DataGridViewRow>()
 																		select row.Cells[this.filepath1.Index].Value.ToString());
-
-				// Prepare an empty dataGridViewRow as template from first dataGridView. (this avoids access to UI thread in worker thread)
-				DataGridViewRow emptyRow = new DataGridViewRow();
-				emptyRow.CreateCells(this.dataGridView1);
 
 				// Prepare handler which receives the progress and increases progressBar (update UI thread)
 				Progress<int> progressHandler = new Progress<int>(value =>
@@ -106,7 +102,7 @@ namespace Shiny_ID3_Tagger
 					fileTable = await Task.Run(() =>
 					{
 						cancelToken.ThrowIfCancellationRequested();
-						return this.AddFilesToTable(newFiles, existingFilePaths, emptyRow, progress, cancelToken);
+						return this.AddFilesToTable(newFiles, existingFiles, progress, cancelToken);
 					});
 
 					// Add the list of dataGridViewRows to first dataGridView (update UI thread)
@@ -153,110 +149,152 @@ namespace Shiny_ID3_Tagger
 		/// </summary>
 		/// <param name="newFiles">List of paths of all selected and new files to add</param>
 		/// <param name="existingFiles">List of all already added file paths</param>
-		/// <param name="emptyRow">An empty dataGridViewRow as template from dataGridView1 to avoid access to UI thread from this worker thread</param>
 		/// <param name="progress">Variable is used to report the current progress back to parent thread</param>
 		/// <param name="cancelToken">Global cancellation token</param>
 		/// <returns>A list of dataGridView rows with unique files (old and new ones)</returns>
 		private List<DataGridViewRow> AddFilesToTable(
 			string[] newFiles,
 			HashSet<string> existingFiles,
-			DataGridViewRow emptyRow,
 			IProgress<int> progress,
 			CancellationToken cancelToken)
 		{
-			int counter = 0;
-			List<DataGridViewRow> fileList = new List<DataGridViewRow>();
+			int rowIndex = 0;
+			List<DataGridViewRow> rowList = new List<DataGridViewRow>();
+
+			// Prepare an empty dataGridViewRow as template from first dataGridView
+			DataGridViewRow rowTemplate = new DataGridViewRow();
+			rowTemplate.CreateCells(MainForm.Instance.dataGridView1);
 
 			// Loop through each file and add it to dataGridView1
 			foreach (string filepath in newFiles)
 			{
-				// Check if user pressed cancel or ESC
-				if (!cancelToken.IsCancellationRequested)
+				// Check if user pressed cancel or ESC and if file wasn't already added earlier and if file is a valid mp3 file
+				if (cancelToken.IsCancellationRequested == false &&
+					existingFiles.Contains(filepath) == false &&
+					Utils.IsValidMp3(filepath))
 				{
-					// Check if file wasn't already added earlier
-					if (!existingFiles.Contains(filepath))
+					string filename = Path.GetFileNameWithoutExtension(filepath);
+					string[] artistChoices = new[] { null, null, filename };
+					string[] titleChoices = new[] { null, null, filename };
+
+					foreach (string pattern in User.Settings["FilenamePatterns"])
 					{
-						// Check if file is a valid mp3 file
-						if (Utils.IsValidMp3(filepath))
+						if (Utils.IsValidRegex(pattern))
 						{
-							using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mp3", TagLib.ReadStyle.None))
+							// Test each pattern against current filename
+							Match match = Regex.Match(filename, pattern);
+
+							// Stop at first successful match
+							if (match.Success)
 							{
-								string filename = Path.GetFileNameWithoutExtension(filepath);
-								string[] artistChoices = new[] { null, null, filename };
-								string[] titleChoices = new[] { null, null, filename };
-
-								foreach (string pattern in User.Settings["FilenamePatterns"])
+								// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
+								if ((bool)User.Settings["PreferTags"] == false)
 								{
-									if (Utils.IsValidRegex(pattern))
-									{
-										// Test each pattern against current filename
-										Match match = Regex.Match(filename, pattern);
-
-										// Stop at first successful match
-										if (match.Success)
-										{
-											// Extract artist and title from filename and store them in array at index 0 or 1 according to setting "PreferTags"
-											if ((bool)User.Settings["PreferTags"] == false)
-											{
-												artistChoices[0] = match.Groups["artist"].Value;
-												titleChoices[0] = match.Groups["title"].Value;
-											}
-											else
-											{
-												artistChoices[1] = match.Groups["artist"].Value;
-												titleChoices[1] = match.Groups["title"].Value;
-											}
-
-											break;
-										}
-									}
-								}
-
-								// Extract artist and title from ID3 tags and store them in array at index 0 or 1 according to setting "PreferTags"
-								if ((bool)User.Settings["PreferTags"])
-								{
-									artistChoices[0] = tagFile.Tag.FirstPerformer;
-									titleChoices[0] = tagFile.Tag.Title;
+									artistChoices[0] = match.Groups["artist"].Value;
+									titleChoices[0] = match.Groups["title"].Value;
 								}
 								else
 								{
-									artistChoices[1] = tagFile.Tag.FirstPerformer;
-									titleChoices[1] = tagFile.Tag.Title;
+									artistChoices[1] = match.Groups["artist"].Value;
+									titleChoices[1] = match.Groups["title"].Value;
 								}
 
-								// used to report progress and to calculate current row index
-								counter++;
-								progress.Report(counter);
-
-								// Add values to a new (cloned) DataGridViewRow
-								// Use empty string values as fall back when NULL is encountered
-								DataGridViewRow row = (DataGridViewRow)emptyRow.Clone();
-								row.SetValues(
-									(existingFiles.Count + counter).ToString(),
-									filepath ?? string.Empty,
-									artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,			// Select the first non-null artist choice, value order in array is important therefore
-									titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty,				// Select the first non-null title choice, value order in array is important therefore
-									tagFile.Tag.Album ?? string.Empty,
-									(tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(GlobalVariables.CultEng) : string.Empty,
-									tagFile.Tag.FirstGenre ?? string.Empty,
-									(tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(GlobalVariables.CultEng) : string.Empty,
-									(tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(GlobalVariables.CultEng) : string.Empty,
-									(tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(GlobalVariables.CultEng) : string.Empty,
-									(tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(GlobalVariables.CultEng) : string.Empty,
-									tagFile.Tag.Lyrics ?? string.Empty,
-									tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty,
-									false,
-									false);
-
-								// Add new DataGridViewRow to a fileList which is returned later
-								fileList.Add(row);
+								break;
 							}
 						}
+					}
+
+					using (TagLib.File tagFile = TagLib.File.Create(filepath, "audio/mp3", TagLib.ReadStyle.None))
+					{
+						// Extract artist and title from ID3 tags and store them in array at index 0 or 1 according to setting "PreferTags"
+						if ((bool)User.Settings["PreferTags"])
+						{
+							artistChoices[0] = tagFile.Tag.FirstPerformer;
+							titleChoices[0] = tagFile.Tag.Title;
+						}
+						else
+						{
+							artistChoices[1] = tagFile.Tag.FirstPerformer;
+							titleChoices[1] = tagFile.Tag.Title;
+						}
+
+						// used to report progress and to calculate current row index
+						rowIndex++;
+						progress.Report(rowIndex);
+
+						// Prepare a new row, has all columns from datagridview1
+						DataGridViewRow newRow = (DataGridViewRow)rowTemplate.Clone();
+
+						// Set filenumber
+						newRow.Cells[MainForm.Instance.filenumber1.Index].Value = (existingFiles.Count + rowIndex).ToString();
+
+						// Set filepath
+						newRow.Cells[MainForm.Instance.filepath1.Index].Value = filepath ?? string.Empty;
+
+						// Set artist
+						DataGridViewComboBoxCell artistCell = newRow.Cells[MainForm.Instance.artist1.Index] as DataGridViewComboBoxCell;
+						artistCell.Value = artistChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty;
+						artistCell.Items.Add(artistCell.Value);
+
+						// Set title
+						DataGridViewComboBoxCell titleCell = newRow.Cells[MainForm.Instance.title1.Index] as DataGridViewComboBoxCell;
+						titleCell.Value = titleChoices.FirstOrDefault(s => !string.IsNullOrEmpty(s)) ?? string.Empty;
+						titleCell.Items.Add(titleCell.Value);
+
+						// Set album
+						DataGridViewComboBoxCell albumCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						albumCell.Value = tagFile.Tag.Album ?? string.Empty;
+						albumCell.Items.Add(albumCell.Value);
+
+						// Set date
+						DataGridViewComboBoxCell dateCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						dateCell.Value = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(GlobalVariables.CultEng) : string.Empty;
+						dateCell.Items.Add(dateCell.Value);
+
+						// Set genre
+						DataGridViewComboBoxCell genreCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						genreCell.Value = tagFile.Tag.FirstGenre ?? string.Empty;
+						genreCell.Items.Add(genreCell.Value);
+
+						// Set disc count
+						DataGridViewComboBoxCell disccountCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						disccountCell.Value = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(GlobalVariables.CultEng) : string.Empty;
+						disccountCell.Items.Add(disccountCell.Value);
+
+						// Set disc number
+						DataGridViewComboBoxCell discnumberCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						discnumberCell.Value = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(GlobalVariables.CultEng) : string.Empty;
+						discnumberCell.Items.Add(discnumberCell.Value);
+
+						// Set track count
+						DataGridViewComboBoxCell trackcountCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						trackcountCell.Value = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(GlobalVariables.CultEng) : string.Empty;
+						trackcountCell.Items.Add(trackcountCell.Value);
+
+						// Set track number
+						DataGridViewComboBoxCell tracknumberCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						tracknumberCell.Value = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(GlobalVariables.CultEng) : string.Empty;
+						tracknumberCell.Items.Add(tracknumberCell.Value);
+
+						// Set lyrics
+						newRow.Cells[MainForm.Instance.lyrics1.Index].Value = tagFile.Tag.Lyrics ?? string.Empty;
+
+						// Set cover URL
+						newRow.Cells[MainForm.Instance.cover1.Index].Value = tagFile.Tag.Pictures.Any() ? tagFile.Tag.Pictures[0].Description : string.Empty;
+
+						// Set isVirtualFile
+						newRow.Cells[MainForm.Instance.isVirtualFile.Index].Value = false;
+
+						// Set hasNewValues ("Save" in column header)
+						newRow.Cells[MainForm.Instance.hasNewValues.Index].Value = false;
+
+						// Add new DataGridViewRow to a fileList which is returned later
+						rowList.Add(newRow);
 					}
 				}
 			}
 
-			return fileList;
+			return rowList;
 		}
 	}
 }

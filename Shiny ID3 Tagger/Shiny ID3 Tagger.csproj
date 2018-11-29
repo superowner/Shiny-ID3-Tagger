@@ -168,6 +168,12 @@
     <Compile Include="src\api\GetLyricsService\ViewLyrics.cs" />
     <Compile Include="src\Exceptions\ReadConfigException.cs" />
     <Compile Include="src\Exceptions\UpdateClientException.cs" />
+    <Compile Include="src\MainForm\DataGridView_CellValidating.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\MainForm\DataGridView_EditingControlShowing.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="src\MainForm\MenuItemClick_CheckForUpdates.cs">
       <SubType>Form</SubType>
     </Compile>

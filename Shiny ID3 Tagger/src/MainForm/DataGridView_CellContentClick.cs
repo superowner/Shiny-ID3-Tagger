@@ -17,29 +17,33 @@ namespace Shiny_ID3_Tagger
 	public partial class MainForm : Form
 	{
 		/// <summary>
-		/// Starts browser which is associated with URLs when clicking on them
+		/// Starts browser which is associated with URL protocol when clicked on a link in DataGridViewLinkColumn
 		/// </summary>
 		/// <param name="sender">The object which has raised the event</param>
 		/// <param name="e">Contains additional information about the event</param>
 		private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dgv = (DataGridView)sender;
-			if (dgv.Columns[e.ColumnIndex] is DataGridViewLinkColumn && e.RowIndex >= 0)
+			if (e.RowIndex >= 0 && dgv.Columns[e.ColumnIndex] is DataGridViewLinkColumn)
 			{
 				string url = (string)dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-				if (Utils.IsValidUrl(url))
+
+				if (string.IsNullOrWhiteSpace(url) == true)
 				{
-					Process.Start(url);
+					return;
 				}
-				else
+
+				if (Utils.IsValidUrl(url) == false)
 				{
 					string[] errorMsg =
 					{
-						"ERROR:    Invalid URL found",
+						"ERROR:    Invalid URL",
 						"URL:      " + url,
 					};
 					MainForm.Instance.RichTextBox_LogMessage(errorMsg, 2);
 				}
+
+				Process.Start(url);
 			}
 		}
 	}

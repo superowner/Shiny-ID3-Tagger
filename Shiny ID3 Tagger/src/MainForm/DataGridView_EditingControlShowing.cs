@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DataGridView_CellMouseDown.cs" company="Shiny ID3 Tagger">
+// <copyright file="DataGridView_EditingControlShowing.cs" company="Shiny ID3 Tagger">
 // Copyright (c) Shiny ID3 Tagger. All rights reserved.
 // </copyright>
 // <author>ShinyId3Tagger Team</author>
@@ -7,7 +7,6 @@
 
 namespace Shiny_ID3_Tagger
 {
-	using System;
 	using System.Windows.Forms;
 
 	/// <summary>
@@ -16,21 +15,17 @@ namespace Shiny_ID3_Tagger
 	public partial class MainForm : Form
 	{
 		/// <summary>
-		/// >Selects a new row if right clicking on a row which is not already selected
+		/// Enables custom user input into datagridview combo boxes
+		/// Works in combination with DataGridView_CellValidating()
+		/// <seealso href="https://www.c-sharpcorner.com/blogs/how-to-create-editable-combobox-cell-in-datagridview1"/>
 		/// </summary>
 		/// <param name="sender">The object which has raised the event</param>
 		/// <param name="e">Contains additional information about the event</param>
-		private void DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+		private void DataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
 		{
-			if (e.RowIndex >= 0 && e.Button == MouseButtons.Right)
+			if (e.Control is ComboBox cb)
 			{
-				DataGridViewCell cell = (sender as DataGridView)[e.ColumnIndex, e.RowIndex];
-				if (!cell.Selected)
-				{
-					cell.DataGridView.ClearSelection();
-					cell.DataGridView.CurrentCell = cell;
-					cell.Selected = true;
-				}
+				cb.DropDownStyle = ComboBoxStyle.DropDown;
 			}
 		}
 	}

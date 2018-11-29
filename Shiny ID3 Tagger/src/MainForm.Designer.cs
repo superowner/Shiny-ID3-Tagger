@@ -118,17 +118,17 @@ namespace Shiny_ID3_Tagger
 			this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.slowProgressBar = new System.Windows.Forms.ProgressBar();
-			this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.filenumber1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.filepath1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.artist1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.title1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.album1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.date1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.genre1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.disccount1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.discnumber1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.trackcount1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.tracknumber1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.artist1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.title1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.album1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.date1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.genre1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.disccount1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.discnumber1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.trackcount1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.tracknumber1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
 			this.lyrics1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.cover1 = new System.Windows.Forms.DataGridViewLinkColumn();
 			this.isVirtualFile = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -358,6 +358,7 @@ namespace Shiny_ID3_Tagger
 			this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.dataGridView1.CausesValidation = false;
 			this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
+			this.dataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
 			this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
 			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
@@ -370,7 +371,7 @@ namespace Shiny_ID3_Tagger
 			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
+            this.filenumber1,
             this.filepath1,
             this.artist1,
             this.title1,
@@ -393,13 +394,14 @@ namespace Shiny_ID3_Tagger
 			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
 			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
 			this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle4;
+			this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2;
 			this.dataGridView1.GridColor = System.Drawing.SystemColors.ControlLight;
 			this.dataGridView1.Location = new System.Drawing.Point(0, 0);
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.RowHeadersVisible = false;
 			dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
 			this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle5;
-			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
 			this.dataGridView1.Size = new System.Drawing.Size(1640, 615);
 			this.dataGridView1.TabIndex = 8;
 			this.dataGridView1.TabStop = false;
@@ -408,6 +410,8 @@ namespace Shiny_ID3_Tagger
 			this.dataGridView1.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseEnter);
 			this.dataGridView1.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
 			this.dataGridView1.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DataGridView_CellPainting);
+			this.dataGridView1.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.DataGridView_CellValidating);
+			this.dataGridView1.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.DataGridView_EditingControlShowing);
 			this.dataGridView1.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellMouseLeave);
 			this.dataGridView1.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.DataGridView_SortCompare);
 			this.dataGridView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridView_KeyPress);
@@ -614,7 +618,7 @@ namespace Shiny_ID3_Tagger
 			this.cover2.ActiveLinkColor = System.Drawing.Color.Black;
 			this.cover2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.cover2.HeaderText = "Cover";
-			this.cover2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+			this.cover2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.cover2.LinkColor = System.Drawing.Color.Black;
 			this.cover2.MinimumWidth = 25;
 			this.cover2.Name = "cover2";
@@ -769,14 +773,14 @@ namespace Shiny_ID3_Tagger
 			this.slowProgressBar.Visible = false;
 			this.slowProgressBar.VisibleChanged += new System.EventHandler(this.SlowProgressBar_VisibleChanged);
 			// 
-			// Column1
+			// filenumber1
 			// 
-			this.Column1.HeaderText = "#";
-			this.Column1.MinimumWidth = 25;
-			this.Column1.Name = "Column1";
-			this.Column1.ReadOnly = true;
-			this.Column1.ToolTipText = "Number";
-			this.Column1.Width = 25;
+			this.filenumber1.HeaderText = "#";
+			this.filenumber1.MinimumWidth = 25;
+			this.filenumber1.Name = "filenumber1";
+			this.filenumber1.ReadOnly = true;
+			this.filenumber1.ToolTipText = "Number";
+			this.filenumber1.Width = 25;
 			// 
 			// filepath1
 			// 
@@ -789,68 +793,95 @@ namespace Shiny_ID3_Tagger
 			// 
 			// artist1
 			// 
+			this.artist1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.artist1.HeaderText = "Artist";
 			this.artist1.MinimumWidth = 25;
 			this.artist1.Name = "artist1";
+			this.artist1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.artist1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.artist1.ToolTipText = "Artist";
 			// 
 			// title1
 			// 
+			this.title1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.title1.HeaderText = "Title";
 			this.title1.MinimumWidth = 25;
 			this.title1.Name = "title1";
+			this.title1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.title1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.title1.ToolTipText = "Title";
 			// 
 			// album1
 			// 
+			this.album1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.album1.HeaderText = "Album";
 			this.album1.MinimumWidth = 25;
 			this.album1.Name = "album1";
+			this.album1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.album1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.album1.ToolTipText = "Album";
 			// 
 			// date1
 			// 
+			this.date1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.date1.HeaderText = "Date";
 			this.date1.MinimumWidth = 25;
 			this.date1.Name = "date1";
+			this.date1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.date1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.date1.ToolTipText = "Date";
 			// 
 			// genre1
 			// 
+			this.genre1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.genre1.HeaderText = "Genre";
 			this.genre1.MinimumWidth = 25;
 			this.genre1.Name = "genre1";
+			this.genre1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.genre1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.genre1.ToolTipText = "Genre";
 			// 
 			// disccount1
 			// 
+			this.disccount1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.disccount1.HeaderText = "Disc Count";
 			this.disccount1.MinimumWidth = 25;
 			this.disccount1.Name = "disccount1";
+			this.disccount1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.disccount1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.disccount1.ToolTipText = "Disc Count";
 			this.disccount1.Width = 30;
 			// 
 			// discnumber1
 			// 
+			this.discnumber1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.discnumber1.HeaderText = "Disc Number";
 			this.discnumber1.MinimumWidth = 25;
 			this.discnumber1.Name = "discnumber1";
+			this.discnumber1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.discnumber1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.discnumber1.ToolTipText = "Disc Number";
 			this.discnumber1.Width = 30;
 			// 
 			// trackcount1
 			// 
+			this.trackcount1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.trackcount1.HeaderText = "Track Count";
 			this.trackcount1.MinimumWidth = 25;
 			this.trackcount1.Name = "trackcount1";
+			this.trackcount1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.trackcount1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.trackcount1.ToolTipText = "Track Count";
 			this.trackcount1.Width = 30;
 			// 
 			// tracknumber1
 			// 
+			this.tracknumber1.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
 			this.tracknumber1.HeaderText = "Track Number";
 			this.tracknumber1.MinimumWidth = 25;
 			this.tracknumber1.Name = "tracknumber1";
+			this.tracknumber1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.tracknumber1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.tracknumber1.ToolTipText = "Track Number";
 			this.tracknumber1.Width = 30;
 			// 
@@ -870,11 +901,10 @@ namespace Shiny_ID3_Tagger
 			this.cover1.ActiveLinkColor = System.Drawing.Color.Black;
 			this.cover1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.cover1.HeaderText = "Cover";
-			this.cover1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+			this.cover1.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.cover1.LinkColor = System.Drawing.Color.Black;
 			this.cover1.MinimumWidth = 25;
 			this.cover1.Name = "cover1";
-			this.cover1.ReadOnly = true;
 			this.cover1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.cover1.ToolTipText = "Cover";
 			this.cover1.VisitedLinkColor = System.Drawing.Color.Black;
@@ -892,13 +922,14 @@ namespace Shiny_ID3_Tagger
 			// 
 			// hasNewValues
 			// 
-			this.hasNewValues.FalseValue = "";
+			this.hasNewValues.FalseValue = "false";
 			this.hasNewValues.HeaderText = "Save";
+			this.hasNewValues.IndeterminateValue = "";
 			this.hasNewValues.MinimumWidth = 25;
 			this.hasNewValues.Name = "hasNewValues";
 			this.hasNewValues.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.hasNewValues.ToolTipText = "Save";
-			this.hasNewValues.TrueValue = "";
+			this.hasNewValues.TrueValue = "true";
 			this.hasNewValues.Width = 25;
 			// 
 			// MainForm
@@ -943,6 +974,7 @@ namespace Shiny_ID3_Tagger
 
 		}
 		private System.Windows.Forms.ToolStripMenuItem importTableToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
 		private System.Windows.Forms.DataGridViewTextBoxColumn number2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn filepath2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn service2;
@@ -960,18 +992,17 @@ namespace Shiny_ID3_Tagger
 		private System.Windows.Forms.DataGridViewTextBoxColumn duration2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn durationTotal2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn albumhits;
-		private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn filenumber1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn filepath1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn artist1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn title1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn album1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn date1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn genre1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn disccount1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn discnumber1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn trackcount1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn tracknumber1;
+		private System.Windows.Forms.DataGridViewComboBoxColumn artist1;
+		private System.Windows.Forms.DataGridViewComboBoxColumn title1;
+		private System.Windows.Forms.DataGridViewComboBoxColumn album1;
+		private System.Windows.Forms.DataGridViewComboBoxColumn date1;
+		private System.Windows.Forms.DataGridViewComboBoxColumn genre1;
+		private System.Windows.Forms.DataGridViewComboBoxColumn disccount1;
+		private System.Windows.Forms.DataGridViewComboBoxColumn discnumber1;
+		private System.Windows.Forms.DataGridViewComboBoxColumn trackcount1;
+		private System.Windows.Forms.DataGridViewComboBoxColumn tracknumber1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn lyrics1;
 		private System.Windows.Forms.DataGridViewLinkColumn cover1;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn isVirtualFile;

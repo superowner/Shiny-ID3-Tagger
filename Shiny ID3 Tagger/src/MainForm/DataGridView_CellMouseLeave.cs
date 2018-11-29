@@ -26,8 +26,7 @@ namespace Shiny_ID3_Tagger
 			DataGridView dgv = (DataGridView)sender;
 			if (e.RowIndex >= 0)
 			{
-				// Ugly workaround until I found a better way to preserve yellow background color for result rows
-				if (dgv.Name.ToLowerInvariant() == "dataGridView2".ToLowerInvariant() &&
+				if (dgv == this.dataGridView2 &&
 					dgv.Rows[e.RowIndex].Cells[this.service2.Index].Value.ToString().ToUpperInvariant() == "RESULT")
 				{
 					dgv.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Yellow;
