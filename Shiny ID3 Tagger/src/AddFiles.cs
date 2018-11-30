@@ -247,32 +247,32 @@ namespace Shiny_ID3_Tagger
 						albumCell.Items.Add(albumCell.Value);
 
 						// Set date
-						DataGridViewComboBoxCell dateCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						DataGridViewComboBoxCell dateCell = newRow.Cells[MainForm.Instance.date1.Index] as DataGridViewComboBoxCell;
 						dateCell.Value = (tagFile.Tag.Year > 0) ? tagFile.Tag.Year.ToString(GlobalVariables.CultEng) : string.Empty;
 						dateCell.Items.Add(dateCell.Value);
 
 						// Set genre
-						DataGridViewComboBoxCell genreCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						DataGridViewComboBoxCell genreCell = newRow.Cells[MainForm.Instance.genre1.Index] as DataGridViewComboBoxCell;
 						genreCell.Value = tagFile.Tag.FirstGenre ?? string.Empty;
 						genreCell.Items.Add(genreCell.Value);
 
 						// Set disc count
-						DataGridViewComboBoxCell disccountCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						DataGridViewComboBoxCell disccountCell = newRow.Cells[MainForm.Instance.disccount1.Index] as DataGridViewComboBoxCell;
 						disccountCell.Value = (tagFile.Tag.DiscCount > 0) ? tagFile.Tag.DiscCount.ToString(GlobalVariables.CultEng) : string.Empty;
 						disccountCell.Items.Add(disccountCell.Value);
 
 						// Set disc number
-						DataGridViewComboBoxCell discnumberCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						DataGridViewComboBoxCell discnumberCell = newRow.Cells[MainForm.Instance.discnumber1.Index] as DataGridViewComboBoxCell;
 						discnumberCell.Value = (tagFile.Tag.Disc > 0) ? tagFile.Tag.Disc.ToString(GlobalVariables.CultEng) : string.Empty;
 						discnumberCell.Items.Add(discnumberCell.Value);
 
 						// Set track count
-						DataGridViewComboBoxCell trackcountCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						DataGridViewComboBoxCell trackcountCell = newRow.Cells[MainForm.Instance.trackcount1.Index] as DataGridViewComboBoxCell;
 						trackcountCell.Value = (tagFile.Tag.TrackCount > 0) ? tagFile.Tag.TrackCount.ToString(GlobalVariables.CultEng) : string.Empty;
 						trackcountCell.Items.Add(trackcountCell.Value);
 
 						// Set track number
-						DataGridViewComboBoxCell tracknumberCell = newRow.Cells[MainForm.Instance.album1.Index] as DataGridViewComboBoxCell;
+						DataGridViewComboBoxCell tracknumberCell = newRow.Cells[MainForm.Instance.tracknumber1.Index] as DataGridViewComboBoxCell;
 						tracknumberCell.Value = (tagFile.Tag.Track > 0) ? tagFile.Tag.Track.ToString(GlobalVariables.CultEng) : string.Empty;
 						tracknumberCell.Items.Add(tracknumberCell.Value);
 

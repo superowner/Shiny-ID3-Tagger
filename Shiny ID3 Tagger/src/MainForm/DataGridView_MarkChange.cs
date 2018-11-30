@@ -39,7 +39,8 @@ namespace Shiny_ID3_Tagger
 
 					if (cell is DataGridViewComboBoxCell cbCell && cbCell.Items.Contains(newValue) == false)
 					{
-						cbCell.Items.Insert(0, newValue);
+						cbCell.Items.Clear();
+						cbCell.Items.Add(newValue);
 					}
 
 					if (string.IsNullOrWhiteSpace(oldValue))
